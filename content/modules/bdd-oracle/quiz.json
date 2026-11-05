@@ -1,0 +1,1934 @@
+[
+ {
+  "id": "bd-q001",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 1,
+  "q": "Quelle commande Oracle permet de modifier la structure d'une table existante ?",
+  "options": [
+   "MODIFY TABLE",
+   "UPDATE TABLE",
+   "CHANGE TABLE",
+   "ALTER TABLE"
+  ],
+  "answer": 3,
+  "explain": "La structure se modifie avec ALTER TABLE (ajout, modification, suppression de colonnes ou de contraintes). CHANGE TABLE et MODIFY TABLE n'existent pas ; UPDATE modifie des données, pas la structure."
+ },
+ {
+  "id": "bd-q002",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 1,
+  "q": "Que fait la commande « DELETE FROM Employe; » ?",
+  "options": [
+   "Elle supprime toutes les lignes de la table Employe",
+   "Elle supprime la table et ses contraintes",
+   "Elle supprime uniquement les lignes où la condition est vraie",
+   "Elle supprime la table Employe"
+  ],
+  "answer": 0,
+  "explain": "Sans clause WHERE, DELETE agit sur toutes les lignes. La table et ses contraintes subsistent ; c'est DROP TABLE qui supprime la table."
+ },
+ {
+  "id": "bd-q003",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Quelle est la différence principale entre DELETE et TRUNCATE ?",
+  "options": [
+   "TRUNCATE ne peut pas être annulé par un ROLLBACK",
+   "DELETE est toujours plus rapide que TRUNCATE",
+   "TRUNCATE conserve les déclencheurs (triggers) de suppression",
+   "DELETE supprime les colonnes au lieu des lignes"
+  ],
+  "answer": 0,
+  "explain": "TRUNCATE est une commande DDL à validation automatique : impossible de l'annuler. Elle est plus rapide, ne déclenche pas les triggers DELETE et ne supporte pas de WHERE."
+ },
+ {
+  "id": "bd-q004",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 1,
+  "q": "Quelle commande Oracle permet de renommer une table ?",
+  "options": [
+   "CHANGE TABLE ancienne_table TO nouvelle_table;",
+   "UPDATE ancienne_table SET NAME = nouvelle_table;",
+   "ALTER TABLE ancienne_table RENAME TO nouvelle_table;",
+   "RENAME TABLE ancienne_table TO nouvelle_table;"
+  ],
+  "answer": 2,
+  "explain": "En Oracle : ALTER TABLE ... RENAME TO ... (ou la commande RENAME ancienne TO nouvelle, sans le mot TABLE). RENAME TABLE est la syntaxe de MySQL."
+ },
+ {
+  "id": "bd-q005",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 1,
+  "q": "Que fait SELECT DISTINCT id_langue FROM Utilisateur; ?",
+  "options": [
+   "Elle sélectionne toutes les langues triées par nom",
+   "Elle supprime les utilisateurs sans langue",
+   "Elle supprime les doublons de la table",
+   "Elle sélectionne les langues sans doublons"
+  ],
+  "answer": 3,
+  "explain": "DISTINCT élimine les doublons du résultat uniquement ; la table n'est jamais modifiée par un SELECT."
+ },
+ {
+  "id": "bd-q006",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Quelle est la bonne syntaxe pour ajouter une colonne « stock » (défaut 0) à la table produits ?",
+  "options": [
+   "UPDATE TABLE produits ADD stock NUMBER;",
+   "ALTER TABLE produits INSERT stock NUMBER DEFAULT 0;",
+   "ALTER TABLE produits ADD (stock NUMBER DEFAULT 0);",
+   "CREATE COLUMN stock ON produits;"
+  ],
+  "answer": 2,
+  "explain": "On ajoute une colonne avec ALTER TABLE ... ADD (...). DEFAULT précise la valeur prise quand aucune n'est fournie."
+ },
+ {
+  "id": "bd-q007",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Une commande DDL (CREATE, ALTER, DROP...) a pour effet de :",
+  "options": [
+   "ne concerner que les données",
+   "rester en attente jusqu'au COMMIT",
+   "valider automatiquement la transaction en cours",
+   "être toujours annulable par ROLLBACK"
+  ],
+  "answer": 2,
+  "explain": "Les commandes DDL font un COMMIT implicite : on ne peut plus annuler ce qui précédait."
+ },
+ {
+  "id": "bd-q008",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 1,
+  "q": "Quel type Oracle convient pour du texte de longueur variable ?",
+  "options": [
+   "VARCHAR2",
+   "TEXT",
+   "VARCHAR3",
+   "STRING"
+  ],
+  "answer": 0,
+  "explain": "VARCHAR2(n) est le type texte standard d'Oracle. CHAR(n) a une longueur fixe."
+ },
+ {
+  "id": "bd-q009",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Que contient une colonne de type DATE en Oracle ?",
+  "options": [
+   "Seulement le jour, le mois et l'année",
+   "La date et l'heure",
+   "Seulement l'heure",
+   "Un nombre de jours depuis 1900"
+  ],
+  "answer": 1,
+  "explain": "Une DATE Oracle contient toujours une partie horaire ; TRUNC(date) la ramène à minuit."
+ },
+ {
+  "id": "bd-q010",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Comment créer la table FACTUREPAYE avec le même schéma que FACTURE, sans copier les lignes ?",
+  "options": [
+   "CREATE TABLE facturepaye AS SELECT * FROM facture;",
+   "CREATE TABLE facturepaye LIKE facture;",
+   "CREATE TABLE facturepaye AS SELECT * FROM facture WHERE 1 = 0;",
+   "COPY TABLE facture TO facturepaye;"
+  ],
+  "answer": 2,
+  "explain": "La condition toujours fausse (1 = 0) copie la structure sans aucune ligne. Sans WHERE, on copierait aussi les données ; LIKE n'existe pas en Oracle."
+ },
+ {
+  "id": "bd-q011",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 1,
+  "q": "Que génère « departement_id_seq.NEXTVAL » ?",
+  "options": [
+   "Un identifiant aléatoire",
+   "La valeur suivante de la séquence",
+   "La dernière valeur insérée dans la table",
+   "Le nombre de lignes de la table"
+  ],
+  "answer": 1,
+  "explain": "NEXTVAL produit la prochaine valeur de la séquence ; CURRVAL relit la dernière valeur obtenue dans la session."
+ },
+ {
+  "id": "bd-q012",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Quelle séquence commence à 2 et s'incrémente de 1 ?",
+  "options": [
+   "CREATE SEQUENCE s INIT 2 PLUS 1;",
+   "CREATE SEQUENCE s FROM 2 STEP 1;",
+   "CREATE SEQUENCE s START WITH 2 INCREMENT BY 1;",
+   "CREATE SEQUENCE s BEGIN 2 ADD 1;"
+  ],
+  "answer": 2,
+  "explain": "Les mots-clés sont START WITH (valeur initiale) et INCREMENT BY (pas)."
+ },
+ {
+  "id": "bd-q013",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Une séquence est liée :",
+  "options": [
+   "à aucune table en particulier : elle est indépendante",
+   "à une vue",
+   "à une seule table, qui la possède",
+   "à une colonne précise, de façon permanente"
+  ],
+  "answer": 0,
+  "explain": "Une séquence est un objet autonome ; plusieurs tables peuvent l'utiliser, et un ROLLBACK ne restitue pas les valeurs consommées."
+ },
+ {
+  "id": "bd-q014",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 1,
+  "q": "Quelle commande valide définitivement une transaction ?",
+  "options": [
+   "ROLLBACK",
+   "VALIDATE",
+   "SAVEPOINT",
+   "COMMIT"
+  ],
+  "answer": 3,
+  "explain": "COMMIT valide ; ROLLBACK annule ; SAVEPOINT pose un repère."
+ },
+ {
+  "id": "bd-q015",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Que fait « ROLLBACK TO point1; » ?",
+  "options": [
+   "Il supprime le SAVEPOINT sans rien annuler",
+   "Il valide jusqu'à point1",
+   "Il annule toute la transaction et ferme la session",
+   "Il annule les modifications faites depuis le SAVEPOINT point1"
+  ],
+  "answer": 3,
+  "explain": "ROLLBACK TO nom annule uniquement ce qui suit le repère ; la transaction reste ouverte."
+ },
+ {
+  "id": "bd-q016",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Que fait UPDATE produits SET stock = 100; (sans WHERE) ?",
+  "options": [
+   "Il met le stock à 100 pour tous les produits",
+   "Il provoque une erreur de syntaxe",
+   "Il ne modifie que le premier produit",
+   "Il crée une nouvelle colonne stock"
+  ],
+  "answer": 0,
+  "explain": "Sans WHERE, l'UPDATE s'applique à toutes les lignes."
+ },
+ {
+  "id": "bd-q017",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Quel est l'intérêt principal d'une vue ?",
+  "options": [
+   "Simplifier ou masquer des données en enregistrant une requête sous un nom",
+   "Stocker physiquement une copie des données",
+   "Accélérer systématiquement les INSERT",
+   "Remplacer les contraintes d'intégrité"
+  ],
+  "answer": 0,
+  "explain": "Une vue ne stocke pas de données : c'est une requête nommée, utile pour simplifier et restreindre l'accès."
+ },
+ {
+  "id": "bd-q018",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 3,
+  "q": "Une colonne UNIQUE accepte-t-elle des valeurs NULL ?",
+  "options": [
+   "Non, jamais",
+   "Seulement si elle est aussi clé primaire",
+   "Oui, mais une seule fois exactement",
+   "Oui, les valeurs NULL sont tolérées"
+  ],
+  "answer": 3,
+  "explain": "UNIQUE interdit les doublons de valeurs non nulles ; NULL est toléré (contrairement à PRIMARY KEY, qui exige NOT NULL)."
+ },
+ {
+  "id": "bd-q019",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Quelle contrainte garantit qu'une valeur existe dans la table parente ?",
+  "options": [
+   "DEFAULT",
+   "UNIQUE",
+   "FOREIGN KEY ... REFERENCES",
+   "CHECK"
+  ],
+  "answer": 2,
+  "explain": "La clé étrangère impose l'intégrité référentielle : la valeur doit exister comme clé de la table référencée (ou être NULL)."
+ },
+ {
+  "id": "bd-q020",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 3,
+  "q": "Quelle commande supprime la table ET sa structure ?",
+  "options": [
+   "DELETE FROM",
+   "DROP TABLE",
+   "TRUNCATE TABLE",
+   "ROLLBACK TABLE"
+  ],
+  "answer": 1,
+  "explain": "DROP TABLE supprime tout l'objet ; TRUNCATE vide mais garde la structure."
+ },
+ {
+  "id": "bd-q021",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 3,
+  "q": "Quel est l'effet d'un ROLLBACK sur une séquence dont on a pris des valeurs avec NEXTVAL ?",
+  "options": [
+   "La séquence revient à sa valeur de départ",
+   "Les valeurs sont restituées une à une",
+   "Les valeurs consommées ne sont pas restituées",
+   "La séquence est supprimée"
+  ],
+  "answer": 2,
+  "explain": "Les séquences sont hors transaction : un ROLLBACK laisse des « trous » dans la numérotation."
+ },
+ {
+  "id": "bd-q022",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 3,
+  "q": "Quelle clause rend une colonne d'identité automatique en Oracle 12c ou plus ?",
+  "options": [
+   "GENERATED ALWAYS AS IDENTITY",
+   "AUTO_INCREMENT",
+   "SERIAL",
+   "IDENTITY(1,1)"
+  ],
+  "answer": 0,
+  "explain": "AUTO_INCREMENT (MySQL), SERIAL (PostgreSQL) et IDENTITY(1,1) (SQL Server) ne sont pas Oracle."
+ },
+ {
+  "id": "bd-q023",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 2,
+  "q": "Quelle famille regroupe GRANT et REVOKE ?",
+  "options": [
+   "Le langage de contrôle des données (DCL)",
+   "Le langage de définition (DDL)",
+   "Le langage de transactions (TCL)",
+   "Le langage de manipulation (DML)"
+  ],
+  "answer": 0,
+  "explain": "GRANT et REVOKE gèrent les droits d'accès : c'est le DCL."
+ },
+ {
+  "id": "bd-q024",
+  "chapter": "1-1-ddl-dml",
+  "difficulty": 3,
+  "q": "Après un CREATE TABLE, que devient un INSERT effectué juste avant et non validé ?",
+  "options": [
+   "Il est validé automatiquement",
+   "Il est annulé",
+   "Il est converti en SAVEPOINT",
+   "Il reste en attente"
+  ],
+  "answer": 0,
+  "explain": "Le DDL déclenche un COMMIT implicite de la transaction en cours."
+ },
+ {
+  "id": "bd-q025",
+  "chapter": "1-2-requetes",
+  "difficulty": 1,
+  "q": "Dans quel ordre logique une requête SELECT est-elle évaluée ?",
+  "options": [
+   "FROM, SELECT, WHERE, ORDER BY, GROUP BY, HAVING",
+   "FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY",
+   "SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY",
+   "WHERE, FROM, HAVING, GROUP BY, SELECT, ORDER BY"
+  ],
+  "answer": 1,
+  "explain": "Le moteur lit d'abord les tables (FROM), filtre les lignes (WHERE), regroupe, filtre les groupes (HAVING), puis calcule le SELECT et trie."
+ },
+ {
+  "id": "bd-q026",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Quelle clause filtre les groupes après calcul d'un agrégat ?",
+  "options": [
+   "GROUP WHERE",
+   "HAVING",
+   "WHERE",
+   "FILTER"
+  ],
+  "answer": 1,
+  "explain": "WHERE agit sur les lignes avant regroupement ; HAVING agit sur les groupes."
+ },
+ {
+  "id": "bd-q027",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Quel mot-clé permet de récupérer les N premières lignes dans Oracle 12c ou plus ?",
+  "options": [
+   "TOP",
+   "LIMIT",
+   "ROW_NUMBER",
+   "FETCH FIRST N ROWS ONLY"
+  ],
+  "answer": 3,
+  "explain": "LIMIT est MySQL/PostgreSQL, TOP est SQL Server. Oracle utilise FETCH FIRST N ROWS ONLY (ou ROWNUM)."
+ },
+ {
+  "id": "bd-q028",
+  "chapter": "1-2-requetes",
+  "difficulty": 3,
+  "q": "Pourquoi « SELECT * FROM produits WHERE ROWNUM <= 5 ORDER BY prix DESC » ne donne-t-il pas les 5 produits les plus chers ?",
+  "options": [
+   "ORDER BY ne s'applique pas à ROWNUM",
+   "ROWNUM est attribué avant le tri",
+   "ROWNUM ne fonctionne qu'avec GROUP BY",
+   "La requête est refusée par Oracle"
+  ],
+  "answer": 1,
+  "explain": "Il faut trier dans une sous-requête puis appliquer ROWNUM à l'extérieur, ou utiliser FETCH FIRST."
+ },
+ {
+  "id": "bd-q029",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Comment tester qu'une valeur est nulle ?",
+  "options": [
+   "colonne IS NULL",
+   "colonne = NULL",
+   "colonne EQUALS NULL",
+   "colonne == NULL"
+  ],
+  "answer": 0,
+  "explain": "Toute comparaison avec = NULL est inconnue ; on utilise IS NULL ou IS NOT NULL."
+ },
+ {
+  "id": "bd-q030",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Quelle jointure retourne tous les clients, même ceux sans commande ?",
+  "options": [
+   "LEFT JOIN (clients à gauche)",
+   "INNER JOIN",
+   "CROSS JOIN seulement",
+   "JOIN simple"
+  ],
+  "answer": 0,
+  "explain": "LEFT JOIN conserve toutes les lignes de la table de gauche ; les colonnes de droite valent NULL s'il n'y a pas de correspondance."
+ },
+ {
+  "id": "bd-q031",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Que renvoie SUM(montant) sur une table sans aucune ligne ?",
+  "options": [
+   "0",
+   "NULL",
+   "Une erreur",
+   "-1"
+  ],
+  "answer": 1,
+  "explain": "SUM d'un ensemble vide vaut NULL ; on utilise NVL(SUM(montant), 0) pour obtenir 0."
+ },
+ {
+  "id": "bd-q032",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Quelle formulation convient pour « les abonnés n'ayant jamais été concernés par une coupure » ?",
+  "options": [
+   "NOT EXISTS avec une sous-requête corrélée",
+   "INNER JOIN avec coupure",
+   "WHERE coupure = 0",
+   "GROUP BY abonné HAVING SUM(coupure) = 0 seulement"
+  ],
+  "answer": 0,
+  "explain": "« Jamais / aucun » appelle une anti-jointure : NOT EXISTS (ou LEFT JOIN ... IS NULL)."
+ },
+ {
+  "id": "bd-q033",
+  "chapter": "1-2-requetes",
+  "difficulty": 3,
+  "q": "Pourquoi NOT IN peut-il donner un résultat vide inattendu ?",
+  "options": [
+   "Parce qu'il ne fonctionne qu'avec des nombres",
+   "Parce qu'il ignore les doublons",
+   "Parce que NOT IN est limité à 10 valeurs",
+   "Si la sous-requête contient un NULL, la comparaison est inconnue pour toutes les lignes"
+  ],
+  "answer": 3,
+  "explain": "x NOT IN (1, NULL) n'est jamais vrai. NOT EXISTS évite ce piège."
+ },
+ {
+  "id": "bd-q034",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Quelle expression donne le premier jour du mois en cours ?",
+  "options": [
+   "MONTH(SYSDATE)",
+   "SYSDATE('MM')",
+   "TRUNC(SYSDATE, 'MM')",
+   "FIRST_DAY(SYSDATE)"
+  ],
+  "answer": 2,
+  "explain": "TRUNC(date, 'MM') ramène la date au premier jour du mois à minuit."
+ },
+ {
+  "id": "bd-q035",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Quelle expression désigne « il y a cinq ans » ?",
+  "options": [
+   "SYSDATE - 5 * 12",
+   "SYSDATE - 5",
+   "ADD_MONTHS(SYSDATE, -60)",
+   "ADD_YEARS(SYSDATE, -5)"
+  ],
+  "answer": 2,
+  "explain": "SYSDATE - 5 ôte 5 jours. ADD_MONTHS avec -60 recule de 60 mois ; ADD_YEARS n'existe pas."
+ },
+ {
+  "id": "bd-q036",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Que donne l'expression « date2 - date1 » en Oracle ?",
+  "options": [
+   "Une date",
+   "Un nombre de jours",
+   "Un nombre d'heures",
+   "Un nombre de mois"
+  ],
+  "answer": 1,
+  "explain": "La soustraction de deux dates renvoie la différence en jours (éventuellement fractionnaire)."
+ },
+ {
+  "id": "bd-q037",
+  "chapter": "1-2-requetes",
+  "difficulty": 3,
+  "q": "Pour calculer le montant d'une facture (quantité × prix de la catégorie du compteur), il faut joindre :",
+  "options": [
+   "facture, contrat, compteur et catégorie",
+   "contrat et coupure",
+   "facture et abonné",
+   "facture et catégorie seulement"
+  ],
+  "answer": 0,
+  "explain": "On suit les clés étrangères : facture → contrat (numpolice) → compteur (numcompteur) → catégorie (codcat) où se trouve le prix."
+ },
+ {
+  "id": "bd-q038",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Quelle méthode d'archivage est correcte ?",
+  "options": [
+   "TRUNCATE puis INSERT",
+   "INSERT INTO archive SELECT ... puis DELETE avec la même condition, puis COMMIT",
+   "UPDATE archive SET ...",
+   "DELETE puis INSERT sans condition"
+  ],
+  "answer": 1,
+  "explain": "On copie d'abord, on supprime ensuite avec la même condition, et on valide une seule fois : en cas d'échec, un ROLLBACK ne perd rien."
+ },
+ {
+  "id": "bd-q039",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Que fait COUNT(colonne) ?",
+  "options": [
+   "Il additionne les valeurs",
+   "Il compte toutes les lignes, NULL compris",
+   "Il compte les valeurs distinctes",
+   "Il compte les valeurs non nulles de la colonne"
+  ],
+  "answer": 3,
+  "explain": "COUNT(*) compte les lignes ; COUNT(colonne) ignore les NULL."
+ },
+ {
+  "id": "bd-q040",
+  "chapter": "1-2-requetes",
+  "difficulty": 2,
+  "q": "Dans « SELECT ville, SUM(montant) FROM ... », que doit contenir GROUP BY ?",
+  "options": [
+   "montant",
+   "rien : GROUP BY est facultatif ici",
+   "les deux colonnes",
+   "ville"
+  ],
+  "answer": 3,
+  "explain": "Toute colonne du SELECT qui n'est pas dans un agrégat doit figurer dans le GROUP BY."
+ },
+ {
+  "id": "bd-q041",
+  "chapter": "1-2-requetes",
+  "difficulty": 3,
+  "q": "Quelle expression donne l'année d'une date d ?",
+  "options": [
+   "d.YEAR",
+   "TO_YEAR(d)",
+   "EXTRACT(YEAR FROM d)",
+   "YEAR(d)"
+  ],
+  "answer": 2,
+  "explain": "EXTRACT(YEAR FROM date) est la forme standard Oracle ; TO_CHAR(d,'YYYY') convient aussi (en texte)."
+ },
+ {
+  "id": "bd-q042",
+  "chapter": "1-2-requetes",
+  "difficulty": 3,
+  "q": "Quel est l'effet de « ORDER BY montant DESC » ?",
+  "options": [
+   "Tri décroissant : du plus grand au plus petit",
+   "Tri croissant",
+   "Regroupement par montant",
+   "Suppression des doublons"
+  ],
+  "answer": 0,
+  "explain": "DESC = décroissant ; ASC (défaut) = croissant."
+ },
+ {
+  "id": "bd-q043",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 1,
+  "q": "Quel mot-clé introduit la section de déclaration d'un bloc PL/SQL ?",
+  "options": [
+   "VAR",
+   "DEFINE",
+   "DECLARE",
+   "BEGIN"
+  ],
+  "answer": 2,
+  "explain": "DECLARE ouvre la section (facultative) des déclarations ; BEGIN ouvre le corps, obligatoire."
+ },
+ {
+  "id": "bd-q044",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 1,
+  "q": "Quelle section d'un bloc PL/SQL est obligatoire ?",
+  "options": [
+   "La déclaration (DECLARE)",
+   "Le corps (BEGIN ... END)",
+   "La gestion des erreurs (EXCEPTION)",
+   "Les trois sections"
+  ],
+  "answer": 1,
+  "explain": "Seuls BEGIN et END sont obligatoires ; DECLARE et EXCEPTION sont facultatifs."
+ },
+ {
+  "id": "bd-q045",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 1,
+  "q": "Que doit-on écrire seul sur une ligne après END; pour exécuter un bloc dans un script ?",
+  "options": [
+   "RUN",
+   "/",
+   "EXEC",
+   "GO"
+  ],
+  "answer": 1,
+  "explain": "La barre oblique « / » lance l'exécution du bloc dans SQL Developer ou SQL*Plus."
+ },
+ {
+  "id": "bd-q046",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 1,
+  "q": "Que se passe-t-il si on omet SET SERVEROUTPUT ON ?",
+  "options": [
+   "L'affichage se fait dans un fichier",
+   "Le bloc est refusé",
+   "Le bloc s'exécute mais DBMS_OUTPUT.PUT_LINE n'affiche rien",
+   "Le bloc affiche une erreur de syntaxe"
+  ],
+  "answer": 2,
+  "explain": "Le tampon DBMS_OUTPUT existe, mais le client ne l'affiche que si SERVEROUTPUT est activé."
+ },
+ {
+  "id": "bd-q047",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Quelle déclaration est INCORRECTE ?",
+  "options": [
+   "v_nom clients.nom%TYPE;",
+   "v_total NUMBER := 0;",
+   "v_x, v_y, v_z VARCHAR2(10);",
+   "v_id NUMBER(4);"
+  ],
+  "answer": 2,
+  "explain": "PL/SQL n'autorise qu'une variable par déclaration."
+ },
+ {
+  "id": "bd-q048",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Pourquoi « v_date DATE NOT NULL; » est-elle incorrecte ?",
+  "options": [
+   "NOT NULL est interdit en PL/SQL",
+   "NOT NULL impose une valeur initiale",
+   "DATE n'existe pas en PL/SQL",
+   "Il manque la taille de la date"
+  ],
+  "answer": 1,
+  "explain": "Une variable NOT NULL doit être initialisée dans sa déclaration (v_date DATE NOT NULL := SYSDATE;)."
+ },
+ {
+  "id": "bd-q049",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Pourquoi « v_en_stock BOOLEAN := 1; » est-elle incorrecte ?",
+  "options": [
+   "Le symbole := est interdit pour BOOLEAN",
+   "Un BOOLEAN ne peut valoir que TRUE, FALSE ou NULL",
+   "1 n'est pas un nombre valide",
+   "BOOLEAN n'existe pas en PL/SQL"
+  ],
+  "answer": 1,
+  "explain": "On écrit BOOLEAN := TRUE;. De plus, BOOLEAN n'existe qu'en PL/SQL, pas comme type de colonne."
+ },
+ {
+  "id": "bd-q050",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Pourquoi « emp_record emp_record_type; » est-elle incorrecte sans autre déclaration ?",
+  "options": [
+   "Un enregistrement ne peut pas être déclaré dans DECLARE",
+   "Il manque un point-virgule",
+   "emp_record est un mot réservé",
+   "Le type emp_record_type n'a pas été déclaré"
+  ],
+  "answer": 3,
+  "explain": "Un type utilisateur doit être déclaré (TYPE ... IS RECORD ...) avant la variable qui l'utilise."
+ },
+ {
+  "id": "bd-q051",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Que signifie v_nom clients.nom%TYPE ?",
+  "options": [
+   "v_nom est une constante",
+   "v_nom est un curseur sur clients",
+   "v_nom contient toute la ligne de clients",
+   "v_nom a le même type que la colonne clients.nom"
+  ],
+  "answer": 3,
+  "explain": "%TYPE copie le type d'une colonne ; %ROWTYPE copie la structure d'une ligne entière."
+ },
+ {
+  "id": "bd-q052",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Que déclare « rec film%ROWTYPE » ?",
+  "options": [
+   "Une table temporaire",
+   "Un tableau de films",
+   "Un curseur",
+   "Un enregistrement dont les champs correspondent aux colonnes de film"
+  ],
+  "answer": 3,
+  "explain": "%ROWTYPE crée une variable composée avec un champ par colonne ; on accède à rec.titre, rec.numfilm..."
+ },
+ {
+  "id": "bd-q053",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Combien de lignes doit retourner un SELECT ... INTO ?",
+  "options": [
+   "Exactement une",
+   "Au moins une",
+   "Autant que l'on veut",
+   "Zéro ou une"
+  ],
+  "answer": 0,
+  "explain": "Aucune ligne → NO_DATA_FOUND ; plusieurs → TOO_MANY_ROWS."
+ },
+ {
+  "id": "bd-q054",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 3,
+  "q": "Quelle écriture déclare une table PL/SQL (tableau) de noms ?",
+  "options": [
+   "TYPE tab IS ARRAY(20) OF VARCHAR2;",
+   "TYPE tab IS TABLE OF VARCHAR2(20) INDEX BY BINARY_INTEGER; t tab;",
+   "t ARRAY OF VARCHAR2(20);",
+   "t TABLE VARCHAR2(20);"
+  ],
+  "answer": 1,
+  "explain": "Deux étapes : déclarer le type (TABLE OF ... INDEX BY ...), puis la variable de ce type."
+ },
+ {
+  "id": "bd-q055",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Comment affecter une valeur à une variable PL/SQL ?",
+  "options": [
+   "SET v = 10;",
+   "v := 10;",
+   "v = 10;",
+   "v <- 10;"
+  ],
+  "answer": 1,
+  "explain": "L'opérateur d'affectation est :=. Le signe = sert aux comparaisons."
+ },
+ {
+  "id": "bd-q056",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 3,
+  "q": "Comment créer une table (ordre DDL) depuis un bloc PL/SQL ?",
+  "options": [
+   "C'est impossible",
+   "Avec EXECUTE IMMEDIATE '...'",
+   "Avec DECLARE TABLE",
+   "En écrivant directement CREATE TABLE ..."
+  ],
+  "answer": 1,
+  "explain": "Le DDL n'est pas autorisé directement dans un bloc : on le passe en texte à EXECUTE IMMEDIATE."
+ },
+ {
+  "id": "bd-q057",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 3,
+  "q": "Dans un script SQL Developer, que fait « DECLARE v_nom VARCHAR2(30) := '&p_nom'; » ?",
+  "options": [
+   "Il remplace &p_nom par la valeur saisie avant l'exécution",
+   "Il déclare une variable hôte p_nom",
+   "Il provoque une erreur",
+   "Il lit la valeur dans une table"
+  ],
+  "answer": 0,
+  "explain": "Les variables de substitution &nom sont remplacées par le texte saisi avant l'exécution (entre apostrophes pour du texte)."
+ },
+ {
+  "id": "bd-q058",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 3,
+  "q": "Comment déclarer une constante ?",
+  "options": [
+   "TVA NUMBER FINAL 0.18;",
+   "TVA CONSTANT NUMBER := 0.18;",
+   "CONST TVA = 0.18;",
+   "TVA NUMBER READONLY := 0.18;"
+  ],
+  "answer": 1,
+  "explain": "Le mot-clé est CONSTANT et la valeur est obligatoire."
+ },
+ {
+  "id": "bd-q059",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 2,
+  "q": "Quelle est la portée d'une variable déclarée dans un bloc ?",
+  "options": [
+   "Tout le schéma",
+   "Toute la session",
+   "Uniquement les blocs imbriqués",
+   "Ce bloc et les blocs imbriqués, sauf redéclaration"
+  ],
+  "answer": 3,
+  "explain": "Une variable est visible dans son bloc et ses sous-blocs ; un bloc interne peut la masquer en la redéclarant."
+ },
+ {
+  "id": "bd-q060",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 1,
+  "q": "Pour quel type d'objet PL/SQL est-il le plus naturel de retourner une seule valeur ?",
+  "options": [
+   "Une procédure",
+   "Un trigger",
+   "Un package",
+   "Une fonction"
+  ],
+  "answer": 3,
+  "explain": "Une fonction retourne une valeur avec RETURN ; une procédure ne retourne rien (paramètres OUT possibles)."
+ },
+ {
+  "id": "bd-q061",
+  "chapter": "2-1-blocs-variables",
+  "difficulty": 3,
+  "q": "Quelle fonction convertit un texte en date ?",
+  "options": [
+   "TO_CHAR",
+   "DATEVALUE",
+   "TO_NUMBER",
+   "TO_DATE"
+  ],
+  "answer": 3,
+  "explain": "TO_DATE(texte, format) : texte → date. TO_CHAR fait l'inverse, TO_NUMBER convertit en nombre."
+ },
+ {
+  "id": "bd-q062",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 1,
+  "q": "Quelle est la syntaxe correcte d'une alternative multiple en PL/SQL ?",
+  "options": [
+   "IF ... ELSEIF ... END;",
+   "IF ... THEN ... ELSIF ... THEN ... ELSE ... END IF;",
+   "IF ... ELSE IF ... ENDIF;",
+   "SWITCH ... CASE ... END SWITCH;"
+  ],
+  "answer": 1,
+  "explain": "On écrit ELSIF (sans E au milieu) et on termine par END IF;."
+ },
+ {
+  "id": "bd-q063",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 1,
+  "q": "Quelle instruction permet de boucler un nombre précis de fois ?",
+  "options": [
+   "WHILE",
+   "FOR",
+   "LOOP seul",
+   "REPEAT"
+  ],
+  "answer": 1,
+  "explain": "FOR i IN 1 .. n LOOP ... END LOOP; convient quand le nombre de tours est connu d'avance. REPEAT n'existe pas en PL/SQL."
+ },
+ {
+  "id": "bd-q064",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Comment sortir d'une boucle LOOP quand une condition est vraie ?",
+  "options": [
+   "LEAVE condition;",
+   "EXIT WHEN condition;",
+   "STOP WHEN condition;",
+   "BREAK IF condition;"
+  ],
+  "answer": 1,
+  "explain": "EXIT WHEN condition; ou IF condition THEN EXIT; END IF;."
+ },
+ {
+  "id": "bd-q065",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Dans « FOR i IN REVERSE 1 .. 5 LOOP », quel est le sens de parcours ?",
+  "options": [
+   "Aucun : REVERSE est une erreur",
+   "De 1 vers 5 avec un pas de 2",
+   "De 5 vers 1",
+   "De 1 vers 5"
+  ],
+  "answer": 2,
+  "explain": "REVERSE parcourt de la borne haute à la borne basse, par pas de -1."
+ },
+ {
+  "id": "bd-q066",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Dans « FOR i IN 1 .. 5 », que peut-on dire de i ?",
+  "options": [
+   "C'est une variable locale à la boucle, non déclarée",
+   "Elle est globale",
+   "Elle doit être déclarée dans DECLARE",
+   "Elle est constante à l'extérieur seulement"
+  ],
+  "answer": 0,
+  "explain": "L'indice est créé automatiquement et n'existe que dans la boucle."
+ },
+ {
+  "id": "bd-q067",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 1,
+  "q": "Quand est-on obligé d'utiliser un curseur explicite ?",
+  "options": [
+   "Pour tout UPDATE",
+   "Pour tout INSERT",
+   "Pour un SELECT pouvant renvoyer plusieurs lignes",
+   "Jamais"
+  ],
+  "answer": 2,
+  "explain": "Un SELECT ... INTO ne gère qu'une ligne ; plusieurs lignes imposent un curseur."
+ },
+ {
+  "id": "bd-q068",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Quelle est la bonne séquence d'un curseur explicite ?",
+  "options": [
+   "Ouvrir, lire, déclarer, fermer",
+   "Ouvrir, déclarer, fermer, lire",
+   "Déclarer, ouvrir (OPEN), lire (FETCH), fermer (CLOSE)",
+   "Déclarer, lire, ouvrir, fermer"
+  ],
+  "answer": 2,
+  "explain": "DECLARE CURSOR, OPEN, FETCH (en boucle), CLOSE."
+ },
+ {
+  "id": "bd-q069",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Quel attribut indique qu'il n'y a plus de ligne à lire dans le curseur c1 ?",
+  "options": [
+   "c1%NOTFOUND",
+   "c1%FINISHED",
+   "c1%ISOPEN",
+   "c1%EMPTY"
+  ],
+  "answer": 0,
+  "explain": "c1%NOTFOUND devient vrai quand le FETCH ne trouve plus de ligne ; on l'utilise dans EXIT WHEN."
+ },
+ {
+  "id": "bd-q070",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Que fait c1%ROWCOUNT ?",
+  "options": [
+   "Il donne le nombre de lignes lues jusque-là",
+   "Il indique si le curseur est ouvert",
+   "Il donne le nombre de colonnes",
+   "Il donne la taille mémoire"
+  ],
+  "answer": 0,
+  "explain": "%ROWCOUNT vaut 0 au départ et augmente à chaque FETCH réussi."
+ },
+ {
+  "id": "bd-q071",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Quel attribut utiliser après un UPDATE pour savoir combien de lignes ont été modifiées ?",
+  "options": [
+   "UPDATE%COUNT",
+   "SQL%FOUND seulement",
+   "SQL%ROWCOUNT",
+   "SQL%LINES"
+  ],
+  "answer": 2,
+  "explain": "SQL%ROWCOUNT concerne le dernier ordre DML (curseur implicite)."
+ },
+ {
+  "id": "bd-q072",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 3,
+  "q": "Quel est l'avantage de la boucle FOR sur un curseur ?",
+  "options": [
+   "Elle évite tout accès à la table",
+   "Ouverture, lecture et fermeture sont automatiques",
+   "Elle s'exécute côté client",
+   "Elle permet de modifier la structure de la table"
+  ],
+  "answer": 1,
+  "explain": "On n'écrit ni OPEN, ni FETCH, ni CLOSE, ni la variable de ligne."
+ },
+ {
+  "id": "bd-q073",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 3,
+  "q": "Que permet « WHERE CURRENT OF c » ?",
+  "options": [
+   "Choisir la première ligne de la table",
+   "Verrouiller toute la base",
+   "Modifier ou supprimer la ligne lue par le dernier FETCH du curseur c",
+   "Recommencer le curseur"
+  ],
+  "answer": 2,
+  "explain": "Il nécessite un curseur déclaré FOR UPDATE ; il cible directement la ligne courante."
+ },
+ {
+  "id": "bd-q074",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 3,
+  "q": "Que provoque la clause FOR UPDATE dans la déclaration d'un curseur ?",
+  "options": [
+   "L'arrêt du curseur après une ligne",
+   "La création d'une copie de la table",
+   "Le verrouillage des lignes sélectionnées",
+   "La suppression des lignes après lecture"
+  ],
+  "answer": 2,
+  "explain": "Les lignes du SELECT sont verrouillées en mode modification."
+ },
+ {
+  "id": "bd-q075",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Comment déclarer un curseur paramétré ?",
+  "options": [
+   "CURSOR c (p NUMBER) IS SELECT ... WHERE col = p;",
+   "CURSOR c IS SELECT ... WITH p;",
+   "CURSOR c[p NUMBER] ...;",
+   "PARAM p CURSOR c ...;"
+  ],
+  "answer": 0,
+  "explain": "Les paramètres se placent entre parenthèses après le nom du curseur ; on ouvre avec OPEN c(valeur)."
+ },
+ {
+  "id": "bd-q076",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 3,
+  "q": "Avec un curseur implicite, que vaut SQL%ISOPEN ?",
+  "options": [
+   "TRUE pendant l'exécution",
+   "FALSE, car Oracle le ferme automatiquement",
+   "TRUE après COMMIT",
+   "NULL"
+  ],
+  "answer": 1,
+  "explain": "Le curseur implicite est géré et fermé par Oracle : SQL%ISOPEN est toujours faux."
+ },
+ {
+  "id": "bd-q077",
+  "chapter": "2-2-controle-curseurs",
+  "difficulty": 2,
+  "q": "Quelle instruction convient pour parcourir les produits du moins cher au plus cher ?",
+  "options": [
+   "WHILE produits LOOP ...",
+   "LOOP SELECT ... INTO r ... END LOOP;",
+   "FOR r IN produits LOOP ... END LOOP;",
+   "FOR r IN (SELECT nom, prix FROM produits ORDER BY prix) LOOP ... END LOOP;"
+  ],
+  "answer": 3,
+  "explain": "La boucle FOR sur une requête parcourt toutes les lignes ; ORDER BY impose l'ordre."
+ },
+ {
+  "id": "bd-q078",
+  "chapter": "2-3-erreurs",
+  "difficulty": 1,
+  "q": "Quel mot-clé introduit la section de gestion des erreurs d'un bloc PL/SQL ?",
+  "options": [
+   "CATCH",
+   "EXCEPTION",
+   "ERROR",
+   "TRY"
+  ],
+  "answer": 1,
+  "explain": "EXCEPTION ouvre la section ; WHEN ... THEN décrit chaque cas."
+ },
+ {
+  "id": "bd-q079",
+  "chapter": "2-3-erreurs",
+  "difficulty": 1,
+  "q": "Quelle exception se déclenche quand SELECT ... INTO ne trouve aucune ligne ?",
+  "options": [
+   "VALUE_ERROR",
+   "TOO_MANY_ROWS",
+   "ZERO_DIVIDE",
+   "NO_DATA_FOUND"
+  ],
+  "answer": 3,
+  "explain": "NO_DATA_FOUND (ORA-01403, SQLCODE 100)."
+ },
+ {
+  "id": "bd-q080",
+  "chapter": "2-3-erreurs",
+  "difficulty": 2,
+  "q": "Quelle exception se déclenche quand SELECT ... INTO trouve plusieurs lignes ?",
+  "options": [
+   "TOO_MANY_ROWS",
+   "DUP_VAL_ON_INDEX",
+   "INVALID_CURSOR",
+   "NO_DATA_FOUND"
+  ],
+  "answer": 0,
+  "explain": "TOO_MANY_ROWS (ORA-01422, SQLCODE -1422)."
+ },
+ {
+  "id": "bd-q081",
+  "chapter": "2-3-erreurs",
+  "difficulty": 2,
+  "q": "Quelle exception correspond à un doublon sur une clé primaire ?",
+  "options": [
+   "VALUE_ERROR",
+   "DUP_VAL_ON_INDEX",
+   "NO_DATA_FOUND",
+   "PROGRAM_ERROR"
+  ],
+  "answer": 1,
+  "explain": "DUP_VAL_ON_INDEX (ORA-00001, SQLCODE -1)."
+ },
+ {
+  "id": "bd-q082",
+  "chapter": "2-3-erreurs",
+  "difficulty": 2,
+  "q": "Que renvoie SQLCODE quand il n'y a pas d'erreur ?",
+  "options": [
+   "-1",
+   "NULL",
+   "1",
+   "0"
+  ],
+  "answer": 3,
+  "explain": "SQLCODE vaut 0 sans erreur ; SQLERRM donne le message associé."
+ },
+ {
+  "id": "bd-q083",
+  "chapter": "2-3-erreurs",
+  "difficulty": 2,
+  "q": "Quel est le rôle de WHEN OTHERS ?",
+  "options": [
+   "Déclencher une erreur",
+   "Ignorer l'exception précédente",
+   "Traiter toutes les erreurs non citées avant lui",
+   "Sortir du programme sans message"
+  ],
+  "answer": 2,
+  "explain": "WHEN OTHERS doit être le dernier cas de la section EXCEPTION."
+ },
+ {
+  "id": "bd-q084",
+  "chapter": "2-3-erreurs",
+  "difficulty": 2,
+  "q": "Comment signaler une erreur personnalisée à l'appelant ?",
+  "options": [
+   "THROW 'message';",
+   "DBMS_OUTPUT.ERROR('message');",
+   "RAISE ERROR 'message';",
+   "RAISE_APPLICATION_ERROR(-20001, 'message');"
+  ],
+  "answer": 3,
+  "explain": "Le code doit être compris entre -20000 et -20999."
+ },
+ {
+  "id": "bd-q085",
+  "chapter": "2-3-erreurs",
+  "difficulty": 2,
+  "q": "Dans quelle plage doit se situer le code de RAISE_APPLICATION_ERROR ?",
+  "options": [
+   "-999 à 0",
+   "0 à 999",
+   "1 à 20000",
+   "-20000 à -20999"
+  ],
+  "answer": 3,
+  "explain": "Cette plage est réservée aux erreurs définies par l'utilisateur."
+ },
+ {
+  "id": "bd-q086",
+  "chapter": "2-3-erreurs",
+  "difficulty": 2,
+  "q": "Comment déclarer une erreur utilisateur nommée ?",
+  "options": [
+   "e ERROR;",
+   "e EXCEPTION;",
+   "e := EXCEPTION;",
+   "e THROWABLE;"
+  ],
+  "answer": 1,
+  "explain": "On déclare une variable de type EXCEPTION puis on la déclenche avec RAISE e; et on la traite avec WHEN e THEN."
+ },
+ {
+  "id": "bd-q087",
+  "chapter": "2-3-erreurs",
+  "difficulty": 3,
+  "q": "Que fait PRAGMA EXCEPTION_INIT(e, -2292) ?",
+  "options": [
+   "Il crée un code d'erreur -2292",
+   "Il associe le nom e au code d'erreur -2292",
+   "Il déclenche l'erreur -2292",
+   "Il désactive l'erreur -2292"
+  ],
+  "answer": 1,
+  "explain": "Cela permet d'intercepter par un nom un code Oracle qui n'en a pas de prédéfini (ici, enregistrements fils existants)."
+ },
+ {
+  "id": "bd-q088",
+  "chapter": "2-3-erreurs",
+  "difficulty": 3,
+  "q": "Si une exception n'est pas traitée dans un bloc interne, que se passe-t-il ?",
+  "options": [
+   "Elle est transformée en NO_DATA_FOUND",
+   "Elle remonte au bloc englobant puis à l'appelant",
+   "Elle est ignorée",
+   "Le bloc continue normalement"
+  ],
+  "answer": 1,
+  "explain": "La propagation se poursuit jusqu'à un gestionnaire ou jusqu'à l'environnement appelant."
+ },
+ {
+  "id": "bd-q089",
+  "chapter": "2-3-erreurs",
+  "difficulty": 3,
+  "q": "Quelle est la conséquence si l'erreur est traitée dans la section EXCEPTION d'une procédure ?",
+  "options": [
+   "La procédure est supprimée",
+   "La transaction est annulée automatiquement",
+   "L'appelant reçoit toujours l'erreur ORA",
+   "L'appelant considère l'exécution comme réussie"
+  ],
+  "answer": 3,
+  "explain": "Une exception traitée localement ne remonte pas ; on la consigne souvent dans une table d'erreurs."
+ },
+ {
+  "id": "bd-q090",
+  "chapter": "2-3-erreurs",
+  "difficulty": 3,
+  "q": "Quel texte est correct pour afficher : Le film 5 n'existe pas ?",
+  "options": [
+   "'Le film ' + num + ' n'existe pas'",
+   "'Le film ' || num || ' n'existe pas'",
+   "'Le film ' || num || ' n''existe pas'",
+   "\"Le film \" || num || \" n'existe pas\""
+  ],
+  "answer": 2,
+  "explain": "On concatène avec || et on double l'apostrophe dans un texte SQL ('')."
+ },
+ {
+  "id": "bd-q091",
+  "chapter": "2-3-erreurs",
+  "difficulty": 3,
+  "q": "Un UPDATE ne trouvant aucune ligne lève-t-il NO_DATA_FOUND ?",
+  "options": [
+   "Oui, toujours",
+   "Oui, seulement dans une procédure",
+   "Oui, si WHERE est présent",
+   "Non : on teste SQL%ROWCOUNT"
+  ],
+  "answer": 3,
+  "explain": "NO_DATA_FOUND concerne SELECT ... INTO ; pour UPDATE/DELETE, SQL%ROWCOUNT = 0."
+ },
+ {
+  "id": "bd-q092",
+  "chapter": "2-3-erreurs",
+  "difficulty": 3,
+  "q": "Quel est le SQLCODE de NO_DATA_FOUND ?",
+  "options": [
+   "-1403",
+   "-100",
+   "100",
+   "0"
+  ],
+  "answer": 2,
+  "explain": "NO_DATA_FOUND correspond à ORA-01403 mais SQLCODE vaut +100 (norme SQL)."
+ },
+ {
+  "id": "bd-q093",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 1,
+  "q": "Quel type d'objet PL/SQL peut retourner une seule valeur scalaire ?",
+  "options": [
+   "Une fonction",
+   "Un paquet (package)",
+   "Une procédure",
+   "Un trigger"
+  ],
+  "answer": 0,
+  "explain": "Seule la fonction a une clause RETURN ; une procédure ne retourne rien."
+ },
+ {
+  "id": "bd-q094",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 2,
+  "q": "Quels modes de paramètre existent pour une procédure ?",
+  "options": [
+   "SEND et RECEIVE",
+   "READ et WRITE",
+   "INPUT et OUTPUT",
+   "IN, OUT et IN OUT"
+  ],
+  "answer": 3,
+  "explain": "IN (entrée, défaut), OUT (sortie), IN OUT (entrée-sortie). Les fonctions n'ont que des paramètres IN."
+ },
+ {
+  "id": "bd-q095",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 2,
+  "q": "Comment appeler une procédure sp_test(1) en SQL Developer ?",
+  "options": [
+   "EXEC sp_test(1)",
+   "RUN sp_test(1);",
+   "CALL FUNCTION sp_test(1);",
+   "SELECT sp_test(1) FROM DUAL;"
+  ],
+  "answer": 0,
+  "explain": "EXEC (ou EXECUTE) appelle une procédure ; SELECT ... FROM DUAL convient aux fonctions."
+ },
+ {
+  "id": "bd-q096",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 2,
+  "q": "Comment utiliser la fonction fn_prix_ttc dans une requête ?",
+  "options": [
+   "EXEC fn_prix_ttc(prix);",
+   "SELECT nom, fn_prix_ttc(prix) FROM produits;",
+   "CALL fn_prix_ttc INTO produits;",
+   "fn_prix_ttc(produits);"
+  ],
+  "answer": 1,
+  "explain": "Une fonction s'utilise comme une expression SQL, dans le SELECT ou le WHERE."
+ },
+ {
+  "id": "bd-q097",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 2,
+  "q": "Que se passe-t-il si une fonction n'exécute aucun RETURN ?",
+  "options": [
+   "Une erreur à l'exécution",
+   "Elle retourne 0",
+   "Elle devient une procédure",
+   "Elle retourne NULL silencieusement"
+  ],
+  "answer": 0,
+  "explain": "Chaque chemin d'exécution doit finir par RETURN, y compris dans la section EXCEPTION."
+ },
+ {
+  "id": "bd-q098",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 3,
+  "q": "Quel est l'effet de CREATE OR REPLACE PROCEDURE ?",
+  "options": [
+   "Créer la procédure ou la remplacer si elle existe, en conservant ses droits",
+   "Créer une copie nommée OR REPLACE",
+   "Supprimer toutes les procédures",
+   "Renommer la procédure"
+  ],
+  "answer": 0,
+  "explain": "On évite un DROP préalable et on garde les privilèges accordés."
+ },
+ {
+  "id": "bd-q099",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 2,
+  "q": "Quelle vue du dictionnaire affiche le texte source d'une procédure de votre schéma ?",
+  "options": [
+   "USER_PROC",
+   "USER_TEXT",
+   "USER_CODE",
+   "USER_SOURCE"
+  ],
+  "answer": 3,
+  "explain": "USER_SOURCE contient le source ; USER_ERRORS les erreurs de compilation ; USER_OBJECTS la liste et l'état des objets."
+ },
+ {
+  "id": "bd-q100",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 3,
+  "q": "Où consulter les erreurs de compilation d'une fonction ?",
+  "options": [
+   "USER_SOURCE",
+   "USER_TRACE",
+   "USER_LOGS",
+   "USER_ERRORS"
+  ],
+  "answer": 3,
+  "explain": "USER_ERRORS (ALL_ERRORS, DBA_ERRORS selon la portée)."
+ },
+ {
+  "id": "bd-q101",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 2,
+  "q": "Un package se compose de :",
+  "options": [
+   "un trigger et une procédure",
+   "une spécification et un corps",
+   "une table et une vue",
+   "deux fonctions obligatoires"
+  ],
+  "answer": 1,
+  "explain": "La spécification déclare ce qui est public ; le corps définit les sous-programmes et contient les éléments privés."
+ },
+ {
+  "id": "bd-q102",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 3,
+  "q": "Qu'est-ce que la surcharge dans un package ?",
+  "options": [
+   "Plusieurs sous-programmes de même nom avec des paramètres différents",
+   "Un doublon de variable",
+   "Une procédure trop longue",
+   "Un package qui appelle un autre package"
+  ],
+  "answer": 0,
+  "explain": "Exemple : deux fonctions de même nom, l'une par nom de réalisateur, l'autre par numéro."
+ },
+ {
+  "id": "bd-q103",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 3,
+  "q": "Comment appeler la procédure afficher du package gestion ?",
+  "options": [
+   "CALL gestion::afficher(1)",
+   "EXEC afficher@gestion(1)",
+   "gestion->afficher(1)",
+   "EXEC gestion.afficher(1)"
+  ],
+  "answer": 3,
+  "explain": "On préfixe par le nom du package : nom_package.nom_element."
+ },
+ {
+  "id": "bd-q104",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 3,
+  "q": "Comment supprimer seulement le corps d'un package ?",
+  "options": [
+   "TRUNCATE PACKAGE nom;",
+   "DROP PACKAGE BODY nom;",
+   "DELETE PACKAGE BODY nom;",
+   "DROP BODY nom;"
+  ],
+  "answer": 1,
+  "explain": "DROP PACKAGE supprime tout ; DROP PACKAGE BODY supprime uniquement le corps."
+ },
+ {
+  "id": "bd-q105",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 3,
+  "q": "Dans un package utilisé par plusieurs sessions, que se passe-t-il pour les variables ?",
+  "options": [
+   "Elles sont partagées par toutes les sessions",
+   "Elles sont réinitialisées à chaque appel",
+   "Elles sont stockées dans une table",
+   "Chaque session a sa propre copie"
+  ],
+  "answer": 3,
+  "explain": "L'état du package (variables, curseurs) est propre à chaque session."
+ },
+ {
+  "id": "bd-q106",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 3,
+  "q": "Pourquoi une procédure d'ajout ne contient-elle souvent pas de COMMIT ?",
+  "options": [
+   "Parce que COMMIT est interdit en PL/SQL",
+   "Parce qu'Oracle valide toujours automatiquement",
+   "Parce qu'un COMMIT ralentit le serveur",
+   "L'appelant doit pouvoir valider ou annuler l'ensemble de la transaction"
+  ],
+  "answer": 3,
+  "explain": "Un COMMIT interne empêcherait d'annuler un enchaînement de procédures ; c'est à l'appelant de décider."
+ },
+ {
+  "id": "bd-q107",
+  "chapter": "3-1-procedures-fonctions",
+  "difficulty": 2,
+  "q": "Quelle condition rend une fonction utilisable dans une clause WHERE ?",
+  "options": [
+   "Elle retourne une valeur comparable et ne modifie pas les données",
+   "Elle contient un COMMIT",
+   "Elle est dans un package obligatoirement",
+   "Elle a un paramètre OUT"
+  ],
+  "answer": 0,
+  "explain": "Une fonction appelée depuis une requête SQL ne doit pas modifier la base."
+ },
+ {
+  "id": "bd-q108",
+  "chapter": "3-2-triggers",
+  "difficulty": 1,
+  "q": "Qu'est-ce qu'un trigger ?",
+  "options": [
+   "Une vue matérialisée",
+   "Un index spécial",
+   "Une procédure appelée manuellement par EXEC",
+   "Un traitement déclenché automatiquement par un événement sur une table"
+  ],
+  "answer": 3,
+  "explain": "Il s'exécute sur INSERT, UPDATE ou DELETE sans être appelé explicitement."
+ },
+ {
+  "id": "bd-q109",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Que se passe-t-il quand un trigger BEFORE INSERT lève une exception non gérée ?",
+  "options": [
+   "L'insertion est annulée",
+   "L'insertion est mise en attente",
+   "L'insertion est effectuée malgré tout",
+   "Le trigger est ignoré"
+  ],
+  "answer": 0,
+  "explain": "L'échec du trigger annule l'ordre qui l'a déclenché ; c'est le moyen de refuser une opération."
+ },
+ {
+  "id": "bd-q110",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Combien de types de triggers existe-t-il ?",
+  "options": [
+   "3",
+   "6",
+   "12",
+   "8"
+  ],
+  "answer": 2,
+  "explain": "3 événements (INSERT, UPDATE, DELETE) × 2 modes (ordre, ligne) × 2 moments (BEFORE, AFTER) = 12."
+ },
+ {
+  "id": "bd-q111",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Que signifie FOR EACH ROW ?",
+  "options": [
+   "Le trigger s'exécute chaque jour",
+   "Le trigger parcourt toute la base",
+   "Le trigger s'exécute une fois par ligne touchée",
+   "Le trigger s'exécute une fois par instruction"
+  ],
+  "answer": 2,
+  "explain": "Sans FOR EACH ROW, le trigger est « par ordre » : une seule exécution par instruction."
+ },
+ {
+  "id": "bd-q112",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Quelle est la valeur de :OLD lors d'un INSERT ?",
+  "options": [
+   "La valeur par défaut de la colonne",
+   "La valeur insérée",
+   "La dernière valeur supprimée",
+   "NULL"
+  ],
+  "answer": 3,
+  "explain": "À l'INSERT, :OLD est vide et :NEW contient la valeur créée."
+ },
+ {
+  "id": "bd-q113",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Dans un trigger sur DELETE, comment lire l'identifiant de la ligne supprimée ?",
+  "options": [
+   ":NEW.id",
+   "OLD(id)",
+   ":OLD.id",
+   "DELETED.id"
+  ],
+  "answer": 2,
+  "explain": "À la suppression, :NEW est vide ; la ligne d'origine est dans :OLD."
+ },
+ {
+  "id": "bd-q114",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "À quoi servent INSERTING, UPDATING et DELETING ?",
+  "options": [
+   "À désactiver le trigger",
+   "À compter les lignes modifiées",
+   "À créer des index",
+   "À savoir quelle opération a déclenché le trigger"
+  ],
+  "answer": 3,
+  "explain": "Ce sont des prédicats booléens utilisables dans un trigger qui couvre plusieurs événements."
+ },
+ {
+  "id": "bd-q115",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Quel moment choisir pour refuser un prix négatif avant l'écriture ?",
+  "options": [
+   "BEFORE",
+   "INSTEAD",
+   "AFTER",
+   "DURING"
+  ],
+  "answer": 0,
+  "explain": "BEFORE permet de contrôler (et refuser) avant l'écriture."
+ },
+ {
+  "id": "bd-q116",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Quel moment choisir pour alimenter une table de journal ?",
+  "options": [
+   "BEFORE obligatoirement",
+   "BEFORE STATEMENT seulement",
+   "AFTER",
+   "Jamais un trigger"
+  ],
+  "answer": 2,
+  "explain": "AFTER sert à tracer et propager une fois la modification effectuée."
+ },
+ {
+  "id": "bd-q117",
+  "chapter": "3-2-triggers",
+  "difficulty": 3,
+  "q": "Que signifie « BEFORE UPDATE OF prix ON produits » ?",
+  "options": [
+   "Le trigger se déclenche à l'INSERT uniquement",
+   "Le trigger ne se déclenche que si prix figure dans la clause SET",
+   "Le trigger se déclenche sur toute colonne sauf prix",
+   "Le trigger se déclenche sur toute modification de la table"
+  ],
+  "answer": 1,
+  "explain": "Un UPDATE de la colonne stock seule ne déclenche pas ce trigger."
+ },
+ {
+  "id": "bd-q118",
+  "chapter": "3-2-triggers",
+  "difficulty": 3,
+  "q": "Dans quel type de trigger peut-on modifier :NEW ?",
+  "options": [
+   "BEFORE ... FOR EACH ROW",
+   "Aucun",
+   "AFTER ... FOR EACH ROW",
+   "Tout trigger par ordre"
+  ],
+  "answer": 0,
+  "explain": "Après l'écriture (AFTER), il est trop tard ; en mode ordre, :NEW n'existe pas."
+ },
+ {
+  "id": "bd-q119",
+  "chapter": "3-2-triggers",
+  "difficulty": 3,
+  "q": "Quelle erreur Oracle correspond à une table en mutation ?",
+  "options": [
+   "ORA-00001",
+   "ORA-02292",
+   "ORA-01403",
+   "ORA-04091"
+  ],
+  "answer": 3,
+  "explain": "Un trigger par ligne ne peut pas lire ou modifier la table en cours de modification."
+ },
+ {
+  "id": "bd-q120",
+  "chapter": "3-2-triggers",
+  "difficulty": 3,
+  "q": "Quelle opération est interdite dans un trigger ?",
+  "options": [
+   "IF ... THEN",
+   "COMMIT",
+   "RAISE_APPLICATION_ERROR",
+   "INSERT dans une autre table"
+  ],
+  "answer": 1,
+  "explain": "Le trigger fait partie de la transaction de l'ordre déclencheur ; COMMIT et ROLLBACK y sont interdits (ORA-04092)."
+ },
+ {
+  "id": "bd-q121",
+  "chapter": "3-2-triggers",
+  "difficulty": 3,
+  "q": "Que peut-on mettre dans la clause WHEN d'un trigger ?",
+  "options": [
+   "Un COMMIT",
+   "Une condition simple sans requête SQL",
+   "Un bloc PL/SQL",
+   "Une sous-requête SELECT"
+  ],
+  "answer": 1,
+  "explain": "La clause WHEN n'accepte pas de requête ; les colonnes y sont citées sans deux-points (NEW.prix)."
+ },
+ {
+  "id": "bd-q122",
+  "chapter": "3-2-triggers",
+  "difficulty": 3,
+  "q": "Quel est l'ordre d'exécution des triggers d'un même événement ?",
+  "options": [
+   "BEFORE ordre, BEFORE ligne, AFTER ligne, AFTER ordre",
+   "AFTER ordre, BEFORE ligne, AFTER ligne, BEFORE ordre",
+   "BEFORE ligne, BEFORE ordre, AFTER ordre, AFTER ligne",
+   "AFTER ligne, BEFORE ligne, BEFORE ordre, AFTER ordre"
+  ],
+  "answer": 0,
+  "explain": "Le trigger par ordre BEFORE s'exécute d'abord, puis, pour chaque ligne, BEFORE puis AFTER, enfin le trigger par ordre AFTER."
+ },
+ {
+  "id": "bd-q123",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Comment désactiver un trigger nommé t1 ?",
+  "options": [
+   "ALTER TRIGGER t1 DISABLE;",
+   "UPDATE TRIGGER t1 OFF;",
+   "STOP TRIGGER t1;",
+   "DROP TRIGGER t1 DISABLE;"
+  ],
+  "answer": 0,
+  "explain": "On réactive avec ENABLE ; DROP TRIGGER le supprime définitivement."
+ },
+ {
+  "id": "bd-q124",
+  "chapter": "3-2-triggers",
+  "difficulty": 2,
+  "q": "Quelle vue du dictionnaire liste les triggers de votre schéma ?",
+  "options": [
+   "USER_TRG",
+   "USER_EVENTS",
+   "USER_TRIGGERS",
+   "USER_ACTIONS"
+  ],
+  "answer": 2,
+  "explain": "USER_TRIGGERS, ALL_TRIGGERS ou DBA_TRIGGERS selon la portée."
+ },
+ {
+  "id": "bd-q125",
+  "chapter": "3-2-triggers",
+  "difficulty": 3,
+  "q": "Pourquoi un trigger de ligne qui fait un SELECT MAX(...) sur sa propre table échoue-t-il ?",
+  "options": [
+   "La table est en mutation",
+   "La table est verrouillée en lecture seule",
+   "MAX est interdit dans un trigger",
+   "Il manque un curseur"
+  ],
+  "answer": 0,
+  "explain": "Lire la table modifiée par l'ordre déclencheur provoque ORA-04091 ; on compare plutôt à une constante ou à :NEW/:OLD."
+ },
+ {
+  "id": "bd-q126",
+  "chapter": "3-2-triggers",
+  "difficulty": 3,
+  "q": "Quand une contrainte déclarative (CHECK, FOREIGN KEY) suffit, que vaut-il mieux faire ?",
+  "options": [
+   "L'utiliser plutôt qu'un trigger",
+   "Écrire un trigger quand même",
+   "Écrire un package",
+   "Désactiver la contrainte"
+  ],
+  "answer": 0,
+  "explain": "Une contrainte est plus simple et plus fiable ; le trigger sert aux règles qu'elle ne peut pas exprimer."
+ },
+ {
+  "id": "bd-q127",
+  "chapter": "a-tp-corrige",
+  "difficulty": 2,
+  "q": "Dans le TP, quelle erreur obtient-on pour SELECT ... INTO sur le produit 99999 sans EXCEPTION ?",
+  "options": [
+   "ORA-04091",
+   "ORA-06502",
+   "ORA-01403 : no data found",
+   "ORA-00001"
+  ],
+  "answer": 2,
+  "explain": "Le SELECT ... INTO ne trouve aucune ligne : NO_DATA_FOUND."
+ },
+ {
+  "id": "bd-q128",
+  "chapter": "a-tp-corrige",
+  "difficulty": 2,
+  "q": "Pourquoi UPDATE produits SET stock = 100 WHERE id = 1 ne déclenche-t-il pas trg_produits_prix ?",
+  "options": [
+   "Parce qu'un UPDATE ne déclenche jamais de trigger",
+   "Le trigger est déclaré UPDATE OF prix et la colonne prix n'est pas dans le SET",
+   "Parce que stock est la clé primaire",
+   "Parce que id = 1 est exclu"
+  ],
+  "answer": 1,
+  "explain": "La liste de colonnes limite le déclenchement aux modifications de prix."
+ },
+ {
+  "id": "bd-q129",
+  "chapter": "a-tp-corrige",
+  "difficulty": 3,
+  "q": "Pourquoi sp_ajouter_client ne contient-elle pas de COMMIT ?",
+  "options": [
+   "C'est à l'appelant de valider ou d'annuler la transaction",
+   "Parce que COMMIT est interdit dans une procédure",
+   "Parce que la procédure est dans un package",
+   "Parce que INSERT valide automatiquement"
+  ],
+  "answer": 0,
+  "explain": "On garde la possibilité d'enchaîner plusieurs opérations dans une même transaction."
+ },
+ {
+  "id": "bd-q130",
+  "chapter": "a-tp-corrige",
+  "difficulty": 2,
+  "q": "Que renvoie fn_total_client pour un client inexistant si on n'utilise pas NVL ?",
+  "options": [
+   "0",
+   "-1",
+   "Une erreur NO_DATA_FOUND",
+   "NULL"
+  ],
+  "answer": 3,
+  "explain": "SUM sur zéro ligne renvoie NULL ; NVL(SUM(...), 0) le remplace par 0."
+ },
+ {
+  "id": "bd-q131",
+  "chapter": "a-tp-corrige",
+  "difficulty": 3,
+  "q": "Quel message obtient-on sans trigger en supprimant un client ayant des commandes ?",
+  "options": [
+   "ORA-04091",
+   "ORA-01403",
+   "ORA-20032",
+   "ORA-02292 : enregistrement fils existant (clé étrangère)"
+  ],
+  "answer": 3,
+  "explain": "La clé étrangère refuse la suppression avec un message technique ; le trigger renvoie un message métier (-20032)."
+ },
+ {
+  "id": "bd-q132",
+  "chapter": "a-tp-corrige",
+  "difficulty": 3,
+  "q": "Que se passe-t-il lorsqu'on insère une ligne dans commande_produits avec trg_lignes_stock ?",
+  "options": [
+   "Rien : le trigger n'agit que sur produits",
+   "La commande est supprimée",
+   "Le stock est décrémenté, ou l'insertion est refusée si le stock est insuffisant",
+   "Le prix est recalculé"
+  ],
+  "answer": 2,
+  "explain": "Le trigger BEFORE INSERT lit le stock, lève -20031 si insuffisant, sinon l'UPDATE du stock se fait automatiquement."
+ },
+ {
+  "id": "bd-q133",
+  "chapter": "b-methode-fiche",
+  "difficulty": 1,
+  "q": "Quelle formulation d'énoncé appelle un trigger ?",
+  "options": [
+   "« retourner le nombre de... »",
+   "« créer une vue qui... »",
+   "« afficher la liste de... »",
+   "« empêcher automatiquement l'ajout si... »"
+  ],
+  "answer": 3,
+  "explain": "Les mots « empêcher », « refuser », « automatiquement » désignent un trigger (BEFORE pour empêcher)."
+ },
+ {
+  "id": "bd-q134",
+  "chapter": "b-methode-fiche",
+  "difficulty": 1,
+  "q": "Quelle formulation d'énoncé appelle une fonction ?",
+  "options": [
+   "« empêcher l'ajout... »",
+   "« retourner le nombre de contenus publiés... »",
+   "« journaliser chaque suppression... »",
+   "« mettre à jour la langue... »"
+  ],
+  "answer": 1,
+  "explain": "« Retourner » une valeur = fonction ; « mettre à jour » = procédure ; « journaliser » = trigger."
+ },
+ {
+  "id": "bd-q135",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Un bloc PL/SQL qui prend en paramètre l'identifiant d'un employé s'écrit, dans un script, avec :",
+  "options": [
+   "un fichier externe",
+   "une variable de substitution (&p_emp) ou un paramètre de procédure",
+   "une variable globale G_EMP",
+   "une instruction INPUT"
+  ],
+  "answer": 1,
+  "explain": "Dans un bloc anonyme : &variable ; dans une procédure : un paramètre IN."
+ },
+ {
+  "id": "bd-q136",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Pour « liste des abonnés n'ayant jamais été concernés par une coupure », le meilleur choix est :",
+  "options": [
+   "WHERE coupure IS NOT NULL",
+   "HAVING COUNT(*) = 0 sans GROUP BY",
+   "UNION",
+   "NOT EXISTS"
+  ],
+  "answer": 3,
+  "explain": "Anti-jointure : NOT EXISTS ou LEFT JOIN ... IS NULL."
+ },
+ {
+  "id": "bd-q137",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Que faire avant de créer un objet qui existe peut-être déjà ?",
+  "options": [
+   "Utiliser CREATE OR REPLACE (procédures, fonctions, triggers, vues)",
+   "Renommer l'objet existant",
+   "Toujours faire DROP puis recréer sans réfléchir",
+   "Ajouter IF EXISTS à CREATE TABLE sans condition"
+  ],
+  "answer": 0,
+  "explain": "CREATE OR REPLACE convient aux objets PL/SQL et aux vues ; pour une table, on gère l'exception ORA-00955."
+ },
+ {
+  "id": "bd-q138",
+  "chapter": "b-methode-fiche",
+  "difficulty": 3,
+  "q": "Quelle est l'erreur dans « SELECT nom FROM clients; » placé dans un bloc PL/SQL ?",
+  "options": [
+   "Il manque un GROUP BY",
+   "Il faut un DISTINCT",
+   "Il manque INTO : un SELECT dans un bloc doit stocker son résultat",
+   "Le point-virgule est interdit"
+  ],
+  "answer": 2,
+  "explain": "En PL/SQL, un SELECT doit être SELECT ... INTO variable (une ligne) ou être placé dans un curseur / une boucle FOR."
+ }
+]

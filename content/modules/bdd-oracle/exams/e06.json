@@ -1,0 +1,135 @@
+{
+ "n": 6,
+ "title": "Épreuve n° 6 · Gestion de la scolarité",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : requêtes SQL",
+   "points": 5,
+   "intro": "Écrivez les requêtes Oracle suivantes.",
+   "context": "- FILIERE (**CodeFiliere**, intitule)\n- ETUDIANT (**Matricule**, nom, prenom, datenaiss, #CodeFiliere)\n- MATIERE (**CodeMatiere**, libelle, coefficient)\n- NOTE (#Matricule, #CodeMatiere, annee, valeur)  -- clé primaire (Matricule, CodeMatiere, annee)",
+   "questions": [
+    {
+     "id": "e06p1q1",
+     "q": "Afficher, pour l'année 2025, la moyenne pondérée de chaque étudiant (somme valeur × coefficient divisée par la somme des coefficients), du meilleur au moins bon.",
+     "points": 1,
+     "a": "SELECT e.matricule, e.nom, e.prenom,\n       ROUND(SUM(n.valeur * m.coefficient) / SUM(m.coefficient), 2) AS moyenne\nFROM etudiant e\nJOIN note n    ON n.matricule = e.matricule\nJOIN matiere m ON m.codematiere = n.codematiere\nWHERE n.annee = 2025\nGROUP BY e.matricule, e.nom, e.prenom\nORDER BY moyenne DESC;"
+    },
+    {
+     "id": "e06p1q2",
+     "q": "Lister les étudiants ayant au moins une note inférieure à 10 en 2025, avec le nombre de ces notes.",
+     "points": 1,
+     "a": "SELECT e.matricule, e.nom, COUNT(*) AS nb_notes_faibles\nFROM etudiant e JOIN note n ON n.matricule = e.matricule\nWHERE n.annee = 2025 AND n.valeur < 10\nGROUP BY e.matricule, e.nom;\n- La condition sur chaque note est un WHERE ; le comptage donne le nombre de notes faibles."
+    },
+    {
+     "id": "e06p1q3",
+     "q": "Lister les matières pour lesquelles aucune note n'a jamais été saisie.",
+     "points": 1,
+     "a": "SELECT m.*\nFROM matiere m\nWHERE NOT EXISTS (SELECT 1 FROM note n WHERE n.codematiere = m.codematiere);"
+    },
+    {
+     "id": "e06p1q4",
+     "q": "Afficher les filières comptant plus de 30 étudiants, avec leur effectif.",
+     "points": 1,
+     "a": "SELECT f.intitule, COUNT(e.matricule) AS effectif\nFROM filiere f JOIN etudiant e ON e.codefiliere = f.codefiliere\nGROUP BY f.intitule\nHAVING COUNT(e.matricule) > 30;\n- Condition sur un agrégat : HAVING."
+    },
+    {
+     "id": "e06p1q5",
+     "q": "Copier dans NOTE_HISTO (à créer avec le même schéma que NOTE) les notes de l'année 2023, puis les supprimer de NOTE.",
+     "points": 1,
+     "a": "CREATE TABLE note_histo AS SELECT * FROM note WHERE 1 = 0;\nINSERT INTO note_histo SELECT * FROM note WHERE annee = 2023;\nDELETE FROM note WHERE annee = 2023;\nCOMMIT;"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : déclarations de variables",
+   "points": 3,
+   "intro": "Parmi les déclarations suivantes, déterminer celles qui sont incorrectes et justifier.",
+   "questions": [
+    {
+     "id": "e06p2q1",
+     "q": "A : `v_moy NUMBER(4,2) := 0;`",
+     "points": 0.5,
+     "a": "Correcte : variable initialisée."
+    },
+    {
+     "id": "e06p2q2",
+     "q": "B : `v_nom VARCHAR2;`",
+     "points": 0.5,
+     "a": "Incorrecte : la taille de VARCHAR2 est obligatoire dans une déclaration (VARCHAR2(50))."
+    },
+    {
+     "id": "e06p2q3",
+     "q": "C : `v_ok BOOLEAN DEFAULT FALSE;`",
+     "points": 0.5,
+     "a": "Correcte : DEFAULT équivaut à := pour l'initialisation."
+    },
+    {
+     "id": "e06p2q4",
+     "q": "D : `TYPE t_rec IS RECORD (a NUMBER, b VARCHAR2(10)); v_r t_rec;`",
+     "points": 0.5,
+     "a": "Correcte : type enregistrement déclaré avant la variable."
+    },
+    {
+     "id": "e06p2q5",
+     "q": "E : `v_liste TABLE OF NUMBER;`",
+     "points": 0.5,
+     "a": "Incorrecte : on ne peut pas déclarer directement une variable de type table ; il faut d'abord TYPE ... IS TABLE OF NUMBER INDEX BY BINARY_INTEGER;"
+    },
+    {
+     "id": "e06p2q6",
+     "q": "F : `v_prix produits.prix%TYPE := 100;`",
+     "points": 0.5,
+     "a": "Correcte : %TYPE avec valeur initiale."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : séquence, bloc, fonction",
+   "points": 7,
+   "questions": [
+    {
+     "id": "e06p3q1",
+     "q": "Créez la séquence SEQ_MATRICULE qui commence à 1000, s'incrémente de 1 et ne dépasse pas 9999.",
+     "points": 1,
+     "a": "CREATE SEQUENCE seq_matricule START WITH 1000 INCREMENT BY 1 MAXVALUE 9999 NOCYCLE;"
+    },
+    {
+     "id": "e06p3q2",
+     "q": "Écrivez un bloc PL/SQL qui demande un matricule et affiche « nom prénom » ; si l'étudiant n'existe pas, il affiche « Étudiant introuvable ».",
+     "points": 3,
+     "a": "SET SERVEROUTPUT ON\nDECLARE\n  v_mat    etudiant.matricule%TYPE := &p_mat;\n  v_nom    etudiant.nom%TYPE;\n  v_prenom etudiant.prenom%TYPE;\nBEGIN\n  SELECT nom, prenom INTO v_nom, v_prenom FROM etudiant WHERE matricule = v_mat;\n  DBMS_OUTPUT.PUT_LINE(v_nom || ' ' || v_prenom);\nEXCEPTION\n  WHEN NO_DATA_FOUND THEN\n    DBMS_OUTPUT.PUT_LINE('Etudiant introuvable');\nEND;\n/\n- SELECT ... INTO : exactement une ligne, sinon NO_DATA_FOUND, traité dans EXCEPTION."
+    },
+    {
+     "id": "e06p3q3",
+     "q": "Créez la fonction MoyenneEtudiant(p_mat, p_annee) qui retourne la moyenne pondérée arrondie à deux décimales, ou 0 si l'étudiant n'a aucune note cette année-là.",
+     "points": 3,
+     "a": "CREATE OR REPLACE FUNCTION moyenneetudiant (p_mat IN NUMBER, p_annee IN NUMBER) RETURN NUMBER IS\n  v_moy NUMBER;\nBEGIN\n  SELECT ROUND(SUM(n.valeur * m.coefficient) / SUM(m.coefficient), 2) INTO v_moy\n  FROM note n JOIN matiere m ON m.codematiere = n.codematiere\n  WHERE n.matricule = p_mat AND n.annee = p_annee;\n  RETURN NVL(v_moy, 0);\nEND moyenneetudiant;\n/\nSELECT matricule, moyenneetudiant(matricule, 2025) FROM etudiant;\n- Un agrégat sans ligne renvoie une ligne contenant NULL (pas d'exception NO_DATA_FOUND) : NVL(v_moy, 0) donne 0."
+    }
+   ]
+  },
+  {
+   "id": "p4",
+   "title": "Exercice 4 : triggers",
+   "points": 5,
+   "questions": [
+    {
+     "id": "e06p4q1",
+     "q": "Créez un trigger qui refuse (erreur -20201) toute note NULL ou hors de l'intervalle 0 à 20, à l'insertion et à la modification de la valeur.",
+     "points": 3,
+     "a": "CREATE OR REPLACE TRIGGER trg_note_valide\nBEFORE INSERT OR UPDATE OF valeur ON note\nFOR EACH ROW\nBEGIN\n  IF :NEW.valeur IS NULL OR :NEW.valeur NOT BETWEEN 0 AND 20 THEN\n    RAISE_APPLICATION_ERROR(-20201, 'La note doit etre comprise entre 0 et 20');\n  END IF;\nEND;\n/\n- BEFORE pour refuser avant l'écriture ; UPDATE OF valeur : seulement si la colonne est modifiée."
+    },
+    {
+     "id": "e06p4q2",
+     "q": "Une table NOTE_AUDIT (matricule, codematiere, ancienne_valeur, nouvelle_valeur, date_modif, utilisateur) existe. Créez le trigger qui y enregistre chaque modification de note.",
+     "points": 2,
+     "a": "CREATE OR REPLACE TRIGGER trg_note_audit\nAFTER UPDATE OF valeur ON note\nFOR EACH ROW\nBEGIN\n  INSERT INTO note_audit (matricule, codematiere, ancienne_valeur, nouvelle_valeur, date_modif, utilisateur)\n  VALUES (:OLD.matricule, :OLD.codematiere, :OLD.valeur, :NEW.valeur, SYSDATE, USER);\nEND;\n/\n- AFTER : trace une fois la modification faite ; :OLD = ancienne valeur, :NEW = nouvelle valeur ; USER = utilisateur connecté."
+    }
+   ]
+  }
+ ]
+}

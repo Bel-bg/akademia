@@ -1,0 +1,115 @@
+{
+ "n": 5,
+ "title": "Épreuve n° 5 · QCM et étude de cas : cabinet médical",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Première partie : QCM",
+   "points": 5,
+   "intro": "Une seule réponse correcte par question. Chaque question vaut 0,5 point.",
+   "questions": [
+    {
+     "id": "e05p1q1",
+     "q": "Que fait PRAGMA EXCEPTION_INIT(e, -2292) ?\n\n- A. Il crée un code d'erreur -2292\n- B. Il associe le nom e au code d'erreur -2292\n- C. Il déclenche l'erreur -2292\n- D. Il désactive l'erreur -2292",
+     "points": 0.5,
+     "a": "Réponse : B (Il associe le nom e au code d'erreur -2292). Cela permet d'intercepter par un nom un code Oracle qui n'en a pas de prédéfini (ici, enregistrements fils existants)."
+    },
+    {
+     "id": "e05p1q2",
+     "q": "Comment sortir d'une boucle LOOP quand une condition est vraie ?\n\n- A. LEAVE condition;\n- B. EXIT WHEN condition;\n- C. STOP WHEN condition;\n- D. BREAK IF condition;",
+     "points": 0.5,
+     "a": "Réponse : B (EXIT WHEN condition;). EXIT WHEN condition; ou IF condition THEN EXIT; END IF;."
+    },
+    {
+     "id": "e05p1q3",
+     "q": "Que doit-on écrire seul sur une ligne après END; pour exécuter un bloc dans un script ?\n\n- A. RUN\n- B. /\n- C. EXEC\n- D. GO",
+     "points": 0.5,
+     "a": "Réponse : B (/). La barre oblique « / » lance l'exécution du bloc dans SQL Developer ou SQL*Plus."
+    },
+    {
+     "id": "e05p1q4",
+     "q": "Quelle instruction permet de boucler un nombre précis de fois ?\n\n- A. WHILE\n- B. FOR\n- C. LOOP seul\n- D. REPEAT",
+     "points": 0.5,
+     "a": "Réponse : B (FOR). FOR i IN 1 .. n LOOP ... END LOOP; convient quand le nombre de tours est connu d'avance. REPEAT n'existe pas en PL/SQL."
+    },
+    {
+     "id": "e05p1q5",
+     "q": "Que renvoie SQLCODE quand il n'y a pas d'erreur ?\n\n- A. -1\n- B. NULL\n- C. 1\n- D. 0",
+     "points": 0.5,
+     "a": "Réponse : D (0). SQLCODE vaut 0 sans erreur ; SQLERRM donne le message associé."
+    },
+    {
+     "id": "e05p1q6",
+     "q": "Quel est l'effet de CREATE OR REPLACE PROCEDURE ?\n\n- A. Créer la procédure ou la remplacer si elle existe, en conservant ses droits\n- B. Créer une copie nommée OR REPLACE\n- C. Supprimer toutes les procédures\n- D. Renommer la procédure",
+     "points": 0.5,
+     "a": "Réponse : A (Créer la procédure ou la remplacer si elle existe, en conservant ses droits). On évite un DROP préalable et on garde les privilèges accordés."
+    },
+    {
+     "id": "e05p1q7",
+     "q": "Quelle est la portée d'une variable déclarée dans un bloc ?\n\n- A. Tout le schéma\n- B. Toute la session\n- C. Uniquement les blocs imbriqués\n- D. Ce bloc et les blocs imbriqués, sauf redéclaration",
+     "points": 0.5,
+     "a": "Réponse : D (Ce bloc et les blocs imbriqués, sauf redéclaration). Une variable est visible dans son bloc et ses sous-blocs ; un bloc interne peut la masquer en la redéclarant."
+    },
+    {
+     "id": "e05p1q8",
+     "q": "Quelle vue du dictionnaire liste les triggers de votre schéma ?\n\n- A. USER_TRG\n- B. USER_EVENTS\n- C. USER_TRIGGERS\n- D. USER_ACTIONS",
+     "points": 0.5,
+     "a": "Réponse : C (USER_TRIGGERS). USER_TRIGGERS, ALL_TRIGGERS ou DBA_TRIGGERS selon la portée."
+    },
+    {
+     "id": "e05p1q9",
+     "q": "Quelle est la différence principale entre DELETE et TRUNCATE ?\n\n- A. TRUNCATE ne peut pas être annulé par un ROLLBACK\n- B. DELETE est toujours plus rapide que TRUNCATE\n- C. TRUNCATE conserve les déclencheurs (triggers) de suppression\n- D. DELETE supprime les colonnes au lieu des lignes",
+     "points": 0.5,
+     "a": "Réponse : A (TRUNCATE ne peut pas être annulé par un ROLLBACK). TRUNCATE est une commande DDL à validation automatique : impossible de l'annuler. Elle est plus rapide, ne déclenche pas les triggers DELETE et ne supporte pas de WHERE."
+    },
+    {
+     "id": "e05p1q10",
+     "q": "Quelle opération est interdite dans un trigger ?\n\n- A. IF ... THEN\n- B. COMMIT\n- C. RAISE_APPLICATION_ERROR\n- D. INSERT dans une autre table",
+     "points": 0.5,
+     "a": "Réponse : B (COMMIT). Le trigger fait partie de la transaction de l'ordre déclencheur ; COMMIT et ROLLBACK y sont interdits (ORA-04092)."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Deuxième partie : étude de cas",
+   "points": 15,
+   "intro": "On dispose du modèle logique suivant.",
+   "context": "- PATIENT (**id_patient**, nom, prenom, date_naissance, sexe)\n- MEDECIN (**id_medecin**, nom, specialite)\n- CONSULTATION (**id_consultation**, date_consultation, motif, montant, statut, #id_patient, #id_medecin)\n\nLe statut d'une consultation vaut `prevue`, `realisee` ou `annulee`.",
+   "questions": [
+    {
+     "id": "e05p2q1",
+     "q": "Donnez le code SQL de création de la table CONSULTATION (clés, montant positif ou nul, statut limité aux trois valeurs, statut par défaut prevue).",
+     "points": 3,
+     "a": "CREATE TABLE consultation (\n  id_consultation   NUMBER PRIMARY KEY,\n  date_consultation DATE NOT NULL,\n  motif             VARCHAR2(200),\n  montant           NUMBER(10,2) DEFAULT 0 CHECK (montant >= 0),\n  statut            VARCHAR2(10) DEFAULT 'prevue' CHECK (statut IN ('prevue', 'realisee', 'annulee')),\n  id_patient        NUMBER NOT NULL REFERENCES patient(id_patient),\n  id_medecin        NUMBER NOT NULL REFERENCES medecin(id_medecin)\n);\n- Deux clés étrangères, deux CHECK, valeurs par défaut."
+    },
+    {
+     "id": "e05p2q2",
+     "q": "Créez une vue VUE_MEDECINS_ACTIFS affichant le nom, la spécialité et le nombre de consultations réalisées des médecins ayant réalisé au moins une consultation.",
+     "points": 3,
+     "a": "CREATE OR REPLACE VIEW vue_medecins_actifs AS\nSELECT m.nom, m.specialite, COUNT(*) AS nb_realisees\nFROM medecin m\nJOIN consultation c ON c.id_medecin = m.id_medecin\nWHERE c.statut = 'realisee'\nGROUP BY m.id_medecin, m.nom, m.specialite;\n- Le WHERE filtre les consultations réalisées ; la jointure interne élimine les médecins sans consultation réalisée."
+    },
+    {
+     "id": "e05p2q3",
+     "q": "Créez un trigger TRG_CONSULT_CONTROLE qui, avant insertion ou modification d'une consultation, refuse (erreur -20101) un montant NULL ou négatif, et refuse (erreur -20102) une consultation au statut realisee dont la date est dans le futur.",
+     "points": 3,
+     "a": "CREATE OR REPLACE TRIGGER trg_consult_controle\nBEFORE INSERT OR UPDATE ON consultation\nFOR EACH ROW\nBEGIN\n  IF :NEW.montant IS NULL OR :NEW.montant < 0 THEN\n    RAISE_APPLICATION_ERROR(-20101, 'Montant invalide');\n  END IF;\n  IF :NEW.statut = 'realisee' AND :NEW.date_consultation > SYSDATE THEN\n    RAISE_APPLICATION_ERROR(-20102, 'Une consultation future ne peut pas etre realisee');\n  END IF;\nEND;\n/\n- BEFORE ... FOR EACH ROW : contrôle des valeurs de :NEW avant l'écriture."
+    },
+    {
+     "id": "e05p2q4",
+     "q": "Créez la fonction NbConsultationsPatient(p_id_patient) qui retourne le nombre de consultations réalisées d'un patient.",
+     "points": 3,
+     "a": "CREATE OR REPLACE FUNCTION nbconsultationspatient (p_id_patient IN NUMBER) RETURN NUMBER IS\n  v_nb NUMBER;\nBEGIN\n  SELECT COUNT(*) INTO v_nb FROM consultation\n  WHERE id_patient = p_id_patient AND statut = 'realisee';\n  RETURN v_nb;\nEND;\n/\nSELECT id_patient, nom, nbconsultationspatient(id_patient) FROM patient;"
+    },
+    {
+     "id": "e05p2q5",
+     "q": "Créez la procédure AnnulerConsultation(p_id) qui passe le statut à annulee uniquement si la consultation est au statut prevue ; erreur -20104 si elle n'existe pas, -20103 si son statut n'est pas prevue.",
+     "points": 3,
+     "a": "CREATE OR REPLACE PROCEDURE annulerconsultation (p_id IN NUMBER) IS\n  v_statut consultation.statut%TYPE;\nBEGIN\n  SELECT statut INTO v_statut FROM consultation WHERE id_consultation = p_id;\n  IF v_statut != 'prevue' THEN\n    RAISE_APPLICATION_ERROR(-20103, 'Seule une consultation prevue peut etre annulee');\n  END IF;\n  UPDATE consultation SET statut = 'annulee' WHERE id_consultation = p_id;\nEXCEPTION\n  WHEN NO_DATA_FOUND THEN\n    RAISE_APPLICATION_ERROR(-20104, 'Consultation inexistante');\nEND annulerconsultation;\n/\n- SELECT ... INTO lit le statut ; NO_DATA_FOUND traduit l'inexistence en erreur applicative.\n- Attention : le RAISE_APPLICATION_ERROR -20103 est levé dans le corps, pas dans la section EXCEPTION, donc NO_DATA_FOUND ne l'intercepte pas."
+    }
+   ]
+  }
+ ]
+}

@@ -73,4 +73,9 @@ body { @apply bg-bg text-ink font-sans antialiased; min-height: 100vh; }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
+
+
 @media (prefers-reduced-motion: reduce) { * { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+
+/* Pas de ligatures dans le code : != et <= doivent rester lisibles en SQL */
+code, pre, kbd { font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; }

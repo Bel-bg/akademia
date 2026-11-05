@@ -1,0 +1,115 @@
+{
+ "n": 2,
+ "title": "Épreuve n° 2 · Sujet réel : QCM et étude de cas (contenus multilingues)",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Première partie : QCM",
+   "points": 5,
+   "intro": "Une seule réponse correcte par question. Chaque question vaut 0,5 point.",
+   "questions": [
+    {
+     "id": "e02p1q1",
+     "q": "Dans Oracle, quelle commande permet de modifier la structure d'une table existante ?\n\n- A. CHANGE TABLE\n- B. MODIFY TABLE\n- C. ALTER TABLE\n- D. UPDATE TABLE",
+     "points": 0.5,
+     "a": "Réponse : C (ALTER TABLE). CHANGE TABLE et MODIFY TABLE n'existent pas ; UPDATE modifie des données."
+    },
+    {
+     "id": "e02p1q2",
+     "q": "Que fait la commande suivante ? DELETE FROM Employe;\n\n- A. Supprime la table Employe\n- B. Supprime toutes les lignes de la table Employe\n- C. Supprime uniquement les lignes où la condition est vraie\n- D. Supprime la table et ses contraintes",
+     "points": 0.5,
+     "a": "Réponse : B. Sans WHERE, toutes les lignes sont supprimées ; la table et ses contraintes subsistent (DROP TABLE supprimerait la table)."
+    },
+    {
+     "id": "e02p1q3",
+     "q": "Quelle différence principale existe entre DELETE et TRUNCATE ?\n\n- A. DELETE est plus rapide que TRUNCATE\n- B. TRUNCATE conserve les déclencheurs (triggers)\n- C. TRUNCATE ne peut pas être annulé par un ROLLBACK\n- D. DELETE supprime les colonnes au lieu des lignes",
+     "points": 0.5,
+     "a": "Réponse : C. TRUNCATE est du DDL (validation automatique), plus rapide, sans WHERE, et ne déclenche pas les triggers de suppression."
+    },
+    {
+     "id": "e02p1q4",
+     "q": "Quel mot-clé permet de récupérer les N premières lignes dans une requête Oracle ?\n\n- A. LIMIT\n- B. TOP\n- C. FETCH FIRST N ROWS ONLY\n- D. ROW_NUMBER",
+     "points": 0.5,
+     "a": "Réponse : C (Oracle 12c et plus). LIMIT est MySQL/PostgreSQL, TOP est SQL Server ; ROWNUM est l'alternative historique."
+    },
+    {
+     "id": "e02p1q5",
+     "q": "Dans une procédure PL/SQL, quelle clause est utilisée pour gérer les exceptions ?\n\n- A. CATCH\n- B. TRY\n- C. EXCEPTION\n- D. WHEN",
+     "points": 0.5,
+     "a": "Réponse : C. La section s'ouvre par EXCEPTION ; WHEN introduit chaque cas à l'intérieur."
+    },
+    {
+     "id": "e02p1q6",
+     "q": "Quelle commande permet de renommer une table dans Oracle ?\n\n- A. RENAME TABLE ancienne_table TO nouvelle_table;\n- B. ALTER TABLE ancienne_table RENAME TO nouvelle_table;\n- C. UPDATE ancienne_table SET NAME = nouvelle_table;\n- D. CHANGE TABLE ancienne_table TO nouvelle_table;",
+     "points": 0.5,
+     "a": "Réponse : B. En Oracle : ALTER TABLE ... RENAME TO ... (RENAME TABLE est la syntaxe MySQL)."
+    },
+    {
+     "id": "e02p1q7",
+     "q": "Que fait cette requête ? SELECT DISTINCT id_langue FROM Utilisateur;\n\n- A. Sélectionne toutes les langues triées par nom\n- B. Sélectionne les langues sans doublons\n- C. Supprime les doublons de la table\n- D. Supprime les utilisateurs sans langue",
+     "points": 0.5,
+     "a": "Réponse : B. DISTINCT élimine les doublons du résultat, sans modifier la table."
+    },
+    {
+     "id": "e02p1q8",
+     "q": "Quel type d'objet PL/SQL peut retourner une seule valeur scalaire ?\n\n- A. Une procédure\n- B. Une fonction\n- C. Un trigger\n- D. Un paquet (package)",
+     "points": 0.5,
+     "a": "Réponse : B. La fonction retourne une valeur avec RETURN ; une procédure ne retourne rien (paramètres OUT possibles)."
+    },
+    {
+     "id": "e02p1q9",
+     "q": "Que se passe-t-il si un trigger BEFORE INSERT lève une exception non gérée ?\n\n- A. L'insertion est annulée\n- B. Le trigger est ignoré\n- C. L'insertion est effectuée partiellement\n- D. L'exception est stockée dans une table système",
+     "points": 0.5,
+     "a": "Réponse : A. L'échec du trigger annule l'ordre qui l'a déclenché : c'est ainsi qu'on refuse une opération."
+    },
+    {
+     "id": "e02p1q10",
+     "q": "Quelle instruction PL/SQL permet de boucler un nombre précis de fois ?\n\n- A. WHILE\n- B. FOR\n- C. LOOP\n- D. REPEAT",
+     "points": 0.5,
+     "a": "Réponse : B. FOR i IN 1 .. n LOOP ... END LOOP; convient quand le nombre de tours est connu ; REPEAT n'existe pas en PL/SQL."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Deuxième partie : étude de cas",
+   "points": 15,
+   "intro": "On dispose du modèle logique suivant (extrait).",
+   "context": "- Utilisateur (**id_utilisateur**, nom, prenom, email, id_role, id_langue, date_inscription, statut)\n- Langue (**id_langue**, nom_langue, code_langue, description)\n- Contenu (**id_contenu**, titre, id_type_contenu, texte, date_creation, statut, id_auteur, id_region, id_langue)\n- Commentaire (**id_commentaire**, texte, note, date, id_utilisateur, id_contenu)\n- Role (**id_role**, nom_role)\n\nHypothèse : un contenu est « publié » lorsque son statut vaut `valide`.",
+   "questions": [
+    {
+     "id": "e02p2q1",
+     "q": "Donnez le code SQL de création de la table Contenu.",
+     "points": 3,
+     "a": "CREATE TABLE contenu (\n  id_contenu      NUMBER PRIMARY KEY,\n  titre           VARCHAR2(200) NOT NULL,\n  id_type_contenu NUMBER,\n  texte           CLOB,\n  date_creation   DATE DEFAULT SYSDATE,\n  statut          VARCHAR2(20) DEFAULT 'brouillon'\n                  CHECK (statut IN ('brouillon', 'valide', 'archive')),\n  id_auteur       NUMBER NOT NULL REFERENCES utilisateur(id_utilisateur),\n  id_region       NUMBER,\n  id_langue       NUMBER NOT NULL REFERENCES langue(id_langue)\n);\n- Clé primaire, clés étrangères (auteur, langue), valeur par défaut de la date et du statut, CHECK sur le statut.\n- Le texte long se stocke en CLOB."
+    },
+    {
+     "id": "e02p2q2",
+     "q": "Créez une vue Vue_AuteursActifs affichant le nom, le prénom et le nombre total de contenus publiés par chaque utilisateur ayant publié au moins un contenu.",
+     "points": 3,
+     "a": "CREATE OR REPLACE VIEW vue_auteursactifs AS\nSELECT u.id_utilisateur, u.nom, u.prenom, COUNT(c.id_contenu) AS nb_contenus\nFROM utilisateur u\nJOIN contenu c ON c.id_auteur = u.id_utilisateur\nWHERE c.statut = 'valide'\nGROUP BY u.id_utilisateur, u.nom, u.prenom\nHAVING COUNT(c.id_contenu) >= 1;\n- La jointure interne ne garde que les utilisateurs ayant au moins un contenu ; le HAVING rend l'exigence explicite.\n- Toute colonne non agrégée figure dans le GROUP BY."
+    },
+    {
+     "id": "e02p2q3",
+     "q": "Créez un trigger TRG_BloquerCommentaire qui empêche l'ajout d'un commentaire si : la note n'est pas comprise entre 0 et 5, ou si le contenu concerné n'a pas le statut valide.",
+     "points": 3,
+     "a": "CREATE OR REPLACE TRIGGER trg_bloquercommentaire\nBEFORE INSERT ON commentaire\nFOR EACH ROW\nDECLARE\n  v_statut contenu.statut%TYPE;\nBEGIN\n  IF :NEW.note IS NULL OR :NEW.note NOT BETWEEN 0 AND 5 THEN\n    RAISE_APPLICATION_ERROR(-20001, 'La note doit etre comprise entre 0 et 5');\n  END IF;\n\n  BEGIN\n    SELECT statut INTO v_statut FROM contenu WHERE id_contenu = :NEW.id_contenu;\n  EXCEPTION\n    WHEN NO_DATA_FOUND THEN\n      RAISE_APPLICATION_ERROR(-20003, 'Contenu inexistant');\n  END;\n\n  IF v_statut != 'valide' THEN\n    RAISE_APPLICATION_ERROR(-20002, 'Le contenu n''est pas valide');\n  END IF;\nEND;\n/\n- BEFORE INSERT FOR EACH ROW : on refuse avant l'écriture, avec :NEW.\n- La table lue (contenu) n'est pas la table du trigger (commentaire) : pas de table en mutation.\n- RAISE_APPLICATION_ERROR annule l'insertion."
+    },
+    {
+     "id": "e02p2q4",
+     "q": "Créez une fonction SQL nommée NbContenusParLangue(p_id_langue INT) qui retourne le nombre de contenus publiés dans une langue donnée.",
+     "points": 3,
+     "a": "CREATE OR REPLACE FUNCTION nbcontenusparlangue (p_id_langue IN INT) RETURN NUMBER IS\n  v_nb NUMBER;\nBEGIN\n  SELECT COUNT(*) INTO v_nb\n  FROM contenu\n  WHERE id_langue = p_id_langue AND statut = 'valide';\n  RETURN v_nb;\nEND nbcontenusparlangue;\n/\nSELECT nbcontenusparlangue(1) FROM DUAL;\n- COUNT(*) ne renvoie jamais NULL : pas besoin de NVL.\n- Une fonction retourne une valeur (RETURN) et s'utilise dans un SELECT."
+    },
+    {
+     "id": "e02p2q5",
+     "q": "Créez une procédure ChangerLangueUtilisateur qui prend en paramètres p_id_utilisateur et p_id_langue, et met à jour la langue préférée de l'utilisateur.",
+     "points": 3,
+     "a": "CREATE OR REPLACE PROCEDURE changerlangueutilisateur (\n  p_id_utilisateur IN NUMBER,\n  p_id_langue      IN NUMBER\n) IS\nBEGIN\n  UPDATE utilisateur\n  SET id_langue = p_id_langue\n  WHERE id_utilisateur = p_id_utilisateur;\n\n  IF SQL%ROWCOUNT = 0 THEN\n    RAISE_APPLICATION_ERROR(-20010, 'Utilisateur inconnu');\n  END IF;\nEND changerlangueutilisateur;\n/\nEXEC changerlangueutilisateur(5, 2);\n- Pas de COMMIT : l'appelant valide.\n- SQL%ROWCOUNT = 0 signale un utilisateur inexistant.\n- Une langue inexistante est refusée par la clé étrangère (ORA-02291)."
+    }
+   ]
+  }
+ ]
+}

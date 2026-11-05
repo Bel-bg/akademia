@@ -1,0 +1,115 @@
+{
+ "n": 7,
+ "title": "Épreuve n° 7 · QCM et étude de cas : gestion bancaire",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Première partie : QCM",
+   "points": 5,
+   "intro": "Une seule réponse correcte par question. Chaque question vaut 0,5 point.",
+   "questions": [
+    {
+     "id": "e07p1q1",
+     "q": "Quelle est la conséquence si l'erreur est traitée dans la section EXCEPTION d'une procédure ?\n\n- A. La procédure est supprimée\n- B. La transaction est annulée automatiquement\n- C. L'appelant reçoit toujours l'erreur ORA\n- D. L'appelant considère l'exécution comme réussie",
+     "points": 0.5,
+     "a": "Réponse : D (L'appelant considère l'exécution comme réussie). Une exception traitée localement ne remonte pas ; on la consigne souvent dans une table d'erreurs."
+    },
+    {
+     "id": "e07p1q2",
+     "q": "Que se passe-t-il si on omet SET SERVEROUTPUT ON ?\n\n- A. L'affichage se fait dans un fichier\n- B. Le bloc est refusé\n- C. Le bloc s'exécute mais DBMS_OUTPUT.PUT_LINE n'affiche rien\n- D. Le bloc affiche une erreur de syntaxe",
+     "points": 0.5,
+     "a": "Réponse : C (Le bloc s'exécute mais DBMS_OUTPUT.PUT_LINE n'affiche rien). Le tampon DBMS_OUTPUT existe, mais le client ne l'affiche que si SERVEROUTPUT est activé."
+    },
+    {
+     "id": "e07p1q3",
+     "q": "Que fait COUNT(colonne) ?\n\n- A. Il additionne les valeurs\n- B. Il compte toutes les lignes, NULL compris\n- C. Il compte les valeurs distinctes\n- D. Il compte les valeurs non nulles de la colonne",
+     "points": 0.5,
+     "a": "Réponse : D (Il compte les valeurs non nulles de la colonne). COUNT(*) compte les lignes ; COUNT(colonne) ignore les NULL."
+    },
+    {
+     "id": "e07p1q4",
+     "q": "Si une exception n'est pas traitée dans un bloc interne, que se passe-t-il ?\n\n- A. Elle est transformée en NO_DATA_FOUND\n- B. Elle remonte au bloc englobant puis à l'appelant\n- C. Elle est ignorée\n- D. Le bloc continue normalement",
+     "points": 0.5,
+     "a": "Réponse : B (Elle remonte au bloc englobant puis à l'appelant). La propagation se poursuit jusqu'à un gestionnaire ou jusqu'à l'environnement appelant."
+    },
+    {
+     "id": "e07p1q5",
+     "q": "Quel est l'effet d'un ROLLBACK sur une séquence dont on a pris des valeurs avec NEXTVAL ?\n\n- A. La séquence revient à sa valeur de départ\n- B. Les valeurs sont restituées une à une\n- C. Les valeurs consommées ne sont pas restituées\n- D. La séquence est supprimée",
+     "points": 0.5,
+     "a": "Réponse : C (Les valeurs consommées ne sont pas restituées). Les séquences sont hors transaction : un ROLLBACK laisse des « trous » dans la numérotation."
+    },
+    {
+     "id": "e07p1q6",
+     "q": "Que faire avant de créer un objet qui existe peut-être déjà ?\n\n- A. Utiliser CREATE OR REPLACE (procédures, fonctions, triggers, vues)\n- B. Renommer l'objet existant\n- C. Toujours faire DROP puis recréer sans réfléchir\n- D. Ajouter IF EXISTS à CREATE TABLE sans condition",
+     "points": 0.5,
+     "a": "Réponse : A (Utiliser CREATE OR REPLACE (procédures, fonctions, triggers, vues)). CREATE OR REPLACE convient aux objets PL/SQL et aux vues ; pour une table, on gère l'exception ORA-00955."
+    },
+    {
+     "id": "e07p1q7",
+     "q": "Quelle écriture déclare une table PL/SQL (tableau) de noms ?\n\n- A. TYPE tab IS ARRAY(20) OF VARCHAR2;\n- B. TYPE tab IS TABLE OF VARCHAR2(20) INDEX BY BINARY_INTEGER; t tab;\n- C. t ARRAY OF VARCHAR2(20);\n- D. t TABLE VARCHAR2(20);",
+     "points": 0.5,
+     "a": "Réponse : B (TYPE tab IS TABLE OF VARCHAR2(20) INDEX BY BINARY_INTEGER; t tab;). Deux étapes : déclarer le type (TABLE OF ... INDEX BY ...), puis la variable de ce type."
+    },
+    {
+     "id": "e07p1q8",
+     "q": "Que permet « WHERE CURRENT OF c » ?\n\n- A. Choisir la première ligne de la table\n- B. Verrouiller toute la base\n- C. Modifier ou supprimer la ligne lue par le dernier FETCH du curseur c\n- D. Recommencer le curseur",
+     "points": 0.5,
+     "a": "Réponse : C (Modifier ou supprimer la ligne lue par le dernier FETCH du curseur c). Il nécessite un curseur déclaré FOR UPDATE ; il cible directement la ligne courante."
+    },
+    {
+     "id": "e07p1q9",
+     "q": "Quelle contrainte garantit qu'une valeur existe dans la table parente ?\n\n- A. DEFAULT\n- B. UNIQUE\n- C. FOREIGN KEY ... REFERENCES\n- D. CHECK",
+     "points": 0.5,
+     "a": "Réponse : C (FOREIGN KEY ... REFERENCES). La clé étrangère impose l'intégrité référentielle : la valeur doit exister comme clé de la table référencée (ou être NULL)."
+    },
+    {
+     "id": "e07p1q10",
+     "q": "À quoi servent INSERTING, UPDATING et DELETING ?\n\n- A. À désactiver le trigger\n- B. À compter les lignes modifiées\n- C. À créer des index\n- D. À savoir quelle opération a déclenché le trigger",
+     "points": 0.5,
+     "a": "Réponse : D (À savoir quelle opération a déclenché le trigger). Ce sont des prédicats booléens utilisables dans un trigger qui couvre plusieurs événements."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Deuxième partie : étude de cas",
+   "points": 15,
+   "intro": "On dispose du modèle logique suivant.",
+   "context": "- CLIENT (**id_client**, nom, prenom, telephone)\n- COMPTE (**id_compte**, numero, solde, type_compte, date_ouverture, #id_client)\n- OPERATION (**id_operation**, #id_compte, type_op, montant, date_op)\n\nLe type d'opération vaut `DEPOT` ou `RETRAIT`.",
+   "questions": [
+    {
+     "id": "e07p2q1",
+     "q": "Donnez le code SQL de création de la table OPERATION (montant strictement positif, type limité à DEPOT ou RETRAIT, date par défaut du jour).",
+     "points": 3,
+     "a": "CREATE TABLE operation (\n  id_operation NUMBER PRIMARY KEY,\n  id_compte    NUMBER NOT NULL REFERENCES compte(id_compte),\n  type_op      VARCHAR2(10) NOT NULL CHECK (type_op IN ('DEPOT', 'RETRAIT')),\n  montant      NUMBER(12,2) NOT NULL CHECK (montant > 0),\n  date_op      DATE DEFAULT SYSDATE\n);"
+    },
+    {
+     "id": "e07p2q2",
+     "q": "Créez une vue VUE_SOLDES_CLIENTS affichant, pour chaque client, son nom, son prénom, son nombre de comptes et la somme de ses soldes.",
+     "points": 3,
+     "a": "CREATE OR REPLACE VIEW vue_soldes_clients AS\nSELECT c.nom, c.prenom, COUNT(cp.id_compte) AS nb_comptes, NVL(SUM(cp.solde), 0) AS solde_total\nFROM client c\nLEFT JOIN compte cp ON cp.id_client = c.id_client\nGROUP BY c.id_client, c.nom, c.prenom;\n- LEFT JOIN : les clients sans compte apparaissent (0 compte, solde 0 grâce à NVL)."
+    },
+    {
+     "id": "e07p2q3",
+     "q": "Créez la fonction SoldeTotalClient(p_id_client) qui retourne la somme des soldes des comptes d'un client, 0 s'il n'a aucun compte.",
+     "points": 3,
+     "a": "CREATE OR REPLACE FUNCTION soldetotalclient (p_id_client IN NUMBER) RETURN NUMBER IS\n  v_total NUMBER;\nBEGIN\n  SELECT NVL(SUM(solde), 0) INTO v_total FROM compte WHERE id_client = p_id_client;\n  RETURN v_total;\nEND;\n/"
+    },
+    {
+     "id": "e07p2q4",
+     "q": "Créez la procédure EffectuerOperation(p_id_compte, p_type, p_montant) qui insère une opération : erreur -20301 si le compte n'existe pas. La mise à jour du solde est confiée à un trigger.",
+     "points": 3,
+     "a": "CREATE OR REPLACE PROCEDURE effectueroperation (\n  p_id_compte IN NUMBER, p_type IN VARCHAR2, p_montant IN NUMBER\n) IS\n  v_nb NUMBER;\nBEGIN\n  SELECT COUNT(*) INTO v_nb FROM compte WHERE id_compte = p_id_compte;\n  IF v_nb = 0 THEN\n    RAISE_APPLICATION_ERROR(-20301, 'Compte inconnu');\n  END IF;\n  INSERT INTO operation (id_operation, id_compte, type_op, montant)\n  VALUES ((SELECT NVL(MAX(id_operation), 0) + 1 FROM operation), p_id_compte, UPPER(p_type), p_montant);\nEND effectueroperation;\n/\n- Pas de COMMIT : l'appelant valide. Le solde est géré par le trigger de la question suivante."
+    },
+    {
+     "id": "e07p2q5",
+     "q": "Créez le trigger TRG_OPERATION_SOLDE qui, avant l'insertion d'une opération, refuse (erreur -20302) un retrait supérieur au solde du compte, sinon met à jour le solde (ajout pour un dépôt, retrait pour un retrait).",
+     "points": 3,
+     "a": "CREATE OR REPLACE TRIGGER trg_operation_solde\nBEFORE INSERT ON operation\nFOR EACH ROW\nDECLARE\n  v_solde compte.solde%TYPE;\nBEGIN\n  SELECT solde INTO v_solde FROM compte WHERE id_compte = :NEW.id_compte;\n\n  IF :NEW.type_op = 'RETRAIT' THEN\n    IF v_solde < :NEW.montant THEN\n      RAISE_APPLICATION_ERROR(-20302, 'Solde insuffisant');\n    END IF;\n    UPDATE compte SET solde = solde - :NEW.montant WHERE id_compte = :NEW.id_compte;\n  ELSE\n    UPDATE compte SET solde = solde + :NEW.montant WHERE id_compte = :NEW.id_compte;\n  END IF;\nEND;\n/\n- La table lue et modifiée (compte) n'est pas la table du trigger (operation) : pas de table en mutation.\n- BEFORE : la vérification se fait avant l'écriture ; l'échec annule l'insertion de l'opération."
+    }
+   ]
+  }
+ ]
+}

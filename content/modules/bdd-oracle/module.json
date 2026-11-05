@@ -1,0 +1,28 @@
+{
+  "id": "bdd-oracle",
+  "title": "Administration de bases de données",
+  "subtitle": "SQL & PL/SQL Oracle · ENEAM · IG3 (AIP et ARI)",
+  "description": "Rappels SQL Oracle, langage PL/SQL (blocs, curseurs, exceptions), procédures et fonctions stockées, packages et triggers, avec TP et sujets d'examen corrigés.",
+  "emoji": "🗄️",
+  "color": "#D9480F",
+  "level": "Licence 3",
+  "estimatedHours": 12,
+  "parts": [
+    { "id": "ch1", "title": "Chapitre 1 · Rappels SQL Oracle", "chapters": ["1-1-ddl-dml", "1-2-requetes"] },
+    { "id": "ch2", "title": "Chapitre 2 · Le langage PL/SQL", "chapters": ["2-1-blocs-variables", "2-2-controle-curseurs", "2-3-erreurs"] },
+    { "id": "ch3", "title": "Chapitre 3 · Objets stockés", "chapters": ["3-1-procedures-fonctions", "3-2-triggers"] },
+    { "id": "ann", "title": "Annexes", "chapters": ["a-tp-corrige", "b-methode-fiche"] }
+  ],
+  "chapters": [
+    { "id": "1-1-ddl-dml", "number": "1.1", "title": "Définir et manipuler les données", "summary": "DDL, types, contraintes, DELETE vs TRUNCATE, séquences, transactions, vues.", "minutes": 12, "file": "1-1-ddl-dml.md" },
+    { "id": "1-2-requetes", "number": "1.2", "title": "Interroger la base", "summary": "Jointures, agrégats, sous-requêtes, anti-jointure, dates, Top-N, archivage.", "minutes": 11, "file": "1-2-requetes.md" },
+    { "id": "2-1-blocs-variables", "number": "2.1", "title": "Blocs, variables et types", "summary": "Structure d'un bloc, déclarations valides ou non, %TYPE, %ROWTYPE, RECORD, tables.", "minutes": 11, "file": "2-1-blocs-variables.md" },
+    { "id": "2-2-controle-curseurs", "number": "2.2", "title": "Structures de contrôle et curseurs", "summary": "IF, boucles, curseurs implicites et explicites, attributs, FOR UPDATE.", "minutes": 11, "file": "2-2-controle-curseurs.md" },
+    { "id": "2-3-erreurs", "number": "2.3", "title": "Gestion des erreurs", "summary": "EXCEPTION, erreurs standard, erreurs utilisateur, RAISE_APPLICATION_ERROR.", "minutes": 9, "file": "2-3-erreurs.md" },
+    { "id": "3-1-procedures-fonctions", "number": "3.1", "title": "Procédures, fonctions et packages", "summary": "Paramètres IN/OUT, RETURN, appels, dictionnaire, spécification et corps de package.", "minutes": 12, "file": "3-1-procedures-fonctions.md" },
+    { "id": "3-2-triggers", "number": "3.2", "title": "Les triggers", "summary": "12 types, :OLD/:NEW, BEFORE/AFTER, table en mutation, journalisation.", "minutes": 12, "file": "3-2-triggers.md" },
+    { "id": "a-tp-corrige", "number": "A", "title": "TP corrigé : fonctions, procédures, triggers", "summary": "Correction détaillée du TP (parties 1 à 5).", "minutes": 14, "file": "a-tp-corrige.md" },
+    { "id": "b-methode-fiche", "number": "B", "title": "Méthode d'examen et fiche syntaxe", "summary": "Méthode en 6 temps, quel objet utiliser, erreurs fréquentes, aide-mémoire.", "minutes": 7, "file": "b-methode-fiche.md" }
+  ],
+  "features": { "quiz": true, "blitz": true, "exams": true, "flashcards": true }
+}

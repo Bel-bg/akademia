@@ -107,9 +107,17 @@ export function Inline({ text, className }: { text: string; className?: string }
   );
 }
 
-/** Texte brut multi-lignes avec puces « - » (corrigés d'épreuve). */
+/** Corrigés d'épreuve : bloc de code (SQL/PL-SQL) en tête, puis explications à puces « - ». */
+const CODE_START = /^(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|DECLARE|BEGIN|SET|ACCEPT|EXEC|WITH|COMMIT|--)/i;
+
 export function AnswerText({ text }: { text: string }) {
-  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+  const raw = text.replace(/\r/g, '').split('\n');
+  const firstBullet = raw.findIndex((l) => l.startsWith('- '));
+  const head = (firstBullet === -1 ? raw : raw.slice(0, firstBullet)).join('\n').replace(/\s+$/, '');
+  const isCode = CODE_START.test(head.trimStart());
+  const rest = isCode ? (firstBullet === -1 ? [] : raw.slice(firstBullet)) : raw;
+
+  const lines = rest.map((l) => l.trim()).filter(Boolean);
   const items: ReactNode[] = [];
   let bullets: string[] = [];
   const flush = () => {
@@ -136,7 +144,16 @@ export function AnswerText({ text }: { text: string }) {
     }
   });
   flush();
-  return <div className="text-[14.5px] leading-relaxed">{items}</div>;
+  return (
+    <div className="text-[14.5px] leading-relaxed">
+      {isCode && (
+        <pre className="my-1.5 overflow-x-auto rounded-xl border border-line bg-soft p-3 font-mono text-[12.5px] leading-relaxed text-ink">
+          <code>{head}</code>
+        </pre>
+      )}
+      {items}
+    </div>
+  );
 }
 
 export function textOf(node: ReactNode): string {

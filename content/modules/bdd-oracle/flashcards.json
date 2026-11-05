@@ -1,0 +1,578 @@
+[
+ {
+  "id": "bd-f001",
+  "front": "Commande pour modifier la structure d'une table",
+  "back": "`ALTER TABLE` (ADD, MODIFY, DROP COLUMN, RENAME)",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f002",
+  "front": "Renommer une table en Oracle",
+  "back": "`ALTER TABLE ancien RENAME TO nouveau;` (ou `RENAME ancien TO nouveau;`)",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f003",
+  "front": "Renommer une colonne",
+  "back": "`ALTER TABLE t RENAME COLUMN a TO b;`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f004",
+  "front": "Que fait `DELETE FROM t;` ?",
+  "back": "Supprime **toutes les lignes** (annulable par ROLLBACK) ; la table et ses contraintes restent.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f005",
+  "front": "DELETE vs TRUNCATE",
+  "back": "TRUNCATE : DDL, pas de WHERE, **non annulable**, très rapide, ne déclenche pas les triggers DELETE. DELETE : DML, annulable, avec WHERE.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f006",
+  "front": "DROP TABLE vs TRUNCATE TABLE",
+  "back": "DROP supprime la table **et** sa structure ; TRUNCATE ne supprime que les lignes.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f007",
+  "front": "Les familles de commandes SQL",
+  "back": "DDL (CREATE, ALTER, DROP, TRUNCATE) · DML (INSERT, UPDATE, DELETE) · DQL (SELECT) · TCL (COMMIT, ROLLBACK, SAVEPOINT) · DCL (GRANT, REVOKE)",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f008",
+  "front": "Une commande DDL provoque…",
+  "back": "Un **COMMIT implicite** : elle ne peut pas être annulée.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f009",
+  "front": "Copier la structure d'une table sans les lignes",
+  "back": "`CREATE TABLE copie AS SELECT * FROM source WHERE 1 = 0;`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f010",
+  "front": "Créer une séquence démarrant à 2, pas de 1",
+  "back": "`CREATE SEQUENCE s START WITH 2 INCREMENT BY 1;`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f011",
+  "front": "NEXTVAL vs CURRVAL",
+  "back": "NEXTVAL : valeur suivante. CURRVAL : dernière valeur obtenue dans la session (après un NEXTVAL).",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f012",
+  "front": "Colonne auto-incrémentée (Oracle 12c+)",
+  "back": "`id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f013",
+  "front": "Les propriétés ACID",
+  "back": "Atomicité · Cohérence · Isolation · Durabilité",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f014",
+  "front": "SAVEPOINT et ROLLBACK TO",
+  "back": "SAVEPOINT pose un repère ; ROLLBACK TO repère annule seulement ce qui suit, sans fermer la transaction.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f015",
+  "front": "Qu'est-ce qu'une vue ?",
+  "back": "Une requête enregistrée sous un nom : aucune donnée stockée ; sert à simplifier et masquer.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f016",
+  "front": "Créer ou remplacer une vue",
+  "back": "`CREATE OR REPLACE VIEW v AS SELECT ...;`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f017",
+  "front": "WHERE vs HAVING",
+  "back": "WHERE filtre les **lignes** avant regroupement ; HAVING filtre les **groupes** après agrégation.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f018",
+  "front": "Top-N en Oracle 12c+",
+  "back": "`ORDER BY ... FETCH FIRST N ROWS ONLY` (LIMIT et TOP n'existent pas).",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f019",
+  "front": "Que renvoie `SUM` sans ligne ?",
+  "back": "**NULL** → écrire `NVL(SUM(x), 0)`.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f020",
+  "front": "« N'ayant jamais… » se traduit par",
+  "back": "`NOT EXISTS` (anti-jointure) ou `LEFT JOIN … WHERE col_droite IS NULL`.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f021",
+  "front": "Piège de NOT IN",
+  "back": "Si la sous-requête contient un NULL, `NOT IN` ne retourne aucune ligne.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f022",
+  "front": "Premier jour du mois en cours",
+  "back": "`TRUNC(SYSDATE, 'MM')`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f023",
+  "front": "Il y a cinq ans",
+  "back": "`ADD_MONTHS(SYSDATE, -60)`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f024",
+  "front": "Soustraire deux dates",
+  "back": "`d2 - d1` donne un nombre de **jours**.",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f025",
+  "front": "Archiver des lignes",
+  "back": "`INSERT INTO archive SELECT … WHERE cond;` puis `DELETE … WHERE cond;` puis `COMMIT;`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f026",
+  "front": "Tester une valeur nulle",
+  "back": "`IS NULL` / `IS NOT NULL` (jamais `= NULL`).",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f027",
+  "front": "Remplacer NULL par 0",
+  "back": "`NVL(x, 0)` ou `COALESCE(x, 0)`",
+  "tag": "SQL"
+ },
+ {
+  "id": "bd-f028",
+  "front": "Les 3 sections d'un bloc PL/SQL",
+  "back": "DECLARE (facultative) · BEGIN … END (obligatoire) · EXCEPTION (facultative)",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f029",
+  "front": "Que doit-on mettre après `END;` dans un script ?",
+  "back": "Une ligne contenant seulement `/` pour exécuter le bloc.",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f030",
+  "front": "Que fait `SET SERVEROUTPUT ON` ?",
+  "back": "Autorise l'affichage de `DBMS_OUTPUT.PUT_LINE` (sinon rien ne s'affiche).",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f031",
+  "front": "Opérateur d'affectation",
+  "back": "`:=` (le signe `=` sert à comparer).",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f032",
+  "front": "Concaténer des textes",
+  "back": "L'opérateur `||`",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f033",
+  "front": "`%TYPE`",
+  "back": "Déclare une variable du même type qu'une colonne : `v clients.nom%TYPE;`",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f034",
+  "front": "`%ROWTYPE`",
+  "back": "Déclare un enregistrement ayant la structure d'une ligne de table ou de curseur.",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f035",
+  "front": "Déclarer `v_x, v_y VARCHAR2(10);`",
+  "back": "**Incorrect** : une seule variable par déclaration.",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f036",
+  "front": "Déclarer `v DATE NOT NULL;`",
+  "back": "**Incorrect** : NOT NULL exige une valeur initiale (`:= SYSDATE`).",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f037",
+  "front": "Déclarer `v BOOLEAN := 1;`",
+  "back": "**Incorrect** : un BOOLEAN vaut TRUE, FALSE ou NULL.",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f038",
+  "front": "Variable d'un type non déclaré",
+  "back": "**Incorrect** : le type (`TYPE … IS RECORD`) doit être déclaré avant la variable.",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f039",
+  "front": "Déclarer une constante",
+  "back": "`c CONSTANT NUMBER := 0.18;` (valeur obligatoire)",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f040",
+  "front": "Déclarer un enregistrement personnalisé",
+  "back": "`TYPE t IS RECORD (a INTEGER, b VARCHAR2(20)); r t;`",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f041",
+  "front": "Déclarer une table PL/SQL",
+  "back": "`TYPE t IS TABLE OF VARCHAR2(20) INDEX BY BINARY_INTEGER; v t;`",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f042",
+  "front": "`SELECT … INTO` : combien de lignes ?",
+  "back": "Exactement **une** (sinon NO_DATA_FOUND ou TOO_MANY_ROWS).",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f043",
+  "front": "Exécuter un DDL depuis un bloc",
+  "back": "`EXECUTE IMMEDIATE 'CREATE TABLE …';`",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f044",
+  "front": "Saisir une valeur dans un script",
+  "back": "`ACCEPT p PROMPT 'texte'` puis `&p` (apostrophes si texte).",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f045",
+  "front": "Syntaxe de l'alternative multiple",
+  "back": "`IF … THEN … ELSIF … THEN … ELSE … END IF;`",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f046",
+  "front": "Boucle pour un nombre de tours connu",
+  "back": "`FOR i IN 1 .. n LOOP … END LOOP;` (`REVERSE` pour décroître)",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f047",
+  "front": "Sortir d'une boucle LOOP",
+  "back": "`EXIT WHEN condition;`",
+  "tag": "PL/SQL"
+ },
+ {
+  "id": "bd-f048",
+  "front": "Curseur implicite vs explicite",
+  "back": "Implicite : géré par Oracle (DML, SELECT INTO). Explicite : déclaré pour un SELECT à plusieurs lignes.",
+  "tag": "Curseurs"
+ },
+ {
+  "id": "bd-f049",
+  "front": "Les 4 étapes d'un curseur explicite",
+  "back": "Déclarer · OPEN · FETCH · CLOSE",
+  "tag": "Curseurs"
+ },
+ {
+  "id": "bd-f050",
+  "front": "Déclarer un curseur",
+  "back": "`CURSOR c IS SELECT …;` (paramétré : `CURSOR c (p NUMBER) IS …`)",
+  "tag": "Curseurs"
+ },
+ {
+  "id": "bd-f051",
+  "front": "Boucle FOR sur curseur",
+  "back": "`FOR r IN c LOOP … END LOOP;` : OPEN, FETCH et CLOSE automatiques.",
+  "tag": "Curseurs"
+ },
+ {
+  "id": "bd-f052",
+  "front": "Attributs d'un curseur",
+  "back": "`%FOUND` · `%NOTFOUND` · `%ISOPEN` · `%ROWCOUNT`",
+  "tag": "Curseurs"
+ },
+ {
+  "id": "bd-f053",
+  "front": "Attributs du curseur implicite",
+  "back": "`SQL%FOUND`, `SQL%NOTFOUND`, `SQL%ROWCOUNT`, `SQL%ISOPEN` (toujours faux).",
+  "tag": "Curseurs"
+ },
+ {
+  "id": "bd-f054",
+  "front": "`FOR UPDATE` et `CURRENT OF`",
+  "back": "Verrouille les lignes ; `WHERE CURRENT OF c` modifie la ligne lue par le dernier FETCH.",
+  "tag": "Curseurs"
+ },
+ {
+  "id": "bd-f055",
+  "front": "Où placer `EXIT WHEN c%NOTFOUND` ?",
+  "back": "Juste **après** le `FETCH`.",
+  "tag": "Curseurs"
+ },
+ {
+  "id": "bd-f056",
+  "front": "Mot-clé de la section d'erreurs",
+  "back": "`EXCEPTION` (puis `WHEN … THEN …`).",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f057",
+  "front": "NO_DATA_FOUND",
+  "back": "ORA-01403 · SQLCODE 100 · SELECT INTO sans ligne.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f058",
+  "front": "TOO_MANY_ROWS",
+  "back": "ORA-01422 · SQLCODE -1422 · SELECT INTO avec plusieurs lignes.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f059",
+  "front": "DUP_VAL_ON_INDEX",
+  "back": "ORA-00001 · SQLCODE -1 · doublon de clé.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f060",
+  "front": "ZERO_DIVIDE",
+  "back": "ORA-01476 · division par zéro.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f061",
+  "front": "INVALID_NUMBER",
+  "back": "ORA-01722 · conversion en nombre impossible.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f062",
+  "front": "SQLCODE et SQLERRM",
+  "back": "SQLCODE : numéro de l'erreur (0 si aucune). SQLERRM : message correspondant.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f063",
+  "front": "`WHEN OTHERS`",
+  "back": "Attrape toutes les autres erreurs ; toujours en **dernier**.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f064",
+  "front": "Erreur utilisateur nommée",
+  "back": "`e EXCEPTION;` · `RAISE e;` · `WHEN e THEN …`",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f065",
+  "front": "`RAISE_APPLICATION_ERROR`",
+  "back": "`RAISE_APPLICATION_ERROR(-20001, 'msg');` — code entre -20000 et -20999.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f066",
+  "front": "Nommer un code Oracle",
+  "back": "`PRAGMA EXCEPTION_INIT(e, -2292);`",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f067",
+  "front": "Apostrophe dans un texte",
+  "back": "On la double : `'n''existe pas'`.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f068",
+  "front": "Un UPDATE ne trouve aucune ligne",
+  "back": "Pas d'exception : tester `SQL%ROWCOUNT = 0`.",
+  "tag": "Erreurs"
+ },
+ {
+  "id": "bd-f069",
+  "front": "Fonction vs procédure",
+  "back": "Fonction : retourne une valeur (RETURN), utilisable dans un SELECT. Procédure : exécute une action, appelée dans un bloc ou par EXEC.",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f070",
+  "front": "Modes de paramètres",
+  "back": "`IN` (défaut) · `OUT` · `IN OUT` (fonction : IN seulement).",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f071",
+  "front": "Créer une procédure",
+  "back": "`CREATE OR REPLACE PROCEDURE p (a IN NUMBER) IS … BEGIN … END p;`",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f072",
+  "front": "Créer une fonction",
+  "back": "`CREATE OR REPLACE FUNCTION f (a IN NUMBER) RETURN NUMBER IS … BEGIN RETURN x; END f;`",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f073",
+  "front": "Appeler une procédure en interactif",
+  "back": "`EXEC p(1);`",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f074",
+  "front": "Appeler une fonction dans une requête",
+  "back": "`SELECT f(1) FROM DUAL;` ou `WHERE f(col) = …`",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f075",
+  "front": "Règle d'or d'une fonction",
+  "back": "Chaque chemin finit par `RETURN` (y compris dans EXCEPTION).",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f076",
+  "front": "Pourquoi pas de COMMIT dans une procédure ?",
+  "back": "L'appelant valide ou annule l'ensemble de la transaction.",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f077",
+  "front": "Vues du dictionnaire pour les objets stockés",
+  "back": "USER_OBJECTS (liste) · USER_SOURCE (texte) · USER_ERRORS (erreurs de compilation)",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f078",
+  "front": "Supprimer procédure, fonction",
+  "back": "`DROP PROCEDURE nom;` · `DROP FUNCTION nom;`",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f079",
+  "front": "Les deux parties d'un package",
+  "back": "Spécification (public) et corps (définitions + éléments privés), compilées séparément.",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f080",
+  "front": "Surcharge",
+  "back": "Plusieurs sous-programmes de même nom, paramètres différents (dans un package).",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f081",
+  "front": "Supprimer le corps d'un package",
+  "back": "`DROP PACKAGE BODY nom;`",
+  "tag": "Procédures"
+ },
+ {
+  "id": "bd-f082",
+  "front": "Qu'est-ce qu'un trigger ?",
+  "back": "Un traitement PL/SQL déclenché automatiquement par un INSERT, UPDATE ou DELETE.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f083",
+  "front": "Les 12 types de triggers",
+  "back": "3 événements × 2 modes (ordre / ligne) × 2 moments (BEFORE / AFTER).",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f084",
+  "front": "`FOR EACH ROW`",
+  "back": "Trigger par ligne : s'exécute une fois par ligne touchée.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f085",
+  "front": "BEFORE ou AFTER ?",
+  "back": "BEFORE : contrôler, modifier :NEW, initialiser. AFTER : tracer, propager, journaliser.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f086",
+  "front": "`:OLD` et `:NEW`",
+  "back": "INSERT : OLD vide, NEW = valeur créée · UPDATE : avant / après · DELETE : OLD = valeur supprimée, NEW vide.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f087",
+  "front": "`INSERTING`, `UPDATING`, `DELETING`",
+  "back": "Prédicats indiquant quelle opération a déclenché le trigger.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f088",
+  "front": "`UPDATE OF colonne`",
+  "back": "Le trigger ne se déclenche que si la colonne figure dans le SET.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f089",
+  "front": "Refuser une opération",
+  "back": "`RAISE_APPLICATION_ERROR(-20xxx, 'msg')` dans un trigger BEFORE.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f090",
+  "front": "Ordre d'exécution",
+  "back": "BEFORE ordre → (pour chaque ligne : BEFORE ligne → AFTER ligne) → AFTER ordre.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f091",
+  "front": "Table en mutation",
+  "back": "ORA-04091 : un trigger par ligne ne peut pas lire ni modifier la table qui le déclenche.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f092",
+  "front": "COMMIT dans un trigger",
+  "back": "**Interdit** (ORA-04092).",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f093",
+  "front": "Clause WHEN d'un trigger",
+  "back": "Condition sans requête SQL ; colonnes sans deux-points : `WHEN (NEW.prix > 0)`.",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f094",
+  "front": "Désactiver / réactiver",
+  "back": "`ALTER TRIGGER t DISABLE|ENABLE;` · `ALTER TABLE x DISABLE ALL TRIGGERS;`",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f095",
+  "front": "Lister les triggers",
+  "back": "`SELECT * FROM user_triggers;`",
+  "tag": "Triggers"
+ },
+ {
+  "id": "bd-f096",
+  "front": "Supprimer un trigger",
+  "back": "`DROP TRIGGER nom;`",
+  "tag": "Triggers"
+ }
+]

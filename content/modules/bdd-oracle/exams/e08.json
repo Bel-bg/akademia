@@ -1,0 +1,135 @@
+{
+ "n": 8,
+ "title": "Épreuve n° 8 · Location de voitures",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : requêtes SQL",
+   "points": 5,
+   "intro": "Écrivez les requêtes Oracle suivantes.",
+   "context": "- AGENCE (**CodeAgence**, ville)\n- VOITURE (**Immat**, marque, modele, prixjour, #CodeAgence)\n- CLIENT (**IdClient**, nom, telephone)\n- LOCATION (**IdLoc**, #IdClient, #Immat, datedebut, datefin, montant)",
+   "questions": [
+    {
+     "id": "e08p1q1",
+     "q": "Afficher, pour chaque ville, le chiffre d'affaires total des locations (somme des montants), du plus élevé au plus faible.",
+     "points": 1,
+     "a": "SELECT a.ville, SUM(l.montant) AS ca\nFROM agence a\nJOIN voiture v  ON v.codeagence = a.codeagence\nJOIN location l ON l.immat = v.immat\nGROUP BY a.ville\nORDER BY ca DESC;"
+    },
+    {
+     "id": "e08p1q2",
+     "q": "Lister les voitures qui n'ont jamais été louées.",
+     "points": 1,
+     "a": "SELECT v.*\nFROM voiture v\nWHERE NOT EXISTS (SELECT 1 FROM location l WHERE l.immat = v.immat);"
+    },
+    {
+     "id": "e08p1q3",
+     "q": "Lister les clients ayant effectué plus de 3 locations débutées en 2025.",
+     "points": 1,
+     "a": "SELECT c.idclient, c.nom, COUNT(*) AS nb_locations\nFROM client c JOIN location l ON l.idclient = c.idclient\nWHERE EXTRACT(YEAR FROM l.datedebut) = 2025\nGROUP BY c.idclient, c.nom\nHAVING COUNT(*) > 3;"
+    },
+    {
+     "id": "e08p1q4",
+     "q": "Afficher la durée moyenne de location (en jours) par marque.",
+     "points": 1,
+     "a": "SELECT v.marque, ROUND(AVG(l.datefin - l.datedebut), 1) AS duree_moyenne\nFROM voiture v JOIN location l ON l.immat = v.immat\nGROUP BY v.marque;\n- La soustraction de deux dates donne des jours."
+    },
+    {
+     "id": "e08p1q5",
+     "q": "Augmenter de 10 % le prix par jour des voitures louées plus de 10 fois.",
+     "points": 1,
+     "a": "UPDATE voiture\nSET prixjour = prixjour * 1.10\nWHERE immat IN (SELECT immat FROM location GROUP BY immat HAVING COUNT(*) > 10);\nCOMMIT;\n- Sous-requête avec GROUP BY ... HAVING pour repérer les voitures concernées."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : déclarations de variables",
+   "points": 3,
+   "intro": "Parmi les déclarations suivantes, déterminer celles qui sont incorrectes et justifier.",
+   "questions": [
+    {
+     "id": "e08p2q1",
+     "q": "A : `v_immat voiture.immat%TYPE;`",
+     "points": 0.5,
+     "a": "Correcte."
+    },
+    {
+     "id": "e08p2q2",
+     "q": "B : `v_duree := 5;`",
+     "points": 0.5,
+     "a": "Incorrecte : aucun type n'est donné ; il faut v_duree NUMBER := 5;"
+    },
+    {
+     "id": "e08p2q3",
+     "q": "C : `v_total NUMBER(8,2) DEFAULT 0;`",
+     "points": 0.5,
+     "a": "Correcte : DEFAULT initialise la variable."
+    },
+    {
+     "id": "e08p2q4",
+     "q": "D : `CONSTANT v_taux NUMBER := 0.2;`",
+     "points": 0.5,
+     "a": "Incorrecte : le nom vient d'abord : v_taux CONSTANT NUMBER := 0.2;"
+    },
+    {
+     "id": "e08p2q5",
+     "q": "E : `v_actif BOOLEAN NOT NULL := TRUE;`",
+     "points": 0.5,
+     "a": "Correcte : NOT NULL accompagné d'une valeur initiale valide."
+    },
+    {
+     "id": "e08p2q6",
+     "q": "F : `v_nom, v_tel VARCHAR2(20);`",
+     "points": 0.5,
+     "a": "Incorrecte : une seule variable par déclaration."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : séquence, bloc, procédure",
+   "points": 7,
+   "questions": [
+    {
+     "id": "e08p3q1",
+     "q": "Créez la séquence SEQ_LOC qui commence à 1, s'incrémente de 1, sans cache.",
+     "points": 1,
+     "a": "CREATE SEQUENCE seq_loc START WITH 1 INCREMENT BY 1 NOCACHE;"
+    },
+    {
+     "id": "e08p3q2",
+     "q": "Écrivez un bloc PL/SQL avec une boucle FOR qui affiche, pour chaque voiture, « immat : marque modèle - Economique/Premium » (Economique si le prix par jour est inférieur à 20000, Premium sinon).",
+     "points": 3,
+     "a": "SET SERVEROUTPUT ON\nBEGIN\n  FOR r IN (SELECT immat, marque, modele, prixjour FROM voiture ORDER BY immat) LOOP\n    DBMS_OUTPUT.PUT_LINE(r.immat || ' : ' || r.marque || ' ' || r.modele || ' - ' ||\n      CASE WHEN r.prixjour < 20000 THEN 'Economique' ELSE 'Premium' END);\n  END LOOP;\nEND;\n/\n- Boucle FOR sur une requête : pas de curseur à déclarer, pas de variable r à déclarer."
+    },
+    {
+     "id": "e08p3q3",
+     "q": "Créez la procédure LouerVoiture(p_idclient, p_immat, p_datedebut, p_datefin, p_idloc OUT) : erreur -20401 si la voiture est déjà louée sur une période qui chevauche ; sinon calcule le montant (nombre de jours × prix par jour) et insère la location.",
+     "points": 3,
+     "a": "CREATE OR REPLACE PROCEDURE louervoiture (\n  p_idclient IN NUMBER, p_immat IN VARCHAR2,\n  p_datedebut IN DATE, p_datefin IN DATE, p_idloc OUT NUMBER\n) IS\n  v_nb   NUMBER;\n  v_prix voiture.prixjour%TYPE;\nBEGIN\n  SELECT COUNT(*) INTO v_nb FROM location\n  WHERE immat = p_immat AND datedebut <= p_datefin AND datefin >= p_datedebut;\n  IF v_nb > 0 THEN\n    RAISE_APPLICATION_ERROR(-20401, 'Voiture indisponible sur cette periode');\n  END IF;\n\n  SELECT prixjour INTO v_prix FROM voiture WHERE immat = p_immat;\n  p_idloc := seq_loc.NEXTVAL;\n  INSERT INTO location (idloc, idclient, immat, datedebut, datefin, montant)\n  VALUES (p_idloc, p_idclient, p_immat, p_datedebut, p_datefin, (p_datefin - p_datedebut) * v_prix);\nEND louervoiture;\n/\n- Chevauchement : début existant avant ma fin ET fin existante après mon début.\n- Une voiture inexistante lèvera NO_DATA_FOUND (à traiter par une erreur applicative si demandé)."
+    }
+   ]
+  },
+  {
+   "id": "p4",
+   "title": "Exercice 4 : trigger et fonction",
+   "points": 5,
+   "questions": [
+    {
+     "id": "e08p4q1",
+     "q": "Créez un trigger qui refuse (erreur -20402) une location dont la date de fin est antérieure à la date de début, à l'insertion comme à la modification des dates.",
+     "points": 3,
+     "a": "CREATE OR REPLACE TRIGGER trg_location_dates\nBEFORE INSERT OR UPDATE OF datedebut, datefin ON location\nFOR EACH ROW\nBEGIN\n  IF :NEW.datefin < :NEW.datedebut THEN\n    RAISE_APPLICATION_ERROR(-20402, 'La date de fin precede la date de debut');\n  END IF;\nEND;\n/\n- UPDATE OF avec deux colonnes : déclenché si l'une des deux figure dans le SET."
+    },
+    {
+     "id": "e08p4q2",
+     "q": "Créez la fonction CAAgence(p_code) qui retourne le chiffre d'affaires total des locations des voitures d'une agence, 0 si aucune location.",
+     "points": 2,
+     "a": "CREATE OR REPLACE FUNCTION caagence (p_code IN NUMBER) RETURN NUMBER IS\n  v_ca NUMBER;\nBEGIN\n  SELECT NVL(SUM(l.montant), 0) INTO v_ca\n  FROM location l JOIN voiture v ON v.immat = l.immat\n  WHERE v.codeagence = p_code;\n  RETURN v_ca;\nEND;\n/"
+    }
+   ]
+  }
+ ]
+}

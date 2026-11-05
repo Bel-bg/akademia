@@ -1,0 +1,129 @@
+{
+ "n": 4,
+ "title": "Épreuve n° 4 · Gestion d'une bibliothèque",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : requêtes SQL",
+   "points": 5,
+   "intro": "Écrivez les requêtes Oracle suivantes.",
+   "context": "- CATEGORIE (**IdCategorie**, libelle)\n- LIVRE (**IdLivre**, titre, auteur, annee, #IdCategorie)\n- ADHERENT (**IdAdherent**, nom, prenom, email, datInscription)\n- EMPRUNT (**IdEmprunt**, #IdAdherent, #IdLivre, dateEmprunt, dateRetourPrevue, dateRetourEffective)\n\nUn emprunt non rendu a dateRetourEffective à NULL.",
+   "questions": [
+    {
+     "id": "e04p1q1",
+     "q": "Afficher, pour chaque catégorie, le libellé et le nombre de livres, par ordre décroissant du nombre de livres.",
+     "points": 1,
+     "a": "SELECT c.libelle, COUNT(l.idlivre) AS nb_livres\nFROM categorie c\nLEFT JOIN livre l ON l.idcategorie = c.idcategorie\nGROUP BY c.libelle\nORDER BY nb_livres DESC;\n- LEFT JOIN pour conserver les catégories sans livre (nombre 0) ; COUNT(l.idlivre) ignore les NULL."
+    },
+    {
+     "id": "e04p1q2",
+     "q": "Lister les emprunts en retard (non rendus et date de retour prévue dépassée) avec le nom de l'adhérent, le titre du livre et le nombre de jours de retard.",
+     "points": 1,
+     "a": "SELECT a.nom, l.titre, TRUNC(SYSDATE - e.dateretourprevue) AS jours_retard\nFROM emprunt e\nJOIN adherent a ON a.idadherent = e.idadherent\nJOIN livre l    ON l.idlivre = e.idlivre\nWHERE e.dateretoureffective IS NULL\n  AND e.dateretourprevue < SYSDATE;\n- Non rendu : IS NULL ; retard : différence de dates en jours."
+    },
+    {
+     "id": "e04p1q3",
+     "q": "Lister les adhérents n'ayant jamais emprunté de livre.",
+     "points": 1,
+     "a": "SELECT a.*\nFROM adherent a\nWHERE NOT EXISTS (SELECT 1 FROM emprunt e WHERE e.idadherent = a.idadherent);\n- « Jamais » : NOT EXISTS (ou LEFT JOIN ... WHERE e.idemprunt IS NULL)."
+    },
+    {
+     "id": "e04p1q4",
+     "q": "Afficher les trois livres les plus empruntés.",
+     "points": 1,
+     "a": "SELECT l.titre, COUNT(*) AS nb_emprunts\nFROM livre l JOIN emprunt e ON e.idlivre = l.idlivre\nGROUP BY l.idlivre, l.titre\nORDER BY nb_emprunts DESC\nFETCH FIRST 3 ROWS ONLY;\n- Compter par livre, trier décroissant, limiter avec FETCH FIRST (Oracle 12c+) ; sinon sous-requête + ROWNUM."
+    },
+    {
+     "id": "e04p1q5",
+     "q": "Archiver dans EMPRUNT_ARCHIVE (à créer avec le même schéma qu'EMPRUNT) les emprunts rendus depuis plus de deux ans, puis les supprimer de la table EMPRUNT.",
+     "points": 1,
+     "a": "CREATE TABLE emprunt_archive AS SELECT * FROM emprunt WHERE 1 = 0;\n\nINSERT INTO emprunt_archive\n  SELECT * FROM emprunt\n  WHERE dateretoureffective IS NOT NULL AND dateretoureffective < ADD_MONTHS(SYSDATE, -24);\nDELETE FROM emprunt\n  WHERE dateretoureffective IS NOT NULL AND dateretoureffective < ADD_MONTHS(SYSDATE, -24);\nCOMMIT;\n- Structure copiée avec WHERE 1 = 0 ; INSERT puis DELETE avec la même condition ; un seul COMMIT."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : déclarations de variables",
+   "points": 3,
+   "intro": "Parmi les déclarations suivantes, déterminer celles qui sont incorrectes et justifier.",
+   "questions": [
+    {
+     "id": "e04p2q1",
+     "q": "A : `v_titre livre.titre%TYPE;`",
+     "points": 0.5,
+     "a": "Correcte : %TYPE reprend le type de la colonne."
+    },
+    {
+     "id": "e04p2q2",
+     "q": "B : `v_nb, v_total NUMBER;`",
+     "points": 0.5,
+     "a": "Incorrecte : une seule variable par déclaration."
+    },
+    {
+     "id": "e04p2q3",
+     "q": "C : `v_code CONSTANT NUMBER;`",
+     "points": 0.5,
+     "a": "Incorrecte : une constante doit recevoir sa valeur à la déclaration (v_code CONSTANT NUMBER := 10;)."
+    },
+    {
+     "id": "e04p2q4",
+     "q": "D : `v_ok BOOLEAN := 'VRAI';`",
+     "points": 0.5,
+     "a": "Incorrecte : un BOOLEAN ne prend que TRUE, FALSE ou NULL, pas un texte."
+    },
+    {
+     "id": "e04p2q5",
+     "q": "E : `v_rec adherent%ROWTYPE;`",
+     "points": 0.5,
+     "a": "Correcte : enregistrement ayant la structure d'une ligne de la table adherent."
+    },
+    {
+     "id": "e04p2q6",
+     "q": "F : `TYPE t_liste IS TABLE OF livre.titre%TYPE INDEX BY BINARY_INTEGER; v_liste t_liste;`",
+     "points": 0.5,
+     "a": "Correcte : type table déclaré puis variable de ce type."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : séquence, bloc et procédure",
+   "points": 7,
+   "questions": [
+    {
+     "id": "e04p3q1",
+     "q": "Créez la séquence SEQ_ADHERENT qui commence à 100 et s'incrémente de 5.",
+     "points": 1,
+     "a": "CREATE SEQUENCE seq_adherent START WITH 100 INCREMENT BY 5 NOCACHE NOCYCLE;"
+    },
+    {
+     "id": "e04p3q2",
+     "q": "Écrivez un bloc PL/SQL qui demande à l'utilisateur le nom, le prénom et l'e-mail, insère un adhérent (identifiant par la séquence, date d'inscription du jour) et affiche un message de confirmation.",
+     "points": 3,
+     "a": "SET SERVEROUTPUT ON\nACCEPT p_nom    PROMPT 'Nom : '\nACCEPT p_prenom PROMPT 'Prenom : '\nACCEPT p_email  PROMPT 'Email : '\nDECLARE\n  v_nom    adherent.nom%TYPE    := '&p_nom';\n  v_prenom adherent.prenom%TYPE := '&p_prenom';\n  v_email  adherent.email%TYPE  := '&p_email';\nBEGIN\n  INSERT INTO adherent (idadherent, nom, prenom, email, datinscription)\n  VALUES (seq_adherent.NEXTVAL, v_nom, v_prenom, v_email, TRUNC(SYSDATE));\n  COMMIT;\n  DBMS_OUTPUT.PUT_LINE('Adherent ' || v_nom || ' ' || v_prenom || ' ajoute');\nEND;\n/\n- ACCEPT/& pour la saisie, NEXTVAL pour l'identifiant, COMMIT après l'insertion."
+    },
+    {
+     "id": "e04p3q3",
+     "q": "Créez la procédure SupprimerLivre(p_id) : erreur -20050 si le livre n'existe pas ; erreur -20051 si le livre a des emprunts non rendus ; sinon suppression.",
+     "points": 3,
+     "a": "CREATE OR REPLACE PROCEDURE supprimerlivre (p_id IN NUMBER) IS\n  v_nb NUMBER;\nBEGIN\n  SELECT COUNT(*) INTO v_nb FROM livre WHERE idlivre = p_id;\n  IF v_nb = 0 THEN\n    RAISE_APPLICATION_ERROR(-20050, 'Livre inexistant');\n  END IF;\n\n  SELECT COUNT(*) INTO v_nb FROM emprunt\n  WHERE idlivre = p_id AND dateretoureffective IS NULL;\n  IF v_nb > 0 THEN\n    RAISE_APPLICATION_ERROR(-20051, 'Livre actuellement emprunte');\n  END IF;\n\n  DELETE FROM livre WHERE idlivre = p_id;\nEND supprimerlivre;\n/\n- Deux contrôles successifs avec COUNT(*) (qui ne lève jamais NO_DATA_FOUND), puis suppression.\n- Pas de COMMIT : l'appelant valide. (Les emprunts déjà rendus peuvent être bloqués par la clé étrangère : ORA-02292.)"
+    }
+   ]
+  },
+  {
+   "id": "p4",
+   "title": "Exercice 4 : calcul d'une pénalité",
+   "points": 5,
+   "questions": [
+    {
+     "id": "e04p4q1",
+     "q": "On ajoute à ADHERENT l'attribut penalite (NUMBER). Écrivez la procédure MajPenalite(p_id) qui calcule le total des jours de retard de l'adhérent (emprunts rendus après la date prévue) puis met à jour sa pénalité : 0 s'il n'y a aucun retard ; 500 jusqu'à 10 jours ; 1500 jusqu'à 30 jours ; 3000 au-delà. Validez par COMMIT.",
+     "points": 5,
+     "a": "ALTER TABLE adherent ADD (penalite NUMBER DEFAULT 0);\n\nCREATE OR REPLACE PROCEDURE majpenalite (p_id IN NUMBER) IS\n  v_jours NUMBER;\n  v_pen   NUMBER;\nBEGIN\n  SELECT NVL(SUM(dateretoureffective - dateretourprevue), 0) INTO v_jours\n  FROM emprunt\n  WHERE idadherent = p_id\n    AND dateretoureffective IS NOT NULL\n    AND dateretoureffective > dateretourprevue;\n\n  IF v_jours = 0 THEN v_pen := 0;\n  ELSIF v_jours <= 10 THEN v_pen := 500;\n  ELSIF v_jours <= 30 THEN v_pen := 1500;\n  ELSE v_pen := 3000;\n  END IF;\n\n  UPDATE adherent SET penalite = v_pen WHERE idadherent = p_id;\n  IF SQL%ROWCOUNT = 0 THEN\n    RAISE_APPLICATION_ERROR(-20052, 'Adherent inconnu');\n  END IF;\n  COMMIT;\nEND majpenalite;\n/\n- NVL(SUM(...), 0) : sans retard, SUM vaut NULL.\n- ELSIF du plus petit seuil au plus grand.\n- Ici l'énoncé demande le COMMIT : on valide dans la procédure."
+    }
+   ]
+  }
+ ]
+}

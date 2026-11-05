@@ -1,0 +1,115 @@
+{
+ "n": 9,
+ "title": "Épreuve n° 9 · QCM et étude de cas : pharmacie",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Première partie : QCM",
+   "points": 5,
+   "intro": "Une seule réponse correcte par question. Chaque question vaut 0,5 point.",
+   "questions": [
+    {
+     "id": "e09p1q1",
+     "q": "Quelle méthode d'archivage est correcte ?\n\n- A. TRUNCATE puis INSERT\n- B. INSERT INTO archive SELECT ... puis DELETE avec la même condition, puis COMMIT\n- C. UPDATE archive SET ...\n- D. DELETE puis INSERT sans condition",
+     "points": 0.5,
+     "a": "Réponse : B (INSERT INTO archive SELECT ... puis DELETE avec la même condition, puis COMMIT). On copie d'abord, on supprime ensuite avec la même condition, et on valide une seule fois : en cas d'échec, un ROLLBACK ne perd rien."
+    },
+    {
+     "id": "e09p1q2",
+     "q": "Quelle condition rend une fonction utilisable dans une clause WHERE ?\n\n- A. Elle retourne une valeur comparable et ne modifie pas les données\n- B. Elle contient un COMMIT\n- C. Elle est dans un package obligatoirement\n- D. Elle a un paramètre OUT",
+     "points": 0.5,
+     "a": "Réponse : A (Elle retourne une valeur comparable et ne modifie pas les données). Une fonction appelée depuis une requête SQL ne doit pas modifier la base."
+    },
+    {
+     "id": "e09p1q3",
+     "q": "Que fait la commande « DELETE FROM Employe; » ?\n\n- A. Elle supprime toutes les lignes de la table Employe\n- B. Elle supprime la table et ses contraintes\n- C. Elle supprime uniquement les lignes où la condition est vraie\n- D. Elle supprime la table Employe",
+     "points": 0.5,
+     "a": "Réponse : A (Elle supprime toutes les lignes de la table Employe). Sans clause WHERE, DELETE agit sur toutes les lignes. La table et ses contraintes subsistent ; c'est DROP TABLE qui supprime la table."
+    },
+    {
+     "id": "e09p1q4",
+     "q": "Pourquoi « v_en_stock BOOLEAN := 1; » est-elle incorrecte ?\n\n- A. Le symbole := est interdit pour BOOLEAN\n- B. Un BOOLEAN ne peut valoir que TRUE, FALSE ou NULL\n- C. 1 n'est pas un nombre valide\n- D. BOOLEAN n'existe pas en PL/SQL",
+     "points": 0.5,
+     "a": "Réponse : B (Un BOOLEAN ne peut valoir que TRUE, FALSE ou NULL). On écrit BOOLEAN := TRUE;. De plus, BOOLEAN n'existe qu'en PL/SQL, pas comme type de colonne."
+    },
+    {
+     "id": "e09p1q5",
+     "q": "Quelle est l'erreur dans « SELECT nom FROM clients; » placé dans un bloc PL/SQL ?\n\n- A. Il manque un GROUP BY\n- B. Il faut un DISTINCT\n- C. Il manque INTO : un SELECT dans un bloc doit stocker son résultat\n- D. Le point-virgule est interdit",
+     "points": 0.5,
+     "a": "Réponse : C (Il manque INTO : un SELECT dans un bloc doit stocker son résultat). En PL/SQL, un SELECT doit être SELECT ... INTO variable (une ligne) ou être placé dans un curseur / une boucle FOR."
+    },
+    {
+     "id": "e09p1q6",
+     "q": "Quand une contrainte déclarative (CHECK, FOREIGN KEY) suffit, que vaut-il mieux faire ?\n\n- A. L'utiliser plutôt qu'un trigger\n- B. Écrire un trigger quand même\n- C. Écrire un package\n- D. Désactiver la contrainte",
+     "points": 0.5,
+     "a": "Réponse : A (L'utiliser plutôt qu'un trigger). Une contrainte est plus simple et plus fiable ; le trigger sert aux règles qu'elle ne peut pas exprimer."
+    },
+    {
+     "id": "e09p1q7",
+     "q": "Comment déclarer une constante ?\n\n- A. TVA NUMBER FINAL 0.18;\n- B. TVA CONSTANT NUMBER := 0.18;\n- C. CONST TVA = 0.18;\n- D. TVA NUMBER READONLY := 0.18;",
+     "points": 0.5,
+     "a": "Réponse : B (TVA CONSTANT NUMBER := 0.18;). Le mot-clé est CONSTANT et la valeur est obligatoire."
+    },
+    {
+     "id": "e09p1q8",
+     "q": "Quelle est la syntaxe correcte d'une alternative multiple en PL/SQL ?\n\n- A. IF ... ELSEIF ... END;\n- B. IF ... THEN ... ELSIF ... THEN ... ELSE ... END IF;\n- C. IF ... ELSE IF ... ENDIF;\n- D. SWITCH ... CASE ... END SWITCH;",
+     "points": 0.5,
+     "a": "Réponse : B (IF ... THEN ... ELSIF ... THEN ... ELSE ... END IF;). On écrit ELSIF (sans E au milieu) et on termine par END IF;."
+    },
+    {
+     "id": "e09p1q9",
+     "q": "Quelle jointure retourne tous les clients, même ceux sans commande ?\n\n- A. LEFT JOIN (clients à gauche)\n- B. INNER JOIN\n- C. CROSS JOIN seulement\n- D. JOIN simple",
+     "points": 0.5,
+     "a": "Réponse : A (LEFT JOIN (clients à gauche)). LEFT JOIN conserve toutes les lignes de la table de gauche ; les colonnes de droite valent NULL s'il n'y a pas de correspondance."
+    },
+    {
+     "id": "e09p1q10",
+     "q": "Quel est le rôle de WHEN OTHERS ?\n\n- A. Déclencher une erreur\n- B. Ignorer l'exception précédente\n- C. Traiter toutes les erreurs non citées avant lui\n- D. Sortir du programme sans message",
+     "points": 0.5,
+     "a": "Réponse : C (Traiter toutes les erreurs non citées avant lui). WHEN OTHERS doit être le dernier cas de la section EXCEPTION."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Deuxième partie : étude de cas",
+   "points": 15,
+   "intro": "On dispose du modèle logique suivant.",
+   "context": "- MEDICAMENT (**id_med**, nom, prix, stock, seuil)\n- VENTE (**id_vente**, date_vente, #id_med, quantite, montant)\n\nLe seuil est le stock minimal avant réapprovisionnement.",
+   "questions": [
+    {
+     "id": "e09p2q1",
+     "q": "Donnez le code SQL de création de la table VENTE (quantité strictement positive, date du jour par défaut, clé étrangère vers MEDICAMENT).",
+     "points": 3,
+     "a": "CREATE TABLE vente (\n  id_vente   NUMBER PRIMARY KEY,\n  date_vente DATE DEFAULT SYSDATE,\n  id_med     NUMBER NOT NULL REFERENCES medicament(id_med),\n  quantite   NUMBER NOT NULL CHECK (quantite > 0),\n  montant    NUMBER(12,2)\n);"
+    },
+    {
+     "id": "e09p2q2",
+     "q": "Créez une vue VUE_RUPTURE listant les médicaments dont le stock est inférieur ou égal au seuil, avec la quantité manquante.",
+     "points": 3,
+     "a": "CREATE OR REPLACE VIEW vue_rupture AS\nSELECT id_med, nom, stock, seuil, seuil - stock AS manquant\nFROM medicament\nWHERE stock <= seuil;"
+    },
+    {
+     "id": "e09p2q3",
+     "q": "Créez un trigger qui, avant l'insertion d'une vente, refuse (erreur -20501) la vente si le stock est insuffisant, sinon calcule le montant (quantité × prix) dans la ligne insérée et diminue le stock.",
+     "points": 4,
+     "a": "CREATE OR REPLACE TRIGGER trg_vente_stock\nBEFORE INSERT ON vente\nFOR EACH ROW\nDECLARE\n  v_stock medicament.stock%TYPE;\n  v_prix  medicament.prix%TYPE;\nBEGIN\n  SELECT stock, prix INTO v_stock, v_prix FROM medicament WHERE id_med = :NEW.id_med;\n\n  IF v_stock < :NEW.quantite THEN\n    RAISE_APPLICATION_ERROR(-20501, 'Stock insuffisant');\n  END IF;\n\n  :NEW.montant := :NEW.quantite * v_prix;          -- BEFORE ligne : on peut modifier :NEW\n  UPDATE medicament SET stock = stock - :NEW.quantite WHERE id_med = :NEW.id_med;\nEND;\n/\n- Seul un trigger BEFORE par ligne peut modifier :NEW (ici le montant).\n- Lecture et mise à jour de MEDICAMENT : table différente de VENTE, donc pas de mutation."
+    },
+    {
+     "id": "e09p2q4",
+     "q": "Créez la fonction ChiffreAffairesMois(p_annee, p_mois) qui retourne le total des montants des ventes du mois indiqué, 0 si aucune vente.",
+     "points": 2,
+     "a": "CREATE OR REPLACE FUNCTION chiffreaffairesmois (p_annee IN NUMBER, p_mois IN NUMBER) RETURN NUMBER IS\n  v_ca NUMBER;\nBEGIN\n  SELECT NVL(SUM(montant), 0) INTO v_ca\n  FROM vente\n  WHERE EXTRACT(YEAR FROM date_vente) = p_annee\n    AND EXTRACT(MONTH FROM date_vente) = p_mois;\n  RETURN v_ca;\nEND;\n/"
+    },
+    {
+     "id": "e09p2q5",
+     "q": "Créez la procédure Reapprovisionner(p_id_med, p_qte) qui augmente le stock : erreur -20503 si la quantité est négative ou nulle, erreur -20502 si le médicament n'existe pas.",
+     "points": 3,
+     "a": "CREATE OR REPLACE PROCEDURE reapprovisionner (p_id_med IN NUMBER, p_qte IN NUMBER) IS\nBEGIN\n  IF p_qte IS NULL OR p_qte <= 0 THEN\n    RAISE_APPLICATION_ERROR(-20503, 'Quantite invalide');\n  END IF;\n\n  UPDATE medicament SET stock = stock + p_qte WHERE id_med = p_id_med;\n  IF SQL%ROWCOUNT = 0 THEN\n    RAISE_APPLICATION_ERROR(-20502, 'Medicament inexistant');\n  END IF;\nEND reapprovisionner;\n/\n- On valide d'abord le paramètre, puis on teste SQL%ROWCOUNT après l'UPDATE."
+    }
+   ]
+  }
+ ]
+}

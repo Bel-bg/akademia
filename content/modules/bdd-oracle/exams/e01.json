@@ -1,0 +1,131 @@
+{
+ "n": 1,
+ "title": "Épreuve n° 1 · Sujet réel : consommation d'eau",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : requêtes SQL",
+   "points": 5,
+   "intro": "Rédigez les requêtes SQL (Oracle) permettant de :",
+   "context": "Schéma relationnel :\n\n- COMPTEUR (**NumCompteur**, #CodCat)\n- ABONNE (**NumAbonne**, nom, prenom, adresse, telephone)\n- CONTRAT (**NumPolice**, datedebut, datedefin, quartier, ville, #NumAbonne, #NumCompteur)\n- FACTURE (**NumFacture**, quantite, dateenvoie, datelimite, datpaie, #NumPolice)\n- CATEGORIE (**CodeCat**, intitule, prix)\n- COUPURE (**NumOrdre**, #NumPolice, date, datepaiement, dateretablissement)\n\nLe montant d'une facture est quantite × prix de la catégorie du compteur.",
+   "questions": [
+    {
+     "id": "e01p1q1",
+     "q": "Afficher le montant facturé pour chaque numéro de police pour les factures envoyées dans le mois en cours.",
+     "points": 1,
+     "a": "SELECT f.numpolice, SUM(f.quantite * cat.prix) AS montant_facture\nFROM facture f\nJOIN contrat c   ON c.numpolice = f.numpolice\nJOIN compteur cp ON cp.numcompteur = c.numcompteur\nJOIN categorie cat ON cat.codecat = cp.codcat\nWHERE TRUNC(f.dateenvoie, 'MM') = TRUNC(SYSDATE, 'MM')\nGROUP BY f.numpolice;\n- Le prix est dans CATEGORIE : il faut enchaîner facture, contrat, compteur, catégorie.\n- TRUNC(date, 'MM') ramène chaque date au premier jour de son mois : égalité avec le mois en cours.\n- GROUP BY numpolice pour avoir un total par police."
+    },
+    {
+     "id": "e01p1q2",
+     "q": "Afficher la liste des contrats ayant plus de deux factures en impayés et dont les dates limites de paiement sont dépassées, en indiquant les numéros de police et de compteur.",
+     "points": 1,
+     "a": "SELECT c.numpolice, c.numcompteur\nFROM contrat c\nJOIN facture f ON f.numpolice = c.numpolice\nWHERE f.datpaie IS NULL AND f.datelimite < SYSDATE\nGROUP BY c.numpolice, c.numcompteur\nHAVING COUNT(*) > 2;\n- Impayée : datpaie IS NULL ; dépassée : datelimite < SYSDATE (conditions sur les lignes, donc WHERE).\n- « Plus de deux » porte sur un groupe : HAVING COUNT(*) > 2."
+    },
+    {
+     "id": "e01p1q3",
+     "q": "Lister les abonnés n'ayant jamais été concernés par une coupure.",
+     "points": 1,
+     "a": "SELECT a.*\nFROM abonne a\nWHERE NOT EXISTS (SELECT 1\n                  FROM contrat c\n                  JOIN coupure cp ON cp.numpolice = c.numpolice\n                  WHERE c.numabonne = a.numabonne);\n- « Jamais » : anti-jointure avec NOT EXISTS (plus sûr que NOT IN en présence de NULL).\n- Le lien abonné → coupure passe par CONTRAT (NumAbonne, NumPolice)."
+    },
+    {
+     "id": "e01p1q4",
+     "q": "Afficher, par ordre décroissant, le montant total des créances non recouvrées par ville et par quartier.",
+     "points": 1,
+     "a": "SELECT c.ville, c.quartier, SUM(f.quantite * cat.prix) AS creances\nFROM facture f\nJOIN contrat c   ON c.numpolice = f.numpolice\nJOIN compteur cp ON cp.numcompteur = c.numcompteur\nJOIN categorie cat ON cat.codecat = cp.codcat\nWHERE f.datpaie IS NULL\nGROUP BY c.ville, c.quartier\nORDER BY creances DESC;\n- Créance non recouvrée = facture non payée (datpaie IS NULL).\n- Ville et quartier sont dans CONTRAT ; le regroupement se fait sur les deux colonnes."
+    },
+    {
+     "id": "e01p1q5",
+     "q": "Archiver dans la table FACTUREPAYE (que vous allez créer si elle n'existe pas), ayant le même schéma que la table FACTURE, toutes les factures payées de plus de cinq ans, et donc les supprimer de la table FACTURE.",
+     "points": 1,
+     "a": "-- Étape 1 : création si besoin (bloc séparé : le DDL passe par EXECUTE IMMEDIATE)\nBEGIN\n  EXECUTE IMMEDIATE 'CREATE TABLE facturepaye AS SELECT * FROM facture WHERE 1 = 0';\nEXCEPTION\n  WHEN OTHERS THEN\n    IF SQLCODE != -955 THEN RAISE; END IF;   -- ORA-00955 : la table existe déjà\nEND;\n/\n-- Étape 2 : archivage puis suppression, avec la même condition\nINSERT INTO facturepaye\n  SELECT * FROM facture WHERE datpaie IS NOT NULL AND datpaie < ADD_MONTHS(SYSDATE, -60);\nDELETE FROM facture\n  WHERE datpaie IS NOT NULL AND datpaie < ADD_MONTHS(SYSDATE, -60);\nCOMMIT;\n- WHERE 1 = 0 : copie de la structure sans les lignes.\n- Insérer avant de supprimer, même condition, un seul COMMIT.\n- Interprétation retenue : payée depuis plus de cinq ans (date de paiement)."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : déclarations de variables",
+   "points": 3,
+   "intro": "Parmi les déclarations suivantes, déterminer celles qui sont incorrectes et justifier en quoi les autres sont fausses.",
+   "questions": [
+    {
+     "id": "e01p2q1",
+     "q": "A : `DECLARE v_id NUMBER(4);`",
+     "points": 0.5,
+     "a": "Correcte. Variable scalaire NUMBER avec précision valide."
+    },
+    {
+     "id": "e01p2q2",
+     "q": "B : `DECLARE v_x, v_y, v_z VARCHAR2(10);`",
+     "points": 0.5,
+     "a": "Incorrecte. PL/SQL n'autorise qu'une seule variable par déclaration : il faut trois lignes (v_x VARCHAR2(10); v_y VARCHAR2(10); v_z VARCHAR2(10);)."
+    },
+    {
+     "id": "e01p2q3",
+     "q": "C : `DECLARE v_date_naissance DATE NOT NULL;`",
+     "points": 0.5,
+     "a": "Incorrecte. Une variable déclarée NOT NULL doit recevoir une valeur initiale : v_date_naissance DATE NOT NULL := SYSDATE;"
+    },
+    {
+     "id": "e01p2q4",
+     "q": "D : `DECLARE v_en_stock BOOLEAN := 1;`",
+     "points": 0.5,
+     "a": "Incorrecte. Un BOOLEAN ne peut valoir que TRUE, FALSE ou NULL ; on écrit BOOLEAN := TRUE;"
+    },
+    {
+     "id": "e01p2q5",
+     "q": "E : `DECLARE emp_record emp_record_type;`",
+     "points": 0.5,
+     "a": "Incorrecte tant que le type emp_record_type n'est pas déclaré : il faut d'abord TYPE emp_record_type IS RECORD (...); ou utiliser employe%ROWTYPE."
+    },
+    {
+     "id": "e01p2q6",
+     "q": "F : `DECLARE TYPE type_table_nom IS TABLE OF VARCHAR2(20) INDEX BY BINARY_INTEGER; dept_table_nom type_table_nom;`",
+     "points": 0.5,
+     "a": "Correcte. Le type table est déclaré d'abord (TABLE OF ... INDEX BY BINARY_INTEGER), puis la variable de ce type."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : séquence et blocs PL/SQL",
+   "points": 7,
+   "intro": "Soit la table Departement(id_departement, nom). L'attribut id_departement est généré par une séquence qui commence par 2 et s'incrémente de 1.",
+   "questions": [
+    {
+     "id": "e01p3q1",
+     "q": "Donner le code SQL qui crée la séquence DEPARTEMENT_ID_SEQ.",
+     "points": 1,
+     "a": "CREATE SEQUENCE departement_id_seq\n  START WITH 2\n  INCREMENT BY 1\n  NOCACHE NOCYCLE;\n- START WITH : première valeur ; INCREMENT BY : pas."
+    },
+    {
+     "id": "e01p3q2",
+     "q": "Donner le code PL/SQL qui utilise la séquence pour insérer un nouveau département. Le nom du département est demandé à l'utilisateur lors du lancement du code PL/SQL par l'affichage d'un prompt qui l'invite à saisir le nom du département. L'attribut id_departement est obtenu automatiquement grâce à la séquence.",
+     "points": 3,
+     "a": "SET SERVEROUTPUT ON\nACCEPT p_nom PROMPT 'Nom du departement : '\nDECLARE\n  v_nom departement.nom%TYPE := '&p_nom';\nBEGIN\n  INSERT INTO departement (id_departement, nom)\n  VALUES (departement_id_seq.NEXTVAL, v_nom);\n  COMMIT;\n  DBMS_OUTPUT.PUT_LINE('Departement ' || v_nom || ' insere');\nEND;\n/\n- ACCEPT ... PROMPT affiche l'invite ; &p_nom est remplacé par la saisie (entre apostrophes pour du texte).\n- departement_id_seq.NEXTVAL fournit l'identifiant.\n- Le sujet cite aussi DEPT_ID_SEQ : c'est la même séquence (utiliser le nom de la question 1)."
+    },
+    {
+     "id": "e01p3q3",
+     "q": "Créer un bloc PL/SQL pour supprimer un département. L'id du département est passé en paramètre. Le bloc affiche le message « Département supprimé » si tout se passe bien. Sinon, l'exception devra être traitée et un message correct devra être affiché à l'utilisateur.",
+     "points": 3,
+     "a": "DECLARE\n  v_id departement.id_departement%TYPE := &p_id;\n  e_inexistant EXCEPTION;\nBEGIN\n  DELETE FROM departement WHERE id_departement = v_id;\n  IF SQL%ROWCOUNT = 0 THEN\n    RAISE e_inexistant;\n  END IF;\n  COMMIT;\n  DBMS_OUTPUT.PUT_LINE('Departement supprime');\nEXCEPTION\n  WHEN e_inexistant THEN\n    DBMS_OUTPUT.PUT_LINE('Erreur : le departement ' || v_id || ' n''existe pas');\n  WHEN OTHERS THEN\n    ROLLBACK;\n    DBMS_OUTPUT.PUT_LINE('Erreur : ' || SQLERRM);   -- par exemple ORA-02292 si des employés dépendent du département\nEND;\n/\n- DELETE sans ligne concernée ne lève pas d'exception : on teste SQL%ROWCOUNT.\n- Exception utilisateur : déclarer, RAISE, traiter.\n- WHEN OTHERS en dernier, avec SQLERRM."
+    }
+   ]
+  },
+  {
+   "id": "p4",
+   "title": "Exercice 4 : bloc PL/SQL de calcul de commission",
+   "points": 5,
+   "context": "Soit la relation suivante : Employes (**employe_id**, nom, prenom, telephone, sexe, commission) ; Commandes (**commandes_id**, date_commande, montant, #employe_id).\n\nDans la table Commandes, on enregistre les commandes traitées par chaque employé.",
+   "questions": [
+    {
+     "id": "e01p4q1",
+     "q": "Créer un bloc PL/SQL qui prend en paramètre l'identifiant d'un employé et met à jour le pourcentage de sa commission en fonction du total de ses ventes. Pour arriver, trouver la somme totale de toutes les commandes traitées par cet employé. Mettre à jour le pourcentage de commission de l'employé : si la somme est inférieure à 100 000, commission 10 ; si elle est comprise entre 100 000 et 1 000 000 inclus, commission 15 ; si elle excède 1 000 000, commission 20 ; si aucune commande n'existe pour cet employé, commission 0. Valider la modification avec un commit.",
+     "points": 5,
+     "a": "SET SERVEROUTPUT ON\nDECLARE\n  v_emp   employes.employe_id%TYPE := &p_emp;\n  v_total NUMBER;\n  v_comm  NUMBER;\nBEGIN\n  SELECT SUM(montant) INTO v_total\n  FROM commandes\n  WHERE employe_id = v_emp;                 -- SUM vaut NULL s'il n'y a aucune commande\n\n  IF v_total IS NULL THEN\n    v_comm := 0;\n  ELSIF v_total < 100000 THEN\n    v_comm := 10;\n  ELSIF v_total <= 1000000 THEN\n    v_comm := 15;\n  ELSE\n    v_comm := 20;\n  END IF;\n\n  UPDATE employes SET commission = v_comm WHERE employe_id = v_emp;\n  IF SQL%ROWCOUNT = 0 THEN\n    DBMS_OUTPUT.PUT_LINE('Employe inexistant');\n  ELSE\n    COMMIT;\n    DBMS_OUTPUT.PUT_LINE('Commission mise a jour : ' || v_comm || ' %');\n  END IF;\nEND;\n/\n- SUM sans ligne donne NULL : c'est ce qui permet de détecter « aucune commande ».\n- Ordre des tests de l'ELSIF : du plus petit seuil au plus grand ; la borne 1 000 000 est incluse dans la tranche à 15 (<=).\n- COMMIT après l'UPDATE ; SQL%ROWCOUNT protège contre un employé inexistant."
+    }
+   ]
+  }
+ ]
+}

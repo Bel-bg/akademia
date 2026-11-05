@@ -1,0 +1,82 @@
+[
+ {
+  "n": 1,
+  "title": "Épreuve n° 1 · Sujet réel : consommation d'eau",
+  "scenario": "Gestion de la consommation d'eau",
+  "cas": "SQL, déclarations, séquence, PL/SQL",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 2,
+  "title": "Épreuve n° 2 · Sujet réel : QCM et étude de cas (contenus multilingues)",
+  "scenario": "Plateforme de contenus multilingues",
+  "cas": "QCM + vue, trigger, fonction, procédure",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 3,
+  "title": "Épreuve n° 3 · TP : fonctions, procédures et triggers",
+  "scenario": "Boutique : clients, produits, commandes",
+  "cas": "Fonctions, procédures stockées, triggers (TP)",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 4,
+  "title": "Épreuve n° 4 · Gestion d'une bibliothèque",
+  "scenario": "Bibliothèque universitaire",
+  "cas": "Requêtes, déclarations, séquence, procédure de pénalité (type exercices)",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 5,
+  "title": "Épreuve n° 5 · QCM et étude de cas : cabinet médical",
+  "scenario": "Consultations médicales",
+  "cas": "Table, vue, trigger, fonction, procédure",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 6,
+  "title": "Épreuve n° 6 · Gestion de la scolarité",
+  "scenario": "Notes et moyennes des étudiants",
+  "cas": "Moyenne pondérée, fonction, triggers de contrôle et d'audit (type exercices)",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 7,
+  "title": "Épreuve n° 7 · QCM et étude de cas : gestion bancaire",
+  "scenario": "Comptes et opérations bancaires",
+  "cas": "Table, vue, fonction, procédure, trigger",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 8,
+  "title": "Épreuve n° 8 · Location de voitures",
+  "scenario": "Agences de location",
+  "cas": "Chiffre d'affaires, disponibilité, procédure de location, trigger de dates (type exercices)",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 9,
+  "title": "Épreuve n° 9 · QCM et étude de cas : pharmacie",
+  "scenario": "Stock et ventes de médicaments",
+  "cas": "Table, vue, trigger de stock, fonction, procédure",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 10,
+  "title": "Épreuve n° 10 · Ressources humaines et projets",
+  "scenario": "Employés, départements, projets",
+  "cas": "Salaires, curseur explicite, charge de travail, triggers (type exercices)",
+  "durationMinutes": 120,
+  "points": 20
+ }
+]

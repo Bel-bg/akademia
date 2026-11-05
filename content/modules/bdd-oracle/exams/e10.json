@@ -1,0 +1,135 @@
+{
+ "n": 10,
+ "title": "Épreuve n° 10 · Ressources humaines et projets",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : requêtes SQL",
+   "points": 5,
+   "intro": "Écrivez les requêtes Oracle suivantes.",
+   "context": "- DEPARTEMENT (**IdDept**, nom, ville)\n- EMPLOYE (**IdEmp**, nom, prenom, salaire, dateembauche, #IdDept)\n- PROJET (**IdProjet**, titre, budget)\n- AFFECTATION (#IdEmp, #IdProjet, heures)",
+   "questions": [
+    {
+     "id": "e10p1q1",
+     "q": "Afficher, pour chaque département, le nombre d'employés et le salaire moyen.",
+     "points": 1,
+     "a": "SELECT d.nom, COUNT(e.idemp) AS nb_employes, ROUND(AVG(e.salaire)) AS salaire_moyen\nFROM departement d LEFT JOIN employe e ON e.iddept = d.iddept\nGROUP BY d.nom;"
+    },
+    {
+     "id": "e10p1q2",
+     "q": "Lister les employés dont le salaire dépasse la moyenne de leur département.",
+     "points": 1,
+     "a": "SELECT e.nom, e.prenom, e.salaire\nFROM employe e\nWHERE e.salaire > (SELECT AVG(e2.salaire) FROM employe e2 WHERE e2.iddept = e.iddept);\n- Sous-requête corrélée : elle dépend de la ligne courante (e.iddept)."
+    },
+    {
+     "id": "e10p1q3",
+     "q": "Lister les départements qui n'ont aucun employé.",
+     "points": 1,
+     "a": "SELECT d.*\nFROM departement d\nWHERE NOT EXISTS (SELECT 1 FROM employe e WHERE e.iddept = d.iddept);"
+    },
+    {
+     "id": "e10p1q4",
+     "q": "Afficher les trois employés les mieux payés.",
+     "points": 1,
+     "a": "SELECT nom, prenom, salaire\nFROM employe\nORDER BY salaire DESC\nFETCH FIRST 3 ROWS ONLY;"
+    },
+    {
+     "id": "e10p1q5",
+     "q": "Augmenter de 5 % le salaire des employés embauchés depuis plus de 10 ans.",
+     "points": 1,
+     "a": "UPDATE employe\nSET salaire = salaire * 1.05\nWHERE dateembauche < ADD_MONTHS(SYSDATE, -120);\nCOMMIT;\n- Dix ans = 120 mois."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : déclarations de variables",
+   "points": 3,
+   "intro": "Parmi les déclarations suivantes, déterminer celles qui sont incorrectes et justifier.",
+   "questions": [
+    {
+     "id": "e10p2q1",
+     "q": "A : `v_sal employe.salaire%TYPE := 0;`",
+     "points": 0.5,
+     "a": "Correcte."
+    },
+    {
+     "id": "e10p2q2",
+     "q": "B : `v_emp employe%ROWTYPE;`",
+     "points": 0.5,
+     "a": "Correcte : enregistrement de la structure de la table."
+    },
+    {
+     "id": "e10p2q3",
+     "q": "C : `v_nb NUMBER(3) NOT NULL;`",
+     "points": 0.5,
+     "a": "Incorrecte : NOT NULL exige une valeur initiale (:= 0)."
+    },
+    {
+     "id": "e10p2q4",
+     "q": "D : `v_ok BOOLEAN := 'TRUE';`",
+     "points": 0.5,
+     "a": "Incorrecte : 'TRUE' est un texte ; il faut le littéral booléen TRUE."
+    },
+    {
+     "id": "e10p2q5",
+     "q": "E : `TYPE t IS RECORD (id NUMBER, nom VARCHAR2);`",
+     "points": 0.5,
+     "a": "Incorrecte : VARCHAR2 exige une taille (VARCHAR2(50))."
+    },
+    {
+     "id": "e10p2q6",
+     "q": "F : `TYPE tab IS TABLE OF NUMBER INDEX BY PLS_INTEGER; v tab;`",
+     "points": 0.5,
+     "a": "Correcte : PLS_INTEGER (comme BINARY_INTEGER) peut indexer une table PL/SQL."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : curseur et fonction",
+   "points": 7,
+   "questions": [
+    {
+     "id": "e10p3q1",
+     "q": "Créez la séquence SEQ_EMP commençant à 500 avec un pas de 10.",
+     "points": 1,
+     "a": "CREATE SEQUENCE seq_emp START WITH 500 INCREMENT BY 10;"
+    },
+    {
+     "id": "e10p3q2",
+     "q": "Écrivez un bloc PL/SQL avec un curseur explicite (OPEN, FETCH, CLOSE) qui demande un numéro de département et affiche « nom prénom : salaire » de ses employés, du mieux payé au moins bien payé.",
+     "points": 3,
+     "a": "SET SERVEROUTPUT ON\nDECLARE\n  CURSOR c (p_dept NUMBER) IS\n    SELECT nom, prenom, salaire FROM employe WHERE iddept = p_dept ORDER BY salaire DESC;\n  v_nom    employe.nom%TYPE;\n  v_prenom employe.prenom%TYPE;\n  v_sal    employe.salaire%TYPE;\nBEGIN\n  OPEN c(&p_dept);\n  LOOP\n    FETCH c INTO v_nom, v_prenom, v_sal;\n    EXIT WHEN c%NOTFOUND;\n    DBMS_OUTPUT.PUT_LINE(v_nom || ' ' || v_prenom || ' : ' || v_sal);\n  END LOOP;\n  CLOSE c;\nEND;\n/\n- Curseur paramétré ; EXIT WHEN c%NOTFOUND juste après FETCH ; CLOSE à la fin."
+    },
+    {
+     "id": "e10p3q3",
+     "q": "Créez la fonction ChargeEmploye(p_id) qui retourne le total d'heures affectées à un employé sur tous les projets, 0 s'il n'en a aucune.",
+     "points": 3,
+     "a": "CREATE OR REPLACE FUNCTION chargeemploye (p_id IN NUMBER) RETURN NUMBER IS\n  v_total NUMBER;\nBEGIN\n  SELECT NVL(SUM(heures), 0) INTO v_total FROM affectation WHERE idemp = p_id;\n  RETURN v_total;\nEND;\n/\nSELECT idemp, nom, chargeemploye(idemp) FROM employe;"
+    }
+   ]
+  },
+  {
+   "id": "p4",
+   "title": "Exercice 4 : triggers",
+   "points": 5,
+   "questions": [
+    {
+     "id": "e10p4q1",
+     "q": "Une table JOURNAL_SALAIRE (idemp, ancien_salaire, nouveau_salaire, date_modif, utilisateur) existe. Créez le trigger qui y enregistre chaque modification de salaire.",
+     "points": 3,
+     "a": "CREATE OR REPLACE TRIGGER trg_salaire_journal\nAFTER UPDATE OF salaire ON employe\nFOR EACH ROW\nBEGIN\n  INSERT INTO journal_salaire (idemp, ancien_salaire, nouveau_salaire, date_modif, utilisateur)\n  VALUES (:OLD.idemp, :OLD.salaire, :NEW.salaire, SYSDATE, USER);\nEND;\n/\n- AFTER ... FOR EACH ROW pour tracer ; :OLD et :NEW pour les deux valeurs."
+    },
+    {
+     "id": "e10p4q2",
+     "q": "Créez un trigger qui refuse (erreur -20601) toute diminution de salaire.",
+     "points": 2,
+     "a": "CREATE OR REPLACE TRIGGER trg_salaire_baisse\nBEFORE UPDATE OF salaire ON employe\nFOR EACH ROW\nWHEN (NEW.salaire < OLD.salaire)\nBEGIN\n  RAISE_APPLICATION_ERROR(-20601, 'Une diminution de salaire est interdite');\nEND;\n/\n- Dans la clause WHEN, OLD et NEW s'écrivent sans deux-points ; sans la clause WHEN, on testerait dans le bloc avec :NEW.salaire < :OLD.salaire."
+    }
+   ]
+  }
+ ]
+}
