@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="214" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 214" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="214"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-214)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="100" width="96" height="56" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="28.864453124999997" y="135.024" style="font-family: DV-B; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,270) scale(1,-1)">CAPTEURS</text>
+			<text x="19.328320312499997" y="125.624" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,251) scale(1,-1)">température, PIR,</text>
+			<text x="23.858203125" y="116.224" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,232) scale(1,-1)">ultrason, gaz...</text>
+			<rect x="384" y="100" width="96" height="56" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="405.8595703125" y="135.024" style="font-family: DV-B; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,270) scale(1,-1)">ACTIONNEURS</text>
+			<text x="410.1609375" y="125.624" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,251) scale(1,-1)">relais, sirène,</text>
+			<text x="410.5142578125" y="116.224" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,232) scale(1,-1)">vanne, LED...</text>
+			<rect x="126" y="36" width="228" height="150" rx="6" ry="6" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(96%,98%,98%); fill-rule: evenodd;"/>
+			<text x="164.0234375" y="172" style="font-family: DV-B; font-size: 8px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,344) scale(1,-1)">MICROCONTRÔLEUR (une seule puce)</text>
+			<rect x="138" y="126" width="100" height="34" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="180.41572265625" y="145.358" style="font-family: DV-B; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,290) scale(1,-1)">CPU</text>
+			<text x="165.436865234375" y="135.758" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,271) scale(1,-1)">(8/16/32 bits)</text>
+			<rect x="244" y="126" width="100" height="34" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="276.641845703125" y="145.29" style="font-family: DV-B; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,290) scale(1,-1)">Mémoires</text>
+			<text x="259.4306640625" y="136.09" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,272) scale(1,-1)">Flash, SRAM, EEPROM</text>
+			<rect x="138" y="82" width="100" height="34" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="159.37109375" y="101.28999999999999" style="font-family: DV-B; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,202) scale(1,-1)">E/S : GPIO, CAN,</text>
+			<text x="168.221923828125" y="92.08999999999999" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,184) scale(1,-1)">PWM, timers</text>
+			<rect x="244" y="82" width="100" height="34" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="265.30615234375" y="101.28999999999999" style="font-family: DV-B; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,202) scale(1,-1)">Bus : UART, I2C,</text>
+			<text x="280.709228515625" y="92.08999999999999" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,184) scale(1,-1)">SPI, USB</text>
+			<rect x="138" y="42" width="206" height="30" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="167.59228515625" y="54.69" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,109) scale(1,-1)">Watchdog, interruptions, RTC, modes de veille</text>
+			<path d="M 97,128 L 125,128 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="125 128, 120.4978 130.1748, 120.4978 125.8252" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<path d="M 355,128 L 383,128 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="383 128, 378.4978 130.1748, 378.4978 125.8252" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<rect x="158" y="192" width="164" height="20" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="176.4060546875" y="199.756" style="font-family: DV; font-size: 6.8px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,399) scale(1,-1)">COMMUNICATION : Wi-Fi, BLE, LoRa, GSM</text>
+			<path d="M 240,187 L 240,191 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="240 191, 237.8252 186.4978, 242.1748 186.4978" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<rect x="158" y="4" width="164" height="24" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="181.5251953125" y="13.722999999999999" style="font-family: DV; font-size: 6.9px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,27) scale(1,-1)">ALIMENTATION : pile, batterie, solaire</text>
+			<path d="M 240,29 L 240,35 Z" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="240 35, 237.8252 30.49776, 242.1748 30.49776" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+		</g>
+	</g>
+</svg>

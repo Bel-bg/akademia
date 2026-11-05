@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="214" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 214" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="214"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-214)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="168" width="92" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<text x="19.695947265625" y="185.0" style="font-family: DV-B; font-size: 7.8px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,370) scale(1,-1)">APPLICATION</text>
+			<rect x="98.0" y="168" width="59.5" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="118.19287109375" y="185.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,371) scale(1,-1)">MQTT</text>
+			<rect x="162.5" y="168" width="59.5" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="183.605224609375" y="185.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,371) scale(1,-1)">CoAP</text>
+			<rect x="227.0" y="168" width="59.5" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="236.376513671875" y="185.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,371) scale(1,-1)">HTTP / REST</text>
+			<rect x="291.5" y="168" width="59.5" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="311.474267578125" y="185.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,371) scale(1,-1)">AMQP</text>
+			<rect x="356.0" y="168" width="59.5" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="373.311279296875" y="185.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,371) scale(1,-1)">LwM2M</text>
+			<rect x="420.5" y="168" width="59.5" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="437.52763671875" y="185.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,371) scale(1,-1)">OPC UA</text>
+			<rect x="0" y="118" width="92" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<text x="22.076318359375" y="135.0" style="font-family: DV-B; font-size: 7.8px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,270) scale(1,-1)">TRANSPORT</text>
+			<rect x="98.0" y="118" width="124.0" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="140.757470703125" y="135.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,271) scale(1,-1)">TCP (fiable)</text>
+			<rect x="227.0" y="118" width="124.0" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="269.833349609375" y="135.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,271) scale(1,-1)">UDP (léger)</text>
+			<rect x="356.0" y="118" width="124.0" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="383.177001953125" y="135.558" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,271) scale(1,-1)">TLS / DTLS (sécurité)</text>
+			<rect x="0" y="68" width="92" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<text x="30.411425781250003" y="85.0" style="font-family: DV-B; font-size: 7.8px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,170) scale(1,-1)">RÉSEAU</text>
+			<rect x="98.0" y="68" width="124.0" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="142.614697265625" y="85.55799999999999" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,171) scale(1,-1)">IPv4 / IPv6</text>
+			<rect x="227.0" y="68" width="124.0" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="240.0544921875" y="85.55799999999999" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,171) scale(1,-1)">6LoWPAN (IPv6 sur 802.15.4)</text>
+			<rect x="356.0" y="68" width="124.0" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="378.100341796875" y="85.55799999999999" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,171) scale(1,-1)">LoRaWAN (MAC/réseau)</text>
+			<rect x="0" y="18" width="92" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<text x="9.38037109375" y="35.0" style="font-family: DV-B; font-size: 7.8px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,70) scale(1,-1)">ACCÈS / PHYSIQUE</text>
+			<rect x="98.0" y="18" width="50.28571428571428" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="109.52396065848214" y="35.69" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,71) scale(1,-1)">Ethernet</text>
+			<rect x="153.28571428571428" y="18" width="50.28571428571428" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="170.61680385044642" y="35.69" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,71) scale(1,-1)">Wi-Fi</text>
+			<rect x="208.57142857142856" y="18" width="50.28571428571428" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="227.8114536830357" y="35.69" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,71) scale(1,-1)">BLE</text>
+			<rect x="263.8571428571429" y="18" width="50.28571428571428" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="278.09326171875006" y="35.69" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,71) scale(1,-1)">Zigbee</text>
+			<rect x="319.1428571428571" y="18" width="50.28571428571428" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="336.4893275669643" y="35.69" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,71) scale(1,-1)">LoRa</text>
+			<rect x="374.42857142857144" y="18" width="50.28571428571428" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="381.6390555245536" y="35.69" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,71) scale(1,-1)">NB-IoT / 4G</text>
+			<rect x="429.7142857142857" y="18" width="50.28571428571428" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="448.4911760602679" y="35.69" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,71) scale(1,-1)">NFC</text>
+		</g>
+	</g>
+</svg>

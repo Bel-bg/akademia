@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="150" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="150"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-150)" style="clip-path: url(#clip)">
+		<g transform="">
+			<path d="M 10,75 L 470,75 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 2.4;"/>
+			<circle cx="40.0" cy="75" r="5" style="stroke: rgb(100%,100%,100%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 40,80 L 40,98 Z" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<text x="28.732421875" y="128" style="font-family: DV-B; font-size: 9px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,256) scale(1,-1)">1982</text>
+			<text x="23.694531249999997" y="116.0" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,232) scale(1,-1)">Coca-Cola</text>
+			<text x="14.110937499999999" y="106.5" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,213) scale(1,-1)">connecté (CMU)</text>
+			<circle cx="106.7" cy="75" r="5" style="stroke: rgb(100%,100%,100%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 106.7,70 L 106.7,52 Z" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<text x="95.432421875" y="40" style="font-family: DV-B; font-size: 9px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,80) scale(1,-1)">1991</text>
+			<text x="85.8294921875" y="28.0" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,56) scale(1,-1)">Informatique</text>
+			<text x="89.202734375" y="18.5" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,37) scale(1,-1)">ubiquitaire</text>
+			<circle cx="173.4" cy="75" r="5" style="stroke: rgb(100%,100%,100%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 173.4,80 L 173.4,98 Z" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<text x="162.132421875" y="128" style="font-family: DV-B; font-size: 9px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,256) scale(1,-1)">1999</text>
+			<text x="150.9896484375" y="116.0" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,232) scale(1,-1)">Terme « IoT »</text>
+			<text x="155.4333984375" y="106.5" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,213) scale(1,-1)">(K. Ashton)</text>
+			<circle cx="240.10000000000002" cy="75" r="5" style="stroke: rgb(100%,100%,100%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 240.1,70 L 240.1,52 Z" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<text x="221.51772460937502" y="40" style="font-family: DV-B; font-size: 9px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,80) scale(1,-1)">2008-09</text>
+			<text x="219.64433593750002" y="28.0" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,56) scale(1,-1)">Plus d'objets</text>
+			<text x="216.13574218750003" y="18.5" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,37) scale(1,-1)">que d'humains</text>
+			<circle cx="306.8" cy="75" r="5" style="stroke: rgb(100%,100%,100%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 306.8,80 L 306.8,98 Z" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<text x="295.532421875" y="128" style="font-family: DV-B; font-size: 9px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,256) scale(1,-1)">2012</text>
+			<text x="288.8123046875" y="116.0" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,232) scale(1,-1)">IPv6, LoRa,</text>
+			<text x="286.3126953125" y="106.5" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,213) scale(1,-1)">Raspberry Pi</text>
+			<circle cx="373.5" cy="75" r="5" style="stroke: rgb(100%,100%,100%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 373.5,70 L 373.5,52 Z" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<text x="362.232421875" y="40" style="font-family: DV-B; font-size: 9px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,80) scale(1,-1)">2016</text>
+			<text x="361.7455078125" y="28.0" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,56) scale(1,-1)">NB-IoT,</text>
+			<text x="353.9390625" y="18.5" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,37) scale(1,-1)">botnet Mirai</text>
+			<circle cx="440.20000000000005" cy="75" r="5" style="stroke: rgb(100%,100%,100%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 440.2,80 L 440.2,98 Z" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<text x="421.61772460937505" y="128" style="font-family: DV-B; font-size: 9px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,256) scale(1,-1)">2019-22</text>
+			<text x="421.90292968750003" y="116.0" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,232) scale(1,-1)">5G, Matter,</text>
+			<text x="428.75488281250006" y="106.5" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,213) scale(1,-1)">TinyML</text>
+		</g>
+	</g>
+</svg>

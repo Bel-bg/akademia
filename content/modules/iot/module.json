@@ -1,0 +1,146 @@
+{
+  "id": "iot",
+  "title": "Internet des Objets",
+  "subtitle": "Introduction à l'IoT · ENEAM · Licence 3 ARI",
+  "description": "Du capteur au cloud : définitions, architectures, protocoles (LoRaWAN, MQTT...), systèmes embarqués, edge computing, sécurité et études de cas d'examen.",
+  "emoji": "📡",
+  "color": "#0E9F9A",
+  "level": "Licence 3",
+  "estimatedHours": 14,
+  "parts": [
+    {
+      "id": "ch1",
+      "title": "Chapitre 1 · Introduction à l'Internet des Objets",
+      "chapters": [
+        "1-1-definition-historique",
+        "1-2-principes",
+        "1-3-evolution-tendances",
+        "1-4-applications",
+        "1-5-enjeux-defis"
+      ]
+    },
+    {
+      "id": "ch2",
+      "title": "Chapitre 2 · Architectures et composants de l'IoT",
+      "chapters": [
+        "2-1-couches-protocoles",
+        "2-2-capteurs-actionneurs",
+        "2-3-systemes-embarques",
+        "2-4-cloud-edge"
+      ]
+    },
+    {
+      "id": "ann",
+      "title": "Annexes · Approfondissements et méthode d'examen",
+      "chapters": [
+        "a-securite-resilience",
+        "c-methode-corrige",
+        "d-glossaire-fiches"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "1-1-definition-historique",
+      "number": "1.1",
+      "title": "Définition et historique de l'IoT",
+      "summary": "Ce qu'est l'IoT, ses caractéristiques clés et son histoire, de 1982 à aujourd'hui.",
+      "minutes": 8,
+      "file": "1-1-definition-historique.md"
+    },
+    {
+      "id": "1-2-principes",
+      "number": "1.2",
+      "title": "Principes fondamentaux des objets connectés",
+      "summary": "Les dix principes : collecte, connectivité, traitement, action, interopérabilité, sécurité, énergie...",
+      "minutes": 6,
+      "file": "1-2-principes.md"
+    },
+    {
+      "id": "1-3-evolution-tendances",
+      "number": "1.3",
+      "title": "Évolution et tendances actuelles",
+      "summary": "5G, LPWAN, edge, TinyML, jumeaux numériques : où va l'IoT, et la situation en Afrique.",
+      "minutes": 6,
+      "file": "1-3-evolution-tendances.md"
+    },
+    {
+      "id": "1-4-applications",
+      "number": "1.4",
+      "title": "Applications de l'IoT dans divers secteurs",
+      "summary": "Agriculture, industrie, santé, transport, ville, commerce, énergie : capteurs et bénéfices par secteur.",
+      "minutes": 7,
+      "file": "1-4-applications.md"
+    },
+    {
+      "id": "1-5-enjeux-defis",
+      "number": "1.5",
+      "title": "Enjeux et défis de l'IoT",
+      "summary": "Sécurité, vie privée, scalabilité, énergie, standards, coût, fiabilité : problèmes et solutions.",
+      "minutes": 8,
+      "file": "1-5-enjeux-defis.md"
+    },
+    {
+      "id": "2-1-couches-protocoles",
+      "number": "2.1",
+      "title": "Modèle de référence : couches et protocoles",
+      "summary": "Les couches de l'architecture IoT et les protocoles : Wi-Fi, BLE, Zigbee, LoRaWAN, MQTT, CoAP, NB-IoT...",
+      "minutes": 19,
+      "file": "2-1-couches-protocoles.md"
+    },
+    {
+      "id": "2-2-capteurs-actionneurs",
+      "number": "2.2",
+      "title": "Capteurs, actionneurs et objets connectés",
+      "summary": "Mesurer et agir : caractéristiques des capteurs, chaîne d'acquisition, actionneurs et interfaçage.",
+      "minutes": 8,
+      "file": "2-2-capteurs-actionneurs.md"
+    },
+    {
+      "id": "2-3-systemes-embarques",
+      "number": "2.3",
+      "title": "Systèmes embarqués et microcontrôleurs",
+      "summary": "Le cerveau de l'objet : microcontrôleurs, cartes, bus, logiciel embarqué, gestion de l'énergie.",
+      "minutes": 6,
+      "file": "2-3-systemes-embarques.md"
+    },
+    {
+      "id": "2-4-cloud-edge",
+      "number": "2.4",
+      "title": "Architecture cloud et edge pour l'IoT",
+      "summary": "Cloud, fog et edge : comparaison, architecture hybride et chaîne de traitement des données.",
+      "minutes": 6,
+      "file": "2-4-cloud-edge.md"
+    },
+    {
+      "id": "a-securite-resilience",
+      "number": "A-B",
+      "title": "Sécurité, résilience et autonomie",
+      "summary": "Mécanismes de sécurité, confidentialité, résilience en cas de panne et solutions d'autonomie.",
+      "minutes": 7,
+      "file": "a-securite-resilience.md"
+    },
+    {
+      "id": "c-methode-corrige",
+      "number": "C",
+      "title": "Méthode d'examen et corrigé commenté",
+      "summary": "Comment répondre aux trois parties de l'examen, et le corrigé commenté de l'examen 2025-2026.",
+      "minutes": 8,
+      "file": "c-methode-corrige.md"
+    },
+    {
+      "id": "d-glossaire-fiches",
+      "number": "D-F",
+      "title": "Glossaire, fiches de révision et corrections",
+      "summary": "Glossaire, dix points à retenir, formules, et corrections apportées au cours d'origine.",
+      "minutes": 6,
+      "file": "d-glossaire-fiches.md"
+    }
+  ],
+  "features": {
+    "quiz": true,
+    "blitz": true,
+    "exams": true,
+    "flashcards": true
+  }
+}

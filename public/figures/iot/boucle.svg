@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="128" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 128" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="128"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-128)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0.0" y="52" width="100.0" height="58" rx="5" ry="5" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="28.085351562499998" y="96" style="font-family: DV-B; font-size: 8.4px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,192) scale(1,-1)">1. CAPTER</text>
+			<text x="34.54951171875" y="80" style="font-family: DV; font-size: 7.6px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,160) scale(1,-1)">Capteurs</text>
+			<text x="34.4400390625" y="70" style="font-family: DV; font-size: 7.6px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,140) scale(1,-1)">(mesure)</text>
+			<path d="M 102,81 L 124.67,81 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="124.67 81, 120.1678 83.17483, 120.1678 78.82517" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<rect x="126.67" y="52" width="100.00000000000001" height="58" rx="5" ry="5" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="138.3778125" y="96" style="font-family: DV-B; font-size: 8.4px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,192) scale(1,-1)">2. COMMUNIQUER</text>
+			<text x="164.04353515625002" y="80" style="font-family: DV; font-size: 7.6px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,160) scale(1,-1)">Réseau</text>
+			<text x="144.63347656250002" y="70" style="font-family: DV; font-size: 7.6px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,140) scale(1,-1)">(Wi-Fi, LoRa, 4G...)</text>
+			<path d="M 228.67,81 L 251.34,81 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="251.34 81, 246.8378 83.17483, 246.8378 78.82517" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<rect x="253.34" y="52" width="100.00000000000003" height="58" rx="5" ry="5" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(93%,94%,95%); fill-rule: evenodd;"/>
+			<text x="280.07388671875003" y="96" style="font-family: DV-B; font-size: 8.4px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,192) scale(1,-1)">3. TRAITER</text>
+			<text x="281.64400390625" y="80" style="font-family: DV; font-size: 7.6px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,160) scale(1,-1)">Edge / Cloud</text>
+			<text x="274.77134765625004" y="70" style="font-family: DV; font-size: 7.6px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,140) scale(1,-1)">(règles, analyse)</text>
+			<path d="M 355.34,81 L 378.01,81 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="378.01 81, 373.5078 83.17483, 373.5078 78.82517" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<rect x="380.01" y="52" width="100.0" height="58" rx="5" ry="5" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="414.29076171875" y="96" style="font-family: DV-B; font-size: 8.4px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,192) scale(1,-1)">4. AGIR</text>
+			<text x="408.5348046875" y="80" style="font-family: DV; font-size: 7.6px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,160) scale(1,-1)">Actionneurs,</text>
+			<text x="418.231484375" y="70" style="font-family: DV; font-size: 7.6px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,140) scale(1,-1)">alertes</text>
+			<path d="M 430.01,52 L 430.01,28 Z" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<path d="M 430.01,28 L 50,28 Z" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<path d="M 50,28 L 50,51 Z" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="50 51, 47.82517 46.49776, 52.17483 46.49776" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<text x="121.103173828125" y="14" style="font-family: DV; font-size: 7.4px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,28) scale(1,-1)">Rétroaction : l'effet de l'action est de nouveau mesuré par les capteurs</text>
+			<text x="150.88671875" y="120" style="font-family: DV-B; font-size: 8px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,240) scale(1,-1)">Boucle de fonctionnement d'un système IoT</text>
+		</g>
+	</g>
+</svg>

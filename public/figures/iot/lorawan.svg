@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="176" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 176" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="176"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-176)" style="clip-path: url(#clip)">
+		<g transform="">
+			<circle cx="24" cy="146" r="13" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="16.3400390625" y="143.5" style="font-family: DV-B; font-size: 6.8px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,287) scale(1,-1)">Cap.</text>
+			<circle cx="24" cy="106" r="13" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="16.3400390625" y="103.5" style="font-family: DV-B; font-size: 6.8px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,207) scale(1,-1)">Cap.</text>
+			<circle cx="24" cy="66" r="13" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="16.3400390625" y="63.5" style="font-family: DV-B; font-size: 6.8px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,127) scale(1,-1)">Cap.</text>
+			<circle cx="24" cy="26" r="13" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="16.3400390625" y="23.5" style="font-family: DV-B; font-size: 6.8px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,47) scale(1,-1)">Cap.</text>
+			<text x="0" y="168" style="font-family: DV-B; font-size: 7.4px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,336) scale(1,-1)">Nœuds LoRa</text>
+			<rect x="120" y="122" width="68" height="34" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="134.6544921875" y="141.358" style="font-family: DV-B; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,282) scale(1,-1)">Passerelle</text>
+			<text x="137.70048828125" y="131.758" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,263) scale(1,-1)">LoRaWAN</text>
+			<rect x="120" y="46" width="68" height="34" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="134.6544921875" y="65.358" style="font-family: DV-B; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,130) scale(1,-1)">Passerelle</text>
+			<text x="137.70048828125" y="55.758" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,111) scale(1,-1)">LoRaWAN</text>
+			<path d="M 38,146 L 119,139 Z" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.7; stroke-dasharray: 2, 2;"/>
+			<polygon points="119 139, 114.7017 141.5544, 114.3272 137.2209" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(62%,71%,73%); fill-rule: evenodd;"/>
+			<path d="M 38,146 L 119,63 Z" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.7; stroke-dasharray: 2, 2;"/>
+			<polygon points="119 63, 117.412 67.74111, 114.299 64.70318" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(62%,71%,73%); fill-rule: evenodd;"/>
+			<path d="M 38,106 L 119,139 Z" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.7; stroke-dasharray: 2, 2;"/>
+			<polygon points="119 139, 114.01 139.3154, 115.6511 135.2872" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(62%,71%,73%); fill-rule: evenodd;"/>
+			<path d="M 38,106 L 119,63 Z" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.7; stroke-dasharray: 2, 2;"/>
+			<polygon points="119 63, 116.0431 67.03198, 114.0036 63.19012" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(62%,71%,73%); fill-rule: evenodd;"/>
+			<path d="M 38,66 L 119,139 Z" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.7; stroke-dasharray: 2, 2;"/>
+			<polygon points="119 139, 114.1996 137.6014, 117.1116 134.3703" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(62%,71%,73%); fill-rule: evenodd;"/>
+			<path d="M 38,66 L 119,63 Z" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.7; stroke-dasharray: 2, 2;"/>
+			<polygon points="119 63, 114.5813 65.33997, 114.4204 60.9933" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(62%,71%,73%); fill-rule: evenodd;"/>
+			<path d="M 38,26 L 119,139 Z" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.7; stroke-dasharray: 2, 2;"/>
+			<polygon points="119 139, 114.6094 136.6078, 118.1446 134.0737" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(62%,71%,73%); fill-rule: evenodd;"/>
+			<path d="M 38,26 L 119,63 Z" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.7; stroke-dasharray: 2, 2;"/>
+			<polygon points="119 63, 114.0012 63.10756, 115.8084 59.15113" style="stroke: rgb(62%,71%,73%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(62%,71%,73%); fill-rule: evenodd;"/>
+			<text x="80" y="168" style="font-family: DV; font-size: 7.2px;fill: rgb(37%,41%,46%); stroke:none;" transform="translate(0,336) scale(1,-1)">Radio LoRa (2-15 km)</text>
+			<rect x="232" y="70" width="78" height="46" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="243.12109375" y="100.024" style="font-family: DV-B; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,200) scale(1,-1)">Serveur réseau</text>
+			<text x="246.7228515625" y="90.624" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,181) scale(1,-1)">(déduplication,</text>
+			<text x="247.7125" y="81.224" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,162) scale(1,-1)">ADR, sécurité)</text>
+			<path d="M 188,139 L 231,93 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.2;"/>
+			<polygon points="231 93, 229.5143 97.77416, 226.3367 94.80385" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<path d="M 188,63 L 231,93 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.2;"/>
+			<polygon points="231 93, 226.0632 92.20754, 228.552 88.64027" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<text x="196" y="164" style="font-family: DV; font-size: 7.2px;fill: rgb(37%,41%,46%); stroke:none;" transform="translate(0,328) scale(1,-1)">IP (Ethernet / 4G)</text>
+			<rect x="342" y="70" width="70" height="46" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="362.659765625" y="100.024" style="font-family: DV-B; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,200) scale(1,-1)">Serveur</text>
+			<text x="362.0287109375" y="90.624" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,181) scale(1,-1)">applicatif</text>
+			<text x="353.1921875" y="81.224" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,162) scale(1,-1)">(+ Join Server)</text>
+			<path d="M 311,93 L 341,93 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="341 93, 336.4978 95.17483, 336.4978 90.82517" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<rect x="436" y="70" width="44" height="46" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="446.328125" y="95.324" style="font-family: DV-B; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,190) scale(1,-1)">Appli /</text>
+			<text x="449.2619140625" y="85.92399999999999" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,171) scale(1,-1)">utilis.</text>
+			<path d="M 413,93 L 435,93 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="435 93, 430.4978 95.17483, 430.4978 90.82517" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<text x="351.151953125" y="126" style="font-family: DV; font-size: 7.2px;fill: rgb(37%,41%,46%); stroke:none;" transform="translate(0,252) scale(1,-1)">MQTT / HTTPS</text>
+			<text x="212.38671875" y="40" style="font-family: DV; font-size: 7.2px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,80) scale(1,-1)">Chaque trame est reçue par toutes les</text>
+			<text x="199.5916015625" y="30" style="font-family: DV; font-size: 7.2px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,60) scale(1,-1)">passerelles proches : redondance et résilience</text>
+		</g>
+	</g>
+</svg>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="214" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 214" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="214"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-214)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="150" width="360" height="56" rx="6" ry="6" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="164.35986328125" y="190" style="font-family: DV-B; font-size: 9px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,380) scale(1,-1)">CLOUD</text>
+			<text x="71.9267578125" y="177" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,354) scale(1,-1)">Stockage massif, historique, IA lourde, tableaux de bord globaux</text>
+			<text x="130.95703125" y="163" style="font-family: DV; font-size: 7.2px;fill: rgb(37%,41%,46%); stroke:none;" transform="translate(0,326) scale(1,-1)">Latence : 50 à plus de 200 ms</text>
+			<rect x="0" y="80" width="360" height="56" rx="6" ry="6" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1; fill: rgb(86%,92%,94%); fill-rule: evenodd;"/>
+			<text x="93.46728515624999" y="120" style="font-family: DV-B; font-size: 9px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,240) scale(1,-1)">EDGE / FOG (passerelle, mini-serveur)</text>
+			<text x="66.48154296874999" y="107" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,214) scale(1,-1)">Filtrage, règles locales, conversion de protocoles, tampon, IA légère</text>
+			<text x="143.3091796875" y="93" style="font-family: DV; font-size: 7.2px;fill: rgb(37%,41%,46%); stroke:none;" transform="translate(0,186) scale(1,-1)">Latence : quelques ms</text>
+			<rect x="0" y="10" width="360" height="56" rx="6" ry="6" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="134.747314453125" y="50" style="font-family: DV-B; font-size: 9px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,100) scale(1,-1)">OBJETS CONNECTÉS</text>
+			<text x="71.11015624999999" y="37" style="font-family: DV; font-size: 7.4px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,74) scale(1,-1)">Capteurs, actionneurs, microcontrôleurs (traitement dans l'objet)</text>
+			<text x="133.0611328125" y="23" style="font-family: DV; font-size: 7.2px;fill: rgb(37%,41%,46%); stroke:none;" transform="translate(0,46) scale(1,-1)">Réaction immédiate possible</text>
+			<path d="M 100,68 L 100,79 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="100 79, 97.82517 74.49776, 102.1748 74.49776" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<path d="M 260,79 L 260,68 Z" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="260 68, 262.1748 72.50224, 257.8252 72.50224" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 100,138 L 100,149 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="100 149, 97.82517 144.4978, 102.1748 144.4978" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<path d="M 260,149 L 260,138 Z" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1.3;"/>
+			<polygon points="260 138, 262.1748 142.5022, 257.8252 142.5022" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<text x="108" y="72" style="font-family: DV; font-size: 6.6px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,144) scale(1,-1)">mesures</text>
+			<text x="268" y="72" style="font-family: DV; font-size: 6.6px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,144) scale(1,-1)">commandes</text>
+			<text x="108" y="142" style="font-family: DV; font-size: 6.6px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,284) scale(1,-1)">données agrégées</text>
+			<text x="268" y="142" style="font-family: DV; font-size: 6.6px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,284) scale(1,-1)">modèles IA, mises à jour</text>
+			<rect x="380" y="150" width="100" height="56" rx="4" ry="4" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="414.1498046875" y="185.024" style="font-family: DV-B; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,370) scale(1,-1)">Données</text>
+			<text x="418.91171875" y="175.624" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,351) scale(1,-1)">froides</text>
+			<text x="411.24765625" y="166.224" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,332) scale(1,-1)">(historique)</text>
+			<rect x="380" y="80" width="100" height="56" rx="4" ry="4" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="414.5154296875" y="115.024" style="font-family: DV-B; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,230) scale(1,-1)">Décision</text>
+			<text x="407.517578125" y="105.624" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,211) scale(1,-1)">en temps réel</text>
+			<text x="416.123828125" y="96.224" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,192) scale(1,-1)">(alarme)</text>
+			<rect x="380" y="10" width="100" height="56" rx="4" ry="4" style="stroke: rgb(78%,83%,85%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="414.1498046875" y="45.024" style="font-family: DV-B; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,90) scale(1,-1)">Données</text>
+			<text x="419.6095703125" y="35.624" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,71) scale(1,-1)">brutes</text>
+			<text x="413.3166015625" y="26.224" style="font-family: DV; font-size: 7.2px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,52) scale(1,-1)">(capteurs)</text>
+		</g>
+	</g>
+</svg>

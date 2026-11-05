@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="158" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 158" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="158"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-158)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="100" width="150" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="25.536865234375" y="122.28999999999999" style="font-family: DV-B; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,244) scale(1,-1)">Capteur de niveau (éditeur)</text>
+			<text x="21.766845703125" y="113.08999999999999" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,226) scale(1,-1)">publie « ville/poubelle42/niveau »</text>
+			<rect x="0" y="30" width="150" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(98%,90%,84%); fill-rule: evenodd;"/>
+			<text x="14.98388671875" y="52.29" style="font-family: DV-B; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,104) scale(1,-1)">Capteur de température (éditeur)</text>
+			<text x="32.417236328125" y="43.09" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,86) scale(1,-1)">publie « ville/salle1/temp »</text>
+			<rect x="185" y="40" width="110" height="90" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<text x="212.0751953125" y="102.092" style="font-family: DV-B; font-size: 7.6px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,204) scale(1,-1)">BROKER MQTT</text>
+			<text x="240.0" y="92.292" style="font-family: DV; font-size: 7.6px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,184) scale(1,-1)"></text>
+			<text x="213.35361328125" y="82.49199999999999" style="font-family: DV; font-size: 7.6px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,164) scale(1,-1)">reçoit, filtre par</text>
+			<text x="207.4958984375" y="72.692" style="font-family: DV; font-size: 7.6px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,145) scale(1,-1)">sujet et redistribue</text>
+			<text x="208.60546875" y="62.891999999999996" style="font-family: DV; font-size: 7.6px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,125) scale(1,-1)">(QoS, retain, LWT)</text>
+			<rect x="330" y="100" width="150" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="352.55810546875" y="122.28999999999999" style="font-family: DV-B; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,244) scale(1,-1)">Application mobile (abonnée)</text>
+			<text x="369.001953125" y="113.08999999999999" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,226) scale(1,-1)">abonnement « ville/#»</text>
+			<rect x="330" y="30" width="150" height="40" rx="4" ry="4" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.9; fill: rgb(89%,90%,97%); fill-rule: evenodd;"/>
+			<text x="355.5625" y="52.29" style="font-family: DV-B; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,104) scale(1,-1)">Base de données (abonnée)</text>
+			<text x="356.343505859375" y="43.09" style="font-family: DV; font-size: 7px;fill: rgb(12%,16%,20%); stroke:none;" transform="translate(0,86) scale(1,-1)">abonnement « ville/+/niveau »</text>
+			<path d="M 150,120 L 184,105 Z" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="184 105, 180.7587 108.8071, 179.003 104.8275" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 150,50 L 184,65 Z" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="184 65, 179.003 65.17251, 180.7587 61.19293" style="stroke: rgb(87%,48%,22%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(87%,48%,22%); fill-rule: evenodd;"/>
+			<path d="M 296,105 L 329,120 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="329 120, 324.0014 120.1169, 325.8013 116.1571" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<path d="M 296,65 L 329,50 Z" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="329 50, 325.8013 53.84293, 324.0014 49.88315" style="stroke: rgb(4%,33%,38%); stroke-linecap: butt; stroke-width: 0.5; fill: rgb(4%,33%,38%); fill-rule: evenodd;"/>
+			<text x="150.77998046875" y="144" style="font-family: DV-B; font-size: 7.4px;fill: rgb(87%,48%,22%); stroke:none;" transform="translate(0,288) scale(1,-1)">PUBLISH</text>
+			<text x="294.034765625" y="144" style="font-family: DV-B; font-size: 7.4px;fill: rgb(4%,33%,38%); stroke:none;" transform="translate(0,288) scale(1,-1)">MESSAGE</text>
+			<text x="116.41874999999999" y="12" style="font-family: DV; font-size: 7.2px;fill: rgb(37%,41%,46%); stroke:none;" transform="translate(0,24) scale(1,-1)">Éditeurs et abonnés ne se connaissent pas : ils sont découplés par le broker</text>
+		</g>
+	</g>
+</svg>

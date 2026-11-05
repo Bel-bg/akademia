@@ -1,0 +1,76 @@
+@import '@fontsource-variable/plus-jakarta-sans';
+@import '@fontsource-variable/jetbrains-mono';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 246 247 252;
+  --card: 255 255 255;
+  --soft: 238 240 250;
+  --ink: 18 24 38;
+  --muted: 91 100 117;
+  --line: 227 231 241;
+  --brand: 91 75 255;
+  --accent: 255 176 32;
+  --good: 18 183 106;
+  --bad: 240 68 56;
+  --shadow: 20 28 60;
+}
+.dark {
+  --bg: 11 16 32;
+  --card: 19 26 46;
+  --soft: 28 38 66;
+  --ink: 238 241 250;
+  --muted: 152 162 184;
+  --line: 38 50 84;
+  --brand: 139 125 255;
+  --accent: 255 196 70;
+  --good: 52 211 153;
+  --bad: 251 113 100;
+  --shadow: 0 0 0;
+}
+
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
+body { @apply bg-bg text-ink font-sans antialiased; min-height: 100vh; }
+::selection { background: rgb(var(--brand) / 0.25); }
+*:focus-visible { outline: 2px solid rgb(var(--brand)); outline-offset: 2px; border-radius: 6px; }
+
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[.98] disabled:opacity-50 disabled:pointer-events-none; }
+.btn-primary { @apply bg-brand text-white shadow-card hover:brightness-110; }
+.btn-soft { @apply bg-soft text-ink hover:brightness-95 dark:hover:brightness-125; }
+.btn-ghost { @apply text-muted hover:bg-soft hover:text-ink; }
+.btn-good { @apply bg-good text-white hover:brightness-110; }
+.btn-lg { @apply px-6 py-3.5 text-base rounded-2xl; }
+.card { @apply bg-card rounded-2xl border border-line shadow-card; }
+.chip { @apply inline-flex items-center gap-1.5 rounded-full bg-soft px-3 py-1 text-xs font-semibold text-ink; }
+.h-display { @apply font-extrabold tracking-tight; }
+
+/* ---------- Mise en forme du cours ---------- */
+.prose-k { @apply text-[15.5px] leading-[1.75] text-ink; }
+.prose-k h2 { @apply mt-10 mb-3 text-2xl font-extrabold tracking-tight scroll-mt-24 border-b border-line pb-2; }
+.prose-k h3 { @apply mt-8 mb-2 text-lg font-bold text-brand scroll-mt-24; }
+.prose-k h4 { @apply mt-6 mb-1 text-[15px] font-bold uppercase tracking-wide text-accent scroll-mt-24; }
+.prose-k p { @apply my-3; }
+.prose-k ul { @apply my-3 list-disc space-y-1.5 pl-6 marker:text-accent; }
+.prose-k ol { @apply my-3 list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-brand; }
+.prose-k li > p { @apply my-1; }
+.prose-k strong { @apply font-bold; }
+.prose-k a { @apply text-brand underline underline-offset-2; }
+.prose-k code { @apply rounded-md bg-soft px-1.5 py-0.5 font-mono text-[13px] text-brand; }
+.prose-k pre { @apply my-4 overflow-x-auto rounded-xl border border-line bg-soft p-4 text-[13px] leading-relaxed; }
+.prose-k pre code { @apply bg-transparent p-0 text-ink; }
+.prose-k table { @apply w-full border-collapse text-[13.5px]; }
+.prose-k th { @apply bg-brand/10 px-3 py-2 text-left font-bold; }
+.prose-k td { @apply border-t border-line px-3 py-2 align-top; }
+.prose-k tr:nth-child(even) td { @apply bg-soft/60; }
+.prose-k img { @apply mx-auto my-5 max-w-full rounded-xl bg-white p-3 shadow-card; }
+.prose-k sub, .prose-k sup { @apply text-[0.75em]; }
+.prose-k hr { @apply my-8 border-line; }
+.reader-lg .prose-k { font-size: 17.5px; }
+.reader-sm .prose-k { font-size: 14px; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
