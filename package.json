@@ -1,8 +1,12 @@
 {
   "name": "akademia-root",
   "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
-    "setup": "npm install && npm --prefix backend install && npm --prefix frontend install",
+    "setup": "npm install",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run dev",
