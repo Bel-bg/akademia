@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const content = require('../services/contentService');
 const progression = require('../services/progressionService');
+const progressStore = require('../services/progressService');
 
 const moduleMeta = content.getModules()[0];
 
@@ -58,4 +59,9 @@ test('legacy import rebuilds rewards instead of trusting stored XP', () => {
 test('content service rejects traversal paths', () => {
   assert.equal(content.getChapter('../backend', 'server.js'), null);
   assert.equal(content.getModule('../backend'), null);
+});
+
+test('Supabase minimal-success responses may be empty', async () => {
+  assert.equal(await progressStore.readResponse(new Response(null, { status: 201 })), null);
+  assert.deepEqual(await progressStore.readResponse(new Response('[{"ok":true}]', { status: 200 })), [{ ok: true }]);
 });

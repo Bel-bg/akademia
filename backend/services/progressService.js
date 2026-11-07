@@ -26,13 +26,24 @@ async function supabaseRequest(path, accessToken, options = {}) {
       ...(options.headers || {}),
     },
   });
+  return readResponse(response);
+}
+
+async function readResponse(response) {
+  const body = await response.text();
   if (!response.ok) {
     const error = new Error(`Supabase request failed (${response.status})`);
     error.status = response.status >= 500 ? 502 : response.status;
     throw error;
   }
-  if (response.status === 204) return null;
-  return response.json();
+  if (!body.trim()) return null;
+  try {
+    return JSON.parse(body);
+  } catch {
+    const error = new Error('Supabase returned an invalid response');
+    error.status = 502;
+    throw error;
+  }
 }
 
 async function verifyAccessToken(accessToken) {
@@ -74,4 +85,4 @@ async function getProfile(accessToken, userId) {
   return rows?.[0] ?? null;
 }
 
-module.exports = { getLeaderboard, getProfile, isConfigured, loadProgress, saveProgress, verifyAccessToken };
+module.exports = { getLeaderboard, getProfile, isConfigured, loadProgress, readResponse, saveProgress, verifyAccessToken };
