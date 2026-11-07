@@ -20,9 +20,8 @@ const NAV = [
 function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2.5">
-    
-      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#7B6CFF] to-[#4338E8] shadow-card">
-        <Zap size={19} className="fill-[#FFD66B] text-[#FFD66B]" />
+      <span aria-hidden="true" className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl shadow-card">
+        <img src="/img.png" alt="" className="absolute left-1/2 top-[43%] w-[250%] max-w-none -translate-x-1/2 -translate-y-[43%]" />
       </span>
       <span className="text-xl font-extrabold tracking-tight">Akademia</span>
     </Link>
