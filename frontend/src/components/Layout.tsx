@@ -11,6 +11,7 @@ import {
   Newspaper,
   Sparkles,
   Star,
+  TextBubble,
   User,
 } from '@getpapillon/papicons';
 import { modules } from '@/lib/content';
@@ -39,6 +40,7 @@ const DESKTOP_NAV = [
   { to: '/actu', label: 'Actualités & Battles', icon: Newspaper },
   { to: '/modules', label: 'Modules de cours', icon: Folder },
   { to: '/classement', label: 'Classement', icon: Crown },
+  { to: '/messages', label: 'Messages', icon: TextBubble },
   { to: '/profil', label: 'Mon Profil', icon: User },
   { to: '/resultats', label: 'Mes statistiques', icon: Grades },
   { to: '/succes', label: 'Mes badges', icon: Sparkles },
@@ -60,217 +62,168 @@ function Logo() {
 
 function XpChip() {
   const { state } = useStore();
-  const { filiere } = useTheme();
   const lp = levelProgress(state.xp);
   return (
-    <div className="flex items-center gap-1.5 sm:gap-2">
-      <Link
-        to="/profil"
-        className="hidden items-center gap-2 rounded-full bg-soft py-1 pl-1.5 pr-3 transition hover:brightness-95 sm:flex"
-        title={`Niveau ${lp.level} · Filière ${filiere}`}
-      >
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-[11px] font-extrabold text-white">
-          {lp.level}
-        </span>
-        <span className="text-xs font-extrabold leading-tight">
-          Niv. {lp.level} · {filiere}
-          <span className="mt-0.5 block w-16">
-            <Bar value={lp.ratio} h={5} />
-          </span>
-        </span>
-      </Link>
-
-      <Link to="/profil" className="chip hover:brightness-95" title="Total XP">
-        <Star size={14} className="text-brand" />
-        <span>{fmtNum(state.xp)} XP</span>
-      </Link>
-
-      <Link
-        to="/profil"
-        className={cn('chip hover:brightness-95', state.streak > 0 ? 'text-ink' : 'text-muted')}
-        title="Série de jours consécutifs"
-      >
-        <FlameBadgeIcon size={16} />
-        <span>{state.streak}</span>
-      </Link>
-    </div>
+    <Link
+      to="/resultats"
+      className="flex items-center gap-2 rounded-2xl border border-line/80 bg-card px-3 py-1.5 shadow-card transition hover:border-brand/40"
+      title={`${fmtNum(state.xp)} XP cumulés · Niveau ${lp.level}`}
+    >
+      <FlameBadgeIcon size={22} />
+      <div className="leading-none">
+        <span className="font-display block text-xs font-extrabold text-ink">{fmtNum(state.xp)} XP</span>
+        <span className="text-[10px] font-extrabold text-brand">Niv. {lp.level}</span>
+      </div>
+    </Link>
   );
 }
 
 /**
- * Modale obligatoire affichée à la connexion pour les utilisateurs déjà inscrits
- * qui n'avaient pas encore renseigné leur filière (ARI ou AIP).
- * Le thème s'adapte immédiatement (défaut = rouge corail / ARI -> corail / AIP -> violet).
+ * Modale de premier choix de filière (ARI ou AIP) si l'utilisateur n'en a pas encore.
  */
 function FilierePromptModal() {
-  const { ready } = useStore();
-  const { hasFiliere, setFiliere } = useTheme();
-  const [picked, setPicked] = useState<FiliereId>('ARI');
+  const { filiere, hasFiliere, setFiliere } = useTheme();
+  const { updateProfile } = useAuth();
+  const { setUserFiliere } = useStore();
+  const [selected, setSelected] = useState<FiliereId>(filiere);
   const [saving, setSaving] = useState(false);
-  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const shouldPrompt = ready && !hasFiliere;
+  if (hasFiliere) return null;
 
-  useEffect(() => {
-    const dlg = dialogRef.current;
-    if (!dlg) return;
-    if (shouldPrompt) {
-      if (!dlg.open) dlg.showModal();
-    } else if (dlg.open) {
-      dlg.close();
-    }
-  }, [shouldPrompt]);
-
-  // Aperçu immédiat de la couleur du thème pendant le choix dans la modale
-  useEffect(() => {
-    if (!shouldPrompt) return;
-    const previewTheme = picked === 'AIP' ? 'violet' : 'corail';
-    document.documentElement.setAttribute('data-theme', previewTheme);
-  }, [picked, shouldPrompt]);
-
-  if (!shouldPrompt) return null;
-
-  const confirmFiliere = async () => {
+  const handleConfirm = async () => {
     setSaving(true);
     try {
-      await setFiliere(picked);
-      fireConfetti(false);
+      await setFiliere(selected);
+      await updateProfile({ filiere: selected });
+      await setUserFiliere(selected);
+      fireConfetti(true);
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <dialog
-      ref={dialogRef}
-      aria-labelledby="filiere-prompt-title"
-      onCancel={(e) => e.preventDefault()}
-      className="m-auto w-[calc(100%-2rem)] max-w-md overflow-hidden rounded-4xl border-0 bg-bg p-6 text-center text-ink shadow-pop outline-none animate-pop"
-    >
-      <div className="relative flex flex-col items-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60 backdrop-blur-sm animate-fadeIn">
+      <div className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-brand/20 bg-card p-6 shadow-pop sm:p-8">
         <ConfettiBackdrop />
 
-        <span className="relative z-10 inline-flex items-center gap-1.5 rounded-full bg-soft px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-brand">
-          <GraduationHat size={15} /> Configuration du profil
-        </span>
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <Mascot mood="thinking" size={120} />
 
-        <h2 id="filiere-prompt-title" className="h-display relative z-10 mt-3 text-2xl sm:text-3xl">
-          Quelle est ta filière ?
-        </h2>
-        <p className="relative z-10 mt-1.5 max-w-xs text-xs font-bold leading-relaxed text-muted">
-          Choisis ton camp universitaire entre <b>ARI</b> et <b>AIP</b>. Ton thème Akademia et tes points de Battle s’adaptent automatiquement !
-        </p>
+          <h3 className="h-display mt-3 text-2xl text-ink">Bienvenue sur Akademia !</h3>
+          <p className="mt-2 text-sm font-semibold text-muted">
+            Choisis ta filière universitaire pour adapter le thème de ton application et faire gagner des points à ton département lors de la Battle hebdomadaire !
+          </p>
 
-        <div className="relative z-10 mt-5 grid w-full grid-cols-2 gap-3">
-          {FILIERES.map((f) => {
-            const active = picked === f.id;
-            return (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setPicked(f.id)}
-                className={cn(
-                  'relative flex flex-col items-center rounded-3xl border-2 p-4 text-center transition',
-                  active
-                    ? 'border-brand bg-card shadow-pop scale-[1.02]'
-                    : 'border-line bg-card/70 opacity-80 hover:opacity-100',
-                )}
-              >
-                {active && (
-                  <span
-                    className="absolute right-2.5 top-2.5 flex h-6 w-6 items-center justify-center rounded-full text-white shadow-sm"
-                    style={{ background: f.color }}
-                  >
-                    <Check size={14} />
-                  </span>
-                )}
-                <Mascot
-                  mood={active ? 'excited' : 'idle'}
-                  size={84}
-                  color={f.color}
-                  animate={false}
-                />
-                <span className="h-display mt-2 text-2xl font-extrabold" style={{ color: f.color }}>
-                  {f.name}
-                </span>
-                <span className="mt-0.5 line-clamp-2 text-[11px] font-bold leading-tight text-muted">
-                  {f.full}
-                </span>
-                <span
-                  className="mt-2.5 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold text-white"
-                  style={{ background: f.color }}
+          <div className="mt-5 grid w-full grid-cols-2 gap-3">
+            {FILIERES.map((f) => {
+              const active = selected === f.id;
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setSelected(f.id)}
+                  className={cn(
+                    'flex flex-col items-start justify-between rounded-2xl border-2 p-4 text-left transition',
+                    active
+                      ? 'border-brand bg-soft shadow-card'
+                      : 'border-line/70 bg-card hover:border-brand/40',
+                  )}
                 >
-                  {f.id === 'ARI' ? 'Thème Rouge' : 'Thème Violet'}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                  <div className="flex w-full items-center justify-between">
+                    <span className="font-display text-lg font-extrabold">{f.id}</span>
+                    {active && <Check size={18} className="text-brand" />}
+                  </div>
+                  <span className="mt-1 text-xs font-semibold text-muted">{f.name}</span>
+                </button>
+              );
+            })}
+          </div>
 
-        <button
-          type="button"
-          onClick={confirmFiliere}
-          disabled={saving}
-          className="btn btn-primary btn-lg relative z-10 mt-6 w-full"
-        >
-          {saving ? 'Validation…' : `Rejoindre la filière ${picked}`}
-        </button>
+          <p className="mt-3 text-[11px] font-bold text-muted">
+            Attention : la filière ne pourra plus être modifiée par la suite.
+          </p>
+
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={saving}
+            className="btn btn-primary btn-lg mt-5 w-full"
+          >
+            {saving ? 'Enregistrement…' : 'Confirmer ma filière'}
+          </button>
+        </div>
       </div>
-    </dialog>
+    </div>
   );
 }
 
 export default function Layout() {
   const { user, signOut } = useAuth();
-  const { syncError } = useStore();
-  const { customPseudo, filiere } = useTheme();
-  const [battle, setBattle] = useState<WeeklyBattleInfo | null>(null);
+  const { state, online, pendingSync, syncError } = useStore();
+  const { filiere, customPseudo } = useTheme();
   const loc = useLocation();
   const inReader = loc.pathname.includes('/lire/');
-  const displayName = user?.username || customPseudo;
+
+  const [battle, setBattle] = useState<WeeklyBattleInfo | null>(null);
 
   useEffect(() => {
     let alive = true;
-    const load = () => {
-      fetchBattle()
-        .then((res) => {
-          if (alive) setBattle(res.currentBattle);
-        })
-        .catch(() => {
-          /* ignore network errors */
-        });
-    };
-    load();
-    const interval = setInterval(load, 30000);
+    fetchBattle()
+      .then((res) => {
+        if (alive) setBattle(res.currentBattle);
+      })
+      .catch(() => {
+        /* ignore */
+      });
     return () => {
       alive = false;
-      clearInterval(interval);
     };
   }, []);
 
+  const totalChapters = modules.reduce((acc, m) => acc + m.chapters.length, 0);
+  const readChapters = Object.values(state.chaptersRead ?? {}).reduce(
+    (acc, list) => acc + (Array.isArray(list) ? list.length : 0),
+    0,
+  );
+  const globalPct = totalChapters ? Math.min(100, Math.round((readChapters / totalChapters) * 100)) : 0;
+  const lp = levelProgress(state.xp);
+  const displayName = user?.username || customPseudo;
+
   return (
-    <div className="min-h-dvh lg:pl-72">
-      {/* Sidebar Desktop */}
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col border-r border-line/70 bg-card/95 p-5 backdrop-blur lg:flex">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-bg text-ink transition-colors duration-300">
+      {/* Sidebar Desktop Playful Soft UI */}
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-68 flex-col border-r border-line/70 bg-card/80 p-4 shadow-sm backdrop-blur-md lg:flex">
+        <div className="px-2 pt-2">
           <Logo />
         </div>
 
-        {/* Mini carte étudiant avec Custom Avatar selon la filière */}
-        <Link
-          to="/profil"
-          className="mt-5 flex items-center gap-3 rounded-3xl bg-bg-tinted p-3.5 transition hover:brightness-95"
-        >
-          <CustomAvatar name={displayName} filiere={filiere} size={46} showBadge />
-          <div className="min-w-0 flex-1">
-            <div className="truncate font-display text-base font-extrabold text-ink">{displayName}</div>
-            <div className="flex items-center gap-1.5 text-xs font-extrabold text-brand">
-              <span>Filière {filiere}</span>
+        {/* Carte de Statut Étudiant & Mascotte */}
+        <div className="mt-6 rounded-3xl border border-line/60 bg-soft/60 p-4 shadow-card">
+          <div className="flex items-center gap-3">
+            <CustomAvatar name={displayName} filiere={filiere} size={44} showBadge />
+            <div className="min-w-0 flex-1">
+              <div className="truncate font-display text-sm font-extrabold text-ink">{displayName}</div>
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted">
+                <span className="rounded-md bg-brand px-1.5 py-0.5 text-[10px] font-extrabold text-white">
+                  {filiere}
+                </span>
+                <span>Niv. {lp.level}</span>
+              </div>
             </div>
           </div>
-        </Link>
 
-        <nav className="mt-5 flex flex-col gap-1" aria-label="Navigation principale">
+          <div className="mt-3">
+            <div className="mb-1 flex justify-between text-[11px] font-bold text-muted">
+              <span>Progression cours</span>
+              <span>{globalPct}%</span>
+            </div>
+            <Bar value={globalPct} />
+          </div>
+        </div>
+
+        {/* Liens de Navigation Desktop */}
+        <nav className="mt-6 flex flex-1 flex-col gap-1.5 overflow-y-auto px-1">
           {DESKTOP_NAV.map((n) => (
             <NavLink
               key={n.to}
@@ -278,55 +231,29 @@ export default function Layout() {
               end={n.end}
               className={({ isActive }) =>
                 cn(
-                  'flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-extrabold transition',
+                  'flex items-center gap-3.5 rounded-2xl px-3.5 py-2.5 font-display text-sm font-extrabold transition-all',
                   isActive
                     ? 'bg-brand text-white shadow-btn-brand'
                     : 'text-muted hover:bg-soft hover:text-ink',
-                )
-              }
+                )}
             >
               <n.icon size={20} />
-              {n.label}
+              <span>{n.label}</span>
             </NavLink>
           ))}
         </nav>
 
-        <div className="mt-5 text-[11px] font-extrabold uppercase tracking-wider text-muted">
-          Mes modules
-        </div>
-        <div className="mt-2 flex flex-col gap-1.5 overflow-y-auto">
-          {modules.map((m) => (
-            <NavLink
-              key={m.id}
-              to={`/m/${m.id}`}
-              className={({ isActive }) =>
-                cn(
-                  'flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-extrabold transition',
-                  isActive ? 'bg-soft text-brand' : 'text-muted hover:bg-soft/70 hover:text-ink',
-                )
-              }
-            >
-              <span
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-extrabold text-white"
-                style={{ background: m.color }}
-              >
-                {m.id === 'bdd-oracle' ? 'SQL' : 'IoT'}
-              </span>
-              <span className="truncate">{m.title}</span>
-            </NavLink>
-          ))}
-        </div>
-
-        <div className="mt-auto space-y-3 border-t border-line pt-4">
-          <div className="flex w-full items-center justify-between gap-2">
-            <div className="flex items-center gap-2 min-w-0">
-              <CustomAvatar name={displayName} filiere={filiere} size={28} />
-              <span className="truncate text-sm font-extrabold">{displayName}</span>
+        {/* Bas de Sidebar : Mascotte d'encouragement + Déconnexion */}
+        <div className="mt-auto pt-3 border-t border-line/60">
+          <div className="flex items-center justify-between px-2">
+            <div className="flex items-center gap-2">
+              <Mascot mood="happy" size={38} />
+              <span className="text-[11px] font-extrabold text-muted">Prêt à réviser ?</span>
             </div>
             <button
               type="button"
-              className="btn btn-ghost !px-2.5"
               onClick={() => void signOut()}
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-muted hover:bg-bad/10 hover:text-bad transition"
               title="Se déconnecter"
               aria-label="Se déconnecter"
             >
@@ -350,8 +277,16 @@ export default function Layout() {
           </div>
           <div className="flex items-center gap-2">
             <XpChip />
+            <Link
+              to="/messages"
+              className="flex h-9 w-9 items-center justify-center rounded-2xl border border-line/80 bg-card text-muted hover:text-brand shadow-card transition"
+              aria-label="Messagerie"
+              title="Messagerie"
+            >
+              <TextBubble size={18} />
+            </Link>
             <Link to="/profil" className="ml-1 flex items-center" aria-label="Voir mon profil">
-              <CustomAvatar name={displayName} filiere={filiere} size={32} showBadge />
+              <CustomAvatar name={displayName} filiere={filiere} size={34} showBadge />
             </Link>
           </div>
         </div>
@@ -359,6 +294,16 @@ export default function Layout() {
 
       {/* Contenu principal */}
       <main className={cn('mx-auto px-4 py-5 pb-28 lg:py-7 lg:pb-12', inReader ? 'max-w-6xl' : 'max-w-5xl')}>
+        {!online && (
+          <p role="status" className="mb-4 rounded-2xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm font-bold text-accent">
+            Hors connexion : les cours disponibles restent lisibles et ta progression sera synchronisée au retour du réseau.
+          </p>
+        )}
+        {online && pendingSync > 0 && (
+          <p role="status" className="mb-4 rounded-2xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm font-bold text-accent">
+            Synchronisation en attente : {pendingSync} action{pendingSync > 1 ? 's' : ''} à envoyer.
+          </p>
+        )}
         {syncError && (
           <p role="alert" className="mb-4 rounded-2xl border border-bad/30 bg-bad/10 px-4 py-3 text-sm font-bold text-bad">
             Synchronisation : {syncError}

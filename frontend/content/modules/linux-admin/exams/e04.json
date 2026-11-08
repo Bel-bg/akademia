@@ -1,0 +1,96 @@
+{
+ "n": 4,
+ "title": "Épreuve n° 4 · Vim",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : séquences de touches",
+   "points": 14,
+   "intro": "Donnez la ou les touches (mode normal) ou la commande. Le fichier est une copie de `/etc/services`.",
+   "questions": [
+    {
+     "id": "e04p1q1",
+     "q": "Ouvrez le fichier puis quittez sans rien enregistrer.",
+     "points": 1,
+     "a": "```text\nvim services\n:q!\n```\n- `:q!` abandonne les modifications."
+    },
+    {
+     "id": "e04p1q2",
+     "q": "Descendez de douze lignes, remontez de huit, avancez de seize caractères.",
+     "points": 2,
+     "a": "```text\n12j\n8k\n16l\n```\n- Un nombre devant un déplacement le répète."
+    },
+    {
+     "id": "e04p1q3",
+     "q": "Allez à la dernière ligne, à la première, puis à la 45e.",
+     "points": 2,
+     "a": "```text\nG\ngg\n45G\n```\n- Ou `:45` suivi d'Entrée."
+    },
+    {
+     "id": "e04p1q4",
+     "q": "Insérez « trois » en début de ligne et « quatre » en fin de ligne.",
+     "points": 2,
+     "a": "```text\nI trois (Échap)\nA quatre (Échap)\n```\n- `I` insère au début de ligne, `A` à la fin."
+    },
+    {
+     "id": "e04p1q5",
+     "q": "Supprimez du curseur à la fin de la ligne, puis la ligne entière, puis annulez.",
+     "points": 2,
+     "a": "```text\nd$   (ou D)\ndd\nu\n```\n- `Ctrl+R` rétablit."
+    },
+    {
+     "id": "e04p1q6",
+     "q": "Copiez la dernière ligne et collez-la au début.",
+     "points": 2,
+     "a": "```text\nG\nyy\ngg\nP\n```\n- `P` colle avant la ligne courante."
+    },
+    {
+     "id": "e04p1q7",
+     "q": "Remplacez toutes les occurrences de `udp` par `UDP`.",
+     "points": 1.5,
+     "a": "```text\n:%s/udp/UDP/g\n```\n- `%` : tout le fichier ; `g` : toutes les occurrences par ligne."
+    },
+    {
+     "id": "e04p1q8",
+     "q": "Affichez les numéros de ligne et rendez-le permanent.",
+     "points": 1.5,
+     "a": "```text\n:set number\n```\n- Permanent : ajouter `set number` dans `~/.vimrc`."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : QCM",
+   "points": 6,
+   "intro": "Une seule réponse correcte.",
+   "questions": [
+    {
+     "id": "e04p2q1",
+     "q": "Quelle touche revient au mode normal ?\n\n- A. Entrée\n- B. Échap\n- C. Tab\n- D. Ctrl+S",
+     "points": 1.5,
+     "a": "Réponse : B."
+    },
+    {
+     "id": "e04p2q2",
+     "q": "Que fait `ZZ` ?\n\n- A. Quitte sans enregistrer\n- B. Enregistre et quitte\n- C. Annule\n- D. Copie",
+     "points": 1.5,
+     "a": "Réponse : B (équivalent de `:wq`/`:x`)."
+    },
+    {
+     "id": "e04p2q3",
+     "q": "Que fait `3dd` ?\n\n- A. Supprime 3 caractères\n- B. Supprime 3 lignes\n- C. Copie 3 lignes\n- D. Va à la ligne 3",
+     "points": 1.5,
+     "a": "Réponse : B."
+    },
+    {
+     "id": "e04p2q4",
+     "q": "Comment chercher `tcp` vers le haut ?\n\n- A. `/tcp`\n- B. `?tcp`\n- C. `:tcp`\n- D. `n`",
+     "points": 1.5,
+     "a": "Réponse : B. `/` cherche vers le bas ; `n` et `N` parcourent les occurrences."
+    }
+   ]
+  }
+ ]
+}

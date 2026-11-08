@@ -1,0 +1,90 @@
+{
+ "n": 6,
+ "title": "Épreuve n° 6 · TP4/5 : espace de travail pour 4 utilisateurs",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : mise en place",
+   "points": 12,
+   "intro": "Règles : u1 et u2 sont membres de G1 ; u3 et u4 de G2 ; u2 est aussi dans G2 ; u4 est aussi dans G1. Les répertoires communs `/home/groupe1` et `/home/groupe2` sont accessibles en écriture aux membres du groupe correspondant.",
+   "questions": [
+    {
+     "id": "e06p1q1",
+     "q": "Créez les groupes `G1` et `G2`.",
+     "points": 1,
+     "a": "```bash\nsudo groupadd G1\nsudo groupadd G2\n```"
+    },
+    {
+     "id": "e06p1q2",
+     "q": "Créez les quatre utilisateurs avec leur répertoire personnel et le shell bash.",
+     "points": 2,
+     "a": "```bash\nfor u in u1 u2 u3 u4; do sudo useradd -m -s /bin/bash $u; done\n```\n- Mot de passe : `sudo passwd u1`, etc."
+    },
+    {
+     "id": "e06p1q3",
+     "q": "Ajoutez les utilisateurs à leurs groupes en respectant les règles.",
+     "points": 3,
+     "a": "```bash\nsudo usermod -aG G1 u1\nsudo usermod -aG G1,G2 u2\nsudo usermod -aG G2 u3\nsudo usermod -aG G1,G2 u4\n```\n- `-aG` ajoute sans écraser. Vérification : `id u2`, `grep -E '^G[12]' /etc/group`."
+    },
+    {
+     "id": "e06p1q4",
+     "q": "Créez les répertoires communs, attribuez-les aux groupes et faites hériter du groupe.",
+     "points": 3,
+     "a": "```bash\nsudo mkdir /home/groupe1 /home/groupe2\nsudo chgrp G1 /home/groupe1\nsudo chgrp G2 /home/groupe2\nsudo chmod 2775 /home/groupe1 /home/groupe2\nls -ld /home/groupe*\n```\n- `2775` = setgid + `rwxrwxr-x` : les nouveaux fichiers héritent du groupe.\n- Pour que les « autres » ne puissent pas écrire, 2775 suffit (`r-x`)."
+    },
+    {
+     "id": "e06p1q5",
+     "q": "Que se passe-t-il si `u1` fait `touch /home/groupe2/f` ?",
+     "points": 1.5,
+     "a": "- `Permission denied` : u1 n'est pas dans G2, il n'a donc que `r-x` sur ce répertoire (droits des « autres »)."
+    },
+    {
+     "id": "e06p1q6",
+     "q": "Comment empêcher un membre de G1 de supprimer le fichier d'un autre membre ?",
+     "points": 1.5,
+     "a": "```bash\nsudo chmod +t /home/groupe1\n```\n- Le sticky bit : seul le propriétaire du fichier (ou root) peut le supprimer ou le renommer."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : droits d'accès",
+   "points": 8,
+   "intro": "Connecté en tant que `user1` (compte ordinaire).",
+   "questions": [
+    {
+     "id": "e06p2q1",
+     "q": "Pouvez-vous copier `/etc/passwd` ? le modifier ? le supprimer ? Expliquez avec `ls -l`.",
+     "points": 2,
+     "a": "```bash\ncp /etc/passwd ~/copie\nls -l /etc/passwd\nls -ld /etc\n```\n- Copie : oui (`-rw-r--r--`, lecture pour tous).\n- Modification : non (pas de `w` pour les autres). Suppression : non, car `/etc` (`drwxr-xr-x root root`) n'a pas de `w` pour les autres."
+    },
+    {
+     "id": "e06p2q2",
+     "q": "Créez un fichier lisible par tous mais non modifiable, même par son propriétaire.",
+     "points": 1.5,
+     "a": "```bash\necho texte > lisible.txt\nchmod 444 lisible.txt\n```\n- Le propriétaire peut toujours refaire un `chmod`, mais pas écrire tant que `w` est absent."
+    },
+    {
+     "id": "e06p2q3",
+     "q": "Créez un répertoire `Secret` dont le contenu n'est visible que par vous.",
+     "points": 1.5,
+     "a": "```bash\nmkdir Secret\nchmod 700 Secret\n```"
+    },
+    {
+     "id": "e06p2q4",
+     "q": "Créez `Connaisseurs` : les autres ne peuvent pas lister son contenu mais peuvent lire les fichiers placés dedans.",
+     "points": 1.5,
+     "a": "```bash\nmkdir Connaisseurs\nchmod 711 Connaisseurs\necho salut > Connaisseurs/toto\nchmod 644 Connaisseurs/toto\n```\n- `x` sans `r` sur le répertoire : on traverse sans lister. `ls` donnera `Permission denied`, `cat .../toto` marchera."
+    },
+    {
+     "id": "e06p2q5",
+     "q": "Cherchez des commandes SUID dans `/usr/bin`. À quoi servent-elles ?",
+     "points": 1.5,
+     "a": "```bash\nfind /usr/bin -perm -4000 -ls\n```\n- Exemples : `passwd`, `sudo`, `su`. Le bit SUID (`s` à la place du `x` du propriétaire) fait exécuter la commande avec les droits de son propriétaire (root), nécessaire par exemple pour modifier `/etc/shadow`."
+    }
+   ]
+  }
+ ]
+}

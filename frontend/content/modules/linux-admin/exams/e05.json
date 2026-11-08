@@ -1,0 +1,91 @@
+{
+ "n": 5,
+ "title": "Épreuve n° 5 · Recherche, filtres et redirections",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : annuaire",
+   "points": 12,
+   "intro": "Le fichier `telephone.txt` contient des lignes `nom prénom numéro` séparées par des tabulations.",
+   "context": "```text\nDupond\tMarie\t0102030405\nMartin\tPaul\t0607080910\nDupond\tAlain\t0203040506\nDurand\tEve\t0708091011\n```",
+   "questions": [
+    {
+     "id": "e05p1q1",
+     "q": "Affichez le nombre de personnes de l'annuaire.",
+     "points": 1.5,
+     "a": "```bash\nwc -l telephone.txt\n```\n- Résultat attendu : 4."
+    },
+    {
+     "id": "e05p1q2",
+     "q": "Affichez toutes les lignes concernant les Dupond, puis toutes les autres.",
+     "points": 2,
+     "a": "```bash\ngrep Dupond telephone.txt\ngrep -v Dupond telephone.txt\n```\n- `-v` inverse la sélection."
+    },
+    {
+     "id": "e05p1q3",
+     "q": "Affichez le numéro (sans le nom) du premier Dupond du fichier.",
+     "points": 2,
+     "a": "```bash\ngrep Dupond telephone.txt | head -n 1 | cut -f3\n```\n- `cut` utilise la tabulation par défaut. Résultat : `0102030405`."
+    },
+    {
+     "id": "e05p1q4",
+     "q": "Affichez l'annuaire trié par nom.",
+     "points": 1.5,
+     "a": "```bash\nsort telephone.txt\n```\n- Résultat : Dupond Alain, Dupond Marie, Durand, Martin."
+    },
+    {
+     "id": "e05p1q5",
+     "q": "Affichez le numéro du premier Dupond dans l'ordre alphabétique des prénoms.",
+     "points": 2.5,
+     "a": "```bash\ngrep Dupond telephone.txt | sort -t $'\\t' -k2,2 | head -n 1 | cut -f3\n```\n- Tri sur le 2e champ (prénom) : Alain vient avant Marie. Résultat : `0203040506`."
+    },
+    {
+     "id": "e05p1q6",
+     "q": "Enregistrez dans `noms.txt` la liste des noms de famille sans doublon.",
+     "points": 2.5,
+     "a": "```bash\ncut -f1 telephone.txt | sort -u > noms.txt\n```\n- `sort -u` supprime les doublons ; on obtient Dupond, Durand, Martin."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : recherche et redirections",
+   "points": 8,
+   "intro": "Écrivez les commandes.",
+   "questions": [
+    {
+     "id": "e05p2q1",
+     "q": "Trouvez les fichiers `.conf` de `/etc` modifiés depuis moins de 2 jours.",
+     "points": 2,
+     "a": "```bash\nfind /etc -name \"*.conf\" -mtime -2\n```"
+    },
+    {
+     "id": "e05p2q2",
+     "q": "Affichez le nombre de fichiers de `/usr/include` dont le nom contient la lettre `t`.",
+     "points": 2,
+     "a": "```bash\nls /usr/include | grep t | wc -l\n```"
+    },
+    {
+     "id": "e05p2q3",
+     "q": "Enregistrez la liste de `/etc` dans `liste.txt` et les erreurs de `ls /etc /nulle` dans `err.txt`.",
+     "points": 2,
+     "a": "```bash\nls /etc /nulle > liste.txt 2> err.txt\n```"
+    },
+    {
+     "id": "e05p2q4",
+     "q": "Ajoutez la ligne « The end » à la fin de `Temp`.",
+     "points": 1,
+     "a": "```bash\necho \"The end\" >> Temp\n```"
+    },
+    {
+     "id": "e05p2q5",
+     "q": "Quelle différence entre `>` et `>>` ?",
+     "points": 1,
+     "a": "- `>` écrase le fichier ; `>>` ajoute à la fin."
+    }
+   ]
+  }
+ ]
+}

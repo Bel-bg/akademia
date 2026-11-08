@@ -1,0 +1,245 @@
+{
+ "id": "linux-admin",
+ "title": "Administration sous Linux",
+ "subtitle": "Shell, utilisateurs, système, réseau, scripts · ENEAM · IG3",
+ "description": "Cours complet d'administration sous GNU/Linux (Ubuntu/Debian et Red Hat) : shell, fichiers, droits, processus, systemd, disques, réseau, SSH, scripts, sauvegarde, dépannage, avec exercices corrigés et sujets d'examen.",
+ "emoji": "🐧",
+ "color": "#0B7285",
+ "level": "Licence 3",
+ "estimatedHours": 8,
+ "parts": [
+  {
+   "id": "ch1",
+   "title": "Chapitre 1 · Fondamentaux",
+   "chapters": [
+    "1-1-unix-linux",
+    "1-2-shell-arborescence",
+    "1-3-fichiers",
+    "1-4-texte-redirections",
+    "1-5-vim"
+   ]
+  },
+  {
+   "id": "ch2",
+   "title": "Chapitre 2 · Utilisateurs et droits",
+   "chapters": [
+    "2-1-utilisateurs",
+    "2-2-permissions",
+    "2-3-sudo-pam"
+   ]
+  },
+  {
+   "id": "ch3",
+   "title": "Chapitre 3 · Système",
+   "chapters": [
+    "3-1-processus",
+    "3-2-systemd-boot",
+    "3-3-planification-journaux",
+    "3-4-paquets"
+   ]
+  },
+  {
+   "id": "ch4",
+   "title": "Chapitre 4 · Stockage et réseau",
+   "chapters": [
+    "4-1-disques-fs",
+    "4-2-lvm-raid-swap",
+    "4-3-reseau",
+    "4-4-ssh-pare-feu"
+   ]
+  },
+  {
+   "id": "ch5",
+   "title": "Chapitre 5 · Automatisation",
+   "chapters": [
+    "5-1-scripts-bash",
+    "5-2-sauvegarde",
+    "5-3-depannage"
+   ]
+  },
+  {
+   "id": "ann",
+   "title": "Annexes",
+   "chapters": [
+    "a-installation",
+    "b-methode-fiche"
+   ]
+  }
+ ],
+ "chapters": [
+  {
+   "id": "1-1-unix-linux",
+   "number": "1.1",
+   "title": "Unix, Linux et les distributions",
+   "summary": "Noyau, philosophie Unix, distributions, aide (man), informations système.",
+   "minutes": 14,
+   "file": "1-1-unix-linux.md"
+  },
+  {
+   "id": "1-2-shell-arborescence",
+   "number": "1.2",
+   "title": "Le shell et l'arborescence",
+   "summary": "FHS, chemins, PATH, variables, historique, quoting.",
+   "minutes": 16,
+   "file": "1-2-shell-arborescence.md"
+  },
+  {
+   "id": "1-3-fichiers",
+   "number": "1.3",
+   "title": "Fichiers et répertoires",
+   "summary": "cp, mv, rm, liens, inodes, jokers, noms piégeux.",
+   "minutes": 24,
+   "file": "1-3-fichiers.md"
+  },
+  {
+   "id": "1-4-texte-redirections",
+   "number": "1.4",
+   "title": "Texte, redirections et recherche",
+   "summary": "Flux, tubes, grep, sed, awk, find, regex.",
+   "minutes": 12,
+   "file": "1-4-texte-redirections.md"
+  },
+  {
+   "id": "1-5-vim",
+   "number": "1.5",
+   "title": "L'éditeur Vim",
+   "summary": "Modes, déplacements, édition, recherche, options.",
+   "minutes": 7,
+   "file": "1-5-vim.md"
+  },
+  {
+   "id": "2-1-utilisateurs",
+   "number": "2.1",
+   "title": "Utilisateurs et groupes",
+   "summary": "passwd, shadow, useradd, usermod, chage, verrouillage.",
+   "minutes": 21,
+   "file": "2-1-utilisateurs.md"
+  },
+  {
+   "id": "2-2-permissions",
+   "number": "2.2",
+   "title": "Permissions",
+   "summary": "chmod, umask, SUID/SGID/sticky, ACL, chattr.",
+   "minutes": 19,
+   "file": "2-2-permissions.md"
+  },
+  {
+   "id": "2-3-sudo-pam",
+   "number": "2.3",
+   "title": "sudo et PAM",
+   "summary": "su, sudo, visudo, sudoers, PAM, politique de mots de passe.",
+   "minutes": 8,
+   "file": "2-3-sudo-pam.md"
+  },
+  {
+   "id": "3-1-processus",
+   "number": "3.1",
+   "title": "Processus et jobs",
+   "summary": "ps, top, signaux, jobs, nice, /proc, zombies.",
+   "minutes": 9,
+   "file": "3-1-processus.md"
+  },
+  {
+   "id": "3-2-systemd-boot",
+   "number": "3.2",
+   "title": "systemd et démarrage",
+   "summary": "Boot, GRUB, targets, systemctl, journalctl.",
+   "minutes": 17,
+   "file": "3-2-systemd-boot.md"
+  },
+  {
+   "id": "3-3-planification-journaux",
+   "number": "3.3",
+   "title": "Planification et journaux",
+   "summary": "cron, at, timers, rsyslog, logrotate.",
+   "minutes": 17,
+   "file": "3-3-planification-journaux.md"
+  },
+  {
+   "id": "3-4-paquets",
+   "number": "3.4",
+   "title": "Gestion des paquets",
+   "summary": "apt, dpkg, rpm, dnf, dépôts, compilation.",
+   "minutes": 24,
+   "file": "3-4-paquets.md"
+  },
+  {
+   "id": "4-1-disques-fs",
+   "number": "4.1",
+   "title": "Disques et systèmes de fichiers",
+   "summary": "Partitions, mkfs, mount, fstab, inodes, loop.",
+   "minutes": 19,
+   "file": "4-1-disques-fs.md"
+  },
+  {
+   "id": "4-2-lvm-raid-swap",
+   "number": "4.2",
+   "title": "LVM, RAID, swap et quotas",
+   "summary": "Volumes logiques, mdadm, swapfile, quotas.",
+   "minutes": 18,
+   "file": "4-2-lvm-raid-swap.md"
+  },
+  {
+   "id": "4-3-reseau",
+   "number": "4.3",
+   "title": "Réseau",
+   "summary": "ip, ss, DNS, netplan, diagnostic, tcpdump.",
+   "minutes": 19,
+   "file": "4-3-reseau.md"
+  },
+  {
+   "id": "4-4-ssh-pare-feu",
+   "number": "4.4",
+   "title": "SSH et pare-feu",
+   "summary": "Clés, sshd durci, tunnels, ufw, iptables.",
+   "minutes": 20,
+   "file": "4-4-ssh-pare-feu.md"
+  },
+  {
+   "id": "5-1-scripts-bash",
+   "number": "5.1",
+   "title": "Scripts Bash",
+   "summary": "Variables, tests, boucles, fonctions, robustesse.",
+   "minutes": 9,
+   "file": "5-1-scripts-bash.md"
+  },
+  {
+   "id": "5-2-sauvegarde",
+   "number": "5.2",
+   "title": "Archivage et sauvegarde",
+   "summary": "tar, rsync, dd, 3-2-1, rotation.",
+   "minutes": 18,
+   "file": "5-2-sauvegarde.md"
+  },
+  {
+   "id": "5-3-depannage",
+   "number": "5.3",
+   "title": "Dépannage",
+   "summary": "Méthode USE, scénarios corrigés.",
+   "minutes": 8,
+   "file": "5-3-depannage.md"
+  },
+  {
+   "id": "a-installation",
+   "number": "A",
+   "title": "Installer Ubuntu (TP1)",
+   "summary": "ISO, live, partitionnement, post-installation.",
+   "minutes": 6,
+   "file": "a-installation.md"
+  },
+  {
+   "id": "b-methode-fiche",
+   "number": "B",
+   "title": "Méthode d'examen et aide-mémoire",
+   "summary": "Quelle commande pour quoi, erreurs fréquentes, fiche.",
+   "minutes": 10,
+   "file": "b-methode-fiche.md"
+  }
+ ],
+ "features": {
+  "quiz": true,
+  "blitz": true,
+  "exams": true,
+  "flashcards": true
+ }
+}

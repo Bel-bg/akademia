@@ -387,15 +387,100 @@ async function voteBattle(_userId, _campInput) {
   };
 }
 
+async function insertMessage(_accessToken, senderId, recipientId, body) {
+  const db = loadDb();
+  if (!Array.isArray(db.messages)) db.messages = [];
+  const msg = {
+    id: crypto.randomUUID(),
+    sender_id: senderId,
+    recipient_id: recipientId,
+    body,
+    created_at: new Date().toISOString(),
+  };
+  db.messages.push(msg);
+  saveDb(db);
+  return msg;
+}
+
+async function deleteMessageForParticipants(_accessToken, userId, messageId) {
+  const db = loadDb();
+  if (!Array.isArray(db.messages)) return 0;
+  const initialLen = db.messages.length;
+  db.messages = db.messages.filter(
+    (m) => !(m.id === messageId && (m.sender_id === userId || m.recipient_id === userId)),
+  );
+  saveDb(db);
+  return initialLen - db.messages.length;
+}
+
+async function deleteConversationForParticipants(_accessToken, userId, partnerId) {
+  const db = loadDb();
+  if (!Array.isArray(db.messages)) return 0;
+  const initialLen = db.messages.length;
+  db.messages = db.messages.filter(
+    (m) =>
+      !(
+        (m.sender_id === userId && m.recipient_id === partnerId) ||
+        (m.sender_id === partnerId && m.recipient_id === userId)
+      ),
+  );
+  saveDb(db);
+  return initialLen - db.messages.length;
+}
+
+async function getActionReceipt(_accessToken, userId, actionId) {
+  const db = loadDb();
+  return db.actionReceipts?.[`${userId}:${actionId}`] ?? null;
+}
+
+async function saveActionReceipt(_accessToken, userId, actionId, result) {
+  const db = loadDb();
+  if (!db.actionReceipts) db.actionReceipts = {};
+  db.actionReceipts[`${userId}:${actionId}`] = result;
+  saveDb(db);
+}
+
+function overtakenPlayerIds(before, after, userId) {
+  if (!Array.isArray(before) || !Array.isArray(after)) return [];
+  const oldRank = before.findIndex((player) => player.id === userId);
+  const newRank = after.findIndex((player) => player.id === userId);
+  if (oldRank < 0 || newRank < 0 || newRank >= oldRank) return [];
+  return before.slice(newRank, oldRank).map((player) => player.id);
+}
+
+async function readResponse(response) {
+  const body = await response.text();
+  if (!response.ok) {
+    const error = new Error(`Supabase request failed (${response.status})`);
+    error.status = response.status >= 500 ? 502 : response.status;
+    throw error;
+  }
+  if (!body.trim()) return null;
+  try {
+    return JSON.parse(body);
+  } catch {
+    const error = new Error('Supabase returned an invalid response');
+    error.status = 502;
+    throw error;
+  }
+}
+
 module.exports = {
   addPostComment,
+  deleteConversationForParticipants,
+  deleteMessageForParticipants,
+  getActionReceipt,
   getBattleData,
   getFeed,
   getLeaderboard,
   getProfile,
+  insertMessage,
   isConfigured,
   loadProgress,
+  overtakenPlayerIds,
+  readResponse,
   resetUserPassword,
+  saveActionReceipt,
   saveProgress,
   signInUser,
   signOutUser,

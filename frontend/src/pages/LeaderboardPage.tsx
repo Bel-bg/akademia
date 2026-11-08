@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronDown, Filter, Sparkles } from '@getpapillon/papicons';
 import { fetchLeaderboard, LeaderRow } from '@/data/repo';
 import { cn } from '@/lib/utils';
@@ -121,18 +122,21 @@ export default function LeaderboardPage() {
         </button>
       </div>
 
-      {/* ==================== PODIUM 3 COLONNES SI >= 3 JOUEURS ==================== */}
+      {/* ==================== PODIUM TOP 3 AVEC MASCOTTES ==================== */}
       {hasPodium && (
-        <section className="pt-4">
-          <div className="grid grid-cols-3 items-end gap-2.5 px-1 sm:gap-4">
+        <section className="relative pt-6">
+          <div className="grid grid-cols-3 items-end gap-2 sm:gap-3">
             {/* 2e Place (Gauche) */}
-            <div className="flex flex-col items-center">
+            <Link
+              to={top2.isMe ? '/profil' : `/joueurs/${top2.id}`}
+              className="flex flex-col items-center group transition transform hover:-translate-y-1"
+            >
               <div className="relative -mb-3 z-10 flex flex-col items-center">
-                <CustomAvatar name={top2.username} filiere={top2.filiere} size={56} showBadge />
+                <CustomAvatar name={top2.username} filiere={top2.filiere} size={54} showBadge />
               </div>
               <div
                 className={cn(
-                  'flex w-full flex-col items-center justify-center rounded-t-3xl rounded-b-2xl border-b-4 px-2 py-5 text-center shadow-card transition',
+                  'flex w-full flex-col items-center justify-center rounded-t-3xl rounded-b-2xl border-b-4 px-2 py-4 text-center shadow-card transition',
                   podiumColors.c2Bar,
                 )}
               >
@@ -141,13 +145,18 @@ export default function LeaderboardPage() {
                 <span className="truncate max-w-[85px] text-[10px] font-bold opacity-75">{top2.username}</span>
                 <span className="text-[11px] font-bold opacity-90">{fmtK(top2.xp)}</span>
               </div>
-            </div>
+            </Link>
 
-            {/* 1re Place (Centre — Plus haute) */}
-            <div className="flex flex-col items-center">
-              <div className="relative -mb-3 z-10 flex flex-col items-center">
-                <Mascot mood="proud" crown size={72} color={podiumColors.c1Mascot} />
-                <div className="-mt-4">
+            {/* 1ère Place (Centre, Élevé) */}
+            <Link
+              to={top1.isMe ? '/profil' : `/joueurs/${top1.id}`}
+              className="flex flex-col items-center -mt-6 group transition transform hover:-translate-y-1"
+            >
+              <div className="relative -mb-3 z-20 flex flex-col items-center">
+                <div className="relative">
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2">
+                    <Mascot mood="excited" size={48} />
+                  </div>
                   <CustomAvatar name={top1.username} filiere={top1.filiere} size={64} showBadge />
                 </div>
               </div>
@@ -169,10 +178,13 @@ export default function LeaderboardPage() {
                 <span className="truncate max-w-[100px] text-xs font-bold opacity-80">{top1.username}</span>
                 <span className="text-xs font-extrabold opacity-95">{fmtK(top1.xp)}</span>
               </div>
-            </div>
+            </Link>
 
             {/* 3e Place (Droite) */}
-            <div className="flex flex-col items-center">
+            <Link
+              to={top3.isMe ? '/profil' : `/joueurs/${top3.id}`}
+              className="flex flex-col items-center group transition transform hover:-translate-y-1"
+            >
               <div className="relative -mb-3 z-10 flex flex-col items-center">
                 <CustomAvatar name={top3.username} filiere={top3.filiere} size={52} showBadge />
               </div>
@@ -187,7 +199,7 @@ export default function LeaderboardPage() {
                 <span className="truncate max-w-[85px] text-[10px] font-bold opacity-75">{top3.username}</span>
                 <span className="text-[11px] font-bold opacity-90">{fmtK(top3.xp)}</span>
               </div>
-            </div>
+            </Link>
           </div>
         </section>
       )}
@@ -212,10 +224,11 @@ export default function LeaderboardPage() {
             const highlighted = row.isMe || rank === 1;
 
             return (
-              <div
+              <Link
                 key={row.id}
+                to={row.isMe ? '/profil' : `/joueurs/${row.id}`}
                 className={cn(
-                  'flex items-center gap-3.5 rounded-3xl px-4 py-3.5 transition shadow-card',
+                  'flex items-center gap-3.5 rounded-3xl px-4 py-3.5 transition shadow-card block hover:scale-[1.01]',
                   highlighted && theme === 'violet'
                     ? 'bg-brand text-white shadow-btn-brand'
                     : highlighted
@@ -257,7 +270,7 @@ export default function LeaderboardPage() {
                 >
                   {fmtK(row.xp)}
                 </span>
-              </div>
+              </Link>
             );
           })
         )}

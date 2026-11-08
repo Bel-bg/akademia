@@ -1,0 +1,108 @@
+{
+ "n": 3,
+ "title": "Épreuve n° 3 · TP2 : fichiers, répertoires et liens",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : manipulation",
+   "points": 14,
+   "intro": "Depuis le répertoire personnel, écrivez les commandes.",
+   "questions": [
+    {
+     "id": "e03p1q1",
+     "q": "Créez `TP2`, placez-vous dedans, et créez les sous-répertoires `Source` et `Data`.",
+     "points": 1.5,
+     "a": "```bash\nmkdir TP2\ncd TP2\nmkdir Source Data\n```"
+    },
+    {
+     "id": "e03p1q2",
+     "q": "Créez `Mon_fichier` contenant une ligne de texte, et `Mon_fichier_2`.",
+     "points": 1.5,
+     "a": "```bash\necho \"Bonjour\" > Mon_fichier\necho \"Deuxième fichier\" > Mon_fichier_2\n```\n- `>` écrase ; `cat > f` + `Ctrl+D` est une autre méthode."
+    },
+    {
+     "id": "e03p1q3",
+     "q": "Copiez chaque fichier en `nom.old`, créez `Old` et déplacez-y les `.old`.",
+     "points": 2,
+     "a": "```bash\ncp Mon_fichier Mon_fichier.old\ncp Mon_fichier_2 Mon_fichier_2.old\nmkdir Old\nmv *.old Old/\n```\n- Le shell développe `*.old`."
+    },
+    {
+     "id": "e03p1q4",
+     "q": "Détruisez le répertoire `Source` (vide).",
+     "points": 1,
+     "a": "```bash\nrmdir Source\n```\n- `rmdir` n'accepte que les répertoires vides ; sinon `rm -r Source`."
+    },
+    {
+     "id": "e03p1q5",
+     "q": "Créez un lien physique `Mon_lien` vers `Mon_fichier_2` et comparez les inodes.",
+     "points": 2,
+     "a": "```bash\nln Mon_fichier_2 Mon_lien\nls -li Mon_lien Mon_fichier_2\n```\n- Les deux noms ont le **même inode** et le compteur de liens vaut 2."
+    },
+    {
+     "id": "e03p1q6",
+     "q": "Supprimez `Mon_lien` : `Mon_fichier_2` disparaît-il ?",
+     "points": 1,
+     "a": "```bash\nrm Mon_lien\nls -li Mon_fichier_2\n```\n- Non : les données restent tant qu'un nom subsiste ; le compteur retombe à 1."
+    },
+    {
+     "id": "e03p1q7",
+     "q": "Créez un lien symbolique `Mon_nouveau_lien` vers `Mon_fichier_2`, puis supprimez `Mon_fichier_2`. Que devient le lien ?",
+     "points": 2,
+     "a": "```bash\nln -s Mon_fichier_2 Mon_nouveau_lien\nrm Mon_fichier_2\nls -l Mon_nouveau_lien\ncat Mon_nouveau_lien\n```\n- Le lien symbolique (type `l`, inode différent) devient **cassé** : `cat` répond « Aucun fichier ou dossier de ce type »."
+    },
+    {
+     "id": "e03p1q8",
+     "q": "Quelle est la taille totale des fichiers de `TP2` ?",
+     "points": 1,
+     "a": "```bash\ndu -sh ~/TP2\n```\n- `du -ch ~/TP2/*` affiche aussi un total."
+    },
+    {
+     "id": "e03p1q9",
+     "q": "Effacez tout ce qui a été créé dans `TP2`.",
+     "points": 1,
+     "a": "```bash\ncd ~\nrm -r TP2\n```\n- Pas de corbeille en console : vérifier avec `ls` avant."
+    },
+    {
+     "id": "e03p1q10",
+     "q": "Quels fichiers sélectionne `ls [a-c]*` ? Et `ls *[!0-9]` ?",
+     "points": 1,
+     "a": "- `[a-c]*` : noms commençant par a, b ou c.\n- `*[!0-9]` : noms ne se terminant pas par un chiffre."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : QCM",
+   "points": 6,
+   "intro": "Une seule réponse correcte.",
+   "questions": [
+    {
+     "id": "e03p2q1",
+     "q": "Que partagent un fichier et son lien physique ?\n\n- A. Le même nom\n- B. Le même inode\n- C. Le même chemin\n- D. Rien",
+     "points": 1.5,
+     "a": "Réponse : B. Deux noms, un seul inode."
+    },
+    {
+     "id": "e03p2q2",
+     "q": "Quelle commande crée `a/b/c` si `a` n'existe pas ?\n\n- A. `mkdir a/b/c`\n- B. `mkdir -p a/b/c`\n- C. `mkdir -r a/b/c`\n- D. `touch a/b/c`",
+     "points": 1.5,
+     "a": "Réponse : B. Sans `-p`, `mkdir` échoue si le parent est absent."
+    },
+    {
+     "id": "e03p2q3",
+     "q": "Comment supprimer un fichier nommé `-rf` ?\n\n- A. `rm -rf`\n- B. `rm \"-rf\"`\n- C. `rm -- -rf`\n- D. `rm *`",
+     "points": 1.5,
+     "a": "Réponse : C. `--` termine les options (ou `rm ./-rf`). `rm -rf` seul serait lu comme options."
+    },
+    {
+     "id": "e03p2q4",
+     "q": "Quelle commande affiche l'inode d'un fichier ?\n\n- A. `ls -i`\n- B. `ls -l`\n- C. `du -i`\n- D. `file -i`",
+     "points": 1.5,
+     "a": "Réponse : A (`ls -i`, aussi `stat`)."
+    }
+   ]
+  }
+ ]
+}

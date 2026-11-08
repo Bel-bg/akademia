@@ -151,48 +151,78 @@ export function Inline({ text, className }: { text: string; className?: string }
 /** Corrigés d'épreuve : bloc de code (SQL/PL-SQL) en tête, puis explications à puces « - ». */
 const CODE_START = /^(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|DECLARE|BEGIN|SET|ACCEPT|EXEC|WITH|COMMIT|--)/i;
 
+function InlineCode({ text }: { text: string }) {
+  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+  return (
+    <>
+      {parts.map((part, index) =>
+        part.startsWith('`') && part.endsWith('`') && part.length > 2 ? (
+          <code key={index} className="rounded bg-soft px-1.5 py-0.5 font-mono text-[0.9em]">{part.slice(1, -1)}</code>
+        ) : part.startsWith('**') && part.endsWith('**') && part.length > 4 ? (
+          <strong key={index}>{part.slice(2, -2)}</strong>
+        ) : (
+          <span key={index}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+function renderAnswerText(raw: string[], keyPrefix: string): ReactNode[] {
+  const lines = raw.map((line) => line.trim()).filter(Boolean);
+  const items: ReactNode[] = [];
+  let bullets: string[] = [];
+  const flush = () => {
+    if (!bullets.length) return;
+    items.push(
+      <ul key={`${keyPrefix}-list-${items.length}`} className="my-1.5 list-disc space-y-1 pl-5 marker:text-accent">
+        {bullets.map((bullet, index) => <li key={index}><InlineCode text={bullet} /></li>)}
+      </ul>,
+    );
+    bullets = [];
+  };
+
+  for (const line of lines) {
+    if (line.startsWith('- ')) bullets.push(line.slice(2));
+    else {
+      flush();
+      items.push(<p key={`${keyPrefix}-p-${items.length}`} className="my-1.5"><InlineCode text={line} /></p>);
+    }
+  }
+  flush();
+  return items;
+}
+
+const ANSWER_PRE = 'my-1.5 overflow-x-auto rounded-2xl border border-line bg-[#141B2D] p-3.5 font-mono text-[12.5px] leading-relaxed text-slate-100 shadow-card';
+
 export function AnswerText({ text }: { text: string }) {
-  const raw = text.replace(/\r/g, '').split('\n');
+  const clean = text.replace(/\r/g, '');
+  if (clean.includes('```')) {
+    const output: ReactNode[] = [];
+    clean.split(/```[a-zA-Z]*\n?/).forEach((segment, index) => {
+      if (index % 2 === 1) {
+        output.push(<pre key={`code-${index}`} className={ANSWER_PRE}><code>{segment.replace(/\s+$/, '')}</code></pre>);
+      } else if (segment.trim()) {
+        output.push(...renderAnswerText(segment.split('\n'), `text-${index}`));
+      }
+    });
+    return <div className="text-[14.5px] leading-relaxed">{output}</div>;
+  }
+
+  const raw = clean.split('\n');
   const firstBullet = raw.findIndex((l) => l.startsWith('- '));
   const head = (firstBullet === -1 ? raw : raw.slice(0, firstBullet)).join('\n').replace(/\s+$/, '');
   const isCode = CODE_START.test(head.trimStart());
   const rest = isCode ? (firstBullet === -1 ? [] : raw.slice(firstBullet)) : raw;
 
-  const lines = rest.map((l) => l.trim()).filter(Boolean);
-  const items: ReactNode[] = [];
-  let bullets: string[] = [];
-  const flush = () => {
-    if (bullets.length) {
-      items.push(
-        <ul key={`u${items.length}`} className="my-1.5 list-disc space-y-1 pl-5 marker:text-brand">
-          {bullets.map((b, i) => (
-            <li key={i}>{b}</li>
-          ))}
-        </ul>,
-      );
-      bullets = [];
-    }
-  };
-  lines.forEach((l) => {
-    if (l.startsWith('- ')) bullets.push(l.slice(2));
-    else {
-      flush();
-      items.push(
-        <p key={`p${items.length}`} className="my-1.5">
-          {l}
-        </p>,
-      );
-    }
-  });
-  flush();
   return (
     <div className="text-[14.5px] leading-relaxed">
       {isCode && (
-        <pre className="my-1.5 overflow-x-auto rounded-2xl border border-line bg-[#141B2D] p-3.5 font-mono text-[12.5px] leading-relaxed text-slate-100">
+        <pre className={ANSWER_PRE}>
           <code>{head}</code>
         </pre>
       )}
-      {items}
+      {renderAnswerText(rest, 'answer')}
     </div>
   );
 }

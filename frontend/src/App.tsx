@@ -13,9 +13,11 @@ import ExamsPage from '@/pages/ExamsPage';
 import FeedPage from '@/pages/FeedPage';
 import FlashcardsPage from '@/pages/FlashcardsPage';
 import LeaderboardPage from '@/pages/LeaderboardPage';
+import MessagesPage from '@/pages/MessagesPage';
+import ProfilePage from '@/pages/ProfilePage';
+import ConversationPage from '@/pages/ConversationPage';
 import ModulePage from '@/pages/ModulePage';
 import ModulesPage from '@/pages/ModulesPage';
-import ProfilePage from '@/pages/ProfilePage';
 import QuizPage from '@/pages/QuizPage';
 import ResultsPage from '@/pages/ResultsPage';
 
@@ -47,6 +49,9 @@ export default function App() {
         <Route path="resultats" element={<ResultsPage />} />
         <Route path="succes" element={<BadgesPage />} />
         <Route path="classement" element={<LeaderboardPage />} />
+        <Route path="joueurs/:userId" element={<ProfilePage />} />
+        <Route path="messages" element={<MessagesPage />} />
+        <Route path="messages/:userId" element={<ConversationPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

@@ -9,6 +9,8 @@ export type CelebrationEvent = { type: 'level'; level: number } | { type: 'badge
 interface StoreApi {
   state: UserState;
   ready: boolean;
+  online: boolean;
+  pendingSync: number;
   syncError: string | null;
   events: CelebrationEvent[];
   dismissEvent(): void;
@@ -26,10 +28,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [state, setState] = useState<UserState>(defaultState());
   const [ready, setReady] = useState(false);
+  const [online, setOnline] = useState(() => navigator.onLine);
+  const [pendingSync, setPendingSync] = useState(0);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [events, setEvents] = useState<CelebrationEvent[]>([]);
   const ref = useRef(state);
   const repoRef = useRef<CloudRepo | null>(null);
+  const syncTimer = useRef<number | undefined>(undefined);
 
   // Chargement depuis le backend quand l'utilisateur connecté change
   useEffect(() => {
@@ -42,7 +47,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       return;
     }
     (async () => {
-      const repo = apiRepo();
+      const repo = apiRepo(user.id);
       repoRef.current = repo;
       let s: UserState | null = null;
       try {
@@ -56,6 +61,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (!st.filiere && user.filiere) {
         st = { ...st, filiere: user.filiere, theme: themeForFiliere(user.filiere) };
       }
+      setPendingSync(repo.pendingCount ? repo.pendingCount() : 0);
       ref.current = st;
       setState(st);
       setReady(true);
@@ -79,24 +85,67 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const dispatch = useCallback(
     async (action: ProgressAction) => {
-      const repo = repoRef.current ?? apiRepo();
+      const repo = repoRef.current ?? apiRepo(user?.id ?? 'me');
       repoRef.current = repo;
       try {
         const result = await repo.applyAction(action);
+        setPendingSync(repo.pendingCount ? repo.pendingCount() : 0);
         setSyncError(null);
         return commit(result);
       } catch (error) {
+        setPendingSync(repo.pendingCount ? repo.pendingCount() : 0);
         setSyncError(error instanceof Error ? error.message : 'Synchronisation impossible');
         throw error;
       }
     },
-    [commit],
+    [commit, user?.id],
   );
+
+  const syncPendingActions = useCallback(async () => {
+    window.clearTimeout(syncTimer.current);
+    const repo = repoRef.current as CloudRepo | null;
+    if (!repo?.syncPending || !navigator.onLine) return;
+    try {
+      const syncedState = await repo.syncPending();
+      const remaining = repo.pendingCount ? repo.pendingCount() : 0;
+      setPendingSync(remaining);
+      if (syncedState) {
+        ref.current = syncedState;
+        setState(syncedState);
+      }
+      if (remaining > 0) syncTimer.current = window.setTimeout(syncPendingActions, 5000);
+      else setSyncError(null);
+    } catch (error) {
+      setSyncError(error instanceof Error ? error.message : 'Synchronisation impossible');
+    }
+  }, []);
+
+  useEffect(() => {
+    const onOffline = () => setOnline(false);
+    const onOnline = () => {
+      setOnline(true);
+      void syncPendingActions();
+    };
+    window.addEventListener('offline', onOffline);
+    window.addEventListener('online', onOnline);
+    return () => {
+      window.clearTimeout(syncTimer.current);
+      window.removeEventListener('offline', onOffline);
+      window.removeEventListener('online', onOnline);
+    };
+  }, [syncPendingActions]);
+
+  useEffect(() => {
+    if (online && pendingSync > 0) void syncPendingActions();
+    return () => window.clearTimeout(syncTimer.current);
+  }, [online, pendingSync, syncPendingActions]);
 
   const api = useMemo<StoreApi>(
     () => ({
       state,
       ready,
+      online,
+      pendingSync,
       syncError,
       events,
       dismissEvent: () => setEvents((e) => e.slice(1)),
@@ -141,11 +190,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return result;
       },
       resetProgress: async () => {
-        const repo = repoRef.current ?? apiRepo();
-        commit({ state: await repo.reset(), summary: null });
+        const repo = repoRef.current ?? apiRepo(user?.id ?? 'me');
+        const resetState = await repo.reset(defaultState());
+        setPendingSync(repo.pendingCount ? repo.pendingCount() : 0);
+        commit({ state: resetState, summary: null });
       },
     }),
-    [state, ready, syncError, events, commit, dispatch],
+    [state, ready, online, pendingSync, syncError, events, commit, dispatch, user],
   );
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

@@ -282,3 +282,26 @@ kbd {
   font-variant-ligatures: none;
   font-feature-settings: 'calt' 0, 'liga' 0;
 }
+
+/* Corrigés masqués dans les chapitres */
+.prose-k details {
+  margin: 0.75rem 0 1.25rem;
+  border: 1px solid rgb(var(--line));
+  border-radius: 1rem;
+  background: rgb(var(--soft));
+  padding: 0 1rem;
+}
+.prose-k details > summary {
+  cursor: pointer;
+  padding: 0.7rem 0;
+  font-weight: 700;
+  color: rgb(var(--brand));
+  list-style-position: inside;
+}
+.prose-k details[open] > summary {
+  border-bottom: 1px solid rgb(var(--line));
+  margin-bottom: 0.6rem;
+}
+.prose-k details > :last-child {
+  margin-bottom: 0.9rem;
+}

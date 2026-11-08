@@ -1,0 +1,620 @@
+[
+ {
+  "id": "lx-f001",
+  "front": "Rôle de `/etc`",
+  "back": "Configuration du système et des services (fichiers texte).",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f002",
+  "front": "Rôle de `/var`",
+  "back": "Données variables : logs (`/var/log`), spool, bases, caches.",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f003",
+  "front": "Rôle de `/home`",
+  "back": "Répertoires personnels des utilisateurs.",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f004",
+  "front": "Rôle de `/tmp`",
+  "back": "Fichiers temporaires, accessibles à tous (sticky bit), souvent vidés au reboot.",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f005",
+  "front": "Rôle de `/proc`",
+  "back": "Système de fichiers virtuel : infos du noyau et des processus.",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f006",
+  "front": "Rôle de `/dev`",
+  "back": "Fichiers représentant les périphériques.",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f007",
+  "front": "Revenir au répertoire précédent",
+  "back": "`cd -`",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f008",
+  "front": "Infos système (noyau, distribution)",
+  "back": "`uname -a` ; `cat /etc/os-release` ; `lsb_release -a`",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f009",
+  "front": "Variables à connaître",
+  "back": "`HOME`, `PATH`, `USER`, `SHELL`, `PS1` ; `$?` = code de retour, `$$` = PID du shell.",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f010",
+  "front": "Relancer la dernière commande",
+  "back": "`!!` ; `!n` (numéro) ; `Ctrl+R` pour chercher.",
+  "tag": "Navigation"
+ },
+ {
+  "id": "lx-f011",
+  "front": "Créer une arborescence d'un coup",
+  "back": "`mkdir -p projet/{src,doc,bin}`",
+  "tag": "Fichiers"
+ },
+ {
+  "id": "lx-f012",
+  "front": "Copier un dossier",
+  "back": "`cp -r source dest` (`-a` pour tout préserver)",
+  "tag": "Fichiers"
+ },
+ {
+  "id": "lx-f013",
+  "front": "Lien physique vs symbolique",
+  "back": "Physique : même inode, survit à la suppression. Symbolique : pointe vers un chemin, peut être cassé.",
+  "tag": "Fichiers"
+ },
+ {
+  "id": "lx-f014",
+  "front": "Créer un lien symbolique",
+  "back": "`ln -s CIBLE NOM_DU_LIEN`",
+  "tag": "Fichiers"
+ },
+ {
+  "id": "lx-f015",
+  "front": "Voir l'inode d'un fichier",
+  "back": "`ls -i f` ou `stat f`",
+  "tag": "Fichiers"
+ },
+ {
+  "id": "lx-f016",
+  "front": "Supprimer le fichier `-rf`",
+  "back": "`rm -- -rf` ou `rm ./-rf`",
+  "tag": "Fichiers"
+ },
+ {
+  "id": "lx-f017",
+  "front": "Jokers du shell",
+  "back": "`*` tout ; `?` un caractère ; `[a-c]` classe ; `[!0-9]` négation ; `{a,b}` liste.",
+  "tag": "Fichiers"
+ },
+ {
+  "id": "lx-f018",
+  "front": "Rediriger stdout / stderr",
+  "back": "`> f` ; `2> f` ; `> f 2>&1` ; `&> f` ; ajout avec `>>`.",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f019",
+  "front": "Lignes 5 à 10 d'un fichier",
+  "back": "`sed -n '5,10p' f` ou `head -n 10 f | tail -n 6`",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f020",
+  "front": "Chercher un motif",
+  "back": "`grep -i -n -r -v -E motif`",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f021",
+  "front": "Trouver les .h sous /usr/include",
+  "back": "`find /usr/include -name \"*.h\"`",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f022",
+  "front": "Supprimer commentaires et lignes vides",
+  "back": "`grep -v -E '^\\s*(#|$)' fichier`",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f023",
+  "front": "Compter les utilisateurs par shell",
+  "back": "`cut -d: -f7 /etc/passwd | sort | uniq -c`",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f024",
+  "front": "Colonne d'un fichier",
+  "back": "`cut -d: -f1 f` ou `awk -F: '{print $1}' f`",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f025",
+  "front": "Remplacer en gardant une sauvegarde",
+  "back": "`sed -i.bak 's/a/b/g' f`",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f026",
+  "front": "Écrire dans un fichier root avec sudo",
+  "back": "`echo x | sudo tee /etc/f` (la redirection `>` se fait avec VOS droits).",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f027",
+  "front": "Quitter sans enregistrer",
+  "back": "`:q!`",
+  "tag": "Vim"
+ },
+ {
+  "id": "lx-f028",
+  "front": "Enregistrer et quitter",
+  "back": "`:wq`, `:x` ou `ZZ`",
+  "tag": "Vim"
+ },
+ {
+  "id": "lx-f029",
+  "front": "Remplacer partout",
+  "back": "`:%s/ancien/nouveau/g`",
+  "tag": "Vim"
+ },
+ {
+  "id": "lx-f030",
+  "front": "Aller à la ligne 45 / début / fin",
+  "back": "`45G` ; `gg` ; `G`",
+  "tag": "Vim"
+ },
+ {
+  "id": "lx-f031",
+  "front": "Supprimer / copier / coller une ligne",
+  "back": "`dd` ; `yy` ; `p` (après) ou `P` (avant)",
+  "tag": "Vim"
+ },
+ {
+  "id": "lx-f032",
+  "front": "Insérer en fin / début de ligne",
+  "back": "`A` ; `I`",
+  "tag": "Vim"
+ },
+ {
+  "id": "lx-f033",
+  "front": "Rendre une option permanente",
+  "back": "L'écrire dans `~/.vimrc` (ex. `set number`).",
+  "tag": "Vim"
+ },
+ {
+  "id": "lx-f034",
+  "front": "Les 7 champs de /etc/passwd",
+  "back": "login:x:UID:GID:commentaire:répertoire:shell",
+  "tag": "Utilisateurs"
+ },
+ {
+  "id": "lx-f035",
+  "front": "Créer luke (groupe principal jedi, secondaire rebelles)",
+  "back": "`useradd -m -g jedi -G rebelles -s /bin/bash luke`",
+  "tag": "Utilisateurs"
+ },
+ {
+  "id": "lx-f036",
+  "front": "Ajouter un utilisateur à un groupe sans perdre les autres",
+  "back": "`usermod -aG groupe user` (sans `-a`, les autres sont effacés).",
+  "tag": "Utilisateurs"
+ },
+ {
+  "id": "lx-f037",
+  "front": "Mot de passe en une ligne",
+  "back": "`echo 'luke:password' | chpasswd`",
+  "tag": "Utilisateurs"
+ },
+ {
+  "id": "lx-f038",
+  "front": "Supprimer compte + home",
+  "back": "`userdel -r user`",
+  "tag": "Utilisateurs"
+ },
+ {
+  "id": "lx-f039",
+  "front": "Verrouiller / déverrouiller",
+  "back": "`usermod -L` / `-U` ou `passwd -l` / `-u`",
+  "tag": "Utilisateurs"
+ },
+ {
+  "id": "lx-f040",
+  "front": "Forcer le changement de mot de passe",
+  "back": "`chage -d 0 user`",
+  "tag": "Utilisateurs"
+ },
+ {
+  "id": "lx-f041",
+  "front": "Plages d'UID",
+  "back": "0 : root ; 1-999 : système ; 1000+ : utilisateurs.",
+  "tag": "Utilisateurs"
+ },
+ {
+  "id": "lx-f042",
+  "front": "Octal : r, w, x",
+  "back": "4, 2, 1 (7 = rwx, 5 = r-x, 6 = rw-).",
+  "tag": "Droits"
+ },
+ {
+  "id": "lx-f043",
+  "front": "`chmod 750 f`",
+  "back": "`rwxr-x---` : propriétaire tout, groupe lit/exécute, autres rien.",
+  "tag": "Droits"
+ },
+ {
+  "id": "lx-f044",
+  "front": "umask 027",
+  "back": "Fichiers 640, répertoires 750 (666 et 777 moins 027).",
+  "tag": "Droits"
+ },
+ {
+  "id": "lx-f045",
+  "front": "Droits sur un répertoire",
+  "back": "`r` lister ; `w` créer/supprimer ; `x` entrer/traverser.",
+  "tag": "Droits"
+ },
+ {
+  "id": "lx-f046",
+  "front": "Bits spéciaux",
+  "back": "SUID 4000 ; SGID 2000 ; sticky 1000 (`chmod 2775` : dossier de groupe).",
+  "tag": "Droits"
+ },
+ {
+  "id": "lx-f047",
+  "front": "ACL",
+  "back": "`setfacl -m u:bob:rwx dir` ; `getfacl dir`",
+  "tag": "Droits"
+ },
+ {
+  "id": "lx-f048",
+  "front": "Fichier immuable",
+  "back": "`chattr +i f` ; `lsattr f`",
+  "tag": "Droits"
+ },
+ {
+  "id": "lx-f049",
+  "front": "su vs sudo",
+  "back": "`su` : mot de passe de la cible ; `sudo` : le vôtre, journalisé.",
+  "tag": "sudo/PAM"
+ },
+ {
+  "id": "lx-f050",
+  "front": "Éditer sudoers",
+  "back": "Toujours `visudo` (vérifie la syntaxe). Un fichier par règle dans `/etc/sudoers.d/` (0440).",
+  "tag": "sudo/PAM"
+ },
+ {
+  "id": "lx-f051",
+  "front": "Autoriser une seule commande sans mot de passe",
+  "back": "`bob ALL=(root) NOPASSWD: /usr/bin/systemctl restart nginx`",
+  "tag": "sudo/PAM"
+ },
+ {
+  "id": "lx-f052",
+  "front": "Groupe admin Debian / Red Hat",
+  "back": "`sudo` / `wheel`",
+  "tag": "sudo/PAM"
+ },
+ {
+  "id": "lx-f053",
+  "front": "Bloquer après 3 échecs",
+  "back": "`pam_faillock` : `deny = 3`, `unlock_time = 600`.",
+  "tag": "sudo/PAM"
+ },
+ {
+  "id": "lx-f054",
+  "front": "PID du premier processus",
+  "back": "1 (`systemd`/`init`), PPID 0.",
+  "tag": "Processus"
+ },
+ {
+  "id": "lx-f055",
+  "front": "Signaux essentiels",
+  "back": "1 HUP (recharger) ; 2 INT ; 9 KILL ; 15 TERM (défaut) ; 19 STOP ; 18 CONT.",
+  "tag": "Processus"
+ },
+ {
+  "id": "lx-f056",
+  "front": "Lancer en arrière-plan / suspendre / reprendre",
+  "back": "`cmd &` ; `Ctrl+Z` ; `bg` / `fg %n`",
+  "tag": "Processus"
+ },
+ {
+  "id": "lx-f057",
+  "front": "Survivre à la fermeture du terminal",
+  "back": "`nohup cmd &` ou `disown`.",
+  "tag": "Processus"
+ },
+ {
+  "id": "lx-f058",
+  "front": "Plage de nice",
+  "back": "-20 (prioritaire) à 19 ; `nice -n`, `renice -n`.",
+  "tag": "Processus"
+ },
+ {
+  "id": "lx-f059",
+  "front": "Processus zombie",
+  "back": "État `Z` : terminé, père n'a pas lu son code de retour. Agir sur le père.",
+  "tag": "Processus"
+ },
+ {
+  "id": "lx-f060",
+  "front": "5 plus gros consommateurs de mémoire",
+  "back": "`ps aux --sort=-%mem | head -n 6`",
+  "tag": "Processus"
+ },
+ {
+  "id": "lx-f061",
+  "front": "start vs enable",
+  "back": "`start` lance maintenant ; `enable` active au démarrage (`--now` : les deux).",
+  "tag": "systemd"
+ },
+ {
+  "id": "lx-f062",
+  "front": "mask",
+  "back": "Rend le service impossible à lancer, même à la main.",
+  "tag": "systemd"
+ },
+ {
+  "id": "lx-f063",
+  "front": "reload vs restart",
+  "back": "`reload` relit la config sans coupure ; `restart` arrête puis relance.",
+  "tag": "systemd"
+ },
+ {
+  "id": "lx-f064",
+  "front": "Journaux d'un service",
+  "back": "`journalctl -u nom` (`-f` suivre, `-b` boot courant, `-p err`).",
+  "tag": "systemd"
+ },
+ {
+  "id": "lx-f065",
+  "front": "Runlevels ↔ targets",
+  "back": "3 = multi-user ; 5 = graphical ; 1 = rescue ; 0 = poweroff ; 6 = reboot.",
+  "tag": "systemd"
+ },
+ {
+  "id": "lx-f066",
+  "front": "Régénérer GRUB",
+  "back": "`update-grub` (Ubuntu) ; `grub2-mkconfig -o /boot/grub2/grub.cfg` (Red Hat).",
+  "tag": "systemd"
+ },
+ {
+  "id": "lx-f067",
+  "front": "Champs de cron",
+  "back": "minute heure jour-du-mois mois jour-de-la-semaine.",
+  "tag": "Planification"
+ },
+ {
+  "id": "lx-f068",
+  "front": "Tous les soirs à 3 h",
+  "back": "`0 3 * * * commande`",
+  "tag": "Planification"
+ },
+ {
+  "id": "lx-f069",
+  "front": "Toutes les 5 minutes",
+  "back": "`*/5 * * * *`",
+  "tag": "Planification"
+ },
+ {
+  "id": "lx-f070",
+  "front": "Tâche unique",
+  "back": "`at 15:30` puis commande et `Ctrl+D` ; `atq`, `atrm`.",
+  "tag": "Planification"
+ },
+ {
+  "id": "lx-f071",
+  "front": "logrotate",
+  "back": "Rotation, compression, purge des logs (`/etc/logrotate.d/`).",
+  "tag": "Planification"
+ },
+ {
+  "id": "lx-f072",
+  "front": "Index puis mises à jour (Debian)",
+  "back": "`apt update` puis `apt upgrade`",
+  "tag": "Paquets"
+ },
+ {
+  "id": "lx-f073",
+  "front": "remove vs purge",
+  "back": "`purge` supprime aussi la configuration.",
+  "tag": "Paquets"
+ },
+ {
+  "id": "lx-f074",
+  "front": "Qui fournit ce fichier ?",
+  "back": "`dpkg -S /usr/bin/ssh` ; `rpm -qf /usr/bin/ssh`",
+  "tag": "Paquets"
+ },
+ {
+  "id": "lx-f075",
+  "front": "Geler un paquet",
+  "back": "`apt-mark hold paquet`",
+  "tag": "Paquets"
+ },
+ {
+  "id": "lx-f076",
+  "front": "Voir disques et UUID",
+  "back": "`lsblk -f` ; `blkid`",
+  "tag": "Disques"
+ },
+ {
+  "id": "lx-f077",
+  "front": "Formater / monter",
+  "back": "`mkfs.ext4 /dev/sdb1` ; `mount /dev/sdb1 /mnt`",
+  "tag": "Disques"
+ },
+ {
+  "id": "lx-f078",
+  "front": "fstab : 6 champs",
+  "back": "Périphérique, point de montage, type, options, dump, pass. Tester : `mount -a`.",
+  "tag": "Disques"
+ },
+ {
+  "id": "lx-f079",
+  "front": "Plus de place mais « No space left »",
+  "back": "`df -i` : inodes saturés.",
+  "tag": "Disques"
+ },
+ {
+  "id": "lx-f080",
+  "front": "fsck",
+  "back": "Jamais sur un système monté.",
+  "tag": "Disques"
+ },
+ {
+  "id": "lx-f081",
+  "front": "Ordre LVM",
+  "back": "`pvcreate` → `vgcreate` → `lvcreate`.",
+  "tag": "LVM/RAID"
+ },
+ {
+  "id": "lx-f082",
+  "front": "Étendre un LV et son FS",
+  "back": "`lvextend -r -L +1G /dev/vg/lv`",
+  "tag": "LVM/RAID"
+ },
+ {
+  "id": "lx-f083",
+  "front": "Capacités RAID",
+  "back": "RAID0 : n ; RAID1 : 1 disque ; RAID5 : n-1 ; RAID6 : n-2 ; RAID10 : n/2.",
+  "tag": "LVM/RAID"
+ },
+ {
+  "id": "lx-f084",
+  "front": "État RAID",
+  "back": "`cat /proc/mdstat` ; `mdadm --detail /dev/md0`",
+  "tag": "LVM/RAID"
+ },
+ {
+  "id": "lx-f085",
+  "front": "Voir IP / routes / ports",
+  "back": "`ip a` ; `ip r` ; `ss -tulnp`",
+  "tag": "Réseau"
+ },
+ {
+  "id": "lx-f086",
+  "front": "Hôtes dans un /24",
+  "back": "254 (2^8 - 2).",
+  "tag": "Réseau"
+ },
+ {
+  "id": "lx-f087",
+  "front": "Ports usuels",
+  "back": "22 SSH ; 53 DNS ; 80 HTTP ; 443 HTTPS ; 25 SMTP ; 3306 MySQL ; 5432 PostgreSQL.",
+  "tag": "Réseau"
+ },
+ {
+  "id": "lx-f088",
+  "front": "Diagnostic réseau",
+  "back": "Lien → IP → passerelle → DNS → service.",
+  "tag": "Réseau"
+ },
+ {
+  "id": "lx-f089",
+  "front": "Clé SSH",
+  "back": "`ssh-keygen -t ed25519` puis `ssh-copy-id user@hôte` (700 sur `~/.ssh`, 600 sur `authorized_keys`).",
+  "tag": "SSH/Pare-feu"
+ },
+ {
+  "id": "lx-f090",
+  "front": "Durcir sshd",
+  "back": "`PermitRootLogin no`, `PasswordAuthentication no` ; tester `sshd -t`, garder une 2e session.",
+  "tag": "SSH/Pare-feu"
+ },
+ {
+  "id": "lx-f091",
+  "front": "ufw de base",
+  "back": "`ufw default deny incoming` ; `ufw allow 22/tcp` ; `ufw enable`.",
+  "tag": "SSH/Pare-feu"
+ },
+ {
+  "id": "lx-f092",
+  "front": "Tunnels SSH",
+  "back": "`-L` local ; `-R` distant ; `-D` proxy SOCKS.",
+  "tag": "SSH/Pare-feu"
+ },
+ {
+  "id": "lx-f093",
+  "front": "Début de script",
+  "back": "`#!/bin/bash` puis `chmod +x`.",
+  "tag": "Scripts"
+ },
+ {
+  "id": "lx-f094",
+  "front": "Variables spéciales",
+  "back": "`$0` `$1` `$#` `$@` `$?` `$$`",
+  "tag": "Scripts"
+ },
+ {
+  "id": "lx-f095",
+  "front": "Créer un répertoire s'il n'existe pas",
+  "back": "`[ -d rep ] || mkdir rep` ou `mkdir -p rep`",
+  "tag": "Scripts"
+ },
+ {
+  "id": "lx-f096",
+  "front": "Mode strict",
+  "back": "`set -euo pipefail`",
+  "tag": "Scripts"
+ },
+ {
+  "id": "lx-f097",
+  "front": "Règle 3-2-1",
+  "back": "3 copies, 2 supports, 1 hors site.",
+  "tag": "Sauvegarde"
+ },
+ {
+  "id": "lx-f098",
+  "front": "Archiver / extraire",
+  "back": "`tar -czf a.tar.gz dir` ; `tar -xzf a.tar.gz -C dest`",
+  "tag": "Sauvegarde"
+ },
+ {
+  "id": "lx-f099",
+  "front": "rsync et le slash",
+  "back": "`src/` copie le contenu ; `src` copie le dossier.",
+  "tag": "Sauvegarde"
+ },
+ {
+  "id": "lx-f100",
+  "front": "Méthode USE",
+  "back": "Utilisation, Saturation, Erreurs pour chaque ressource.",
+  "tag": "Dépannage"
+ },
+ {
+  "id": "lx-f101",
+  "front": "Fstab cassé",
+  "back": "Mode urgence : `mount -o remount,rw /`, corriger, `mount -a`.",
+  "tag": "Dépannage"
+ },
+ {
+  "id": "lx-f102",
+  "front": "Espace non rendu après suppression",
+  "back": "`lsof +L1` : un processus tient le fichier ouvert.",
+  "tag": "Dépannage"
+ },
+ {
+  "id": "lx-f103",
+  "front": "Test de configuration",
+  "back": "`nginx -t` ; `sshd -t` ; `visudo -c` ; `mount -a`.",
+  "tag": "Dépannage"
+ }
+]

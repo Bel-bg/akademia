@@ -1,5 +1,7 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { apiRequest, getStoredToken, setStoredToken } from '@/data/repo';
+import { supabase, cloudEnabled } from '@/data/supabase';
+import { disablePush } from '@/data/push';
 import type { BackendThemeId, FiliereId } from '@/lib/types';
 
 export interface AuthUser {
@@ -14,6 +16,7 @@ export interface AuthUser {
 interface AuthApi {
   user: AuthUser | null;
   ready: boolean;
+  cloud: boolean;
   signIn(email: string, password: string): Promise<string | null>;
   signUp(
     email: string,
@@ -71,6 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       user,
       ready,
+      cloud: cloudEnabled,
       async signIn(email, password) {
         try {
           const res = await apiRequest<{
@@ -131,9 +135,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       async signOut() {
         try {
+          await disablePush();
+        } catch {
+          /* la déconnexion ne doit pas dépendre du service push */
+        }
+        try {
           await apiRequest('/auth/signout', { method: 'POST' });
         } catch {
           /* ignore */
+        }
+        if (supabase) {
+          try {
+            await supabase.auth.signOut();
+          } catch {
+            /* ignore */
+          }
         }
         setStoredToken(null);
         setUser(null);

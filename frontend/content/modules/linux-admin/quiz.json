@@ -1,0 +1,2438 @@
+[
+ {
+  "id": "lx-q001",
+  "chapter": "1-1-unix-linux",
+  "difficulty": 1,
+  "q": "Quelle commande affiche le nom du noyau, sa version et l'architecture ?",
+  "options": [
+   "`lsb_release -c`",
+   "`hostname -k`",
+   "`whoami`",
+   "`uname -a`"
+  ],
+  "answer": 3,
+  "explain": "`uname -a` donne système, nom de machine, version du noyau et architecture. `whoami` renvoie le compte courant."
+ },
+ {
+  "id": "lx-q002",
+  "chapter": "1-1-unix-linux",
+  "difficulty": 1,
+  "q": "Quel fichier identifie la distribution installée ?",
+  "options": [
+   "`/proc/kernel`",
+   "`/etc/passwd`",
+   "`/boot/grub/grub.cfg`",
+   "`/etc/os-release`"
+  ],
+  "answer": 3,
+  "explain": "`/etc/os-release` (ou `lsb_release -a`) indique nom et version de la distribution."
+ },
+ {
+  "id": "lx-q003",
+  "chapter": "1-1-unix-linux",
+  "difficulty": 1,
+  "q": "Dans la philosophie Unix, que signifie « tout est fichier » ?",
+  "options": [
+   "Toute donnée doit être stockée dans un seul fichier",
+   "Fichiers, répertoires, périphériques, tubes et sockets sont accessibles comme des fichiers",
+   "Les programmes sont obligatoirement des fichiers texte",
+   "Seuls les fichiers ont des droits d'accès"
+  ],
+  "answer": 1,
+  "explain": "Les périphériques (`/dev`), tubes et sockets se manipulent avec les mêmes appels que les fichiers."
+ },
+ {
+  "id": "lx-q004",
+  "chapter": "1-1-unix-linux",
+  "difficulty": 1,
+  "q": "Quelle section du manuel documente les fichiers de configuration (comme /etc/passwd) ?",
+  "options": [
+   "3",
+   "1",
+   "5",
+   "8"
+  ],
+  "answer": 2,
+  "explain": "Sections : 1 commandes, 2 appels système, 3 fonctions C, 4 fichiers spéciaux, 5 formats de fichiers, 8 administration. `man 5 passwd`."
+ },
+ {
+  "id": "lx-q005",
+  "chapter": "1-1-unix-linux",
+  "difficulty": 1,
+  "q": "Quelle commande recherche les pages de manuel par mot-clé ?",
+  "options": [
+   "`man -k copy` (ou `apropos copy`)",
+   "`whatis -r copy`",
+   "`help copy`",
+   "`man --find copy`"
+  ],
+  "answer": 0,
+  "explain": "`man -k` équivaut à `apropos`. `help` ne documente que les commandes internes du shell."
+ },
+ {
+  "id": "lx-q006",
+  "chapter": "1-1-unix-linux",
+  "difficulty": 2,
+  "q": "Quel élément est le cœur du système, chargé de gérer matériel et processus ?",
+  "options": [
+   "Le terminal",
+   "Le shell",
+   "Le gestionnaire de paquets",
+   "Le noyau (kernel)"
+  ],
+  "answer": 3,
+  "explain": "Le noyau (Linux) gère mémoire, processus, pilotes. Le shell n'est qu'un programme utilisateur."
+ },
+ {
+  "id": "lx-q007",
+  "chapter": "1-1-unix-linux",
+  "difficulty": 2,
+  "q": "Quelle distribution appartient à la famille Debian ?",
+  "options": [
+   "Rocky Linux",
+   "Fedora",
+   "Ubuntu",
+   "CentOS"
+  ],
+  "answer": 2,
+  "explain": "Ubuntu dérive de Debian (apt, dpkg). Fedora, CentOS et Rocky relèvent de la famille Red Hat (dnf, rpm)."
+ },
+ {
+  "id": "lx-q008",
+  "chapter": "1-1-unix-linux",
+  "difficulty": 1,
+  "q": "Quelle commande affiche les utilisateurs connectés et ce qu'ils font ?",
+  "options": [
+   "`passwd -S`",
+   "`w`",
+   "`id`",
+   "`last -a`"
+  ],
+  "answer": 1,
+  "explain": "`w` indique utilisateurs, terminal, charge. `who` donne la liste simple ; `last` l'historique."
+ },
+ {
+  "id": "lx-q009",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 1,
+  "q": "Que désigne `~` dans un chemin ?",
+  "options": [
+   "Le répertoire personnel de l'utilisateur",
+   "Le répertoire précédent",
+   "Le répertoire parent",
+   "Le répertoire racine"
+  ],
+  "answer": 0,
+  "explain": "`~` équivaut à `$HOME`. `/` est la racine, `..` le parent, `-` (avec `cd`) le répertoire précédent."
+ },
+ {
+  "id": "lx-q010",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 1,
+  "q": "Quelle commande ramène au répertoire précédent ?",
+  "options": [
+   "`cd /`",
+   "`cd ..`",
+   "`cd -`",
+   "`cd ~`"
+  ],
+  "answer": 2,
+  "explain": "`cd -` revient à `$OLDPWD`."
+ },
+ {
+  "id": "lx-q011",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 1,
+  "q": "Quel répertoire contient les fichiers de configuration du système ?",
+  "options": [
+   "/usr",
+   "/etc",
+   "/var",
+   "/opt"
+  ],
+  "answer": 1,
+  "explain": "`/etc` : configuration (fichiers texte). `/var` : données variables comme les logs."
+ },
+ {
+  "id": "lx-q012",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 1,
+  "q": "Quel répertoire contient les journaux (logs) ?",
+  "options": [
+   "/var/log",
+   "/tmp/log",
+   "/etc/log",
+   "/home/log"
+  ],
+  "answer": 0,
+  "explain": "Les logs sont dans `/var/log` (données variables)."
+ },
+ {
+  "id": "lx-q013",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 2,
+  "q": "Pourquoi ne faut-il pas mettre `.` dans le PATH ?",
+  "options": [
+   "Le PATH n'accepte que des chemins absolus",
+   "Cela ralentit uniquement `ls`",
+   "Cela empêche d'utiliser `cd`",
+   "Un programme piégé placé dans le dossier courant pourrait être exécuté à la place d'une vraie commande"
+  ],
+  "answer": 3,
+  "explain": "Un attaquant peut déposer un faux `ls` dans `/tmp`. Le dossier courant n'est donc volontairement pas dans le PATH, d'où `./script`."
+ },
+ {
+  "id": "lx-q014",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 2,
+  "q": "Que contient `$?` ?",
+  "options": [
+   "Le code de retour de la dernière commande",
+   "Le nombre de paramètres",
+   "Le PID du shell",
+   "Le dernier argument"
+  ],
+  "answer": 0,
+  "explain": "0 = succès, autre valeur = échec. `$$` est le PID du shell."
+ },
+ {
+  "id": "lx-q015",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 2,
+  "q": "Quelle commande montre ce qui s'exécute réellement quand on tape `ls` ?",
+  "options": [
+   "`find ls`",
+   "`whereis -b ls`",
+   "`which -a ls --all`",
+   "`type ls`"
+  ],
+  "answer": 3,
+  "explain": "`type` (builtin) indique alias, fonction ou binaire. `command -v` et `which` sont voisins."
+ },
+ {
+  "id": "lx-q016",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 2,
+  "q": "Que fait `!!` ?",
+  "options": [
+   "Il efface l'historique",
+   "Il relance la dernière commande",
+   "Il liste l'historique",
+   "Il quitte le shell"
+  ],
+  "answer": 1,
+  "explain": "`!!` répète la dernière commande ; `!n` la numéro n ; `!texte` la dernière commençant par texte."
+ },
+ {
+  "id": "lx-q017",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 2,
+  "q": "Dans une session bash, quelle touche recherche dans l'historique ?",
+  "options": [
+   "Ctrl+F",
+   "Ctrl+R",
+   "Ctrl+T",
+   "Ctrl+H"
+  ],
+  "answer": 1,
+  "explain": "`Ctrl+R` lance la recherche incrémentale inversée."
+ },
+ {
+  "id": "lx-q018",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 3,
+  "q": "Quelle différence entre `'$HOME'` et `\"$HOME\"` ?",
+  "options": [
+   "Les apostrophes développent les variables",
+   "Aucune différence",
+   "Les guillemets empêchent tout développement",
+   "Avec les apostrophes aucune variable n'est développée"
+  ],
+  "answer": 3,
+  "explain": "Les apostrophes affichent le texte littéralement (`$HOME`) ; les guillemets développent les variables."
+ },
+ {
+  "id": "lx-q019",
+  "chapter": "1-2-shell-arborescence",
+  "difficulty": 2,
+  "q": "Quelle commande sépare deux commandes en exécutant la seconde seulement si la première réussit ?",
+  "options": [
+   "`cmd1 || cmd2`",
+   "`cmd1 | cmd2`",
+   "`cmd1 ; cmd2`",
+   "`cmd1 && cmd2`"
+  ],
+  "answer": 3,
+  "explain": "`&&` = ET (succès requis), `||` = OU (échec requis), `;` = séquence inconditionnelle, `|` = tube."
+ },
+ {
+  "id": "lx-q020",
+  "chapter": "1-3-fichiers",
+  "difficulty": 1,
+  "q": "Quelle commande crée `a/b/c` même si `a` n'existe pas ?",
+  "options": [
+   "`mkdir --all a/b/c`",
+   "`mkdir -r a/b/c`",
+   "`mkdir -p a/b/c`",
+   "`mkdir a/b/c`"
+  ],
+  "answer": 2,
+  "explain": "Sans `-p`, `mkdir` échoue si le parent est absent."
+ },
+ {
+  "id": "lx-q021",
+  "chapter": "1-3-fichiers",
+  "difficulty": 1,
+  "q": "Quelle commande copie un répertoire entier ?",
+  "options": [
+   "`cp source dest`",
+   "`cp -r source dest`",
+   "`cp -f source dest`",
+   "`cp -d source dest`"
+  ],
+  "answer": 1,
+  "explain": "Sans `-r`, `cp` refuse de copier un répertoire."
+ },
+ {
+  "id": "lx-q022",
+  "chapter": "1-3-fichiers",
+  "difficulty": 1,
+  "q": "Quelle commande supprime un répertoire vide ?",
+  "options": [
+   "`rm dossier`",
+   "`unlink -d dossier`",
+   "`del dossier`",
+   "`rmdir dossier`"
+  ],
+  "answer": 3,
+  "explain": "`rmdir` refuse un dossier non vide ; `rm -r` supprime tout le contenu."
+ },
+ {
+  "id": "lx-q023",
+  "chapter": "1-3-fichiers",
+  "difficulty": 2,
+  "q": "Que partagent un fichier et son lien physique ?",
+  "options": [
+   "Le même inode",
+   "Le même chemin absolu",
+   "Des droits indépendants",
+   "Le même nom"
+  ],
+  "answer": 0,
+  "explain": "Un lien physique est un deuxième nom pour le même inode. `ls -i` le montre."
+ },
+ {
+  "id": "lx-q024",
+  "chapter": "1-3-fichiers",
+  "difficulty": 2,
+  "q": "Que devient un lien symbolique si sa cible est supprimée ?",
+  "options": [
+   "Il pointe vers une copie",
+   "Il est supprimé automatiquement",
+   "Il garde les données",
+   "Il devient cassé (dangling)"
+  ],
+  "answer": 3,
+  "explain": "Il contient seulement un chemin ; le lien physique, lui, survit tant qu'un nom subsiste."
+ },
+ {
+  "id": "lx-q025",
+  "chapter": "1-3-fichiers",
+  "difficulty": 2,
+  "q": "Quelle commande crée un lien symbolique `raccourci` vers `fichier` ?",
+  "options": [
+   "`link -s fichier raccourci`",
+   "`ln fichier raccourci`",
+   "`ln -s raccourci fichier`",
+   "`ln -s fichier raccourci`"
+  ],
+  "answer": 3,
+  "explain": "Syntaxe `ln -s CIBLE NOM_DU_LIEN`. Sans `-s`, c'est un lien physique."
+ },
+ {
+  "id": "lx-q026",
+  "chapter": "1-3-fichiers",
+  "difficulty": 2,
+  "q": "Quelle commande affiche l'inode et les dates d'un fichier ?",
+  "options": [
+   "`stat fichier`",
+   "`file fichier`",
+   "`ls -d fichier`",
+   "`du fichier`"
+  ],
+  "answer": 0,
+  "explain": "`stat` donne inode, liens, atime, mtime, ctime."
+ },
+ {
+  "id": "lx-q027",
+  "chapter": "1-3-fichiers",
+  "difficulty": 3,
+  "q": "Quelle date change quand on modifie les droits d'un fichier (chmod) ?",
+  "options": [
+   "ctime",
+   "atime seulement",
+   "mtime seulement",
+   "Aucune"
+  ],
+  "answer": 0,
+  "explain": "`ctime` = changement des métadonnées ; `mtime` = contenu."
+ },
+ {
+  "id": "lx-q028",
+  "chapter": "1-3-fichiers",
+  "difficulty": 2,
+  "q": "Que sélectionne le motif `[!0-9]*` ?",
+  "options": [
+   "Les fichiers dont le nom ne commence pas par un chiffre",
+   "Les fichiers finissant par un chiffre",
+   "Les fichiers contenant `!`",
+   "Les fichiers commençant par un chiffre"
+  ],
+  "answer": 0,
+  "explain": "`[!...]` nie la classe de caractères."
+ },
+ {
+  "id": "lx-q029",
+  "chapter": "1-3-fichiers",
+  "difficulty": 2,
+  "q": "Comment supprimer sans danger un fichier nommé `-rf` ?",
+  "options": [
+   "`rm -- -rf` ou `rm ./-rf`",
+   "`rm \\-rf` toujours",
+   "`rm *`",
+   "`rm -rf`"
+  ],
+  "answer": 0,
+  "explain": "`--` marque la fin des options ; `./-rf` le rend explicite."
+ },
+ {
+  "id": "lx-q030",
+  "chapter": "1-3-fichiers",
+  "difficulty": 2,
+  "q": "Que fait `ls -l` pour un lien symbolique ?",
+  "options": [
+   "Cache le lien",
+   "Affiche `nom -> cible` avec le type `l`",
+   "Suit toujours le lien",
+   "Affiche la taille de la cible"
+  ],
+  "answer": 1,
+  "explain": "Premier caractère `l`, flèche vers la cible."
+ },
+ {
+  "id": "lx-q031",
+  "chapter": "1-3-fichiers",
+  "difficulty": 1,
+  "q": "Quel caractère de `ls -l` indique un répertoire ?",
+  "options": [
+   "`d`",
+   "`-`",
+   "`l`",
+   "`b`"
+  ],
+  "answer": 0,
+  "explain": "`-` fichier, `d` répertoire, `l` lien, `b` bloc, `c` caractère, `s` socket, `p` tube."
+ },
+ {
+  "id": "lx-q032",
+  "chapter": "1-3-fichiers",
+  "difficulty": 3,
+  "q": "Quelle commande renomme en masse les `.txt` en `.md` avec une boucle ?",
+  "options": [
+   "`for f in *.txt; do mv $f $f.md; done`",
+   "`rename .txt .md`",
+   "`for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done`",
+   "`mv *.txt *.md`"
+  ],
+  "answer": 2,
+  "explain": "`${f%.txt}` retire le suffixe. `mv *.txt *.md` ne fonctionne pas : le shell développe les deux jokers."
+ },
+ {
+  "id": "lx-q033",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 1,
+  "q": "Quel opérateur ajoute à la fin d'un fichier sans l'écraser ?",
+  "options": [
+   "`|`",
+   "`<`",
+   "`>>`",
+   "`>`"
+  ],
+  "answer": 2,
+  "explain": "`>` écrase, `>>` ajoute."
+ },
+ {
+  "id": "lx-q034",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Que fait `cmd 2> erreurs.txt` ?",
+  "options": [
+   "Redirige seulement le flux d'erreur",
+   "Redirige l'entrée",
+   "Redirige la sortie standard",
+   "Redirige les deux flux"
+  ],
+  "answer": 0,
+  "explain": "Descripteur 2 = stderr."
+ },
+ {
+  "id": "lx-q035",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quelle commande envoie stdout et stderr dans le même fichier ?",
+  "options": [
+   "`cmd > f 2>&1` (ou `cmd &> f`)",
+   "`cmd 2> f 1> g`",
+   "`cmd > f > f`",
+   "`cmd 2>&1 > f`"
+  ],
+  "answer": 0,
+  "explain": "L'ordre compte : `2>&1 > f` laisse les erreurs à l'écran."
+ },
+ {
+  "id": "lx-q036",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 1,
+  "q": "À quoi sert `/dev/null` ?",
+  "options": [
+   "À générer des zéros",
+   "À jeter tout ce qu'on y écrit",
+   "À générer du hasard",
+   "À stocker les logs"
+  ],
+  "answer": 1,
+  "explain": "`/dev/zero` donne des zéros, `/dev/urandom` du hasard."
+ },
+ {
+  "id": "lx-q037",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 1,
+  "q": "Quelle commande affiche les 5 dernières lignes d'un fichier ?",
+  "options": [
+   "`tail -n 5 f`",
+   "`head -n 5 f`",
+   "`tail -c 5 f`",
+   "`cat -5 f`"
+  ],
+  "answer": 0,
+  "explain": "`head` : début ; `tail` : fin ; `tail -f` suit en continu."
+ },
+ {
+  "id": "lx-q038",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quelle commande affiche la 7e ligne seule ?",
+  "options": [
+   "`awk '$7' f`",
+   "`sed -n 7p f`",
+   "`sed 7 f`",
+   "`head -n 7 f`"
+  ],
+  "answer": 1,
+  "explain": "On peut aussi faire `head -n 7 f | tail -n 1`."
+ },
+ {
+  "id": "lx-q039",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quelle commande trouve les `.h` sous /usr/include ?",
+  "options": [
+   "`find /usr/include *.h`",
+   "`find /usr/include -name \"*.h\"`",
+   "`ls /usr/include/*.h -r`",
+   "`grep .h /usr/include`"
+  ],
+  "answer": 1,
+  "explain": "`find OÙ -name \"motif\"` ; guillemets pour que le shell ne développe pas `*.h`."
+ },
+ {
+  "id": "lx-q040",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 1,
+  "q": "Quelle commande affiche les lignes de /etc/services contenant HTTP ?",
+  "options": [
+   "`cat HTTP /etc/services`",
+   "`grep HTTP /etc/services`",
+   "`locate HTTP`",
+   "`find HTTP /etc/services`"
+  ],
+  "answer": 1,
+  "explain": "`grep motif fichier`."
+ },
+ {
+  "id": "lx-q041",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Que fait `grep -v` ?",
+  "options": [
+   "Active le mode verbeux",
+   "Compte les lignes",
+   "Affiche les lignes qui ne correspondent pas",
+   "Affiche la version"
+  ],
+  "answer": 2,
+  "explain": "`-v` inverse la sélection."
+ },
+ {
+  "id": "lx-q042",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quelle option de grep rend la recherche insensible à la casse ?",
+  "options": [
+   "`-i`",
+   "`-c`",
+   "`-n`",
+   "`-w`"
+  ],
+  "answer": 0,
+  "explain": "`-n` numéros de ligne, `-c` compte, `-w` mot entier."
+ },
+ {
+  "id": "lx-q043",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quelle commande compte les utilisateurs par shell ?",
+  "options": [
+   "`cut -d: -f7 /etc/passwd | sort | uniq -c`",
+   "`awk '{print $7}' /etc/passwd | wc`",
+   "`grep shell /etc/passwd | wc -l`",
+   "`cut -f7 /etc/passwd | uniq -c`"
+  ],
+  "answer": 0,
+  "explain": "`uniq -c` ne regroupe que les lignes **consécutives** : d'où `sort` avant."
+ },
+ {
+  "id": "lx-q044",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quelle commande affiche login et shell des UID ≥ 1000 ?",
+  "options": [
+   "`awk -F: '$3 >= 1000 {print $1, $7}' /etc/passwd`",
+   "`grep 1000 /etc/passwd`",
+   "`cut -d: -f3,7 /etc/passwd`",
+   "`awk '$3 >= 1000' /etc/passwd`"
+  ],
+  "answer": 0,
+  "explain": "`-F:` fixe le séparateur ; `$3` est l'UID."
+ },
+ {
+  "id": "lx-q045",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quelle commande remplace toutes les occurrences en gardant une sauvegarde ?",
+  "options": [
+   "`sed -i.bak 's/a/b/g' f`",
+   "`sed 's/a/b/' f`",
+   "`sed -b 's/a/b/g' f`",
+   "`sed -n 's/a/b/g' f`"
+  ],
+  "answer": 0,
+  "explain": "`-i.bak` modifie en place et crée `f.bak`."
+ },
+ {
+  "id": "lx-q046",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 3,
+  "q": "Quelle différence entre `-exec cmd {} \\;` et `-exec cmd {} +` ?",
+  "options": [
+   "`+` lance cmd une fois par fichier",
+   "`\\;` exécute en parallèle",
+   "`\\;` lance cmd une fois par fichier ; `+` regroupe les fichiers",
+   "Aucune"
+  ],
+  "answer": 2,
+  "explain": "`+` fonctionne comme `xargs`."
+ },
+ {
+  "id": "lx-q047",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 3,
+  "q": "Pourquoi `sudo echo x > /etc/f` échoue-t-il ?",
+  "options": [
+   "`>` est interdit",
+   "`echo` n'existe pas en sudo",
+   "Il manque `-i`",
+   "Le shell, non sudo, ouvre le fichier avec vos droits"
+  ],
+  "answer": 3,
+  "explain": "Solution : `echo x | sudo tee /etc/f`."
+ },
+ {
+  "id": "lx-q048",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quelle commande trie numériquement, du plus grand au plus petit ?",
+  "options": [
+   "`sort -n -k`",
+   "`sort -u`",
+   "`sort -nr`",
+   "`sort -t`"
+  ],
+  "answer": 2,
+  "explain": "`-n` numérique, `-r` inverse."
+ },
+ {
+  "id": "lx-q049",
+  "chapter": "1-4-texte-redirections",
+  "difficulty": 2,
+  "q": "Quel est l'effet de `ls /nulle 2>/dev/null` ?",
+  "options": [
+   "Rien n'est listé",
+   "La commande est annulée",
+   "Le message d'erreur est masqué",
+   "L'erreur va dans stdout"
+  ],
+  "answer": 2,
+  "explain": "On jette stderr."
+ },
+ {
+  "id": "lx-q050",
+  "chapter": "1-5-vim",
+  "difficulty": 1,
+  "q": "Comment quitter Vim sans enregistrer ?",
+  "options": [
+   "`:q`",
+   "`ZZ`",
+   "`:wq`",
+   "`:q!`"
+  ],
+  "answer": 3,
+  "explain": "`:q` refuse s'il y a des modifications ; `:q!` force ; `ZZ` enregistre et quitte."
+ },
+ {
+  "id": "lx-q051",
+  "chapter": "1-5-vim",
+  "difficulty": 1,
+  "q": "Quelle touche passe du mode insertion au mode normal ?",
+  "options": [
+   "Échap",
+   "Entrée",
+   "Ctrl+S",
+   "Tab"
+  ],
+  "answer": 0,
+  "explain": "`Échap` ramène en mode normal."
+ },
+ {
+  "id": "lx-q052",
+  "chapter": "1-5-vim",
+  "difficulty": 1,
+  "q": "Quelle commande supprime la ligne courante ?",
+  "options": [
+   "`x`",
+   "`yy`",
+   "`dd`",
+   "`D`"
+  ],
+  "answer": 2,
+  "explain": "`x` : un caractère ; `yy` copie ; `D` supprime jusqu'à la fin de ligne."
+ },
+ {
+  "id": "lx-q053",
+  "chapter": "1-5-vim",
+  "difficulty": 1,
+  "q": "Quelle commande copie la ligne courante ?",
+  "options": [
+   "`p`",
+   "`yy`",
+   "`dd`",
+   "`cc`"
+  ],
+  "answer": 1,
+  "explain": "`yy` copie ; `p` colle."
+ },
+ {
+  "id": "lx-q054",
+  "chapter": "1-5-vim",
+  "difficulty": 2,
+  "q": "Comment remplacer toutes les occurrences de udp par UDP dans tout le fichier ?",
+  "options": [
+   "`:%s/udp/UDP/g`",
+   "`/udp/UDP/g`",
+   "`:replace udp UDP`",
+   "`:s/udp/UDP/`"
+  ],
+  "answer": 0,
+  "explain": "`%` = tout le fichier ; `g` = toutes les occurrences de chaque ligne."
+ },
+ {
+  "id": "lx-q055",
+  "chapter": "1-5-vim",
+  "difficulty": 2,
+  "q": "Quelle commande va à la 45e ligne ?",
+  "options": [
+   "`:go45`",
+   "`gg45`",
+   "`45G`",
+   "`G45`"
+  ],
+  "answer": 2,
+  "explain": "Aussi `:45`."
+ },
+ {
+  "id": "lx-q056",
+  "chapter": "1-5-vim",
+  "difficulty": 2,
+  "q": "Comment rendre `set number` permanent ?",
+  "options": [
+   "L'écrire dans `~/.vimrc`",
+   "L'écrire dans `/etc/vim`",
+   "`:save number`",
+   "`:set number!`"
+  ],
+  "answer": 0,
+  "explain": "Les options `:set` sont temporaires."
+ },
+ {
+  "id": "lx-q057",
+  "chapter": "1-5-vim",
+  "difficulty": 2,
+  "q": "Que fait `A` en mode normal ?",
+  "options": [
+   "Insère après le curseur",
+   "Insère en fin de ligne",
+   "Ajoute une ligne en dessous",
+   "Copie tout"
+  ],
+  "answer": 1,
+  "explain": "`a` après le curseur, `A` fin de ligne, `o` nouvelle ligne dessous."
+ },
+ {
+  "id": "lx-q058",
+  "chapter": "1-5-vim",
+  "difficulty": 2,
+  "q": "Quelle commande annule la dernière modification ?",
+  "options": [
+   "`Ctrl+Z`",
+   "`U!`",
+   "`:undo!`",
+   "`u`"
+  ],
+  "answer": 3,
+  "explain": "`Ctrl+R` rétablit."
+ },
+ {
+  "id": "lx-q059",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 1,
+  "q": "Quel fichier contient les informations des utilisateurs du système ?",
+  "options": [
+   "/etc/passwd",
+   "/etc/password",
+   "/etc/users",
+   "/etc/shadow"
+  ],
+  "answer": 0,
+  "explain": "`/etc/shadow` contient les mots de passe hachés ; `/etc/password` n'existe pas."
+ },
+ {
+  "id": "lx-q060",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 1,
+  "q": "Combien de champs comporte une ligne de /etc/passwd ?",
+  "options": [
+   "9",
+   "6",
+   "7",
+   "5"
+  ],
+  "answer": 2,
+  "explain": "login:x:UID:GID:commentaire:home:shell. `/etc/shadow` en a 9."
+ },
+ {
+  "id": "lx-q061",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 1,
+  "q": "Quel est l'UID de root ?",
+  "options": [
+   "1000",
+   "1",
+   "500",
+   "0"
+  ],
+  "answer": 3,
+  "explain": "UID 0 = super-utilisateur ; 1-999 comptes système ; 1000+ utilisateurs."
+ },
+ {
+  "id": "lx-q062",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 2,
+  "q": "Quelle commande crée l'utilisateur luke, groupe principal jedi, groupe secondaire rebelles ?",
+  "options": [
+   "`adduser -g jedi -G rebelles`",
+   "`useradd -m -g jedi -G rebelles luke`",
+   "`useradd -m -g jedi,rebelles luke`",
+   "`useradd -m -G jedi -g rebelles luke`"
+  ],
+  "answer": 1,
+  "explain": "`-g` groupe principal, `-G` groupes secondaires, `-m` crée le home."
+ },
+ {
+  "id": "lx-q063",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 2,
+  "q": "Quelle commande ajoute alice au groupe dev sans supprimer ses autres groupes ?",
+  "options": [
+   "`usermod -g dev alice`",
+   "`groupmod dev alice`",
+   "`usermod -G dev alice`",
+   "`usermod -aG dev alice`"
+  ],
+  "answer": 3,
+  "explain": "Sans `-a`, `-G` remplace tous les groupes secondaires."
+ },
+ {
+  "id": "lx-q064",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 2,
+  "q": "Quelle commande définit le mot de passe de luke en une ligne ?",
+  "options": [
+   "`echo password > /etc/shadow`",
+   "`passwd luke password`",
+   "`useradd -p luke`",
+   "`echo 'luke:password' | chpasswd`"
+  ],
+  "answer": 3,
+  "explain": "`chpasswd` lit `login:motdepasse` sur stdin."
+ },
+ {
+  "id": "lx-q065",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 2,
+  "q": "Quelle commande supprime un utilisateur et son répertoire personnel ?",
+  "options": [
+   "`rm -r alice`",
+   "`userdel -r alice`",
+   "`deluser --keep alice`",
+   "`userdel alice`"
+  ],
+  "answer": 1,
+  "explain": "Sans `-r`, le home reste."
+ },
+ {
+  "id": "lx-q066",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 2,
+  "q": "Quelle commande verrouille un compte ?",
+  "options": [
+   "`passwd -d alice`",
+   "`usermod -U alice`",
+   "`usermod -L alice` (ou `passwd -l alice`)",
+   "`chage -M 0 alice`"
+  ],
+  "answer": 2,
+  "explain": "`-U` déverrouille ; `passwd -d` supprime le mot de passe."
+ },
+ {
+  "id": "lx-q067",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 2,
+  "q": "Quelle commande affiche UID, GID et groupes d'un utilisateur ?",
+  "options": [
+   "`finger -g luke`",
+   "`id luke`",
+   "`who luke`",
+   "`whoami luke`"
+  ],
+  "answer": 1,
+  "explain": "`groups luke` n'affiche que les groupes."
+ },
+ {
+  "id": "lx-q068",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 3,
+  "q": "Que signifie `!` dans le champ mot de passe de /etc/shadow ?",
+  "options": [
+   "Le mot de passe est vide",
+   "Le compte est expiré",
+   "Le compte est verrouillé par mot de passe",
+   "Le hachage est MD5"
+  ],
+  "answer": 2,
+  "explain": "`*` ou `!` empêchent la connexion par mot de passe."
+ },
+ {
+  "id": "lx-q069",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 3,
+  "q": "Quelle commande force le changement du mot de passe à la prochaine connexion ?",
+  "options": [
+   "`passwd -l alice`",
+   "`chage -d 0 alice`",
+   "`chage -E 0 alice`",
+   "`usermod -e 0 alice`"
+  ],
+  "answer": 1,
+  "explain": "`chage -E` règle l'expiration du compte."
+ },
+ {
+  "id": "lx-q070",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 2,
+  "q": "Quel fichier modèle copie-t-on dans le home d'un nouvel utilisateur ?",
+  "options": [
+   "/usr/share/skel",
+   "/etc/default",
+   "/home/.skel",
+   "/etc/skel"
+  ],
+  "answer": 3,
+  "explain": "Le contenu de `/etc/skel` est copié par `useradd -m`."
+ },
+ {
+  "id": "lx-q071",
+  "chapter": "2-1-utilisateurs",
+  "difficulty": 2,
+  "q": "Quelle commande liste les groupes d'un compte ?",
+  "options": [
+   "`grouplist alice`",
+   "`id -p alice`",
+   "`getgroup alice`",
+   "`groups alice`"
+  ],
+  "answer": 3,
+  "explain": "Aussi `id alice` ou `getent group`."
+ },
+ {
+  "id": "lx-q072",
+  "chapter": "2-2-permissions",
+  "difficulty": 1,
+  "q": "Que vaut `chmod 750` ?",
+  "options": [
+   "`rwxr-xr-x`",
+   "`rwx---r-x`",
+   "`rwxr-x---`",
+   "`rw-r-x---`"
+  ],
+  "answer": 2,
+  "explain": "7 = rwx, 5 = r-x, 0 = ---."
+ },
+ {
+  "id": "lx-q073",
+  "chapter": "2-2-permissions",
+  "difficulty": 1,
+  "q": "Que vaut `chmod 644` ?",
+  "options": [
+   "`rw-r--r--`",
+   "`rwxr--r--`",
+   "`rw-rw-r--`",
+   "`rw-r-xr--`"
+  ],
+  "answer": 0,
+  "explain": "6 = rw-, 4 = r--."
+ },
+ {
+  "id": "lx-q074",
+  "chapter": "2-2-permissions",
+  "difficulty": 2,
+  "q": "Quel umask donne des fichiers en 640 et des répertoires en 750 ?",
+  "options": [
+   "022",
+   "077",
+   "027",
+   "007"
+  ],
+  "answer": 2,
+  "explain": "666 − 027 = 640 ; 777 − 027 = 750."
+ },
+ {
+  "id": "lx-q075",
+  "chapter": "2-2-permissions",
+  "difficulty": 2,
+  "q": "Quelle commande équivaut à `chmod 755` ?",
+  "options": [
+   "`chmod a+rwx`",
+   "`chmod u=rwx,g=rx,o=rx`",
+   "`chmod u+x`",
+   "`chmod go=rw`"
+  ],
+  "answer": 1,
+  "explain": "Les trois modes décrivent les mêmes droits."
+ },
+ {
+  "id": "lx-q076",
+  "chapter": "2-2-permissions",
+  "difficulty": 2,
+  "q": "Quel droit faut-il sur un répertoire pour y entrer (cd) ?",
+  "options": [
+   "w",
+   "x",
+   "s",
+   "r"
+  ],
+  "answer": 1,
+  "explain": "`r` permet de lister, `w` de créer/supprimer, `x` de traverser."
+ },
+ {
+  "id": "lx-q077",
+  "chapter": "2-2-permissions",
+  "difficulty": 2,
+  "q": "Que permet `r` sans `x` sur un répertoire ?",
+  "options": [
+   "Rien du tout",
+   "Entrer sans lister",
+   "Lister les noms sans pouvoir y accéder",
+   "Créer des fichiers"
+  ],
+  "answer": 2,
+  "explain": "On voit les noms mais on ne peut pas ouvrir les fichiers."
+ },
+ {
+  "id": "lx-q078",
+  "chapter": "2-2-permissions",
+  "difficulty": 2,
+  "q": "Que fait le sticky bit sur /tmp ?",
+  "options": [
+   "Seul le propriétaire (ou root) peut supprimer ses fichiers",
+   "Exécute avec les droits de root",
+   "Force le groupe",
+   "Empêche toute création"
+  ],
+  "answer": 0,
+  "explain": "Il apparaît en `t` : `drwxrwxrwt`."
+ },
+ {
+  "id": "lx-q079",
+  "chapter": "2-2-permissions",
+  "difficulty": 2,
+  "q": "Que fait le bit SGID sur un répertoire ?",
+  "options": [
+   "Les nouveaux fichiers héritent du groupe du répertoire",
+   "Interdit la suppression",
+   "Exécute avec les droits de root",
+   "Verrouille le répertoire"
+  ],
+  "answer": 0,
+  "explain": "Utile pour un dossier de groupe : `chmod 2775`."
+ },
+ {
+  "id": "lx-q080",
+  "chapter": "2-2-permissions",
+  "difficulty": 3,
+  "q": "Que représente `4755` ?",
+  "options": [
+   "SGID + rwxr-xr-x",
+   "Aucun bit spécial",
+   "SUID + rwxr-xr-x",
+   "Sticky + rwxr-xr-x"
+  ],
+  "answer": 2,
+  "explain": "4000 = SUID, 2000 = SGID, 1000 = sticky."
+ },
+ {
+  "id": "lx-q081",
+  "chapter": "2-2-permissions",
+  "difficulty": 3,
+  "q": "Pourquoi `passwd` est-il SUID root ?",
+  "options": [
+   "Pour lire /etc/passwd",
+   "Il doit modifier /etc/shadow, que seul root peut écrire",
+   "Parce qu'il est un script",
+   "Pour être plus rapide"
+  ],
+  "answer": 1,
+  "explain": "Le SUID fait exécuter le programme avec l'identité de son propriétaire."
+ },
+ {
+  "id": "lx-q082",
+  "chapter": "2-2-permissions",
+  "difficulty": 2,
+  "q": "Quelle commande liste les fichiers SUID de /usr/bin ?",
+  "options": [
+   "`find /usr/bin -perm 4`",
+   "`ls -s /usr/bin`",
+   "`grep SUID /usr/bin`",
+   "`find /usr/bin -perm -4000`"
+  ],
+  "answer": 3,
+  "explain": "`-perm -4000` : le bit SUID est présent."
+ },
+ {
+  "id": "lx-q083",
+  "chapter": "2-2-permissions",
+  "difficulty": 2,
+  "q": "Quelle commande change propriétaire et groupe ?",
+  "options": [
+   "`chmod alice:dev fichier`",
+   "`own alice dev fichier`",
+   "`chgrp alice:dev fichier`",
+   "`chown alice:dev fichier`"
+  ],
+  "answer": 3,
+  "explain": "`chgrp` ne change que le groupe."
+ },
+ {
+  "id": "lx-q084",
+  "chapter": "2-2-permissions",
+  "difficulty": 3,
+  "q": "Quelle commande donne rwx à bob via ACL, sans toucher au groupe ?",
+  "options": [
+   "`getfacl -m bob dossier`",
+   "`setfacl -m u:bob:rwx dossier`",
+   "`chmod u+bob dossier`",
+   "`setfacl -x bob dossier`"
+  ],
+  "answer": 1,
+  "explain": "`setfacl -m` modifie, `-x` supprime, `getfacl` lit."
+ },
+ {
+  "id": "lx-q085",
+  "chapter": "2-2-permissions",
+  "difficulty": 3,
+  "q": "Que fait `chattr +i fichier` ?",
+  "options": [
+   "Le chiffre",
+   "Rend le fichier immuable, même pour root",
+   "Le cache",
+   "Active le SUID"
+  ],
+  "answer": 1,
+  "explain": "`lsattr` affiche les attributs ; `-i` retire le verrou."
+ },
+ {
+  "id": "lx-q086",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 1,
+  "q": "Quel mot de passe `sudo` demande-t-il ?",
+  "options": [
+   "Celui de root",
+   "Celui de l'utilisateur qui l'exécute",
+   "Aucun",
+   "Celui de la cible"
+  ],
+  "answer": 1,
+  "explain": "`su` demande celui de la cible."
+ },
+ {
+  "id": "lx-q087",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 1,
+  "q": "Quel groupe donne les droits sudo sous Ubuntu ?",
+  "options": [
+   "sudo",
+   "wheel",
+   "root",
+   "admin"
+  ],
+  "answer": 0,
+  "explain": "Sous Red Hat : `wheel`."
+ },
+ {
+  "id": "lx-q088",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 2,
+  "q": "Pourquoi utiliser `visudo` ?",
+  "options": [
+   "Il est plus rapide",
+   "Il ajoute NOPASSWD",
+   "Il vérifie la syntaxe avant d'enregistrer",
+   "Il chiffre le fichier"
+  ],
+  "answer": 2,
+  "explain": "Une erreur dans sudoers bloque sudo pour tous."
+ },
+ {
+  "id": "lx-q089",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 2,
+  "q": "Quelle différence entre `su` et `su -` ?",
+  "options": [
+   "`su -` charge l'environnement complet de la cible",
+   "`su` est plus sûr",
+   "`su -` ne demande pas de mot de passe",
+   "Aucune"
+  ],
+  "answer": 0,
+  "explain": "HOME, PATH et répertoire courant sont ceux de la cible avec `su -`."
+ },
+ {
+  "id": "lx-q090",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 2,
+  "q": "Quelle règle autorise bob à relancer nginx sans mot de passe ?",
+  "options": [
+   "`bob nginx=NOPASSWD`",
+   "`bob ALL=(root) NOPASSWD: /usr/bin/systemctl restart nginx`",
+   "`bob ALL=ALL`",
+   "`bob ALL=(root) systemctl`"
+  ],
+  "answer": 1,
+  "explain": "Chemin absolu et arguments exacts."
+ },
+ {
+  "id": "lx-q091",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 3,
+  "q": "Pourquoi autoriser `sudo less` est-il dangereux ?",
+  "options": [
+   "less est lent",
+   "`!sh` dans less ouvre un shell root",
+   "less est SUID",
+   "less écrit dans /etc"
+  ],
+  "answer": 1,
+  "explain": "Il faut `sudoedit` ou `NOEXEC`."
+ },
+ {
+  "id": "lx-q092",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 2,
+  "q": "Où sudo journalise-t-il sous Ubuntu ?",
+  "options": [
+   "/var/log/sudo.log",
+   "/var/log/auth.log",
+   "/var/log/messages",
+   "/etc/sudoers.log"
+  ],
+  "answer": 1,
+  "explain": "Sous Red Hat : `/var/log/secure`."
+ },
+ {
+  "id": "lx-q093",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 3,
+  "q": "Quel module PAM bloque un compte après trop d'échecs ?",
+  "options": [
+   "`pam_faillock`",
+   "`pam_pwquality`",
+   "`pam_limits`",
+   "`pam_unix`"
+  ],
+  "answer": 0,
+  "explain": "`pwquality` impose la qualité des mots de passe ; `limits` les limites de ressources."
+ },
+ {
+  "id": "lx-q094",
+  "chapter": "2-3-sudo-pam",
+  "difficulty": 2,
+  "q": "Quel est le rôle de `/etc/sudoers.d/` ?",
+  "options": [
+   "Un fichier par règle, plus facile à gérer",
+   "Journaliser sudo",
+   "Stocker les mots de passe",
+   "Remplacer PAM"
+  ],
+  "answer": 0,
+  "explain": "Les fichiers doivent être en `0440`."
+ },
+ {
+  "id": "lx-q095",
+  "chapter": "3-1-processus",
+  "difficulty": 1,
+  "q": "Quel est le PID du processus init/systemd ?",
+  "options": [
+   "1",
+   "0",
+   "100",
+   "2"
+  ],
+  "answer": 0,
+  "explain": "Le PID 1 est l'ancêtre de tous les processus ; son PPID vaut 0 (noyau)."
+ },
+ {
+  "id": "lx-q096",
+  "chapter": "3-1-processus",
+  "difficulty": 1,
+  "q": "Quel signal `kill PID` envoie-t-il par défaut ?",
+  "options": [
+   "SIGKILL (9)",
+   "SIGTERM (15)",
+   "SIGSTOP (19)",
+   "SIGHUP (1)"
+  ],
+  "answer": 1,
+  "explain": "SIGTERM demande un arrêt propre ; SIGKILL est le dernier recours."
+ },
+ {
+  "id": "lx-q097",
+  "chapter": "3-1-processus",
+  "difficulty": 1,
+  "q": "Quelle commande lance `sleep 100` en arrière-plan ?",
+  "options": [
+   "`bg sleep 100`",
+   "`sleep 100 --bg`",
+   "`nohup sleep 100`",
+   "`sleep 100 &`"
+  ],
+  "answer": 3,
+  "explain": "Le `&` final met la commande en arrière-plan."
+ },
+ {
+  "id": "lx-q098",
+  "chapter": "3-1-processus",
+  "difficulty": 2,
+  "q": "Quelle combinaison suspend le processus au premier plan ?",
+  "options": [
+   "Ctrl+S",
+   "Ctrl+D",
+   "Ctrl+C",
+   "Ctrl+Z"
+  ],
+  "answer": 3,
+  "explain": "`Ctrl+C` interrompt (SIGINT) ; `Ctrl+Z` suspend (SIGTSTP) ; ensuite `bg` ou `fg`."
+ },
+ {
+  "id": "lx-q099",
+  "chapter": "3-1-processus",
+  "difficulty": 2,
+  "q": "Que signifie le `+` dans la sortie de `jobs` ?",
+  "options": [
+   "Le travail terminé",
+   "Un travail en erreur",
+   "Le travail le plus ancien",
+   "Le travail courant"
+  ],
+  "answer": 3,
+  "explain": "`-` désigne le précédent."
+ },
+ {
+  "id": "lx-q100",
+  "chapter": "3-1-processus",
+  "difficulty": 2,
+  "q": "Quelle commande garde un processus en vie après fermeture du terminal ?",
+  "options": [
+   "`bg cmd`",
+   "`nohup cmd &`",
+   "`cmd &`",
+   "`fg cmd`"
+  ],
+  "answer": 1,
+  "explain": "`nohup` ignore SIGHUP ; `&` seul ne suffit pas."
+ },
+ {
+  "id": "lx-q101",
+  "chapter": "3-1-processus",
+  "difficulty": 2,
+  "q": "Quelle plage de valeurs pour nice ?",
+  "options": [
+   "0 à 100",
+   "1 à 99",
+   "-19 à 20",
+   "-20 à 19"
+  ],
+  "answer": 3,
+  "explain": "-20 = priorité maximale ; 19 = la plus basse."
+ },
+ {
+  "id": "lx-q102",
+  "chapter": "3-1-processus",
+  "difficulty": 2,
+  "q": "Quelle commande affiche l'arbre des processus avec les PID ?",
+  "options": [
+   "`pstree -p`",
+   "`ps -p`",
+   "`tree /proc`",
+   "`top -t`"
+  ],
+  "answer": 0,
+  "explain": "Aussi `ps -ef --forest`."
+ },
+ {
+  "id": "lx-q103",
+  "chapter": "3-1-processus",
+  "difficulty": 2,
+  "q": "Quel signal ne peut être ni ignoré ni intercepté ?",
+  "options": [
+   "SIGKILL",
+   "SIGINT",
+   "SIGTERM",
+   "SIGHUP"
+  ],
+  "answer": 0,
+  "explain": "SIGKILL et SIGSTOP sont réservés au noyau."
+ },
+ {
+  "id": "lx-q104",
+  "chapter": "3-1-processus",
+  "difficulty": 3,
+  "q": "Qu'est-ce qu'un processus zombie ?",
+  "options": [
+   "Un processus en arrière-plan",
+   "Un processus bloqué en attente disque",
+   "Un processus terminé dont le père n'a pas lu le code de retour",
+   "Un processus consommant trop de CPU"
+  ],
+  "answer": 2,
+  "explain": "État `Z`. On agit sur le père."
+ },
+ {
+  "id": "lx-q105",
+  "chapter": "3-1-processus",
+  "difficulty": 2,
+  "q": "Que mesure `wa` dans top ?",
+  "options": [
+   "Le temps CPU en attente d'entrées-sorties",
+   "Les processus actifs",
+   "Le temps en espace noyau",
+   "L'attente réseau uniquement"
+  ],
+  "answer": 0,
+  "explain": "`us` utilisateur, `sy` noyau, `id` inactif, `st` volé par l'hyperviseur."
+ },
+ {
+  "id": "lx-q106",
+  "chapter": "3-1-processus",
+  "difficulty": 2,
+  "q": "Quelle commande trie les processus par mémoire ?",
+  "options": [
+   "`ps aux --sort=-%mem`",
+   "`ps aux --mem`",
+   "`top -k mem`",
+   "`ps -m`"
+  ],
+  "answer": 0,
+  "explain": "Le `-` devant le critère donne l'ordre décroissant."
+ },
+ {
+  "id": "lx-q107",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 1,
+  "q": "Quelle commande démarre un service immédiatement ?",
+  "options": [
+   "`systemctl load nom`",
+   "`systemctl enable nom`",
+   "`systemctl on nom`",
+   "`systemctl start nom`"
+  ],
+  "answer": 3,
+  "explain": "`enable` configure le démarrage au boot sans lancer le service."
+ },
+ {
+  "id": "lx-q108",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 2,
+  "q": "Différence entre `enable` et `start` ?",
+  "options": [
+   "Aucune",
+   "`enable` active au démarrage, `start` lance maintenant",
+   "`enable` arrête le service",
+   "`start` active au démarrage"
+  ],
+  "answer": 1,
+  "explain": "`enable --now` fait les deux."
+ },
+ {
+  "id": "lx-q109",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 2,
+  "q": "Que fait `systemctl mask` ?",
+  "options": [
+   "Le cache dans la liste",
+   "Rend le service impossible à démarrer, même manuellement",
+   "Le supprime",
+   "L'arrête seulement"
+  ],
+  "answer": 1,
+  "explain": "Le masque lie l'unité à `/dev/null`."
+ },
+ {
+  "id": "lx-q110",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 2,
+  "q": "Quelle commande affiche les journaux du service ssh ?",
+  "options": [
+   "`systemctl log ssh`",
+   "`cat /var/log/ssh`",
+   "`journalctl -u ssh`",
+   "`logs ssh`"
+  ],
+  "answer": 2,
+  "explain": "`-f` suit, `-b` limite au boot, `-p err` filtre par priorité."
+ },
+ {
+  "id": "lx-q111",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 2,
+  "q": "Quelle target correspond à l'ancien runlevel 3 ?",
+  "options": [
+   "graphical.target",
+   "poweroff.target",
+   "rescue.target",
+   "multi-user.target"
+  ],
+  "answer": 3,
+  "explain": "Runlevel 5 = graphical, 1 = rescue, 0 = poweroff, 6 = reboot."
+ },
+ {
+  "id": "lx-q112",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 2,
+  "q": "Quelle commande régénère le menu GRUB sur Ubuntu ?",
+  "options": [
+   "`systemctl grub`",
+   "`grub --refresh`",
+   "`update-grub`",
+   "`grub-restore`"
+  ],
+  "answer": 2,
+  "explain": "Sur Red Hat : `grub2-mkconfig -o /boot/grub2/grub.cfg`."
+ },
+ {
+  "id": "lx-q113",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 3,
+  "q": "Quel fichier ajoute des réglages sans modifier l'unité d'origine ?",
+  "options": [
+   "`/etc/inittab`",
+   "Un drop-in via `systemctl edit`",
+   "`/etc/default/grub`",
+   "`/etc/rc.local`"
+  ],
+  "answer": 1,
+  "explain": "`systemctl edit` crée un fichier dans `nom.service.d/`."
+ },
+ {
+  "id": "lx-q114",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 2,
+  "q": "Différence entre `reload` et `restart` ?",
+  "options": [
+   "Aucune",
+   "`reload` relit la configuration sans couper le service",
+   "`restart` ne relit pas la config",
+   "`reload` arrête le service"
+  ],
+  "answer": 1,
+  "explain": "`restart` interrompt brièvement le service."
+ },
+ {
+  "id": "lx-q115",
+  "chapter": "3-3-planification-journaux",
+  "difficulty": 1,
+  "q": "Que représente `*/5 * * * *` ?",
+  "options": [
+   "Tous les jours à 5 h",
+   "Toutes les 5 minutes",
+   "Toutes les 5 heures",
+   "Le 5 de chaque mois"
+  ],
+  "answer": 1,
+  "explain": "Champs : minute heure jour-du-mois mois jour-de-la-semaine."
+ },
+ {
+  "id": "lx-q116",
+  "chapter": "3-3-planification-journaux",
+  "difficulty": 2,
+  "q": "Quelle ligne exécute une tâche tous les soirs à 3 h ?",
+  "options": [
+   "`3 0 * * * commande`",
+   "`0 3 * * * commande`",
+   "`* 3 * * * commande`",
+   "`0 0 3 * * commande`"
+  ],
+  "answer": 1,
+  "explain": "minute = 0, heure = 3."
+ },
+ {
+  "id": "lx-q117",
+  "chapter": "3-3-planification-journaux",
+  "difficulty": 2,
+  "q": "Quelle commande édite la crontab de l'utilisateur ?",
+  "options": [
+   "`at -e`",
+   "`cron -e`",
+   "`crontab -e`",
+   "`edit crontab`"
+  ],
+  "answer": 2,
+  "explain": "`crontab -l` liste ; `-r` supprime."
+ },
+ {
+  "id": "lx-q118",
+  "chapter": "3-3-planification-journaux",
+  "difficulty": 2,
+  "q": "Pourquoi un script peut marcher en terminal et pas dans cron ?",
+  "options": [
+   "Cron est trop lent",
+   "Cron utilise un environnement minimal (PATH réduit)",
+   "Cron refuse les scripts",
+   "Cron ignore les droits"
+  ],
+  "answer": 1,
+  "explain": "Utiliser des chemins absolus et rediriger la sortie."
+ },
+ {
+  "id": "lx-q119",
+  "chapter": "3-3-planification-journaux",
+  "difficulty": 1,
+  "q": "Quelle commande planifie une tâche unique ?",
+  "options": [
+   "`cron`",
+   "`at`",
+   "`batch -d`",
+   "`sleep -s`"
+  ],
+  "answer": 1,
+  "explain": "`atq` liste, `atrm` supprime."
+ },
+ {
+  "id": "lx-q120",
+  "chapter": "3-3-planification-journaux",
+  "difficulty": 2,
+  "q": "Quel est le rôle de logrotate ?",
+  "options": [
+   "Lire les logs",
+   "Envoyer les logs sur le réseau",
+   "Faire tourner, compresser et purger les journaux",
+   "Supprimer les logs de sécurité"
+  ],
+  "answer": 2,
+  "explain": "Configuré dans `/etc/logrotate.d/`."
+ },
+ {
+  "id": "lx-q121",
+  "chapter": "3-3-planification-journaux",
+  "difficulty": 3,
+  "q": "Quelle règle rsyslog écrit local5 dans /var/log/monapp.log ?",
+  "options": [
+   "`log local5 /var/log/monapp.log`",
+   "`local5 > /var/log/monapp.log`",
+   "`*.local5 monapp.log`",
+   "`local5.* /var/log/monapp.log`"
+  ],
+  "answer": 3,
+  "explain": "Test : `logger -p local5.info message`."
+ },
+ {
+  "id": "lx-q122",
+  "chapter": "3-4-paquets",
+  "difficulty": 1,
+  "q": "Quelle commande met à jour l'index des paquets sous Ubuntu ?",
+  "options": [
+   "`apt upgrade`",
+   "`apt update`",
+   "`apt refresh`",
+   "`dpkg --update`"
+  ],
+  "answer": 1,
+  "explain": "`update` actualise l'index ; `upgrade` installe les mises à jour."
+ },
+ {
+  "id": "lx-q123",
+  "chapter": "3-4-paquets",
+  "difficulty": 2,
+  "q": "Différence entre `apt remove` et `apt purge` ?",
+  "options": [
+   "`purge` supprime aussi les fichiers de configuration",
+   "`remove` supprime aussi les dépendances",
+   "Aucune",
+   "`purge` n'efface rien"
+  ],
+  "answer": 0,
+  "explain": "`autoremove` supprime les dépendances orphelines."
+ },
+ {
+  "id": "lx-q124",
+  "chapter": "3-4-paquets",
+  "difficulty": 2,
+  "q": "Quelle commande indique à quel paquet appartient /usr/bin/ssh ?",
+  "options": [
+   "`dpkg -S /usr/bin/ssh`",
+   "`apt show ssh`",
+   "`dpkg -L ssh`",
+   "`rpm -ql ssh`"
+  ],
+  "answer": 0,
+  "explain": "Sous Red Hat : `rpm -qf /usr/bin/ssh`."
+ },
+ {
+  "id": "lx-q125",
+  "chapter": "3-4-paquets",
+  "difficulty": 2,
+  "q": "Quelle commande équivaut à `apt install` sous Red Hat ?",
+  "options": [
+   "`rpm -i --auto`",
+   "`apt-get`",
+   "`dnf install`",
+   "`yum update`"
+  ],
+  "answer": 2,
+  "explain": "`dnf` a remplacé `yum`."
+ },
+ {
+  "id": "lx-q126",
+  "chapter": "3-4-paquets",
+  "difficulty": 3,
+  "q": "Comment empêcher la mise à jour d'un paquet ?",
+  "options": [
+   "`dpkg --stop paquet`",
+   "`apt pin off paquet`",
+   "`apt-mark hold paquet`",
+   "`apt lock paquet`"
+  ],
+  "answer": 2,
+  "explain": "`unhold` annule."
+ },
+ {
+  "id": "lx-q127",
+  "chapter": "3-4-paquets",
+  "difficulty": 2,
+  "q": "Quelle commande liste les fichiers d'un paquet installé ?",
+  "options": [
+   "`dpkg -l paquet`",
+   "`apt list paquet`",
+   "`dpkg -L paquet`",
+   "`dpkg -S paquet`"
+  ],
+  "answer": 2,
+  "explain": "`-l` liste les paquets installés."
+ },
+ {
+  "id": "lx-q128",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 1,
+  "q": "Quelle commande affiche l'arborescence des disques et partitions ?",
+  "options": [
+   "`lsblk`",
+   "`lsdisk`",
+   "`df -h`",
+   "`mount -l`"
+  ],
+  "answer": 0,
+  "explain": "`lsblk -f` ajoute les systèmes de fichiers et UUID."
+ },
+ {
+  "id": "lx-q129",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 2,
+  "q": "Quel fichier décrit les montages automatiques au démarrage ?",
+  "options": [
+   "/etc/fstab",
+   "/etc/mtab",
+   "/etc/disks",
+   "/boot/mount"
+  ],
+  "answer": 0,
+  "explain": "6 champs : périphérique, point de montage, type, options, dump, pass."
+ },
+ {
+  "id": "lx-q130",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 2,
+  "q": "Quelle commande teste fstab sans redémarrer ?",
+  "options": [
+   "`fsck -a`",
+   "`mount --test`",
+   "`mount -a`",
+   "`fstab -t`"
+  ],
+  "answer": 2,
+  "explain": "Une erreur fstab peut empêcher le démarrage."
+ },
+ {
+  "id": "lx-q131",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 2,
+  "q": "« No space left » alors que df -h montre de la place : que vérifier ?",
+  "options": [
+   "`fsck`",
+   "`df -i` (inodes)",
+   "`free -h`",
+   "`du -h`"
+  ],
+  "answer": 1,
+  "explain": "Les inodes saturés bloquent la création de fichiers."
+ },
+ {
+  "id": "lx-q132",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 2,
+  "q": "Quelle commande formate une partition en ext4 ?",
+  "options": [
+   "`format ext4 /dev/sdb1`",
+   "`fdisk -f ext4`",
+   "`mkfs -t sdb1`",
+   "`mkfs.ext4 /dev/sdb1`"
+  ],
+  "answer": 3,
+  "explain": "Pour XFS : `mkfs.xfs`."
+ },
+ {
+  "id": "lx-q133",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 3,
+  "q": "Pourquoi ne jamais lancer fsck sur un système monté ?",
+  "options": [
+   "Il est trop lent",
+   "Risque de corruption",
+   "Il efface les données",
+   "Il est interdit par root"
+  ],
+  "answer": 1,
+  "explain": "Démonter d'abord (`umount`)."
+ },
+ {
+  "id": "lx-q134",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 2,
+  "q": "Quelle commande agrandit un système ext4 ?",
+  "options": [
+   "`fdisk -r`",
+   "`mkfs -r`",
+   "`xfs_growfs`",
+   "`resize2fs`"
+  ],
+  "answer": 3,
+  "explain": "XFS s'agrandit avec `xfs_growfs` (et ne se réduit pas)."
+ },
+ {
+  "id": "lx-q135",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 2,
+  "q": "Quelle commande monte une image disque via loop ?",
+  "options": [
+   "`mount -t img`",
+   "`mount image.img --raw`",
+   "`mount -o loop image.img /mnt`",
+   "`loop mount`"
+  ],
+  "answer": 2,
+  "explain": "Aussi `losetup`."
+ },
+ {
+  "id": "lx-q136",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 2,
+  "q": "Quel est l'ordre de création LVM ?",
+  "options": [
+   "vgcreate, lvcreate, pvcreate",
+   "pvcreate, lvcreate, vgcreate",
+   "pvcreate, vgcreate, lvcreate",
+   "lvcreate, pvcreate, vgcreate"
+  ],
+  "answer": 2,
+  "explain": "PV = volume physique, VG = groupe, LV = volume logique."
+ },
+ {
+  "id": "lx-q137",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 2,
+  "q": "Capacité utile d'un RAID1 de deux disques de 1 To ?",
+  "options": [
+   "2 To",
+   "1 To",
+   "1,5 To",
+   "0,5 To"
+  ],
+  "answer": 1,
+  "explain": "RAID1 = miroir."
+ },
+ {
+  "id": "lx-q138",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 2,
+  "q": "Capacité utile d'un RAID5 de 4 disques de 1 To ?",
+  "options": [
+   "2 To",
+   "3 To",
+   "1 To",
+   "4 To"
+  ],
+  "answer": 1,
+  "explain": "RAID5 perd un disque de parité : (n-1) × taille."
+ },
+ {
+  "id": "lx-q139",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 2,
+  "q": "Quel niveau RAID n'offre aucune tolérance de panne ?",
+  "options": [
+   "RAID 6",
+   "RAID 5",
+   "RAID 1",
+   "RAID 0"
+  ],
+  "answer": 3,
+  "explain": "Le RAID 0 (striping) augmente les performances."
+ },
+ {
+  "id": "lx-q140",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 2,
+  "q": "Quelle commande étend un LV et redimensionne le système de fichiers ?",
+  "options": [
+   "`vgextend -r`",
+   "`lvcreate -r`",
+   "`lvresize --fs`",
+   "`lvextend -r`"
+  ],
+  "answer": 3,
+  "explain": "`-r` appelle `resize2fs` ou `xfs_growfs`."
+ },
+ {
+  "id": "lx-q141",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 2,
+  "q": "Quel fichier montre l'état d'un RAID logiciel ?",
+  "options": [
+   "/proc/mdstat",
+   "/proc/raid",
+   "/etc/raid",
+   "/var/log/md"
+  ],
+  "answer": 0,
+  "explain": "`mdadm --detail /dev/md0` donne le détail."
+ },
+ {
+  "id": "lx-q142",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 3,
+  "q": "Quelle étape faut-il avant `swapon` sur un swapfile ?",
+  "options": [
+   "`chmod 600` puis `mkswap`",
+   "`mount`",
+   "`mkfs.ext4`",
+   "`fdisk`"
+  ],
+  "answer": 0,
+  "explain": "Le fichier doit être en 600 et formaté avec `mkswap`."
+ },
+ {
+  "id": "lx-q143",
+  "chapter": "4-3-reseau",
+  "difficulty": 1,
+  "q": "Quelle commande affiche les adresses IP ?",
+  "options": [
+   "`ip a`",
+   "`netinfo`",
+   "`ip show`",
+   "`ipconfig`"
+  ],
+  "answer": 0,
+  "explain": "`ip -br a` donne un affichage compact."
+ },
+ {
+  "id": "lx-q144",
+  "chapter": "4-3-reseau",
+  "difficulty": 1,
+  "q": "Quelle commande affiche les ports ouverts ?",
+  "options": [
+   "`ss -tulnp`",
+   "`ping -p`",
+   "`nslookup -l`",
+   "`ip ports`"
+  ],
+  "answer": 0,
+  "explain": "`netstat -tulnp` est l'ancienne forme."
+ },
+ {
+  "id": "lx-q145",
+  "chapter": "4-3-reseau",
+  "difficulty": 2,
+  "q": "Quelle commande affiche la table de routage ?",
+  "options": [
+   "`ss -r`",
+   "`ip route show -t`",
+   "`ip r`",
+   "`arp -a`"
+  ],
+  "answer": 2,
+  "explain": "`ip route` est équivalent."
+ },
+ {
+  "id": "lx-q146",
+  "chapter": "4-3-reseau",
+  "difficulty": 2,
+  "q": "Quel fichier associe un nom à une IP localement ?",
+  "options": [
+   "/etc/network",
+   "/etc/resolv.conf",
+   "/etc/hosts",
+   "/etc/dns"
+  ],
+  "answer": 2,
+  "explain": "`/etc/resolv.conf` désigne les serveurs DNS."
+ },
+ {
+  "id": "lx-q147",
+  "chapter": "4-3-reseau",
+  "difficulty": 2,
+  "q": "Combien d'hôtes utilisables dans 192.168.1.0/24 ?",
+  "options": [
+   "255",
+   "253",
+   "254",
+   "256"
+  ],
+  "answer": 2,
+  "explain": "2^8 − 2 (réseau et diffusion)."
+ },
+ {
+  "id": "lx-q148",
+  "chapter": "4-3-reseau",
+  "difficulty": 2,
+  "q": "Quel port utilise SSH ?",
+  "options": [
+   "23",
+   "443",
+   "22",
+   "80"
+  ],
+  "answer": 2,
+  "explain": "Telnet 23, HTTP 80, HTTPS 443."
+ },
+ {
+  "id": "lx-q149",
+  "chapter": "4-3-reseau",
+  "difficulty": 3,
+  "q": "Si `ping 8.8.8.8` marche mais pas `ping google.com`, quelle panne ?",
+  "options": [
+   "La passerelle",
+   "Le pare-feu",
+   "La résolution DNS",
+   "Le câble"
+  ],
+  "answer": 2,
+  "explain": "Vérifier `/etc/resolv.conf` et `dig`."
+ },
+ {
+  "id": "lx-q150",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 1,
+  "q": "Quelle commande génère une paire de clés moderne ?",
+  "options": [
+   "`ssh-key new`",
+   "`ssh-keygen -t ed25519`",
+   "`openssl ssh`",
+   "`ssh --genkey`"
+  ],
+  "answer": 1,
+  "explain": "La clé publique va dans `~/.ssh/authorized_keys`."
+ },
+ {
+  "id": "lx-q151",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Quelle commande installe la clé publique sur un serveur ?",
+  "options": [
+   "`scp key user@hôte`",
+   "`ssh-add user@hôte`",
+   "`ssh -k`",
+   "`ssh-copy-id user@hôte`"
+  ],
+  "answer": 3,
+  "explain": "Elle ajoute la clé à `authorized_keys`."
+ },
+ {
+  "id": "lx-q152",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Quelles permissions pour ~/.ssh et authorized_keys ?",
+  "options": [
+   "777 et 666",
+   "700 et 600",
+   "644 et 644",
+   "755 et 644"
+  ],
+  "answer": 1,
+  "explain": "SSH refuse les droits trop larges."
+ },
+ {
+  "id": "lx-q153",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Quelle option de sshd_config interdit la connexion root ?",
+  "options": [
+   "`RootLogin off`",
+   "`DenyRoot yes`",
+   "`AllowRoot no`",
+   "`PermitRootLogin no`"
+  ],
+  "answer": 3,
+  "explain": "Tester avec `sshd -t` en gardant une session ouverte."
+ },
+ {
+  "id": "lx-q154",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Quelle commande ufw autorise SSH ?",
+  "options": [
+   "`ufw open 22`",
+   "`ufw permit ssh`",
+   "`ufw ssh on`",
+   "`ufw allow 22/tcp`"
+  ],
+  "answer": 3,
+  "explain": "Autoriser SSH **avant** `ufw enable`."
+ },
+ {
+  "id": "lx-q155",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 3,
+  "q": "Quelle règle iptables accepte les connexions déjà établies ?",
+  "options": [
+   "`-m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT`",
+   "`-m state --on`",
+   "`-p tcp --established`",
+   "`-j KEEP`"
+  ],
+  "answer": 0,
+  "explain": "Sans elle, une politique DROP coupe les réponses."
+ },
+ {
+  "id": "lx-q156",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 3,
+  "q": "Quel tunnel SSH redirige un port local vers un service distant ?",
+  "options": [
+   "`ssh -L`",
+   "`ssh -D`",
+   "`ssh -T`",
+   "`ssh -R`"
+  ],
+  "answer": 0,
+  "explain": "`-R` distant, `-D` proxy SOCKS."
+ },
+ {
+  "id": "lx-q157",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 1,
+  "q": "Quelle première ligne indique l'interpréteur bash ?",
+  "options": [
+   "`!#/bin/bash`",
+   "`#!/bin/bash`",
+   "`#bash`",
+   "`// bash`"
+  ],
+  "answer": 1,
+  "explain": "C'est le shebang."
+ },
+ {
+  "id": "lx-q158",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 1,
+  "q": "Comment rendre un script exécutable ?",
+  "options": [
+   "`run script.sh`",
+   "`exec script.sh`",
+   "`chmod +x script.sh`",
+   "`chown +x script.sh`"
+  ],
+  "answer": 2,
+  "explain": "Puis `./script.sh`."
+ },
+ {
+  "id": "lx-q159",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 2,
+  "q": "Quelle affectation est correcte ?",
+  "options": [
+   "`$nom=\"Luke\"`",
+   "`nom=\"Luke\"`",
+   "`nom = \"Luke\"`",
+   "`set nom \"Luke\"`"
+  ],
+  "answer": 1,
+  "explain": "Pas d'espaces autour du `=`."
+ },
+ {
+  "id": "lx-q160",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 2,
+  "q": "Que contient `$#` ?",
+  "options": [
+   "Le nombre d'arguments",
+   "Le PID",
+   "Le code de retour",
+   "Le nom du script"
+  ],
+  "answer": 0,
+  "explain": "`$@` : les arguments ; `$0` : le script."
+ },
+ {
+  "id": "lx-q161",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 2,
+  "q": "Quel test vérifie qu'un répertoire existe ?",
+  "options": [
+   "`[ -d rep ]`",
+   "`[ rep ]`",
+   "`[ -f rep ]`",
+   "`[ -e rep -d ]`"
+  ],
+  "answer": 0,
+  "explain": "`-f` fichier, `-e` existe."
+ },
+ {
+  "id": "lx-q162",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 2,
+  "q": "Quel test compare deux entiers pour l'égalité ?",
+  "options": [
+   "`[ $a == $b ]`",
+   "`[ \"$a\" -is \"$b\" ]`",
+   "`[ \"$a\" -eq \"$b\" ]`",
+   "`[ \"$a\" = \"$b\" ]`"
+  ],
+  "answer": 2,
+  "explain": "`=` compare des chaînes."
+ },
+ {
+  "id": "lx-q163",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 3,
+  "q": "Que fait `set -e` ?",
+  "options": [
+   "Arrête le script à la première commande en échec",
+   "Active le mode débogage",
+   "Ignore les erreurs",
+   "Rend les variables constantes"
+  ],
+  "answer": 0,
+  "explain": "`set -x` trace les commandes."
+ },
+ {
+  "id": "lx-q164",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 1,
+  "q": "Quelle commande crée une archive compressée gzip ?",
+  "options": [
+   "`gzip -c dossier`",
+   "`tar -zip dossier`",
+   "`tar -xzf archive.tar.gz`",
+   "`tar -czf archive.tar.gz dossier`"
+  ],
+  "answer": 3,
+  "explain": "`-x` extrait ; `-t` liste."
+ },
+ {
+  "id": "lx-q165",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 2,
+  "q": "Quel signe final de la source change le comportement de rsync ?",
+  "options": [
+   "Il active --delete",
+   "Le slash final copie le contenu du dossier",
+   "Il ajoute la compression",
+   "Il ne change rien"
+  ],
+  "answer": 1,
+  "explain": "`rsync -a src/ dst/` copie le contenu ; `src` copie le dossier."
+ },
+ {
+  "id": "lx-q166",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 2,
+  "q": "Que signifie la règle 3-2-1 ?",
+  "options": [
+   "3 disques, 2 RAID, 1 cloud",
+   "3 serveurs, 2 sites, 1 test",
+   "3 jours, 2 semaines, 1 mois",
+   "3 copies, 2 supports, 1 hors site"
+  ],
+  "answer": 3,
+  "explain": "Le RAID n'est pas une sauvegarde."
+ },
+ {
+  "id": "lx-q167",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 2,
+  "q": "Quelle commande vérifie l'intégrité d'un fichier ?",
+  "options": [
+   "`file`",
+   "`stat`",
+   "`cksum -v`",
+   "`sha256sum`"
+  ],
+  "answer": 3,
+  "explain": "Comparer l'empreinte avant et après copie."
+ },
+ {
+  "id": "lx-q168",
+  "chapter": "5-3-depannage",
+  "difficulty": 2,
+  "q": "Que signifie la méthode USE ?",
+  "options": [
+   "Unité, Service, Événement",
+   "Usage, Stockage, Exécution",
+   "Utilisation, Saturation, Erreurs",
+   "Utilisateur, Système, Erreur"
+  ],
+  "answer": 2,
+  "explain": "Elle s'applique à chaque ressource."
+ },
+ {
+  "id": "lx-q169",
+  "chapter": "5-3-depannage",
+  "difficulty": 2,
+  "q": "Disque plein mais `df` ne baisse pas après suppression d'un log : cause ?",
+  "options": [
+   "Les inodes sont libres",
+   "Un processus garde le fichier ouvert",
+   "Le disque est en lecture seule",
+   "Le fichier est dans la corbeille"
+  ],
+  "answer": 1,
+  "explain": "`lsof +L1` le révèle."
+ },
+ {
+  "id": "lx-q170",
+  "chapter": "a-installation",
+  "difficulty": 1,
+  "q": "Comment vérifier une image ISO téléchargée ?",
+  "options": [
+   "La renommer",
+   "Lancer fsck",
+   "La copier sur clé",
+   "Comparer sa somme de contrôle (sha256sum/md5sum)"
+  ],
+  "answer": 3,
+  "explain": "Une différence impose de retélécharger."
+ },
+ {
+  "id": "lx-q171",
+  "chapter": "a-installation",
+  "difficulty": 2,
+  "q": "Quel groupe reçoit le premier utilisateur d'Ubuntu ?",
+  "options": [
+   "wheel",
+   "root",
+   "adm seulement",
+   "sudo"
+  ],
+  "answer": 3,
+  "explain": "Il administre via `sudo`."
+ },
+ {
+  "id": "lx-q172",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Que décrit /etc/fstab ?",
+  "options": [
+   "Les comptes utilisateurs",
+   "Les services réseau",
+   "Les règles du pare-feu",
+   "Les systèmes de fichiers à monter au démarrage"
+  ],
+  "answer": 3,
+  "explain": "Réponse type d'examen."
+ },
+ {
+  "id": "lx-q173",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Quelle commande identifie les ports ouverts ?",
+  "options": [
+   "`ss -tulnp`",
+   "`find -port`",
+   "`ls -p`",
+   "`ps -p`"
+  ],
+  "answer": 0,
+  "explain": "Aussi `netstat -tulnp`, `lsof -i`."
+ },
+ {
+  "id": "lx-q174",
+  "chapter": "b-methode-fiche",
+  "difficulty": 1,
+  "q": "/var contient surtout…",
+  "options": [
+   "Les répertoires personnels",
+   "Les programmes",
+   "Des données variables (logs, spool, bases)",
+   "Les périphériques"
+  ],
+  "answer": 2,
+  "explain": "`/home` : personnels ; `/dev` : périphériques."
+ }
+]

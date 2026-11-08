@@ -1,0 +1,90 @@
+{
+ "n": 7,
+ "title": "Épreuve n° 7 · TP6 : processus, jobs, at et cron",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : processus et jobs",
+   "points": 12,
+   "intro": "Répondez avec les commandes ou une explication.",
+   "questions": [
+    {
+     "id": "e07p1q1",
+     "q": "Quel processus n'a pas de père ? Quel est son PID ?",
+     "points": 1.5,
+     "a": "```bash\nps -p 1 -o pid,ppid,comm\n```\n- Le PID 1 (`systemd`/`init`), PPID 0 (noyau)."
+    },
+    {
+     "id": "e07p1q2",
+     "q": "Affichez l'arbre des processus avec les PID, puis les ancêtres du shell courant.",
+     "points": 1.5,
+     "a": "```bash\npstree -p\npstree -s -p $$\n```\n- `$$` est le PID du shell courant."
+    },
+    {
+     "id": "e07p1q3",
+     "q": "Quel signal `kill` envoie-t-il par défaut ? Que font SIGQUIT, SIGKILL et SIGCHLD ?",
+     "points": 2,
+     "a": "- Par défaut : SIGTERM (15), demande d'arrêt propre.\n- SIGQUIT (3) : quitte avec core dump ; SIGKILL (9) : arrêt immédiat non interceptable ; SIGCHLD : signale au père qu'un fils s'est terminé."
+    },
+    {
+     "id": "e07p1q4",
+     "q": "Lancez trois `sleep` en arrière-plan, listez-les, puis arrêtez le premier par son PID et le deuxième par son numéro de travail.",
+     "points": 2.5,
+     "a": "```bash\nsleep 300 &\nsleep 400 &\nsleep 500 &\njobs -l\nkill PID_du_premier\nkill %2\n```\n- `jobs -l` donne les PID ; `%2` désigne le travail n° 2."
+    },
+    {
+     "id": "e07p1q5",
+     "q": "Lancez `sleep 600` au premier plan, suspendez-le puis relancez-le en arrière-plan. Que signifient `+` et `-` ?",
+     "points": 2,
+     "a": "```bash\nsleep 600\n# Ctrl+Z\nbg\njobs\n```\n- `+` : travail courant ; `-` : travail précédent."
+    },
+    {
+     "id": "e07p1q6",
+     "q": "Un `gedit` lancé en arrière-plan se ferme avec le terminal. Comment éviter cela ?",
+     "points": 1.5,
+     "a": "```bash\nnohup gedit > /dev/null 2>&1 &\n```\n- `nohup` ignore SIGHUP ; alternative : `gedit &` puis `disown`."
+    },
+    {
+     "id": "e07p1q7",
+     "q": "Lancez `sleep 1000` avec nice 10 puis passez-la à 15.",
+     "points": 1,
+     "a": "```bash\nnice -n 10 sleep 1000 &\nrenice -n 15 -p $!\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : planification",
+   "points": 8,
+   "intro": "Écrivez les commandes.",
+   "questions": [
+    {
+     "id": "e07p2q1",
+     "q": "Planifiez dans 10 minutes l'écriture de l'heure dans `~/heure.txt`.",
+     "points": 2,
+     "a": "```bash\nat now + 10 minutes\n# at> date >> ~/heure.txt\n# Ctrl+D\natq\n```\n- `atq` liste les tâches ; `atrm 1` en supprime une."
+    },
+    {
+     "id": "e07p2q2",
+     "q": "Planifiez le nettoyage de `/tmp` tous les soirs à 3 h.",
+     "points": 2,
+     "a": "```bash\nsudo crontab -e\n```\n```text\n0 3 * * * find /tmp -type f -mtime +1 -delete\n```\n- Champs : minute heure jour-du-mois mois jour-de-la-semaine."
+    },
+    {
+     "id": "e07p2q3",
+     "q": "Que signifie `*/15 8-18 * * 1-5 /opt/script.sh` ?",
+     "points": 2,
+     "a": "- Toutes les 15 minutes, de 8 h à 18 h, du lundi au vendredi, tous les mois."
+    },
+    {
+     "id": "e07p2q4",
+     "q": "Pourquoi un script marche en terminal mais pas dans cron ?",
+     "points": 2,
+     "a": "- Cron lance les tâches avec un environnement minimal (PATH réduit, pas de variables du shell de connexion).\n- Solution : chemins absolus, définir `PATH` dans la crontab, rediriger la sortie vers un log."
+    }
+   ]
+  }
+ ]
+}

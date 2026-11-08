@@ -1,0 +1,92 @@
+{
+ "n": 10,
+ "title": "Épreuve n° 10 · Services, disques et réseau",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : services et journaux",
+   "points": 7,
+   "intro": "Répondez avec les commandes.",
+   "questions": [
+    {
+     "id": "e10p1q1",
+     "q": "Démarrez `nginx`, activez-le au boot et vérifiez son état.",
+     "points": 2,
+     "a": "```bash\nsudo systemctl enable --now nginx\nsystemctl status nginx\n```\n- `enable` : au démarrage ; `start` : maintenant ; `--now` fait les deux."
+    },
+    {
+     "id": "e10p1q2",
+     "q": "Affichez les messages d'erreur de `nginx` du démarrage courant.",
+     "points": 2,
+     "a": "```bash\njournalctl -u nginx -b -p err\n```"
+    },
+    {
+     "id": "e10p1q3",
+     "q": "Différence entre `reload` et `restart` ?",
+     "points": 1.5,
+     "a": "- `reload` relit la configuration sans interruption ; `restart` arrête puis relance le service."
+    },
+    {
+     "id": "e10p1q4",
+     "q": "Quelle target correspond à l'ancien runlevel 3 ?",
+     "points": 1.5,
+     "a": "- `multi-user.target` (5 = `graphical.target`). Voir la cible par défaut : `systemctl get-default`."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : disques",
+   "points": 7,
+   "intro": "Un disque `/dev/sdb` de 20 Go vient d'être ajouté.",
+   "questions": [
+    {
+     "id": "e10p2q1",
+     "q": "Créez une partition, formatez-la en ext4 et montez-la sur `/data`.",
+     "points": 3,
+     "a": "```bash\nsudo fdisk /dev/sdb        # n, p, 1, Entrée, Entrée, w\nsudo mkfs.ext4 /dev/sdb1\nsudo mkdir /data\nsudo mount /dev/sdb1 /data\n```"
+    },
+    {
+     "id": "e10p2q2",
+     "q": "Rendez le montage permanent par UUID et testez-le.",
+     "points": 2.5,
+     "a": "```bash\nsudo blkid /dev/sdb1\n```\n```text\nUUID=xxxx-xxxx  /data  ext4  defaults,noatime  0  2\n```\n- Ligne à ajouter dans `/etc/fstab` ; test : `sudo mount -a` avant de redémarrer."
+    },
+    {
+     "id": "e10p2q3",
+     "q": "`df -h` indique de la place mais « No space left on device » : que vérifier ?",
+     "points": 1.5,
+     "a": "```bash\ndf -i\n```\n- Les inodes sont saturés."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Partie 3 : réseau",
+   "points": 6,
+   "intro": "Répondez avec les commandes.",
+   "questions": [
+    {
+     "id": "e10p3q1",
+     "q": "Affichez les adresses, la route par défaut et les ports en écoute.",
+     "points": 2,
+     "a": "```bash\nip -br a\nip r\nsudo ss -tulnp\n```"
+    },
+    {
+     "id": "e10p3q2",
+     "q": "`ping 8.8.8.8` fonctionne mais pas `ping google.com` : quelle panne ?",
+     "points": 2,
+     "a": "- La résolution DNS : vérifier `/etc/resolv.conf`, `resolvectl status`, `dig google.com`."
+    },
+    {
+     "id": "e10p3q3",
+     "q": "Autorisez SSH et HTTP/HTTPS avec ufw, refusez le reste en entrée.",
+     "points": 2,
+     "a": "```bash\nsudo ufw default deny incoming\nsudo ufw allow 22/tcp\nsudo ufw allow 80,443/tcp\nsudo ufw enable\n```\n- Autorisez SSH **avant** d'activer, sous peine de vous couper l'accès."
+    }
+   ]
+  }
+ ]
+}

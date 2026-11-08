@@ -17,6 +17,7 @@ export interface QuizResult {
 interface Props {
   questions: SQ[];
   onFinish(r: QuizResult): void;
+  storageKey?: string;
   /** Défi éclair : nombre de vies et durée totale (s). */
   lives?: number;
   timeLimit?: number;
@@ -25,29 +26,70 @@ interface Props {
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-export default function QuizSession({ questions, onFinish, lives, timeLimit, chapterTitle }: Props) {
-  const [i, setI] = useState(0);
-  const [picked, setPicked] = useState<number | null>(null);
-  const [combo, setCombo] = useState(0);
-  const [, setMaxCombo] = useState(0);
-  const [xp, setXp] = useState(0);
-  const [gain, setGain] = useState<number | null>(null);
-  const [livesLeft, setLivesLeft] = useState(lives ?? 0);
-  const [left, setLeft] = useState(timeLimit ?? 0);
-  const results = useRef<QuizResult['results']>([]);
-  const started = useRef(Date.now());
+interface SavedQuizSession {
+  i: number;
+  picked: number | null;
+  combo: number;
+  maxCombo: number;
+  xp: number;
+  gain: number | null;
+  livesLeft: number;
+  left: number;
+  results: QuizResult['results'];
+  startedAt: number;
+  answerXp: number;
+}
+
+function readSavedSession(key?: string): SavedQuizSession | null {
+  if (!key) return null;
+  try {
+    const raw = sessionStorage.getItem(key);
+    return raw ? JSON.parse(raw) as SavedQuizSession : null;
+  } catch {
+    return null;
+  }
+}
+
+export default function QuizSession({ questions, onFinish, lives, timeLimit, chapterTitle, storageKey }: Props) {
+  const [saved] = useState(() => readSavedSession(storageKey));
+  const [i, setI] = useState(saved?.i ?? 0);
+  const [picked, setPicked] = useState<number | null>(saved?.picked ?? null);
+  const [combo, setCombo] = useState(saved?.combo ?? 0);
+  const [maxCombo, setMaxCombo] = useState(saved?.maxCombo ?? 0);
+  const [xp, setXp] = useState(saved?.xp ?? 0);
+  const [gain, setGain] = useState<number | null>(saved?.gain ?? null);
+  const [livesLeft, setLivesLeft] = useState(saved?.livesLeft ?? lives ?? 0);
+  const [left, setLeft] = useState(saved?.left ?? timeLimit ?? 0);
+  const results = useRef<QuizResult['results']>(saved?.results ?? []);
+  const started = useRef(saved?.startedAt ?? Date.now());
+  const mounted = useRef(false);
   const done = useRef(false);
-  const st = useRef({ xp: 0, maxCombo: 0 });
+  const st = useRef({ xp: saved?.answerXp ?? 0, maxCombo: saved?.maxCombo ?? 0 });
 
   const q = questions[i];
 
   const finish = () => {
     if (done.current) return;
     done.current = true;
+    if (storageKey) sessionStorage.removeItem(storageKey);
     onFinish({ results: results.current, answerXp: st.current.xp, maxCombo: st.current.maxCombo });
   };
 
   useEffect(() => {
+    if (!storageKey || done.current) return;
+    try {
+      sessionStorage.setItem(storageKey, JSON.stringify({
+        i, picked, combo, maxCombo, xp, gain, livesLeft, left,
+        results: results.current, startedAt: started.current, answerXp: st.current.xp,
+      } satisfies SavedQuizSession));
+    } catch { /* sessionStorage can be disabled or full */ }
+  }, [storageKey, i, picked, combo, maxCombo, xp, gain, livesLeft, left]);
+
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
     started.current = Date.now();
   }, [i]);
 

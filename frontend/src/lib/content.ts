@@ -14,6 +14,12 @@ const cardLoaders = import.meta.glob('/content/modules/*/flashcards.json', { imp
 const examIndexLoaders = import.meta.glob('/content/modules/*/exams-index.json', { import: 'default' }) as Record<string, () => Promise<ExamIndexItem[]>>;
 const examLoaders = import.meta.glob('/content/modules/*/exams/*.json', { import: 'default' }) as Record<string, () => Promise<Exam>>;
 
+export async function prepareOfflineContent(): Promise<void> {
+  if (!navigator.onLine) return;
+  const loaders = [...Object.values(chapterLoaders), ...Object.values(quizLoaders)];
+  await Promise.allSettled(loaders.map((load) => load()));
+}
+
 async function apiGet<T>(path: string): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`);
   if (!res.ok) {
