@@ -1,11 +1,13 @@
+import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Award, BarChart3, BookOpen, Flame, Home, LogIn, LogOut, Moon, Sun, Trophy, Zap, Monitor } from 'lucide-react';
+import { Award, BarChart3, Bell, BellOff, BookOpen, Flame, Home, LogIn, LogOut, MessageCircle, Moon, Sun, Trophy, Zap, Monitor } from 'lucide-react';
 import { modules } from '@/lib/content';
 import { levelProgress, tierFor } from '@/lib/gamification';
 import { cn, fmtNum } from '@/lib/utils';
 import { useAuth } from '@/state/AuthContext';
 import { useStore } from '@/state/Store';
 import { useTheme } from '@/state/Theme';
+import { disablePush, enablePush, getPushEnabled } from '@/data/push';
 import { Bar } from './ui';
 import Celebrations from './Celebrations';
 
@@ -15,7 +17,9 @@ const NAV = [
   { to: '/resultats', label: 'Résultats', icon: BarChart3 },
   { to: '/succes', label: 'Succès', icon: Award },
   { to: '/classement', label: 'Classement', icon: Trophy },
+  { to: '/messages', label: 'Messages', icon: MessageCircle },
 ];
+const MOBILE_NAV = NAV.filter((item) => item.to !== '/messages');
 
 function Logo() {
   return (
@@ -34,6 +38,46 @@ function ThemeToggle() {
   const Icon = mode === 'light' ? Sun : mode === 'dark' ? Moon : Monitor;
   return (
     <button className="btn btn-ghost !px-2.5" onClick={() => setMode(next)} title={`Thème : ${mode === 'system' ? 'automatique' : mode === 'dark' ? 'sombre' : 'clair'}`} aria-label="Changer de thème">
+      <Icon size={18} />
+    </button>
+  );
+}
+
+function PushToggle() {
+  const [enabled, setEnabled] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    getPushEnabled().then((value) => {
+      if (active) { setEnabled(value); setReady(true); }
+    }).catch(() => { if (active) setReady(true); });
+    return () => { active = false; };
+  }, []);
+
+  const toggle = async () => {
+    setBusy(true);
+    try {
+      if (enabled) await disablePush();
+      else await enablePush();
+      setEnabled(!enabled);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : 'Impossible de modifier les notifications.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const Icon = enabled ? Bell : BellOff;
+  return (
+    <button
+      className="btn btn-ghost !px-2.5"
+      onClick={toggle}
+      disabled={!ready || busy}
+      aria-label={enabled ? 'Désactiver les notifications push' : 'Activer les notifications push'}
+      title={enabled ? 'Notifications push activées' : 'Activer les notifications push'}
+    >
       <Icon size={18} />
     </button>
   );
@@ -69,7 +113,7 @@ export default function Layout() {
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-line bg-card/90 p-5 backdrop-blur lg:flex">
         <Logo />
         <nav className="mt-8 flex flex-col gap-1">
-          {NAV.map((n) => (
+          {NAV.filter((item) => item.to !== '/messages' || (cloud && !user?.guest)).map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => cn('flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition', isActive ? 'bg-brand text-white shadow-card' : 'text-muted hover:bg-soft hover:text-ink')}>
               <n.icon size={18} />
               {n.label}
@@ -107,6 +151,10 @@ export default function Layout() {
           <div className="hidden text-sm font-semibold text-muted lg:block">{user?.guest ? 'Bienvenue 👋' : `Salut ${user?.username} 👋`}</div>
           <div className="flex items-center gap-1">
             <XpChip />
+            {cloud && !user?.guest && <>
+              <Link to="/messages" className="btn btn-ghost !px-2.5" aria-label="Messages" title="Messages"><MessageCircle size={18} /></Link>
+              <PushToggle />
+            </>}
             <ThemeToggle />
             {cloud && (user?.guest ? (
               <Link to="/connexion" className="btn btn-ghost !px-2.5 lg:hidden" aria-label="Se connecter"><LogIn size={18} /></Link>
@@ -123,7 +171,7 @@ export default function Layout() {
       </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-line bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
-        {NAV.map((n) => (
+        {MOBILE_NAV.map((n) => (
           <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => cn('flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold', isActive ? 'text-brand' : 'text-muted')}>
             <n.icon size={20} />
             {n.label}

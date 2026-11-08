@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { API_BASE_URL, supabase, cloudEnabled } from '@/data/supabase';
+import { disablePush } from '@/data/push';
 
 export interface AuthUser {
   id: string;
@@ -99,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       async signOut() {
         localStorage.removeItem(GUEST_KEY);
+        try { await disablePush(); } catch { /* la déconnexion ne doit pas dépendre du service push */ }
         if (supabase) await supabase.auth.signOut();
         setUser(null);
       },

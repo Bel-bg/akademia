@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const content = require('../services/contentService');
 const progression = require('../services/progressionService');
 const progressStore = require('../services/progressService');
+const pushService = require('../services/pushService');
 
 const moduleMeta = content.getModules()[0];
 
@@ -64,4 +65,16 @@ test('content service rejects traversal paths', () => {
 test('Supabase minimal-success responses may be empty', async () => {
   assert.equal(await progressStore.readResponse(new Response(null, { status: 201 })), null);
   assert.deepEqual(await progressStore.readResponse(new Response('[{"ok":true}]', { status: 200 })), [{ ok: true }]);
+});
+
+test('ranking notifications target only players passed by the moving player', () => {
+  const before = ['a', 'b', 'c', 'me', 'd'].map((id) => ({ id }));
+  const after = ['a', 'me', 'b', 'c', 'd'].map((id) => ({ id }));
+
+  assert.deepEqual(progressStore.overtakenPlayerIds(before, after, 'me'), ['b', 'c']);
+  assert.deepEqual(progressStore.overtakenPlayerIds(before, before, 'me'), []);
+});
+
+test('push subscriptions reject non-HTTPS endpoints before storage', async () => {
+  await assert.rejects(pushService.saveSubscription('user-id', { endpoint: 'http://example.test', keys: {} }), (error) => error.status === 400);
 });

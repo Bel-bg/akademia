@@ -76,8 +76,8 @@ async function saveProgress(accessToken, userId, state) {
 }
 
 async function getLeaderboard(accessToken, limit = 50) {
-  const safeLimit = Math.min(100, Math.max(1, Number.parseInt(limit, 10) || 50));
-  return supabaseRequest(`/rest/v1/profiles?select=id,username,xp,level,streak&order=xp.desc&limit=${safeLimit}`, accessToken);
+  const safeLimit = Math.min(1000, Math.max(1, Number.parseInt(limit, 10) || 50));
+  return supabaseRequest(`/rest/v1/profiles?select=id,username,xp,level,streak&order=xp.desc,streak.desc,id.asc&limit=${safeLimit}`, accessToken);
 }
 
 async function getProfile(accessToken, userId) {
@@ -85,4 +85,20 @@ async function getProfile(accessToken, userId) {
   return rows?.[0] ?? null;
 }
 
-module.exports = { getLeaderboard, getProfile, isConfigured, loadProgress, readResponse, saveProgress, verifyAccessToken };
+async function insertMessage(accessToken, senderId, recipientId, body) {
+  const rows = await supabaseRequest('/rest/v1/messages', accessToken, {
+    method: 'POST',
+    headers: { Prefer: 'return=representation' },
+    body: JSON.stringify({ sender_id: senderId, recipient_id: recipientId, body }),
+  });
+  return rows?.[0] ?? null;
+}
+
+function overtakenPlayerIds(before, after, userId) {
+  const oldRank = before.findIndex((player) => player.id === userId);
+  const newRank = after.findIndex((player) => player.id === userId);
+  if (oldRank < 0 || newRank < 0 || newRank >= oldRank) return [];
+  return before.slice(newRank, oldRank).map((player) => player.id);
+}
+
+module.exports = { getLeaderboard, getProfile, insertMessage, isConfigured, loadProgress, overtakenPlayerIds, readResponse, saveProgress, verifyAccessToken };

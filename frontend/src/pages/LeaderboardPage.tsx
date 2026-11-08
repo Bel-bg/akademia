@@ -28,12 +28,12 @@ export default function LeaderboardPage() {
         {rows.map((r, i) => {
           const t = tierFor(r.level);
           return (
-            <div key={r.id} className={cn('flex items-center gap-4 p-4', r.id === user?.id && 'bg-brand/10')}>
+            <Link key={r.id} to={`/joueurs/${r.id}`} className={cn('flex items-center gap-4 p-4 transition hover:bg-soft/70', r.id === user?.id && 'bg-brand/10')} aria-label={`Voir le profil de ${r.username}`}>
               <span className="w-8 text-center text-lg font-extrabold">{i < 3 ? ['🥇', '🥈', '🥉'][i] : i + 1}</span>
               <span className="flex h-10 w-10 items-center justify-center rounded-full text-xl" style={{ background: t.color + '33' }}>{t.emoji}</span>
               <div className="min-w-0 flex-1"><div className="truncate font-bold">{r.username}{r.id === user?.id && ' (toi)'}</div><div className="text-xs text-muted">Niv. {r.level} · {t.name} · 🔥 {r.streak} j</div></div>
               <b className="text-accent">{fmtNum(r.xp)} XP</b>
-            </div>
+            </Link>
           );
         })}
         {rows.length === 0 && <p className="p-8 text-center text-muted">Personne pour l'instant. Sois le premier !</p>}
