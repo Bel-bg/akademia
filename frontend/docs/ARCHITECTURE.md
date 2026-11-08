@@ -11,7 +11,7 @@ frontend/src/data/social.ts  profils publics, conversations et messages temps r�
 frontend/supabase/schema.sql profils, progression privée, messagerie et règles RLS
 ```
 
-## Principes
+## Principes.
 - **Contenu = données** : ajouter un module n'exige aucun code.
 - **Invité** : progression locale dans `localStorage`.
 - **Compte** : actions envoyées à Express avec le jeton Supabase; l’API vérifie la session, recalcule les récompenses et écrit sous RLS.
