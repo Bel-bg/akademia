@@ -1,0 +1,84 @@
+{
+ "n": 8,
+ "title": "Épreuve n° 8 · TP7 : scripts shell",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : écrire des scripts",
+   "points": 14,
+   "intro": "Chaque script commence par le shebang.",
+   "questions": [
+    {
+     "id": "e08p1q1",
+     "q": "Écrivez un script qui demande un prénom et affiche « Bonjour <prénom> ».",
+     "points": 2,
+     "a": "```bash\n#!/bin/bash\nread -p \"Votre prénom : \" prenom\necho \"Bonjour $prenom\"\n```\n- Rendre exécutable : `chmod +x s.sh`, lancer `./s.sh`."
+    },
+    {
+     "id": "e08p1q2",
+     "q": "Un script qui affiche le nombre d'arguments reçus et le premier.",
+     "points": 2,
+     "a": "```bash\n#!/bin/bash\necho \"Arguments : $#\"\necho \"Premier : ${1:-aucun}\"\n```"
+    },
+    {
+     "id": "e08p1q3",
+     "q": "Un script qui indique si l'argument est un fichier, un répertoire ou n'existe pas.",
+     "points": 3,
+     "a": "```bash\n#!/bin/bash\nif [ ! -e \"$1\" ]; then echo \"$1 n'existe pas\"\nelif [ -d \"$1\" ]; then echo \"$1 est un répertoire\"\nelif [ -f \"$1\" ]; then echo \"$1 est un fichier\"\nfi\n```\n- Les espaces à l'intérieur de `[ ]` sont obligatoires."
+    },
+    {
+     "id": "e08p1q4",
+     "q": "Affichez la table de multiplication de 7.",
+     "points": 2,
+     "a": "```bash\n#!/bin/bash\nfor i in {1..10}; do\n  echo \"7 x $i = $((7 * i))\"\ndone\n```"
+    },
+    {
+     "id": "e08p1q5",
+     "q": "Un script qui crée le répertoire `sauvegarde` s'il n'existe pas puis y copie tous les `.txt`.",
+     "points": 2,
+     "a": "```bash\n#!/bin/bash\n[ -d sauvegarde ] || mkdir sauvegarde\ncp *.txt sauvegarde/\n```"
+    },
+    {
+     "id": "e08p1q6",
+     "q": "Un script `menu.sh` : `start`, `stop` ou autre argument.",
+     "points": 3,
+     "a": "```bash\n#!/bin/bash\ncase \"$1\" in\n  start) echo \"démarrage\" ;;\n  stop)  echo \"arrêt\" ;;\n  *)     echo \"usage : $0 start|stop\"; exit 1 ;;\nesac\n```\n- `exit 1` signale une erreur d'usage."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : corriger et expliquer",
+   "points": 6,
+   "intro": "Répondez brièvement.",
+   "questions": [
+    {
+     "id": "e08p2q1",
+     "q": "Corrigez : `nom = \"Luke\"`.",
+     "points": 1.5,
+     "a": "```bash\nnom=\"Luke\"\n```\n- Aucun espace autour du `=`."
+    },
+    {
+     "id": "e08p2q2",
+     "q": "Que fait `set -euo pipefail` ?",
+     "points": 1.5,
+     "a": "- `-e` : arrêt à la première erreur ; `-u` : variable non définie = erreur ; `pipefail` : un tube échoue si l'une des commandes échoue."
+    },
+    {
+     "id": "e08p2q3",
+     "q": "Différence entre `$@` et `$*` entre guillemets ?",
+     "points": 1.5,
+     "a": "- `\"$@\"` : un mot par argument ; `\"$*\"` : tous les arguments en un seul mot."
+    },
+    {
+     "id": "e08p2q4",
+     "q": "Comment obtenir un nettoyage fiable d'un fichier temporaire ?",
+     "points": 1.5,
+     "a": "```bash\ntmp=$(mktemp)\ntrap 'rm -f \"$tmp\"' EXIT\n```\n- Le `trap` s'exécute même en cas d'erreur."
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,82 @@
+[
+ {
+  "n": 1,
+  "title": "Épreuve n° 1 · Sujet réel : UAC / ENEAM, IG3 ARI, 06/01/2026",
+  "scenario": "Épreuve d'administration sous Linux, année 2025-2026",
+  "cas": "Comptes et groupes, chmod, script, find, grep, FHS, fstab, ports",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 2,
+  "title": "Épreuve n° 2 · Session de commandes : utilisateurs, groupes et droits",
+  "scenario": "Entreprise avec services compta et rh",
+  "cas": "useradd, usermod, chage, id, groupe partagé setgid, umask",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 3,
+  "title": "Épreuve n° 3 · TP2 : fichiers, répertoires et liens",
+  "scenario": "Arborescence TP2",
+  "cas": "mkdir, cp, mv, rm, liens, inodes, du, jokers",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 4,
+  "title": "Épreuve n° 4 · Vim",
+  "scenario": "Édition de /etc/services (copie)",
+  "cas": "Déplacements, édition, recherche, options",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 5,
+  "title": "Épreuve n° 5 · Recherche, filtres et redirections",
+  "scenario": "Annuaire telephone.txt",
+  "cas": "sort, cut, grep, wc, redirections, find",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 6,
+  "title": "Épreuve n° 6 · TP4/5 : espace de travail pour 4 utilisateurs",
+  "scenario": "Groupes G1 et G2, utilisateurs u1 à u4",
+  "cas": "useradd, usermod, répertoires partagés, droits, SUID",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 7,
+  "title": "Épreuve n° 7 · TP6 : processus, jobs, at et cron",
+  "scenario": "Gestion des processus",
+  "cas": "ps, pstree, signaux, jobs, nohup, at, crontab, nice",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 8,
+  "title": "Épreuve n° 8 · TP7 : scripts shell",
+  "scenario": "Scripts bash",
+  "cas": "variables, read, arguments, if, case, boucles, tests de fichiers",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 9,
+  "title": "Épreuve n° 9 · Permissions avancées et sudo",
+  "scenario": "Serveur de l'école",
+  "cas": "chmod, umask, SUID, ACL, sudoers",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 10,
+  "title": "Épreuve n° 10 · Services, disques et réseau",
+  "scenario": "Serveur web de l'école",
+  "cas": "systemctl, journalctl, fstab, LVM, ip, ss, ufw",
+  "durationMinutes": 120,
+  "points": 20
+ }
+]

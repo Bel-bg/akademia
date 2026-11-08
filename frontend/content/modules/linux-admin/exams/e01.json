@@ -1,0 +1,102 @@
+{
+ "n": 1,
+ "title": "Épreuve n° 1 · Sujet réel : UAC / ENEAM, IG3 ARI, 06/01/2026",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : session de commandes (barème estimé : 8 points)",
+   "points": 8,
+   "intro": "Il s'agit d'une session de travail où les commandes se suivent. On vous demande d'écrire **uniquement** ces commandes. (Le barème n'est pas indiqué sur le sujet d'origine : il est estimé ici.)",
+   "questions": [
+    {
+     "id": "e01p1q1",
+     "q": "Est-ce que les comptes utilisateurs `daemon` et `luke` existent ? Si oui, quels sont leurs uid, gid et leurs groupes ?",
+     "points": 1.5,
+     "a": "```bash\nid daemon\nid luke\ngetent passwd daemon luke\n```\n- `id` affiche uid, gid et la liste des groupes ; s'il répond `no such user`, le compte n'existe pas.\n- `daemon` existe sur Ubuntu (uid 1, gid 1) ; `luke` n'existe pas encore avant la question 3.\n- Variantes : `grep -E '^(daemon|luke):' /etc/passwd`, `groups luke`."
+    },
+    {
+     "id": "e01p1q2",
+     "q": "Créez les groupes `jedi` et `rebelles`.",
+     "points": 1,
+     "a": "```bash\nsudo groupadd jedi\nsudo groupadd rebelles\n```\n- Les groupes doivent exister **avant** de les référencer dans `useradd`."
+    },
+    {
+     "id": "e01p1q3",
+     "q": "Créez le compte `luke` (groupe principal `jedi`, groupe secondaire `rebelles`), le compte `vador` (groupe `jedi`) et le compte `solo` (groupe `rebelles`). Visualisez ensuite les comptes.",
+     "points": 3,
+     "a": "```bash\nsudo useradd -m -g jedi -G rebelles -s /bin/bash luke\nsudo useradd -m -g jedi -s /bin/bash vador\nsudo useradd -m -g rebelles -s /bin/bash solo\ntail -n 3 /etc/passwd\nid luke ; id vador ; id solo\n```\n- `-g` définit le groupe **principal**, `-G` les groupes **secondaires**, `-m` crée le répertoire personnel.\n- Pour solo, « faisant partie du groupe rebelles » : on le met en groupe principal (variante acceptable : `-G rebelles`).\n- Vérification dans `/etc/passwd` et `/etc/group` (`grep -E 'jedi|rebelles' /etc/group`)."
+    },
+    {
+     "id": "e01p1q4",
+     "q": "Mettez le mot « password » comme mot de passe à l'utilisateur `luke`.",
+     "points": 1.5,
+     "a": "```bash\necho 'luke:password' | sudo chpasswd\n```\n- Autre méthode, interactive : `sudo passwd luke` (saisie deux fois).\n- `chpasswd` lit `login:motdepasse` sur l'entrée standard : pratique dans un script."
+    },
+    {
+     "id": "e01p1q5",
+     "q": "Essayez de vous connecter sous le compte de `luke`.",
+     "points": 1,
+     "a": "```bash\nsu - luke\n```\n- Le tiret charge l'environnement complet de luke. On vérifie avec `whoami` puis on revient avec `exit`.\n- Autre possibilité : `ssh luke@localhost` si SSH est installé."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : questions diverses (barème estimé : 12 points)",
+   "points": 12,
+   "intro": "Répondez à chacune des questions suivantes.",
+   "questions": [
+    {
+     "id": "e01p2q1",
+     "q": "Que réalise la commande `chmod 750 ~/*.pl` ?",
+     "points": 1,
+     "a": "Réponse : elle modifie les droits de tous les fichiers `.pl` du répertoire personnel.\n- Le shell développe `~/*.pl` en la liste des scripts Perl du home.\n- 750 = `rwxr-x---` : le propriétaire lit, écrit et exécute ; le groupe lit et exécute ; les autres n'ont aucun droit."
+    },
+    {
+     "id": "e01p2q2",
+     "q": "Écrivez un script shell qui crée un répertoire `Ex2` contenant dix fichiers nommés `Un` à `Dix`. Chaque fichier contient une seule ligne : `Un` contient « Première fichier », `Deux` contient « Deuxième fichier », ..., `Dix` contient « Dixième fichier ». Vérifiez que le répertoire n'existe pas déjà : dans ce cas, il ne sera pas recréé.",
+     "points": 4,
+     "a": "```bash\n#!/bin/bash\nrep=\"Ex2\"\nif [ ! -d \"$rep\" ]; then\n  mkdir \"$rep\"\nfi\nnoms=(Un Deux Trois Quatre Cinq Six Sept Huit Neuf Dix)\nord=(Première Deuxième Troisième Quatrième Cinquième Sixième Septième Huitième Neuvième Dixième)\nfor i in \"${!noms[@]}\"; do\n  echo \"${ord[$i]} fichier\" > \"$rep/${noms[$i]}\"\ndone\n```\n- Le test `[ ! -d \"$rep\" ]` évite de recréer le répertoire ; `mkdir -p Ex2` ferait de même.\n- Le texte « Première fichier » est celui de l'énoncé ; grammaticalement, on écrirait « Premier fichier ».\n- Après `chmod +x` : `./script.sh`, puis `ls Ex2` et `cat Ex2/Dix` pour vérifier."
+    },
+    {
+     "id": "e01p2q3",
+     "q": "Donnez la commande permettant de trouver la liste des fichiers d'extension `.h` situés sous `/usr/include`.",
+     "points": 1,
+     "a": "```bash\nfind /usr/include -name \"*.h\"\n```\n- Les guillemets empêchent le shell de développer `*.h` avant `find`.\n- Variante : `find /usr/include -type f -name \"*.h\"`."
+    },
+    {
+     "id": "e01p2q4",
+     "q": "Donnez la commande permettant d'afficher les lignes du fichier `/etc/services` qui contiennent la chaîne « HTTP ».",
+     "points": 1,
+     "a": "```bash\ngrep HTTP /etc/services\n```\n- Pour ignorer la casse : `grep -i http /etc/services`."
+    },
+    {
+     "id": "e01p2q5",
+     "q": "Expliquez la différence entre les répertoires suivants : a) `/etc` b) `/var` c) `/home` d) `/tmp`.",
+     "points": 3,
+     "a": "- `/etc` : fichiers de **configuration** du système et des services (texte).\n- `/var` : données **variables** qui évoluent : journaux (`/var/log`), files d'attente, bases de données, caches.\n- `/home` : répertoires **personnels** des utilisateurs (`/home/alice`).\n- `/tmp` : fichiers **temporaires**, accessibles à tous (sticky bit), souvent vidés au redémarrage."
+    },
+    {
+     "id": "e01p2q6",
+     "q": "Quel fichier contient les informations sur les utilisateurs du système ?\n\n- A. `/etc/password`\n- B. `/etc/passwd`\n- C. `/etc/group`\n- D. `/etc/sudoers`",
+     "points": 0.5,
+     "a": "Réponse : B (`/etc/passwd`).\n- `/etc/password` n'existe pas ; `/etc/group` décrit les groupes ; `/etc/sudoers` les droits sudo."
+    },
+    {
+     "id": "e01p2q7",
+     "q": "Quel est le rôle du fichier `/etc/fstab` ?\n\n- A. Configurer les périphériques de stockage\n- B. Gérer les utilisateurs\n- C. Définir les règles du pare-feu\n- D. Configurer les services réseau",
+     "points": 0.5,
+     "a": "Réponse : A (configurer les périphériques de stockage).\n- Plus précisément : il liste les systèmes de fichiers et partitions à monter au démarrage, avec leurs options.\n- Les utilisateurs sont gérés dans `/etc/passwd` ; le pare-feu avec ufw, iptables ou nftables."
+    },
+    {
+     "id": "e01p2q8",
+     "q": "Quelle commande permet d'identifier les ports ouverts sur la machine ?",
+     "points": 1,
+     "a": "```bash\nsudo ss -tulnp\n```\n- `-t` TCP, `-u` UDP, `-l` en écoute, `-n` numérique, `-p` processus.\n- Équivalents : `netstat -tulnp`, `lsof -i`, et depuis l'extérieur `nmap`."
+    }
+   ]
+  }
+ ]
+}

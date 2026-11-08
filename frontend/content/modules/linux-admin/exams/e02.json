@@ -1,0 +1,108 @@
+{
+ "n": 2,
+ "title": "Épreuve n° 2 · Session de commandes : utilisateurs, groupes et droits",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : gestion des comptes",
+   "points": 12,
+   "intro": "Écrivez uniquement les commandes, dans l'ordre.",
+   "questions": [
+    {
+     "id": "e02p1q1",
+     "q": "Créez les groupes `compta` et `rh`.",
+     "points": 1,
+     "a": "```bash\nsudo groupadd compta\nsudo groupadd rh\n```\n- Un groupe doit exister avant d'être utilisé par `useradd`."
+    },
+    {
+     "id": "e02p1q2",
+     "q": "Créez `awa` (groupe principal `compta`, shell bash, avec home) et `koffi` (groupe principal `rh`, secondaire `compta`).",
+     "points": 2,
+     "a": "```bash\nsudo useradd -m -g compta -s /bin/bash awa\nsudo useradd -m -g rh -G compta -s /bin/bash koffi\n```\n- `-g` principal, `-G` secondaires."
+    },
+    {
+     "id": "e02p1q3",
+     "q": "Donnez à `awa` le mot de passe `Ecole2026` sans interaction.",
+     "points": 1,
+     "a": "```bash\necho 'awa:Ecole2026' | sudo chpasswd\n```\n- Variante interactive : `sudo passwd awa`."
+    },
+    {
+     "id": "e02p1q4",
+     "q": "Ajoutez `awa` au groupe `rh` sans perdre son appartenance à `compta`.",
+     "points": 1.5,
+     "a": "```bash\nsudo usermod -aG rh awa\n```\n- Sans `-a`, `usermod -G rh awa` **remplacerait** les groupes secondaires."
+    },
+    {
+     "id": "e02p1q5",
+     "q": "Affichez les groupes de `awa` de deux façons.",
+     "points": 1,
+     "a": "```bash\nid awa\ngroups awa\n```\n- Aussi `getent group rh compta`."
+    },
+    {
+     "id": "e02p1q6",
+     "q": "Forcez `awa` à changer son mot de passe à la prochaine connexion, puis imposez une validité maximale de 90 jours.",
+     "points": 1.5,
+     "a": "```bash\nsudo chage -d 0 awa\nsudo chage -M 90 awa\nsudo chage -l awa\n```\n- `-d 0` met la date de dernier changement à zéro : changement obligatoire. `-l` vérifie."
+    },
+    {
+     "id": "e02p1q7",
+     "q": "Verrouillez le compte `koffi`, puis déverrouillez-le.",
+     "points": 1.5,
+     "a": "```bash\nsudo usermod -L koffi\nsudo usermod -U koffi\n```\n- Équivalent : `sudo passwd -l koffi` / `sudo passwd -u koffi`.\n- Un shell `/sbin/nologin` empêche la session mais pas forcément l'authentification SSH par clé."
+    },
+    {
+     "id": "e02p1q8",
+     "q": "Supprimez `koffi` en supprimant son répertoire personnel.",
+     "points": 1,
+     "a": "```bash\nsudo userdel -r koffi\n```\n- Sans `-r`, `/home/koffi` reste et ses fichiers deviennent orphelins."
+    },
+    {
+     "id": "e02p1q9",
+     "q": "Quel est le sens de chacun des champs de la ligne `awa:x:1001:1001::/home/awa:/bin/bash` ?",
+     "points": 1.5,
+     "a": "- `awa` : login ; `x` : mot de passe dans `/etc/shadow` ; `1001` : UID ; `1001` : GID principal.\n- Champ commentaire (GECOS) vide ; `/home/awa` : répertoire personnel ; `/bin/bash` : shell de connexion."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : répertoire partagé",
+   "points": 8,
+   "intro": "Le dossier `/srv/compta` doit être partagé par le groupe `compta`.",
+   "questions": [
+    {
+     "id": "e02p2q1",
+     "q": "Créez `/srv/compta`, attribuez-le au groupe `compta`, donnez lecture/écriture au groupe et rien aux autres.",
+     "points": 2,
+     "a": "```bash\nsudo mkdir /srv/compta\nsudo chgrp compta /srv/compta\nsudo chmod 770 /srv/compta\n```\n- 770 = `rwxrwx---`."
+    },
+    {
+     "id": "e02p2q2",
+     "q": "Faites en sorte que les nouveaux fichiers héritent du groupe `compta`.",
+     "points": 2,
+     "a": "```bash\nsudo chmod 2770 /srv/compta\n```\n- Le bit **setgid** (2000) sur un répertoire fait hériter du groupe. `ls -ld` affiche `drwxrws---`."
+    },
+    {
+     "id": "e02p2q3",
+     "q": "Empêchez un membre de supprimer les fichiers des autres.",
+     "points": 1.5,
+     "a": "```bash\nsudo chmod +t /srv/compta\n```\n- Le bit **sticky** : seul le propriétaire du fichier (ou root) peut le supprimer. Permission finale `3770`."
+    },
+    {
+     "id": "e02p2q4",
+     "q": "Quel umask donne des fichiers en `660` et des répertoires en `770` ?",
+     "points": 1.5,
+     "a": "Réponse : `umask 007`.\n- 666 − 007 = 660 ; 777 − 007 = 770."
+    },
+    {
+     "id": "e02p2q5",
+     "q": "Quel QCM : `chmod 2775` donne-t-il `rwxrwsr-x` ou `rwxrwxr-s` ?\n\n- A. `rwxrwsr-x`\n- B. `rwxrwxr-s`",
+     "points": 1,
+     "a": "Réponse : A.\n- Le `s` remplace le `x` du **groupe** (setgid). Le `s` en dernière position n'existe pas ; on aurait `t` pour le sticky."
+    }
+   ]
+  }
+ ]
+}

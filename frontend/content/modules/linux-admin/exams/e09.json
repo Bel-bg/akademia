@@ -1,0 +1,84 @@
+{
+ "n": 9,
+ "title": "Épreuve n° 9 · Permissions avancées et sudo",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : permissions",
+   "points": 12,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e09p1q1",
+     "q": "Convertissez `rwxr-x---` en octal et `640` en symbolique.",
+     "points": 2,
+     "a": "- `rwxr-x---` = 750 ; `640` = `rw-r-----`."
+    },
+    {
+     "id": "e09p1q2",
+     "q": "Quel est l'effet de `umask 027` sur la création d'un fichier et d'un répertoire ?",
+     "points": 2,
+     "a": "- Fichiers : 666 − 027 = 640 ; répertoires : 777 − 027 = 750."
+    },
+    {
+     "id": "e09p1q3",
+     "q": "Que signifie `-rwsr-xr-x` ? Donnez l'octal.",
+     "points": 2,
+     "a": "- Le `s` à la place du `x` du propriétaire = SUID : le programme s'exécute avec les droits de son propriétaire. Octal : 4755."
+    },
+    {
+     "id": "e09p1q4",
+     "q": "Donnez à `bob` les droits `rwx` sur `/srv/projet` sans toucher au groupe, puis vérifiez.",
+     "points": 2,
+     "a": "```bash\nsudo setfacl -m u:bob:rwx /srv/projet\ngetfacl /srv/projet\n```\n- `ls -l` affichera un `+` après les permissions."
+    },
+    {
+     "id": "e09p1q5",
+     "q": "Rendez `/etc/important.conf` impossible à modifier ou supprimer, même par root.",
+     "points": 2,
+     "a": "```bash\nsudo chattr +i /etc/important.conf\nlsattr /etc/important.conf\n```\n- `chattr -i` pour lever le verrou."
+    },
+    {
+     "id": "e09p1q6",
+     "q": "Trouvez les fichiers SUID du système.",
+     "points": 2,
+     "a": "```bash\nsudo find / -perm -4000 -type f 2>/dev/null\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : sudo",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e09p2q1",
+     "q": "Autorisez `bob` à lancer uniquement `systemctl restart nginx` sans mot de passe.",
+     "points": 3,
+     "a": "```bash\nsudo visudo -f /etc/sudoers.d/bob\n```\n```text\nbob ALL=(root) NOPASSWD: /usr/bin/systemctl restart nginx\n```\n- Fichier en `0440`. Vérification : `sudo -l -U bob`."
+    },
+    {
+     "id": "e09p2q2",
+     "q": "Pourquoi `sudo echo x > /etc/fichier` échoue-t-il ? Donnez la correction.",
+     "points": 2,
+     "a": "```bash\necho x | sudo tee /etc/fichier\n```\n- La redirection `>` est exécutée par votre shell, avec vos droits, avant `sudo`."
+    },
+    {
+     "id": "e09p2q3",
+     "q": "Pourquoi n'édite-t-on `/etc/sudoers` qu'avec `visudo` ?",
+     "points": 1.5,
+     "a": "- `visudo` vérifie la syntaxe avant d'enregistrer : une erreur dans le fichier bloquerait `sudo` pour tous."
+    },
+    {
+     "id": "e09p2q4",
+     "q": "Pourquoi autoriser `sudo vi` est-il dangereux ?",
+     "points": 1.5,
+     "a": "- Dans `vi`, `:!sh` ouvre un shell avec les droits de root : la règle revient à donner root. On utilise `sudoedit`."
+    }
+   ]
+  }
+ ]
+}
