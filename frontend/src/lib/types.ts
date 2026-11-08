@@ -88,8 +88,13 @@ export interface ReviewItem {
   due: string; // YYYY-MM-DD
   seen: number;
 }
+export type FiliereId = 'ARI' | 'AIP';
+export type BackendThemeId = 'corail' | 'violet';
+
 export interface UserState {
   v: 1;
+  filiere: FiliereId | null;
+  theme: BackendThemeId;
   xp: number;
   streak: number;
   bestStreak: number;

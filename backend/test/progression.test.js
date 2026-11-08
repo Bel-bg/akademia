@@ -59,3 +59,77 @@ test('content service rejects traversal paths', () => {
   assert.equal(content.getChapter('../backend', 'server.js'), null);
   assert.equal(content.getModule('../backend'), null);
 });
+
+test('filiere defines backend theme and is immutable once set', () => {
+  const initial = progression.defaultState();
+  assert.equal(initial.filiere, null);
+  assert.equal(initial.theme, 'corail');
+
+  const ari = progression.applyAction(initial, { type: 'set-filiere', filiere: 'ARI' }, content);
+  assert.equal(ari.state.filiere, 'ARI');
+  assert.equal(ari.state.theme, 'corail');
+
+  // Once set, cannot be modified
+  assert.throws(
+    () => progression.applyAction(ari.state, { type: 'set-filiere', filiere: 'AIP' }, content),
+    /La filière ne peut plus être modifiée une fois choisie/,
+  );
+
+  const initial2 = progression.defaultState();
+  const aip = progression.applyAction(initial2, { type: 'set-filiere', filiere: 'AIP' }, content);
+  assert.equal(aip.state.filiere, 'AIP');
+  assert.equal(aip.state.theme, 'violet');
+
+  assert.throws(
+    () => progression.applyAction(initial, { type: 'set-filiere', filiere: 'OTHER' }, content),
+    /Filière invalide/,
+  );
+});
+
+test('weekly battle starts monday 00h and ends saturday 18h', () => {
+  // Wednesday 12:00 -> active battle
+  const wednesday = new Date('2026-11-04T12:00:00.000Z');
+  const boundsWed = progression.getBattleWeekBounds(wednesday);
+  assert.equal(boundsWed.isFinished, false);
+  assert.equal(boundsWed.id, 'battle-2026-11-02');
+
+  // Saturday 17:59 -> active battle
+  const satBefore = new Date('2026-11-07T17:59:00.000');
+  const boundsSatBefore = progression.getBattleWeekBounds(satBefore);
+  assert.equal(boundsSatBefore.isFinished, false);
+
+  // Saturday 18:00 -> finished battle
+  const satAfter = new Date('2026-11-07T18:00:00.000');
+  const boundsSatAfter = progression.getBattleWeekBounds(satAfter);
+  assert.equal(boundsSatAfter.isFinished, true);
+
+  // Sunday 15:00 -> still finished, awaiting next monday
+  const sunday = new Date('2026-11-08T15:00:00.000');
+  const boundsSun = progression.getBattleWeekBounds(sunday);
+  assert.equal(boundsSun.isFinished, true);
+  assert.equal(boundsSun.id, 'battle-2026-11-02');
+});
+
+test('battle scores are computed from member totals and winner declared at end', () => {
+  const users = {
+    u1: { filiere: 'ARI', xp: 500 },
+    u2: { filiere: 'ARI', xp: 700 },
+    u3: { filiere: 'AIP', xp: 1500 },
+  };
+
+  // During week: active, no winner yet
+  const wednesday = new Date('2026-11-04T12:00:00.000Z');
+  const duringWeek = progression.computeBattleScores(users, wednesday);
+  assert.equal(duringWeek.ariScore, 1200);
+  assert.equal(duringWeek.aipScore, 1500);
+  assert.equal(duringWeek.ariMembers, 2);
+  assert.equal(duringWeek.aipMembers, 1);
+  assert.equal(duringWeek.winner, null);
+  assert.equal(duringWeek.status, 'active');
+
+  // Saturday after 18h: completed, winner declared (AIP with 1500 > ARI with 1200)
+  const saturdayNight = new Date('2026-11-07T18:01:00.000');
+  const completed = progression.computeBattleScores(users, saturdayNight);
+  assert.equal(completed.winner, 'AIP');
+  assert.equal(completed.status, 'completed');
+});

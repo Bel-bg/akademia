@@ -21,6 +21,69 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
+app.get('/api/theme', (req, res) => {
+  const filiere = progressionService.normalizeFiliere(req.query.filiere);
+  const theme = progressionService.themeForFiliere(filiere);
+  res.json({
+    filiere,
+    theme,
+    defaultTheme: progressionService.DEFAULT_THEME,
+    filieres: Object.values(progressionService.FILIERES),
+  });
+});
+
+// ==================== AUTHENTIFICATION EMAIL / MOT DE PASSE ====================
+app.post('/api/auth/signup', async (req, res, next) => {
+  try {
+    const result = await progressService.signUpUser({
+      email: req.body?.email,
+      password: req.body?.password,
+      username: req.body?.username,
+      filiere: req.body?.filiere,
+    });
+    res.status(201).json(result);
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    return next(error);
+  }
+});
+
+app.post('/api/auth/signin', async (req, res, next) => {
+  try {
+    const result = await progressService.signInUser({
+      email: req.body?.email,
+      password: req.body?.password,
+    });
+    res.json(result);
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    return next(error);
+  }
+});
+
+app.post('/api/auth/signout', async (req, res, next) => {
+  try {
+    const match = req.headers.authorization?.match(/^Bearer\s+(.+)$/i);
+    if (match) await progressService.signOutUser(match[1]);
+    res.json({ ok: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/auth/reset-password', async (req, res, next) => {
+  try {
+    await progressService.resetUserPassword({
+      email: req.body?.email,
+      newPassword: req.body?.newPassword,
+    });
+    res.json({ ok: true });
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    return next(error);
+  }
+});
+
 async function requireUser(req, res, next) {
   const match = req.headers.authorization?.match(/^Bearer\s+(.+)$/i);
   if (!match) return res.status(401).json({ error: 'Authentification requise' });
@@ -34,6 +97,7 @@ async function requireUser(req, res, next) {
   }
 }
 
+// ==================== CONTENU DES MODULES ====================
 app.get('/api/modules', (_req, res) => {
   res.json(contentService.getModules());
 });
@@ -74,12 +138,35 @@ app.get('/api/modules/:moduleId/exams/:examNumber', (req, res) => {
   return res.json(exam);
 });
 
+// ==================== PROFIL, CLASSEMENT, ACTUALITÉS & PROGRESSION ====================
 app.get('/api/me', requireUser, async (req, res, next) => {
   try {
     const profile = await progressService.getProfile(req.auth.accessToken, req.auth.user.id);
-    res.json({ id: req.auth.user.id, username: profile?.username || req.auth.user.user_metadata?.username || req.auth.user.email?.split('@')[0] || 'Joueur' });
+    const state = await progressService.loadProgress(req.auth.accessToken, req.auth.user.id);
+    const filiere = progressionService.normalizeFiliere(state?.filiere ?? profile?.filiere);
+    const theme = progressionService.themeForFiliere(filiere);
+    res.json({
+      id: req.auth.user.id,
+      email: profile?.email || req.auth.user.email,
+      username: profile?.username || req.auth.user.username || 'Étudiant',
+      filiere,
+      theme,
+    });
   } catch (error) {
     next(error);
+  }
+});
+
+app.patch('/api/me', requireUser, async (req, res, next) => {
+  try {
+    const updated = await progressService.updateProfile(req.auth.accessToken, req.auth.user.id, {
+      username: req.body?.username,
+      filiere: req.body?.filiere,
+    });
+    res.json(updated);
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    return next(error);
   }
 });
 
@@ -91,10 +178,60 @@ app.get('/api/leaderboard', requireUser, async (req, res, next) => {
   }
 });
 
+app.get('/api/battle', async (_req, res, next) => {
+  try {
+    res.json(progressService.getBattleData());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/api/feed', requireUser, async (req, res, next) => {
+  try {
+    res.json(await progressService.getFeed(req.auth.user.id));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/feed/:postId/like', requireUser, async (req, res, next) => {
+  try {
+    res.json(await progressService.togglePostLike(req.auth.user.id, req.params.postId));
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    return next(error);
+  }
+});
+
+app.post('/api/feed/:postId/comments', requireUser, async (req, res, next) => {
+  try {
+    res.status(201).json(await progressService.addPostComment(req.auth.user.id, req.params.postId, req.body?.text));
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    return next(error);
+  }
+});
+
+app.post('/api/battle/vote', requireUser, async (req, res, next) => {
+  try {
+    res.json(await progressService.voteBattle(req.auth.user.id, req.body?.camp));
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    return next(error);
+  }
+});
+
 app.get('/api/progress', requireUser, async (req, res, next) => {
   try {
-    const state = await progressService.loadProgress(req.auth.accessToken, req.auth.user.id);
-    res.json({ state: state || progressionService.defaultState() });
+    const loaded = await progressService.loadProgress(req.auth.accessToken, req.auth.user.id);
+    const baseState = loaded || progressionService.defaultState();
+    const filiere = progressionService.normalizeFiliere(baseState.filiere);
+    const state = {
+      ...baseState,
+      filiere,
+      theme: progressionService.themeForFiliere(filiere),
+    };
+    res.json({ state, filiere: state.filiere, theme: state.theme });
   } catch (error) {
     next(error);
   }
@@ -104,8 +241,8 @@ app.post('/api/progress/actions', requireUser, async (req, res, next) => {
   try {
     const current = await progressService.loadProgress(req.auth.accessToken, req.auth.user.id);
     const result = progressionService.applyAction(current || progressionService.defaultState(), req.body, contentService);
-    await progressService.saveProgress(req.auth.accessToken, req.auth.user.id, result.state);
-    res.json(result);
+    const savedState = await progressService.saveProgress(req.auth.accessToken, req.auth.user.id, result.state);
+    res.json({ ...result, state: savedState, filiere: savedState.filiere, theme: savedState.theme });
   } catch (error) {
     if (error.status) return next(error);
     return res.status(400).json({ error: error.message || 'Action invalide' });
@@ -126,7 +263,13 @@ app.post('/api/progress/import', requireUser, async (req, res, next) => {
 
 app.delete('/api/progress', requireUser, async (req, res, next) => {
   try {
-    const state = progressionService.defaultState();
+    const current = await progressService.loadProgress(req.auth.accessToken, req.auth.user.id);
+    const filiere = progressionService.normalizeFiliere(current?.filiere);
+    const state = {
+      ...progressionService.defaultState(),
+      filiere,
+      theme: progressionService.themeForFiliere(filiere),
+    };
     await progressService.saveProgress(req.auth.accessToken, req.auth.user.id, state);
     res.json({ ok: true, state });
   } catch (error) {

@@ -1,92 +1,91 @@
 /**
- * Couche de persistance. Plusieurs implémentations interchangeables :
- *  - localRepo    : localStorage (mode invité, aucun compte requis)
- *  - apiRepo      : API Express (authentification, règles métier et persistance Supabase)
+ * Couche de communication avec le backend Express (/api).
+ * Authentification Bearer Token, progression, thème par filière, classement et actualités.
  */
 import { normalizeState } from '@/lib/progress';
-import type { UserState } from '@/lib/types';
-import { API_BASE_URL, supabase } from './supabase';
+import type { BackendThemeId, FiliereId, Summary, UserState } from '@/lib/types';
+import { API_BASE_URL } from './supabase';
 
-async function getAccessToken(): Promise<string> {
-  if (!supabase) throw new Error('Le mode en ligne n’est pas configuré.');
-  const { data, error } = await supabase.auth.getSession();
-  if (error || !data.session?.access_token) throw new Error('Connecte-toi pour accéder aux données en ligne.');
-  return data.session.access_token;
+export const AUTH_TOKEN_KEY = 'akademia:token';
+
+export function getStoredToken(): string | null {
+  try {
+    return localStorage.getItem(AUTH_TOKEN_KEY);
+  } catch {
+    return null;
+  }
 }
 
-async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
-  const token = await getAccessToken();
+export function setStoredToken(token: string | null): void {
+  try {
+    if (token) localStorage.setItem(AUTH_TOKEN_KEY, token);
+    else localStorage.removeItem(AUTH_TOKEN_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
+  const token = getStoredToken();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...((init?.headers as Record<string, string>) ?? {}),
+  };
+
   const res = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      ...(init?.headers ?? {}),
-    },
+    headers,
   });
 
   if (!res.ok) {
-    const body = await res.json().catch(() => null) as { error?: string } | null;
-    throw new Error(body?.error || `Erreur API: ${res.status}`);
+    const body = (await res.json().catch(() => null)) as { error?: string } | null;
+    throw new Error(body?.error || `Erreur API (${res.status})`);
   }
 
   return res.json() as Promise<T>;
 }
 
-export interface Repo {
-  mode: 'local' | 'cloud';
-  load(): Promise<UserState | null>;
-  save(state: UserState): Promise<void>;
-}
 export type ProgressAction =
+  | { type: 'set-filiere'; filiere: FiliereId }
   | { type: 'chapter-read'; moduleId: string; chapterId: string }
   | { type: 'quiz'; moduleId: string; kind: 'qcm' | 'blitz' | 'review'; label: string; results: { id: string; answerIndex: number; elapsedSeconds: number }[] }
   | { type: 'exam'; moduleId: string; n: number; score: number }
   | { type: 'cards'; moduleId: string; known: string[]; unknown: string[] }
   | { type: 'reset' };
-export interface CloudRepo extends Repo {
-  applyAction(action: ProgressAction): Promise<{ state: UserState; summary: import('@/lib/types').Summary | null }>;
+
+export interface ThemeResponse {
+  filiere: FiliereId | null;
+  theme: BackendThemeId;
+  defaultTheme: BackendThemeId;
+}
+
+export async function fetchBackendTheme(filiere: FiliereId | null): Promise<ThemeResponse> {
+  const query = filiere ? `?filiere=${encodeURIComponent(filiere)}` : '';
+  const res = await fetch(`${API_BASE_URL}/theme${query}`);
+  if (!res.ok) throw new Error(`Erreur thème: ${res.status}`);
+  return res.json() as Promise<ThemeResponse>;
+}
+
+export interface CloudRepo {
+  load(): Promise<UserState | null>;
+  applyAction(action: ProgressAction): Promise<{ state: UserState; summary: Summary | null }>;
   importState(state: UserState): Promise<UserState>;
   reset(): Promise<UserState>;
 }
 
-export function localRepo(key: string): Repo {
-  const k = `akademia:state:${key}`;
-  return {
-    mode: 'local',
-    async load() {
-      try {
-        const raw = localStorage.getItem(k);
-        return raw ? normalizeState(JSON.parse(raw)) : null;
-      } catch {
-        return null;
-      }
-    },
-    async save(state) {
-      try {
-        localStorage.setItem(k, JSON.stringify(state));
-      } catch {
-        /* quota ou navigation privée : on ignore */
-      }
-    },
-  };
-}
-
 export function apiRepo(): CloudRepo {
   return {
-    mode: 'cloud',
     async load() {
       const data = await apiRequest<{ state?: UserState }>('/progress');
       return data.state ? normalizeState(data.state) : null;
     },
-    async save() {
-      throw new Error('La progression en ligne doit être modifiée par une action métier.');
-    },
-    applyAction(action) {
-      return apiRequest('/progress/actions', {
+    async applyAction(action) {
+      const res = await apiRequest<{ state: UserState; summary: Summary | null }>('/progress/actions', {
         method: 'POST',
         body: JSON.stringify(action),
       });
+      return { state: normalizeState(res.state), summary: res.summary };
     },
     async importState(state) {
       const data = await apiRequest<{ state: UserState }>('/progress/import', {
@@ -105,10 +104,53 @@ export function apiRepo(): CloudRepo {
 export interface LeaderRow {
   id: string;
   username: string;
+  filiere: FiliereId;
   xp: number;
   level: number;
   streak: number;
 }
+
 export async function fetchLeaderboard(limit = 50): Promise<LeaderRow[]> {
   return apiRequest<LeaderRow[]>(`/leaderboard?limit=${encodeURIComponent(String(limit))}`);
+}
+
+export interface WeeklyBattleInfo {
+  id: string;
+  weekLabel: string;
+  startsAt: string;
+  endsAt: string;
+  nextStartsAt?: string;
+  isFinished: boolean;
+  status: 'active' | 'completed';
+  ariScore: number;
+  aipScore: number;
+  ariMembers: number;
+  aipMembers: number;
+  winner: FiliereId | 'EGALITE' | null;
+}
+
+export interface BattleHistoryItem {
+  id: string;
+  weekLabel: string;
+  startsAt: string;
+  endsAt: string;
+  ariScore: number;
+  aipScore: number;
+  ariMembers: number;
+  aipMembers: number;
+  winner: FiliereId | 'EGALITE';
+  status: 'completed';
+}
+
+export interface BattleApiResponse {
+  currentBattle: WeeklyBattleInfo;
+  history: BattleHistoryItem[];
+}
+
+export async function fetchBattle(): Promise<BattleApiResponse> {
+  return apiRequest<BattleApiResponse>('/battle');
+}
+
+export async function fetchFeed(): Promise<BattleApiResponse> {
+  return fetchBattle();
 }
