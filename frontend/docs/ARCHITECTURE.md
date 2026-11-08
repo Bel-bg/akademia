@@ -1,4 +1,4 @@
-# Architecture
+# Architecture.
 
 **Stack** : React 18, Vite, TypeScript strict, Tailwind, Express, Supabase Auth/Postgres.
 
