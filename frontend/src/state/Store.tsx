@@ -10,6 +10,8 @@ export type CelebrationEvent = { type: 'level'; level: number } | { type: 'badge
 interface StoreApi {
   state: UserState;
   ready: boolean;
+  online: boolean;
+  pendingSync: number;
   syncError: string | null;
   events: CelebrationEvent[];
   dismissEvent(): void;
@@ -27,11 +29,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [state, setState] = useState<UserState>(defaultState());
   const [ready, setReady] = useState(false);
+  const [online, setOnline] = useState(() => navigator.onLine);
+  const [pendingSync, setPendingSync] = useState(0);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [events, setEvents] = useState<CelebrationEvent[]>([]);
   const ref = useRef(state);
   const repoRef = useRef<Repo | null>(null);
   const timer = useRef<number | undefined>(undefined);
+  const syncTimer = useRef<number | undefined>(undefined);
   const dirty = useRef(false);
 
   const flush = useCallback(async () => {
@@ -61,7 +66,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     dirty.current = false;
     if (!user) return;
     (async () => {
-      const repo: Repo | CloudRepo = user.guest ? localRepo('guest') : apiRepo();
+      const repo: Repo | CloudRepo = user.guest ? localRepo('guest') : apiRepo(user.id);
       repoRef.current = repo;
       let s: UserState | null = null;
       try {
@@ -88,6 +93,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       }
       if (!alive) return;
       const st = s ?? defaultState();
+      setPendingSync(repo.mode === 'cloud' ? (repo as CloudRepo).pendingCount() : 0);
       ref.current = st;
       setState(st);
       setReady(true);
@@ -133,19 +139,61 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (user?.guest) return commit(localResult());
     const repo = repoRef.current as CloudRepo | null;
     if (!repo?.applyAction) throw new Error('La connexion au service de progression est indisponible.');
+    const optimistic = localResult();
     try {
-      const result = await repo.applyAction(action);
-      setSyncError(null);
+      const result = await repo.applyAction(action, optimistic);
+      setPendingSync(repo.pendingCount());
+      if (repo.pendingCount() === 0) setSyncError(null);
       return commit(result, false);
     } catch (error) {
+      setPendingSync(repo.pendingCount());
       setSyncError(error instanceof Error ? error.message : 'Synchronisation impossible');
       throw error;
     }
   }, [commit, user]);
 
+  const syncPendingActions = useCallback(async () => {
+    window.clearTimeout(syncTimer.current);
+    const repo = repoRef.current as CloudRepo | null;
+    if (!repo?.syncPending || !navigator.onLine) return;
+    try {
+      const syncedState = await repo.syncPending();
+      const remaining = repo.pendingCount();
+      setPendingSync(remaining);
+      if (syncedState) {
+        ref.current = syncedState;
+        setState(syncedState);
+      }
+      if (remaining > 0) syncTimer.current = window.setTimeout(syncPendingActions, 5000);
+      else setSyncError(null);
+    } catch (error) {
+      setSyncError(error instanceof Error ? error.message : 'Synchronisation impossible');
+    }
+  }, []);
+
+  useEffect(() => {
+    const onOffline = () => setOnline(false);
+    const onOnline = () => {
+      setOnline(true);
+      void syncPendingActions();
+    };
+    window.addEventListener('offline', onOffline);
+    window.addEventListener('online', onOnline);
+    return () => {
+      window.clearTimeout(syncTimer.current);
+      window.removeEventListener('offline', onOffline);
+      window.removeEventListener('online', onOnline);
+    };
+  }, [syncPendingActions]);
+
+  useEffect(() => {
+    if (online && pendingSync > 0) void syncPendingActions();
+    return () => window.clearTimeout(syncTimer.current);
+  }, [online, pendingSync, syncPendingActions]);
+
   const api = useMemo<StoreApi>(
     () => ({
-      state, ready, syncError, events,
+      state, ready, online, pendingSync, syncError, events,
       dismissEvent: () => setEvents((e) => e.slice(1)),
       chapterRead: async (moduleId, chapterId) => dispatch(
         { type: 'chapter-read', moduleId, chapterId },
@@ -183,11 +231,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         else {
           const repo = repoRef.current as CloudRepo | null;
           if (!repo?.reset) throw new Error('La connexion au service de progression est indisponible.');
-          commit({ state: await repo.reset(), summary: null }, false);
+          const resetState = await repo.reset(defaultState());
+          setPendingSync(repo.pendingCount());
+          commit({ state: resetState, summary: null }, false);
         }
       },
     }),
-    [state, ready, syncError, events, commit, dispatch, user],
+    [state, ready, online, pendingSync, syncError, events, commit, dispatch, user],
   );
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

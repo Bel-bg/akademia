@@ -11,20 +11,42 @@ import type { Question, Summary } from '@/lib/types';
 import { shuffle } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { useStore } from '@/state/Store';
+import { useAuth } from '@/state/AuthContext';
 
 type Phase = { t: 'setup' } | { t: 'play'; qs: SQ[]; label: string; kind: 'qcm' | 'review' } | { t: 'done'; s: Summary; wrong: number };
+interface SavedQuizPage { phase: Phase; key: number }
+
+function readSavedPage(key: string): SavedQuizPage | null {
+  try {
+    const raw = sessionStorage.getItem(key);
+    return raw ? JSON.parse(raw) as SavedQuizPage : null;
+  } catch {
+    return null;
+  }
+}
 
 export default function QuizPage() {
   const { moduleId } = useParams();
   const m = getModule(moduleId);
+  const { user } = useAuth();
   const [params] = useSearchParams();
   const { state, finishQuiz } = useStore();
+  const pageSessionKey = `akademia:quiz:${user?.id ?? 'guest'}:${moduleId ?? 'unknown'}`;
+  const [savedPage] = useState(() => readSavedPage(pageSessionKey));
   const [pool, setPool] = useState<Question[] | null>(null);
-  const [phase, setPhase] = useState<Phase>({ t: 'setup' });
+  const [phase, setPhase] = useState<Phase>(savedPage?.phase ?? { t: 'setup' });
   const [chapters, setChapters] = useState<string[]>(() => (params.get('chap') ? [params.get('chap')!] : []));
   const [difficulty, setDifficulty] = useState<0 | 1 | 2 | 3>(0);
   const [count, setCount] = useState(10);
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(savedPage?.key ?? 0);
+
+  useEffect(() => {
+    if (phase.t === 'setup') {
+      sessionStorage.removeItem(pageSessionKey);
+      return;
+    }
+    try { sessionStorage.setItem(pageSessionKey, JSON.stringify({ phase, key } satisfies SavedQuizPage)); } catch { /* sessionStorage can be disabled or full */ }
+  }, [pageSessionKey, phase, key]);
 
   useEffect(() => {
     if (m) loadQuiz(m.id).then(setPool);
@@ -65,6 +87,7 @@ export default function QuizPage() {
       <QuizSession
         key={key}
         questions={p.qs}
+        storageKey={`${pageSessionKey}:attempt:${key}`}
         chapterTitle={(id) => m.chapters.find((c) => c.id === id)?.title ?? ''}
         onFinish={async (r: QuizResult) => {
           try {

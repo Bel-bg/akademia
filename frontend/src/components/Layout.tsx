@@ -104,7 +104,7 @@ function XpChip() {
 
 export default function Layout() {
   const { user, signOut, cloud } = useAuth();
-  const { syncError } = useStore();
+  const { syncError, online, pendingSync } = useStore();
   const loc = useLocation();
   const inReader = loc.pathname.includes('/lire/');
 
@@ -166,6 +166,8 @@ export default function Layout() {
       </header>
 
       <main className={cn('mx-auto px-4 py-6 pb-28 lg:pb-10', inReader ? 'max-w-6xl' : 'max-w-6xl')}>
+        {!online && <p role="status" className="mb-4 rounded-lg border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-accent">Hors connexion : les cours disponibles restent lisibles et ta progression sera synchronisée au retour du réseau.</p>}
+        {online && pendingSync > 0 && <p role="status" className="mb-4 rounded-lg border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-accent">Synchronisation en attente : {pendingSync} action{pendingSync > 1 ? 's' : ''} à envoyer.</p>}
         {syncError && <p role="alert" className="mb-4 rounded-lg border border-bad/30 bg-bad/10 px-4 py-3 text-sm text-bad">Synchronisation : {syncError}</p>}
         <Outlet />
       </main>

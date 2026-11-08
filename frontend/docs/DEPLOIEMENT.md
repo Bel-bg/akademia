@@ -9,7 +9,7 @@ npm run dev
 
 ## 2. Créer le projet Supabase (comptes + classement + synchronisation)
 1. Crée un compte sur https://supabase.com puis **New project** (choisis une région proche, ex. Europe ; note le mot de passe de la base).
-2. Menu **SQL Editor → New query**, colle le contenu de `frontend/supabase/schema.sql`, clique **Run**. (Tables de profils, progression et messages, règles RLS, création automatique du profil.)
+2. Menu **SQL Editor → New query**, colle le contenu de `frontend/supabase/schema.sql`, clique **Run**. (Profils, progression, messages, reçus d’actions idempotentes, abonnements push, règles RLS et activation Realtime.)
 3. Menu **Project Settings → API** : copie **Project URL** et la clé **anon / publishable**.
 4. Crée `.env` à la racine et remplis :
    ```
@@ -40,6 +40,8 @@ Les comptes, la progression, le classement et les notifications passent par Expr
 4. Après le déploiement, connecte-toi au site en HTTPS et clique sur l’icône de cloche pour autoriser les notifications dans le navigateur. Les push sont envoyés pour les nouveaux messages et les joueurs dépassés au classement.
 
 La clé `service_role` contourne RLS : elle doit rester uniquement dans les variables du backend Render. Le backend ne l’expose dans aucune réponse API.
+
+Le service worker conserve le shell de l’application, les cours et les banques de QCM déjà préchargés; les actions de progression hors ligne sont gardées dans le stockage local du navigateur jusqu’au rejeu authentifié.
 
 ### Option B — Netlify
 Même principe : **Add new site → Import from Git**, build `npm run build`, dossier `frontend/dist`, mêmes variables. `frontend/public/_redirects` gère les routes.

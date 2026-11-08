@@ -150,13 +150,20 @@ app.get('/api/progress', requireUser, async (req, res, next) => {
 
 app.post('/api/progress/actions', requireUser, async (req, res, next) => {
   try {
+    const actionId = req.body?.actionId;
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(actionId || '')) {
+      return res.status(400).json({ error: 'Identifiant d’action invalide.' });
+    }
+    const previousResult = await progressService.getActionReceipt(req.auth.accessToken, req.auth.user.id, actionId);
+    if (previousResult) return res.json(previousResult);
     let leaderboardBefore = null;
     if (pushService.isConfigured()) {
       try { leaderboardBefore = await progressService.getLeaderboard(req.auth.accessToken, 1000); } catch { /* les notifications ne bloquent pas la progression */ }
     }
     const current = await progressService.loadProgress(req.auth.accessToken, req.auth.user.id);
-    const result = progressionService.applyAction(current || progressionService.defaultState(), req.body, contentService);
+    const result = progressionService.applyAction(current || progressionService.defaultState(), req.body.action, contentService);
     await progressService.saveProgress(req.auth.accessToken, req.auth.user.id, result.state);
+    await progressService.saveActionReceipt(req.auth.accessToken, req.auth.user.id, actionId, result);
     res.json(result);
     if (leaderboardBefore) {
       void (async () => {

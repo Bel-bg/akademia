@@ -129,3 +129,20 @@ create index if not exists push_subscriptions_user_idx on public.push_subscripti
 alter table public.push_subscriptions enable row level security;
 revoke all on public.push_subscriptions from anon, authenticated;
 grant all on public.push_subscriptions to service_role;
+
+-- 7) Reçus d’actions pour rendre la synchronisation hors ligne idempotente
+create table if not exists public.progress_action_receipts (
+  user_id     uuid not null references auth.users(id) on delete cascade,
+  action_id   uuid not null,
+  result      jsonb not null,
+  created_at  timestamptz not null default now(),
+  primary key (user_id, action_id)
+);
+alter table public.progress_action_receipts enable row level security;
+drop policy if exists "progress_receipts_own" on public.progress_action_receipts;
+create policy "progress_receipts_own" on public.progress_action_receipts
+  for all to authenticated
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+revoke all on public.progress_action_receipts from anon, authenticated;
+grant select, insert on public.progress_action_receipts to authenticated;

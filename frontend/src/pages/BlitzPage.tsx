@@ -8,19 +8,43 @@ import { SQ, toSession } from '@/lib/quiz';
 import type { Summary } from '@/lib/types';
 import { shuffle } from '@/lib/utils';
 import { useStore } from '@/state/Store';
+import { useAuth } from '@/state/AuthContext';
+
+interface SavedBlitzPage {
+  qs: SQ[] | null;
+  phase: 'intro' | 'play' | 'done';
+  sum: Summary | null;
+  game: number;
+}
+
+function readSavedBlitz(key: string): SavedBlitzPage | null {
+  try {
+    const raw = sessionStorage.getItem(key);
+    return raw ? JSON.parse(raw) as SavedBlitzPage : null;
+  } catch {
+    return null;
+  }
+}
 
 export default function BlitzPage() {
   const { moduleId } = useParams();
   const m = getModule(moduleId);
+  const { user } = useAuth();
   const { state, finishQuiz } = useStore();
-  const [qs, setQs] = useState<SQ[] | null>(null);
-  const [phase, setPhase] = useState<'intro' | 'play' | 'done'>('intro');
-  const [sum, setSum] = useState<Summary | null>(null);
-  const [game, setGame] = useState(0);
+  const pageSessionKey = `akademia:blitz:${user?.id ?? 'guest'}:${moduleId ?? 'unknown'}`;
+  const [savedPage] = useState(() => readSavedBlitz(pageSessionKey));
+  const [qs, setQs] = useState<SQ[] | null>(savedPage?.qs ?? null);
+  const [phase, setPhase] = useState<'intro' | 'play' | 'done'>(savedPage?.phase ?? 'intro');
+  const [sum, setSum] = useState<Summary | null>(savedPage?.sum ?? null);
+  const [game, setGame] = useState(savedPage?.game ?? 0);
 
   useEffect(() => {
-    if (m) loadQuiz(m.id).then((p) => setQs(shuffle(p).map(toSession)));
-  }, [m, game]);
+    if (m && !qs) loadQuiz(m.id).then((p) => setQs(shuffle(p).map(toSession)));
+  }, [m, game, qs]);
+
+  useEffect(() => {
+    try { sessionStorage.setItem(pageSessionKey, JSON.stringify({ qs, phase, sum, game } satisfies SavedBlitzPage)); } catch { /* sessionStorage can be disabled or full */ }
+  }, [pageSessionKey, qs, phase, sum, game]);
 
   if (!m) return <Navigate to="/modules" replace />;
   if (!qs) return <Spinner />;
@@ -30,6 +54,7 @@ export default function BlitzPage() {
       <QuizSession
         key={game}
         questions={qs}
+        storageKey={`${pageSessionKey}:attempt:${game}`}
         lives={3}
         timeLimit={90}
         chapterTitle={(id) => m.chapters.find((c) => c.id === id)?.title ?? ''}

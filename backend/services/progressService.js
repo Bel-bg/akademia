@@ -94,6 +94,20 @@ async function insertMessage(accessToken, senderId, recipientId, body) {
   return rows?.[0] ?? null;
 }
 
+async function getActionReceipt(accessToken, userId, actionId) {
+  const query = new URLSearchParams({ select: 'result', user_id: `eq.${userId}`, action_id: `eq.${actionId}`, limit: '1' });
+  const rows = await supabaseRequest(`/rest/v1/progress_action_receipts?${query}`, accessToken);
+  return rows?.[0]?.result ?? null;
+}
+
+async function saveActionReceipt(accessToken, userId, actionId, result) {
+  await supabaseRequest('/rest/v1/progress_action_receipts', accessToken, {
+    method: 'POST',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({ user_id: userId, action_id: actionId, result }),
+  });
+}
+
 function overtakenPlayerIds(before, after, userId) {
   const oldRank = before.findIndex((player) => player.id === userId);
   const newRank = after.findIndex((player) => player.id === userId);
@@ -101,4 +115,4 @@ function overtakenPlayerIds(before, after, userId) {
   return before.slice(newRank, oldRank).map((player) => player.id);
 }
 
-module.exports = { getLeaderboard, getProfile, insertMessage, isConfigured, loadProgress, overtakenPlayerIds, readResponse, saveProgress, verifyAccessToken };
+module.exports = { getActionReceipt, getLeaderboard, getProfile, insertMessage, isConfigured, loadProgress, overtakenPlayerIds, readResponse, saveActionReceipt, saveProgress, verifyAccessToken };

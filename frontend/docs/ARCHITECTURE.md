@@ -15,6 +15,8 @@ frontend/supabase/schema.sql profils, progression privée, messagerie et règles
 - **Contenu = données** : ajouter un module n'exige aucun code.
 - **Invité** : progression locale dans `localStorage`.
 - **Compte** : actions envoyées à Express avec le jeton Supabase; l’API vérifie la session, recalcule les récompenses et écrit sous RLS.
+- **Hors ligne** : le service worker met en cache l’application, les cours et les QCM; la progression des comptes reste visible localement puis est rejouée dans l’ordre au retour du réseau.
+- **Idempotence** : chaque action en attente possède un UUID; `progress_action_receipts` évite de créditer deux fois une action dont la réponse réseau a été perdue.
 - **Profils et messages** : seuls les champs de profil publics sont affichés; les messages sont limités à leurs deux participants par RLS et diffusés par Supabase Realtime.
 - **Web Push** : un service worker affiche les notifications. Le backend utilise VAPID et une clé `service_role` conservée côté serveur pour gérer les abonnements; l’envoi de messages est authentifié via Express.
 - **Contenu statique** : modules et cours lus par le backend depuis `frontend/content/modules`.
