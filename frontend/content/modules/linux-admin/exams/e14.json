@@ -1,0 +1,84 @@
+{
+ "n": 14,
+ "title": "Épreuve n° 14 · Disques, systèmes de fichiers et fstab",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : ajouter un disque",
+   "points": 12,
+   "intro": "Un disque vide `/dev/sdb` est branché.",
+   "questions": [
+    {
+     "id": "e14p1q1",
+     "q": "Comment le repérer sans risque ?",
+     "points": 1.5,
+     "a": "```bash\nlsblk\nsudo fdisk -l /dev/sdb\n```\n- Vérifier la **taille** pour ne pas confondre avec le disque système."
+    },
+    {
+     "id": "e14p1q2",
+     "q": "Créez une partition unique de tout le disque.",
+     "points": 2.5,
+     "a": "```bash\nsudo fdisk /dev/sdb\n# g (table GPT), n, Entrée, Entrée, Entrée, w\n```\n- Résultat : `/dev/sdb1`. Alternative non interactive : `parted`."
+    },
+    {
+     "id": "e14p1q3",
+     "q": "Formatez-la en ext4 et montez-la sur `/data`.",
+     "points": 2,
+     "a": "```bash\nsudo mkfs.ext4 /dev/sdb1\nsudo mkdir /data\nsudo mount /dev/sdb1 /data\ndf -h /data\n```"
+    },
+    {
+     "id": "e14p1q4",
+     "q": "Rendez le montage permanent.",
+     "points": 3,
+     "a": "```bash\nsudo blkid /dev/sdb1\n```\n```text\nUUID=1234-abcd  /data  ext4  defaults,noatime  0  2\n```\n- Ligne ajoutée à `/etc/fstab`, 6 champs : périphérique, point de montage, type, options, dump, ordre de `fsck`.\n- L'UUID reste stable si l'ordre des disques change."
+    },
+    {
+     "id": "e14p1q5",
+     "q": "Comment tester `fstab` sans redémarrer ? Pourquoi est-ce indispensable ?",
+     "points": 1.5,
+     "a": "```bash\nsudo umount /data\nsudo mount -a\n```\n- Une ligne erronée peut bloquer le démarrage en mode urgence."
+    },
+    {
+     "id": "e14p1q6",
+     "q": "Ajoutez une option pour ne pas bloquer le boot si le disque est absent.",
+     "points": 1.5,
+     "a": "- `nofail` : `UUID=…  /data  ext4  defaults,nofail  0  2`."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : diagnostic et loop",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e14p2q1",
+     "q": "`df -h` indique 40 % mais « No space left on device » : quelle cause et quelle commande ?",
+     "points": 2,
+     "a": "```bash\ndf -i\n```\n- Les inodes sont épuisés (millions de petits fichiers)."
+    },
+    {
+     "id": "e14p2q2",
+     "q": "Créez un « disque » de 500 Mo dans un fichier, formatez-le et montez-le.",
+     "points": 3,
+     "a": "```bash\nfallocate -l 500M disque.img\nmkfs.ext4 disque.img\nsudo mkdir /mnt/test\nsudo mount -o loop disque.img /mnt/test\n```\n- Démontage : `sudo umount /mnt/test`."
+    },
+    {
+     "id": "e14p2q3",
+     "q": "`umount` répond « target is busy » : que faire ?",
+     "points": 1.5,
+     "a": "```bash\nsudo fuser -vm /data\nsudo lsof +f -- /data\n```\n- Fermer les processus (ou se sortir du dossier avec `cd ~`) puis `umount`."
+    },
+    {
+     "id": "e14p2q4",
+     "q": "Peut-on lancer `fsck` sur un système monté ?",
+     "points": 1.5,
+     "a": "- Non : risque de corruption. Démonter d'abord (ou vérifier au démarrage)."
+    }
+   ]
+  }
+ ]
+}

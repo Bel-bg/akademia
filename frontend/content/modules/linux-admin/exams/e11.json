@@ -1,0 +1,92 @@
+{
+ "n": 11,
+ "title": "Épreuve n° 11 · systemd, services et journaux",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : gérer les services",
+   "points": 9,
+   "intro": "Écrivez les commandes.",
+   "questions": [
+    {
+     "id": "e11p1q1",
+     "q": "Quelle différence entre `start`, `enable`, `disable` et `mask` ?",
+     "points": 2.5,
+     "a": "- `start` lance maintenant ; `stop` arrête.\n- `enable` active au démarrage (lien dans la target) ; `disable` retire ce lien.\n- `mask` lie l'unité à `/dev/null` : impossible de la démarrer, même à la main ; `unmask` l'annule."
+    },
+    {
+     "id": "e11p1q2",
+     "q": "Listez les services en échec, puis affichez l'état détaillé de `ssh`.",
+     "points": 2,
+     "a": "```bash\nsystemctl --failed\nsystemctl status ssh\n```\n- Aussi `systemctl list-units --state=failed`."
+    },
+    {
+     "id": "e11p1q3",
+     "q": "Activez `nginx` au démarrage ET lancez-le immédiatement en une commande.",
+     "points": 1.5,
+     "a": "```bash\nsudo systemctl enable --now nginx\n```\n- `systemctl is-enabled nginx` et `is-active nginx` vérifient."
+    },
+    {
+     "id": "e11p1q4",
+     "q": "Quelle est la target par défaut d'un serveur sans interface graphique ? Comment la changer ?",
+     "points": 1.5,
+     "a": "```bash\nsystemctl get-default\nsudo systemctl set-default multi-user.target\n```\n- `multi-user.target` ≈ ancien runlevel 3 ; `graphical.target` ≈ runlevel 5."
+    },
+    {
+     "id": "e11p1q5",
+     "q": "Un fichier `.service` a été modifié : que faut-il lancer avant de redémarrer le service ?",
+     "points": 1.5,
+     "a": "```bash\nsudo systemctl daemon-reload\nsudo systemctl restart monservice\n```\n- `daemon-reload` fait relire les unités à systemd."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : créer un service",
+   "points": 7,
+   "intro": "Un script `/opt/monapp/run.sh` doit tourner en permanence sous l'utilisateur `monapp`.",
+   "questions": [
+    {
+     "id": "e11p2q1",
+     "q": "Écrivez l'unité `/etc/systemd/system/monapp.service` : redémarrage automatique en cas d'échec, lancement après le réseau.",
+     "points": 4,
+     "a": "```ini\n[Unit]\nDescription=Mon application\nAfter=network.target\n\n[Service]\nUser=monapp\nExecStart=/opt/monapp/run.sh\nRestart=on-failure\nRestartSec=5\n\n[Install]\nWantedBy=multi-user.target\n```\n- `[Install] WantedBy` permet à `enable` de rattacher le service à la target.\n- Le script doit être exécutable (`chmod +x`)."
+    },
+    {
+     "id": "e11p2q2",
+     "q": "Activez et démarrez le service, puis lisez ses 20 dernières lignes de journal.",
+     "points": 1.5,
+     "a": "```bash\nsudo systemctl daemon-reload\nsudo systemctl enable --now monapp\njournalctl -u monapp -n 20\n```"
+    },
+    {
+     "id": "e11p2q3",
+     "q": "Comment ajouter une variable d'environnement sans modifier le fichier d'origine ?",
+     "points": 1.5,
+     "a": "```bash\nsudo systemctl edit monapp\n```\n```ini\n[Service]\nEnvironment=MODE=prod\n```\n- Le « drop-in » est créé dans `/etc/systemd/system/monapp.service.d/override.conf`."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Partie 3 : journaux",
+   "points": 4,
+   "intro": "Utilisez `journalctl`.",
+   "questions": [
+    {
+     "id": "e11p3q1",
+     "q": "Messages d'erreur du démarrage courant, puis du démarrage précédent.",
+     "points": 2,
+     "a": "```bash\njournalctl -b -p err\njournalctl -b -1 -p err\n```"
+    },
+    {
+     "id": "e11p3q2",
+     "q": "Journaux de `ssh` depuis hier, en continu.",
+     "points": 2,
+     "a": "```bash\njournalctl -u ssh --since yesterday\njournalctl -u ssh -f\n```\n- `--since \"2026-01-06 08:00\"` accepte une date précise."
+    }
+   ]
+  }
+ ]
+}

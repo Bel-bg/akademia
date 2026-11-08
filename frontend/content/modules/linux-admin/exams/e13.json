@@ -1,0 +1,84 @@
+{
+ "n": 13,
+ "title": "Épreuve n° 13 · Gestion des paquets",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : Debian/Ubuntu",
+   "points": 10,
+   "intro": "Écrivez les commandes.",
+   "questions": [
+    {
+     "id": "e13p1q1",
+     "q": "Mettez à jour l'index des paquets puis installez toutes les mises à jour.",
+     "points": 1.5,
+     "a": "```bash\nsudo apt update\nsudo apt upgrade\n```\n- `update` actualise l'index ; `upgrade` installe."
+    },
+    {
+     "id": "e13p1q2",
+     "q": "Installez `nginx`, puis supprimez-le avec sa configuration.",
+     "points": 2,
+     "a": "```bash\nsudo apt install nginx\nsudo apt purge nginx\nsudo apt autoremove\n```\n- `remove` conserve les fichiers de configuration, `purge` les supprime."
+    },
+    {
+     "id": "e13p1q3",
+     "q": "À quel paquet appartient `/usr/bin/ssh` ? Quels fichiers fournit le paquet `openssh-client` ?",
+     "points": 2,
+     "a": "```bash\ndpkg -S /usr/bin/ssh\ndpkg -L openssh-client\n```"
+    },
+    {
+     "id": "e13p1q4",
+     "q": "Empêchez la mise à jour de `nginx`, puis levez le blocage.",
+     "points": 1.5,
+     "a": "```bash\nsudo apt-mark hold nginx\nsudo apt-mark unhold nginx\n```"
+    },
+    {
+     "id": "e13p1q5",
+     "q": "Installez un fichier `.deb` téléchargé et réparez les dépendances manquantes.",
+     "points": 1.5,
+     "a": "```bash\nsudo dpkg -i paquet.deb\nsudo apt -f install\n```\n- Ou directement `sudo apt install ./paquet.deb`."
+    },
+    {
+     "id": "e13p1q6",
+     "q": "Pourquoi `apt-key` est-il obsolète ? Comment déclarer proprement un dépôt tiers ?",
+     "points": 1.5,
+     "a": "- `apt-key` faisait confiance à la clé pour **tous** les dépôts. On place la clé dans `/etc/apt/keyrings/` et le dépôt (`/etc/apt/sources.list.d/x.list`) la référence avec `signed-by=`."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : Red Hat et compilation",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e13p2q1",
+     "q": "Donnez l'équivalent `dnf` de `apt update && apt upgrade`, `apt install`, `apt search`, `dpkg -S`.",
+     "points": 3,
+     "a": "```bash\nsudo dnf upgrade\nsudo dnf install nginx\ndnf search nginx\nrpm -qf /usr/bin/ssh\n```\n- `dnf provides /usr/bin/ssh` fait le travail de `dpkg -S`."
+    },
+    {
+     "id": "e13p2q2",
+     "q": "Listez les paquets installés contenant « ssh », puis les fichiers de l'un d'eux.",
+     "points": 2,
+     "a": "```bash\nrpm -qa | grep ssh\nrpm -ql openssh-clients\n```"
+    },
+    {
+     "id": "e13p2q3",
+     "q": "Quelles sont les étapes pour compiler et installer un programme depuis ses sources dans `/usr/local` ?",
+     "points": 3,
+     "a": "```bash\ntar -xzf prog-1.0.tar.gz && cd prog-1.0\n./configure --prefix=/usr/local\nmake\nsudo make install\n```\n- Prérequis : `build-essential` (Debian) ou `gcc make` (Red Hat). `/usr/local` évite d'interférer avec les paquets du système."
+    },
+    {
+     "id": "e13p2q4",
+     "q": "Comment vérifier l'intégrité des fichiers d'un paquet installé ?",
+     "points": 2,
+     "a": "```bash\nrpm -V openssh-server\nsudo debsums openssh-server\n```\n- Une différence signale un fichier modifié (corruption ou compromission)."
+    }
+   ]
+  }
+ ]
+}

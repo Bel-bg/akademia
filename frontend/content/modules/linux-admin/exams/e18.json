@@ -1,0 +1,72 @@
+{
+ "n": 18,
+ "title": "Épreuve n° 18 · Scripting Bash avancé",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : notions",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e18p1q1",
+     "q": "Que contiennent `$0`, `$1`, `$#`, `$@`, `$?`, `$$` ?",
+     "points": 2.5,
+     "a": "- `$0` nom du script ; `$1` 1er argument ; `$#` nombre d'arguments ; `$@` tous les arguments ; `$?` code de retour de la dernière commande ; `$$` PID du shell."
+    },
+    {
+     "id": "e18p1q2",
+     "q": "Quel intérêt de `set -euo pipefail` ? Quel piège possible ?",
+     "points": 2.5,
+     "a": "- `-e` arrêt à la première erreur ; `-u` erreur si variable non définie ; `pipefail` échec d'un pipeline si une étape échoue.\n- Piège : `grep` sans résultat renvoie 1 et arrête le script ; utiliser `|| true` si c'est normal."
+    },
+    {
+     "id": "e18p1q3",
+     "q": "Différence entre `\"$@\"` et `\"$*\"` ?",
+     "points": 2.5,
+     "a": "- `\"$@\"` conserve chaque argument séparé (même avec espaces) ; `\"$*\"` les fusionne en une seule chaîne. Préférez `\"$@\"`."
+    },
+    {
+     "id": "e18p1q4",
+     "q": "Pourquoi mettre les variables entre guillemets ?",
+     "points": 2.5,
+     "a": "- Sans guillemets, la valeur est découpée sur les espaces et les jokers sont développés : `rm $f` avec `f=\"a b\"` supprime deux fichiers. Écrire `rm \"$f\"`."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : écrire des scripts",
+   "points": 10,
+   "intro": "Testez mentalement chaque script.",
+   "questions": [
+    {
+     "id": "e18p2q1",
+     "q": "Script `verif.sh` : prend un fichier en argument, affiche « existe » ou « absent », code de retour 1 si argument manquant.",
+     "points": 3,
+     "a": "```bash\n#!/bin/bash\nif [ $# -ne 1 ]; then\n    echo \"Usage: $0 fichier\" >&2\n    exit 1\nfi\nif [ -e \"$1\" ]; then\n    echo \"existe\"\nelse\n    echo \"absent\"\nfi\n```"
+    },
+    {
+     "id": "e18p2q2",
+     "q": "Parcourez les fichiers `.log` du dossier courant et affichez leur nombre de lignes.",
+     "points": 2.5,
+     "a": "```bash\nfor f in *.log; do\n    [ -e \"$f\" ] || continue\n    echo \"$f : $(wc -l < \"$f\") lignes\"\ndone\n```\n- Le test `[ -e ]` gère le cas où aucun `.log` n'existe."
+    },
+    {
+     "id": "e18p2q3",
+     "q": "Lisez `/etc/passwd` ligne par ligne et affichez les logins dont l'UID ≥ 1000.",
+     "points": 2.5,
+     "a": "```bash\nwhile IFS=: read -r login _ uid _; do\n    [ \"$uid\" -ge 1000 ] && echo \"$login\"\ndone < /etc/passwd\n```"
+    },
+    {
+     "id": "e18p2q4",
+     "q": "Comment nettoyer un fichier temporaire même si le script est interrompu ?",
+     "points": 2,
+     "a": "```bash\ntmp=$(mktemp)\ntrap 'rm -f \"$tmp\"' EXIT\n```\n- `trap … EXIT` s'exécute à la sortie normale, sur erreur ou sur Ctrl+C."
+    }
+   ]
+  }
+ ]
+}

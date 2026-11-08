@@ -616,5 +616,155 @@
   "front": "Test de configuration",
   "back": "`nginx -t` ; `sshd -t` ; `visudo -c` ; `mount -a`.",
   "tag": "Dépannage"
+ },
+ {
+  "id": "lx-f104",
+  "front": "Redirection de port locale",
+  "back": "`ssh -L 15432:db:5432 user@bastion`",
+  "tag": "SSH/Pare-feu"
+ },
+ {
+  "id": "lx-f105",
+  "front": "Tester sshd_config",
+  "back": "`sudo sshd -t` puis `systemctl reload ssh`.",
+  "tag": "SSH/Pare-feu"
+ },
+ {
+  "id": "lx-f106",
+  "front": "firewalld : règle permanente",
+  "back": "`firewall-cmd --permanent --add-service=http` puis `--reload`.",
+  "tag": "SSH/Pare-feu"
+ },
+ {
+  "id": "lx-f107",
+  "front": "Limiter la force brute",
+  "back": "`fail2ban`, `ufw limit 22/tcp`, clés uniquement.",
+  "tag": "SSH/Pare-feu"
+ },
+ {
+  "id": "lx-f108",
+  "front": "Arguments séparés",
+  "back": "`\"$@\"` (et non `$*`).",
+  "tag": "Scripts"
+ },
+ {
+  "id": "lx-f109",
+  "front": "Lire un fichier ligne par ligne",
+  "back": "`while IFS=: read -r a b; do ... done < fichier`",
+  "tag": "Scripts"
+ },
+ {
+  "id": "lx-f110",
+  "front": "Nettoyage à la sortie",
+  "back": "`trap 'rm -f \"$tmp\"' EXIT`",
+  "tag": "Scripts"
+ },
+ {
+  "id": "lx-f111",
+  "front": "Fichier temporaire sûr",
+  "back": "`tmp=$(mktemp)`",
+  "tag": "Scripts"
+ },
+ {
+  "id": "lx-f112",
+  "front": "Lister une archive",
+  "back": "`tar -tzf a.tar.gz`",
+  "tag": "Sauvegarde"
+ },
+ {
+  "id": "lx-f113",
+  "front": "rsync miroir",
+  "back": "`rsync -av --delete src/ dest/` (tester avec `-n`).",
+  "tag": "Sauvegarde"
+ },
+ {
+  "id": "lx-f114",
+  "front": "Vérifier l'intégrité",
+  "back": "`sha256sum fichier` puis `sha256sum -c`.",
+  "tag": "Sauvegarde"
+ },
+ {
+  "id": "lx-f115",
+  "front": "Charge CPU et cœurs",
+  "back": "`uptime` et `nproc` : comparer load average au nombre de cœurs.",
+  "tag": "Dépannage"
+ },
+ {
+  "id": "lx-f116",
+  "front": "Mémoire réelle disponible",
+  "back": "Colonne `available` de `free -h`.",
+  "tag": "Dépannage"
+ },
+ {
+  "id": "lx-f117",
+  "front": "Service qui ne démarre pas",
+  "back": "`systemctl status` puis `journalctl -u svc -b -n 50`.",
+  "tag": "Dépannage"
+ },
+ {
+  "id": "lx-f118",
+  "front": "Mot de passe root perdu",
+  "back": "GRUB : `init=/bin/bash`, `mount -o remount,rw /`, `passwd`.",
+  "tag": "Dépannage"
+ },
+ {
+  "id": "lx-f119",
+  "front": "Après modification d'une unité",
+  "back": "`systemctl daemon-reload`",
+  "tag": "systemd"
+ },
+ {
+  "id": "lx-f120",
+  "front": "Rescue une seule fois",
+  "back": "GRUB `e` puis `systemd.unit=rescue.target`.",
+  "tag": "systemd"
+ },
+ {
+  "id": "lx-f121",
+  "front": "Compiler depuis les sources",
+  "back": "`./configure --prefix=/usr/local && make && sudo make install`",
+  "tag": "Paquets"
+ },
+ {
+  "id": "lx-f122",
+  "front": "Disque dans un fichier",
+  "back": "`fallocate -l 500M d.img; mkfs.ext4 d.img; mount -o loop d.img /mnt`",
+  "tag": "Disques"
+ },
+ {
+  "id": "lx-f123",
+  "front": "Option fstab non bloquante",
+  "back": "`nofail`",
+  "tag": "Disques"
+ },
+ {
+  "id": "lx-f124",
+  "front": "Remplacer un disque RAID",
+  "back": "`mdadm --fail`, `--remove`, `--add`.",
+  "tag": "LVM/RAID"
+ },
+ {
+  "id": "lx-f125",
+  "front": "Hôtes d'un /26",
+  "back": "62 ; masque 255.255.255.192.",
+  "tag": "Réseau"
+ },
+ {
+  "id": "lx-f126",
+  "front": "Jours ouvrés 23 h",
+  "back": "`0 23 * * 1-5 cmd`",
+  "tag": "Planification"
+ },
+ {
+  "id": "lx-f127",
+  "front": "IPv4 dans un fichier",
+  "back": "`grep -Eo '([0-9]{1,3}\\.){3}[0-9]{1,3}' f`",
+  "tag": "Texte"
+ },
+ {
+  "id": "lx-f128",
+  "front": "Moyenne d'une colonne",
+  "back": "`awk -F, 'NR>1{s+=$3;n++} END{print s/n}' f`",
+  "tag": "Texte"
  }
 ]

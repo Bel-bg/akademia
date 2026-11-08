@@ -1,0 +1,78 @@
+{
+ "n": 16,
+ "title": "Épreuve n° 16 · Réseau",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : commandes",
+   "points": 8,
+   "intro": "Répondez avec les commandes.",
+   "questions": [
+    {
+     "id": "e16p1q1",
+     "q": "Affichez les adresses IP, la table de routage et les ports TCP en écoute.",
+     "points": 2,
+     "a": "```bash\nip -br a\nip r\nsudo ss -tlnp\n```"
+    },
+    {
+     "id": "e16p1q2",
+     "q": "Ajoutez l'adresse `192.168.1.50/24` à `eth0` et une route par défaut via `192.168.1.1`.",
+     "points": 2,
+     "a": "```bash\nsudo ip addr add 192.168.1.50/24 dev eth0\nsudo ip route add default via 192.168.1.1\n```\n- Non persistant : utilisez netplan."
+    },
+    {
+     "id": "e16p1q3",
+     "q": "Écrivez la configuration netplan statique correspondante.",
+     "points": 3,
+     "a": "```yaml\nnetwork:\n  version: 2\n  ethernets:\n    eth0:\n      addresses: [192.168.1.50/24]\n      routes:\n        - to: default\n          via: 192.168.1.1\n      nameservers:\n        addresses: [8.8.8.8, 1.1.1.1]\n```\n- Fichier dans `/etc/netplan/`. Test : `sudo netplan try` ; application : `sudo netplan apply`."
+    },
+    {
+     "id": "e16p1q4",
+     "q": "Quel fichier associe un nom à une IP localement ? Lequel fixe le serveur DNS ?",
+     "points": 1,
+     "a": "- `/etc/hosts` ; `/etc/resolv.conf` (géré par `systemd-resolved` : `resolvectl status`)."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : diagnostic et calculs",
+   "points": 12,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e16p2q1",
+     "q": "Donnez la méthode de diagnostic « couche par couche » avec une commande pour chaque étape.",
+     "points": 3,
+     "a": "- Lien : `ip -br a` (interface UP ?). IP/masque : `ip a`.\n- Passerelle : `ip r` puis `ping 192.168.1.1`.\n- Internet par IP : `ping 8.8.8.8`.\n- DNS : `dig google.com` ou `ping google.com`.\n- Service : `nc -zv hôte 443`, `curl -v`."
+    },
+    {
+     "id": "e16p2q2",
+     "q": "`ping 8.8.8.8` fonctionne mais pas `ping google.com` : quelle panne ?",
+     "points": 1.5,
+     "a": "- La résolution DNS (serveur DNS absent ou faux dans `/etc/resolv.conf`)."
+    },
+    {
+     "id": "e16p2q3",
+     "q": "Pour `192.168.10.0/26` : masque, nombre d'hôtes, première et dernière adresse utilisable, diffusion.",
+     "points": 4,
+     "a": "- Masque : 255.255.255.192 ; 2^6 − 2 = 62 hôtes.\n- Première : 192.168.10.1 ; dernière : 192.168.10.62 ; diffusion : 192.168.10.63."
+    },
+    {
+     "id": "e16p2q4",
+     "q": "Comment activer le routage IP sur un serveur Linux ?",
+     "points": 1.5,
+     "a": "```bash\nsudo sysctl -w net.ipv4.ip_forward=1\n```\n- Permanent : `net.ipv4.ip_forward=1` dans `/etc/sysctl.d/99-routage.conf`."
+    },
+    {
+     "id": "e16p2q5",
+     "q": "Quels services écoutent sur les ports 22, 53, 80, 443, 3306 ?",
+     "points": 2,
+     "a": "- 22 SSH ; 53 DNS ; 80 HTTP ; 443 HTTPS ; 3306 MySQL/MariaDB."
+    }
+   ]
+  }
+ ]
+}

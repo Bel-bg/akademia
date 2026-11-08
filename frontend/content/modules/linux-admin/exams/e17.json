@@ -1,0 +1,72 @@
+{
+ "n": 17,
+ "title": "Épreuve n° 17 · SSH et pare-feu",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : SSH",
+   "points": 10,
+   "intro": "Écrivez les commandes ou directives.",
+   "questions": [
+    {
+     "id": "e17p1q1",
+     "q": "Créez une clé ed25519 et installez-la sur `alice@srv`.",
+     "points": 2,
+     "a": "```bash\nssh-keygen -t ed25519\nssh-copy-id alice@srv\n```\n- La clé publique est ajoutée à `~/.ssh/authorized_keys` du serveur."
+    },
+    {
+     "id": "e17p1q2",
+     "q": "Quels droits sur `~/.ssh` et `authorized_keys` ? Que se passe-t-il sinon ?",
+     "points": 2.5,
+     "a": "- `chmod 700 ~/.ssh` et `chmod 600 ~/.ssh/authorized_keys`.\n- Des droits trop larges font ignorer la clé par `sshd` : retour au mot de passe."
+    },
+    {
+     "id": "e17p1q3",
+     "q": "Quelles directives de `/etc/ssh/sshd_config` durcissent le service ?",
+     "points": 2.5,
+     "a": "```text\nPermitRootLogin no\nPasswordAuthentication no\nPubkeyAuthentication yes\nAllowUsers alice bob\n```\n- Vérifier avec `sudo sshd -t`, recharger avec `sudo systemctl reload ssh`."
+    },
+    {
+     "id": "e17p1q4",
+     "q": "Pourquoi garder une seconde session ouverte pendant ces modifications ?",
+     "points": 3,
+     "a": "- Une erreur de configuration peut vous verrouiller dehors. La session déjà ouverte survit au rechargement et permet de corriger.\n- Toujours tester `sshd -t` avant `reload`, et ouvrir une 2e connexion de test avant de fermer la première."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : tunnels et pare-feu",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e17p2q1",
+     "q": "Rendez la base distante `db:5432` accessible sur `localhost:15432` via le bastion `bast`.",
+     "points": 3,
+     "a": "```bash\nssh -L 15432:db:5432 alice@bast\n```\n- `-L` : redirection locale ; `-R` : distante ; `-D 1080` : proxy SOCKS."
+    },
+    {
+     "id": "e17p2q2",
+     "q": "Configurez `ufw` : tout refuser en entrée, autoriser SSH et HTTPS, puis activer.",
+     "points": 3,
+     "a": "```bash\nsudo ufw default deny incoming\nsudo ufw default allow outgoing\nsudo ufw allow 22/tcp\nsudo ufw allow 443/tcp\nsudo ufw enable\nsudo ufw status verbose\n```\n- Autoriser SSH **avant** `enable`."
+    },
+    {
+     "id": "e17p2q3",
+     "q": "Équivalent `firewalld` pour ouvrir le service http de façon permanente.",
+     "points": 2,
+     "a": "```bash\nsudo firewall-cmd --permanent --add-service=http\nsudo firewall-cmd --reload\nsudo firewall-cmd --list-all\n```"
+    },
+    {
+     "id": "e17p2q4",
+     "q": "Comment limiter les tentatives de force brute sur SSH ?",
+     "points": 2,
+     "a": "- `fail2ban` (bannit les IP après N échecs), `ufw limit 22/tcp`, authentification par clé uniquement, changement de port (complément, pas protection)."
+    }
+   ]
+  }
+ ]
+}

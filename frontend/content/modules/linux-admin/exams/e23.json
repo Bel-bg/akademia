@@ -1,0 +1,86 @@
+{
+ "n": 23,
+ "title": "Épreuve n° 23 · Examen blanc A",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : utilisateurs et droits",
+   "points": 7,
+   "intro": "Sous Ubuntu, en tant qu'administrateur.",
+   "questions": [
+    {
+     "id": "e23p1q1",
+     "q": "Créez le groupe `dev` et les utilisateurs `paul` et `lea` (home, shell bash, groupe secondaire `dev`).",
+     "points": 2.5,
+     "a": "```bash\nsudo groupadd dev\nsudo useradd -m -s /bin/bash -G dev paul\nsudo useradd -m -s /bin/bash -G dev lea\n```"
+    },
+    {
+     "id": "e23p1q2",
+     "q": "Définissez leurs mots de passe en une ligne et forcez un changement à la première connexion.",
+     "points": 2,
+     "a": "```bash\necho 'paul:Azerty1!' | sudo chpasswd\necho 'lea:Azerty1!' | sudo chpasswd\nsudo chage -d 0 paul\nsudo chage -d 0 lea\n```"
+    },
+    {
+     "id": "e23p1q3",
+     "q": "Créez `/srv/projet` : groupe `dev`, accès complet pour le groupe, aucun accès aux autres, fichiers hérités du groupe.",
+     "points": 2.5,
+     "a": "```bash\nsudo mkdir /srv/projet\nsudo chown root:dev /srv/projet\nsudo chmod 2770 /srv/projet\n```\n- `2` = SGID : les nouveaux fichiers héritent du groupe `dev`."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : script et recherche",
+   "points": 7,
+   "intro": "Dans votre répertoire personnel.",
+   "questions": [
+    {
+     "id": "e23p2q1",
+     "q": "Écrivez un script qui affiche les 5 premiers mots d'un tableau, un par ligne, précédés de leur numéro.",
+     "points": 3,
+     "a": "```bash\n#!/bin/bash\nmots=(un deux trois quatre cinq)\nfor i in \"${!mots[@]}\"; do\n    echo \"$((i+1)) : ${mots[$i]}\"\ndone\n```"
+    },
+    {
+     "id": "e23p2q2",
+     "q": "Trouvez les fichiers `.conf` modifiés depuis moins de 7 jours dans `/etc`.",
+     "points": 2,
+     "a": "```bash\nfind /etc -name '*.conf' -mtime -7\n```"
+    },
+    {
+     "id": "e23p2q3",
+     "q": "Comptez les lignes de `/etc/passwd` contenant `nologin`.",
+     "points": 2,
+     "a": "```bash\ngrep -c nologin /etc/passwd\n```"
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : système",
+   "points": 6,
+   "intro": "Répondez avec commandes et explications.",
+   "questions": [
+    {
+     "id": "e23p3q1",
+     "q": "Lancez `sleep 600` en arrière-plan, retrouvez son PID, puis arrêtez-le proprement.",
+     "points": 2,
+     "a": "```bash\nsleep 600 &\npgrep sleep\nkill <PID>\n```\n- `kill` envoie TERM (15) ; `kill -9` seulement en dernier recours."
+    },
+    {
+     "id": "e23p3q2",
+     "q": "Quelles sont les 6 colonnes de `/etc/fstab` ?",
+     "points": 2,
+     "a": "- Périphérique (UUID), point de montage, type, options, dump, ordre `fsck`."
+    },
+    {
+     "id": "e23p3q3",
+     "q": "Quel port et quelle commande pour voir que SSH écoute ?",
+     "points": 2,
+     "a": "```bash\nsudo ss -tlnp | grep :22\n```\n- Port TCP 22."
+    }
+   ]
+  }
+ ]
+}

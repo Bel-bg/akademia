@@ -1,0 +1,72 @@
+{
+ "n": 20,
+ "title": "Épreuve n° 20 · Dépannage",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : serveur lent",
+   "points": 10,
+   "intro": "Un utilisateur signale que le serveur est très lent.",
+   "questions": [
+    {
+     "id": "e20p1q1",
+     "q": "Quelles commandes pour examiner CPU, mémoire, disque et réseau ?",
+     "points": 3,
+     "a": "```bash\nuptime; top\nfree -h\ndf -h; df -i\nss -s\n```\n- Méthode USE : Utilisation, Saturation, Erreurs pour chaque ressource."
+    },
+    {
+     "id": "e20p1q2",
+     "q": "Comment lister les 5 processus les plus gourmands en CPU ?",
+     "points": 2,
+     "a": "```bash\nps aux --sort=-%cpu | head -n 6\n```"
+    },
+    {
+     "id": "e20p1q3",
+     "q": "Comment interpréter les trois valeurs de `load average` sur une machine à 4 cœurs ?",
+     "points": 2.5,
+     "a": "- Charge moyenne sur 1, 5, 15 minutes. Valeur proche de 4 = cœurs saturés ; bien au-dessus = files d'attente.\n- Comparer toujours au nombre de cœurs (`nproc`)."
+    },
+    {
+     "id": "e20p1q4",
+     "q": "`free -h` affiche peu de « free » mais beaucoup de « available » : problème ?",
+     "points": 2.5,
+     "a": "- Non : Linux utilise la RAM libre comme cache disque. La colonne `available` indique la mémoire réellement disponible."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : pannes courantes",
+   "points": 10,
+   "intro": "Donnez le diagnostic et la correction.",
+   "questions": [
+    {
+     "id": "e20p2q1",
+     "q": "Un service ne démarre pas : quelle démarche ?",
+     "points": 3,
+     "a": "```bash\nsystemctl status monservice\njournalctl -u monservice -b -n 50\n```\n- Vérifier la configuration (`nginx -t`, `sshd -t`), les droits, le port déjà utilisé (`ss -tlnp`), l'espace disque."
+    },
+    {
+     "id": "e20p2q2",
+     "q": "`/etc/fstab` est erroné et la machine démarre en mode urgence : comment réparer ?",
+     "points": 2.5,
+     "a": "```bash\nmount -o remount,rw /\nnano /etc/fstab\nmount -a\nreboot\n```\n- Corriger ou commenter la ligne fautive, tester avec `mount -a`."
+    },
+    {
+     "id": "e20p2q3",
+     "q": "Vous avez supprimé un gros fichier mais `df` n'a rien libéré : pourquoi ?",
+     "points": 2.5,
+     "a": "```bash\nsudo lsof +L1\n```\n- Un processus garde le fichier ouvert. Redémarrer ce processus libère l'espace."
+    },
+    {
+     "id": "e20p2q4",
+     "q": "Vous avez oublié le mot de passe root : comment le réinitialiser ?",
+     "points": 2,
+     "a": "- Au démarrage, dans GRUB, ajouter `init=/bin/bash` à la ligne du noyau, puis `mount -o remount,rw /`, `passwd`, `exec /sbin/init`.\n- Montre l'importance de la sécurité physique."
+    }
+   ]
+  }
+ ]
+}
