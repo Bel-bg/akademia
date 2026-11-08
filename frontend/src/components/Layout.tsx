@@ -26,6 +26,7 @@ import { Mascot } from './Mascot';
 import { ConfettiBackdrop, FlameBadgeIcon } from './Decor';
 import { CustomAvatar } from './CustomAvatar';
 import { WeeklyBattleWinnerModal } from './WeeklyBattleWinnerModal';
+import InstallPwaModal from './InstallPwaModal';
 import { fetchBattle, WeeklyBattleInfo } from '@/data/repo';
 
 const MOBILE_NAV = [
@@ -348,6 +349,7 @@ export default function Layout() {
 
       <WeeklyBattleWinnerModal battle={battle} />
       <FilierePromptModal />
+      <InstallPwaModal />
       <Celebrations />
     </div>
   );
