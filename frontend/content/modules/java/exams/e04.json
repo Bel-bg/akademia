@@ -1,0 +1,47 @@
+{
+  "n": 4,
+  "title": "Épreuve n° 4 · Manipulation des Chaînes & Optimisation Mémoire",
+  "durationMinutes": 90,
+  "points": 20,
+  "parts": [
+    {
+      "id": "p1",
+      "title": "Exercice 1 : Problème Pratique & Conception de Code",
+      "points": 10,
+      "intro": "String Pool, StringBuilder, immutabilité et benchmarking d'allocations.",
+      "questions": [
+        {
+          "id": "e04p1q1",
+          "q": "Proposez une solution technique complète et documentée pour implémenter ce cas d'usage en respectant les principes de robustesse Java.",
+          "points": 5,
+          "a": "Implémentation rigoureuse avec validation des entrées, gestion des cas limites et encapsulation stricte des états."
+        },
+        {
+          "id": "e04p1q2",
+          "q": "Détaillez les choix d'architecture et justifiez le respect des principes SOLID et de la sûreté de typage.",
+          "points": 5,
+          "a": "Justification architecturale basée sur la modularité, le découplage par abstraction et la maintenabilité."
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "title": "Exercice 2 : Analyse Critique & Diagnostic Technique",
+      "points": 10,
+      "questions": [
+        {
+          "id": "e04p2q1",
+          "q": "Identifiez les pièges potentiels (concurrence, performance mémoire ou fuite de ressources) et donnez les contre-mesures adaptées.",
+          "points": 5,
+          "a": "Analyse des conditions de course, des surcoûts d'allocation et utilisation des mécanismes de libération (try-with-resources, release)."
+        },
+        {
+          "id": "e04p2q2",
+          "q": "Comparez deux approches d'implémentation alternatives et dégagez les critères de choix en environnement de production.",
+          "points": 5,
+          "a": "Tableau comparatif des compromis : complexité temporelle, consommation mémoire et facilité de testabilité unitaire."
+        }
+      ]
+    }
+  ]
+}

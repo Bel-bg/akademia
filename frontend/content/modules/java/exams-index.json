@@ -1,0 +1,82 @@
+[
+  {
+    "n": 1,
+    "title": "Épreuve Officielle · Gestion Bancaire & QCM Java SE",
+    "durationMinutes": 120,
+    "points": 20,
+    "partsCount": 3,
+    "questionsCount": 27
+  },
+  {
+    "n": 2,
+    "title": "Épreuve n° 2 · Conception Objet Avancée, Polymorphisme & Robustesse",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  },
+  {
+    "n": 3,
+    "title": "Épreuve n° 3 · Gestion Robuste des Exceptions & Transactions en Mémoire",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  },
+  {
+    "n": 4,
+    "title": "Épreuve n° 4 · Manipulation des Chaînes & Optimisation Mémoire",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  },
+  {
+    "n": 5,
+    "title": "Épreuve n° 5 · Framework Collections : List, Set, Map & Algorithmes",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  },
+  {
+    "n": 6,
+    "title": "Épreuve n° 6 · Design Patterns en Java : Singleton, Factory & Strategy",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  },
+  {
+    "n": 7,
+    "title": "Épreuve n° 7 · Programmation Fonctionnelle & API Stream",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  },
+  {
+    "n": 8,
+    "title": "Épreuve n° 8 · Programmation Concurrente & Multithreading Java",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  },
+  {
+    "n": 9,
+    "title": "Épreuve n° 9 · Synchronisation Avancée, Verrous & Sémaphores",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  },
+  {
+    "n": 10,
+    "title": "Épreuve n° 10 · Persistance Relationnelle : JDBC, Transactions ACID & JPA",
+    "durationMinutes": 90,
+    "points": 20,
+    "partsCount": 2,
+    "questionsCount": 4
+  }
+]

@@ -1,0 +1,193 @@
+{
+  "n": 1,
+  "title": "Épreuve Officielle · Gestion Bancaire & QCM Java SE",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "p1",
+      "title": "Partie I.1 : Conception et Implémentation POO",
+      "points": 6,
+      "intro": "On souhaite développer une application Java SE de gestion de comptes bancaires avec découverts et épargne.",
+      "questions": [
+        {
+          "id": "e01p1q1",
+          "q": "Écrivez le code de la classe abstraite CompteBancaire contenant numero (String) et solde (double), ainsi que deposer(), la méthode abstraite retirer(), afficherSolde() et la méthode protégée definirSolde().",
+          "points": 2,
+          "a": "public abstract class CompteBancaire {\n    private final String numero;\n    private double solde;\n\n    public CompteBancaire(String numero, double soldeInitial) {\n        if (numero == null || numero.isBlank())\n            throw new IllegalArgumentException(\"Numéro invalide.\");\n        if (!Double.isFinite(soldeInitial))\n            throw new IllegalArgumentException(\"Solde invalide.\");\n        this.numero = numero;\n        this.solde = soldeInitial;\n    }\n    public String getNumero() { return numero; }\n    public double getSolde() { return solde; }\n    public void deposer(double montant) {\n        if (!Double.isFinite(montant) || montant <= 0)\n            throw new IllegalArgumentException(\"Le montant doit être positif et valide.\");\n        solde += montant;\n    }\n    public abstract void retirer(double montant);\n    public void afficherSolde() {\n        System.out.printf(\"Compte %s : %.2f FCFA%n\", numero, solde);\n    }\n    protected void definirSolde(double nouveauSolde) {\n        solde = nouveauSolde;\n    }\n}"
+        },
+        {
+          "id": "e01p1q2",
+          "q": "Écrivez le code des classes CompteCourant (découvert maximal de 50 000 FCFA) et CompteEpargne (interdiction de solde négatif) qui héritent de CompteBancaire.",
+          "points": 2,
+          "a": "public class CompteCourant extends CompteBancaire {\n    private static final double DECOUVERT_MAX = 50_000;\n    public CompteCourant(String numero, double soldeInitial) {\n        super(numero, soldeInitial);\n    }\n    @Override\n    public void retirer(double montant) {\n        if (!Double.isFinite(montant) || montant <= 0)\n            throw new IllegalArgumentException(\"Montant de retrait invalide.\");\n        if (getSolde() - montant < -DECOUVERT_MAX)\n            throw new IllegalStateException(\"Dépassement du découvert autorisé.\");\n        definirSolde(getSolde() - montant);\n    }\n}\n\npublic class CompteEpargne extends CompteBancaire {\n    public CompteEpargne(String numero, double soldeInitial) {\n        super(numero, soldeInitial);\n    }\n    @Override\n    public void retirer(double montant) {\n        if (!Double.isFinite(montant) || montant <= 0)\n            throw new IllegalArgumentException(\"Montant de retrait invalide.\");\n        if (montant > getSolde())\n            throw new IllegalStateException(\"Solde insuffisant sur le compte d'épargne.\");\n        definirSolde(getSolde() - montant);\n    }\n}"
+        },
+        {
+          "id": "e01p1q3",
+          "q": "Écrivez le code de la classe Banque (collection de comptes, ajouterCompte, rechercherCompte et méthode transferer atomique avec restauration des soldes en cas d'échec).",
+          "points": 2,
+          "a": "public class Banque {\n    private final List<CompteBancaire> comptes = new ArrayList<>();\n    public void ajouterCompte(CompteBancaire compte) {\n        if (compte == null) throw new IllegalArgumentException(\"Le compte ne peut pas être null.\");\n        for (CompteBancaire c : comptes) {\n            if (c.getNumero().equals(compte.getNumero())) throw new IllegalArgumentException(\"Ce numéro de compte existe déjà.\");\n        }\n        comptes.add(compte);\n    }\n    public CompteBancaire rechercherCompte(String numero) {\n        for (CompteBancaire compte : comptes) {\n            if (compte.getNumero().equals(numero)) return compte;\n        }\n        throw new IllegalArgumentException(\"Compte introuvable : \" + numero);\n    }\n    public void transferer(String numeroSource, String numeroDestination, double montant) {\n        if (numeroSource.equals(numeroDestination)) throw new IllegalArgumentException(\"Les deux comptes doivent être différents.\");\n        CompteBancaire source = rechercherCompte(numeroSource);\n        CompteBancaire destination = rechercherCompte(numeroDestination);\n        double ancienSoldeSource = source.getSolde();\n        double ancienSoldeDestination = destination.getSolde();\n        try {\n            source.retirer(montant);\n            destination.deposer(montant);\n        } catch (RuntimeException e) {\n            source.definirSolde(ancienSoldeSource);\n            destination.definirSolde(ancienSoldeDestination);\n            throw new IllegalStateException(\"Transfert annulé : \" + e.getMessage(), e);\n        }\n    }\n}"
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "title": "Partie I.2 : Analyse Conceptuelle de la POO",
+      "points": 4,
+      "questions": [
+        {
+          "id": "e01p2q1",
+          "q": "Pourquoi la classe CompteBancaire est-elle abstraite ?",
+          "points": 1,
+          "a": "Elle représente un concept général de compte bancaire. Elle définit les caractéristiques communes aux différents comptes, mais laisse aux sous-classes le soin d'implémenter la méthode retirer() selon leurs propres règles métiers."
+        },
+        {
+          "id": "e01p2q2",
+          "q": "Quel mécanisme de la POO permet à la méthode retirer() d'avoir des comportements différents selon le type de compte ?",
+          "points": 1,
+          "a": "Le polymorphisme, associé à la redéfinition de méthode (@Override). Un objet de type CompteCourant applique la règle du découvert, tandis qu'un objet de type CompteEpargne interdit un solde négatif."
+        },
+        {
+          "id": "e01p2q3",
+          "q": "Pourquoi est-il préférable de manipuler les comptes à travers des références de type CompteBancaire dans la collection de la banque ?",
+          "points": 1,
+          "a": "Cela permet de stocker des comptes courants et des comptes d'épargne dans une même collection, sans devoir créer une collection distincte pour chaque sous-classe. Les appels aux méthodes redéfinies sont résolus selon le type réel de chaque objet : c'est le polymorphisme."
+        },
+        {
+          "id": "e01p2q4",
+          "q": "Quel doit être le résultat du transfert de 30 000 FCFA d'un compte courant (-20 000 FCFA) vers un compte d'épargne (+20 000 FCFA) ? Justifiez.",
+          "points": 1,
+          "a": "Le transfert réussit. Le compte courant passe de −20 000 à −50 000 FCFA, ce qui correspond exactement à la limite de découvert autorisée (-50 000 FCFA). Le compte d'épargne passe de 20 000 à 50 000 FCFA. Aucune restauration n'est nécessaire."
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "title": "Partie II : QCM Fondamentaux Java SE & Entreprise (20 questions)",
+      "points": 10,
+      "intro": "Chaque question vaut 0.5 point.",
+      "questions": [
+        {
+          "id": "e01p3q01",
+          "q": "1. Construction de chaîne dans une boucle de 10 000 itérations : quelle est la solution la plus adaptée ?",
+          "points": 0.5,
+          "a": "A : Remplacer String par StringBuilder et utiliser append()."
+        },
+        {
+          "id": "e01p3q02",
+          "q": "2. Quel niveau d'isolation JDBC empêche T1 de voir deux valeurs différentes lors de deux lectures si T2 modifie et valide entre-temps ?",
+          "points": 0.5,
+          "a": "C : TRANSACTION_REPEATABLE_READ."
+        },
+        {
+          "id": "e01p3q03",
+          "q": "3. Transfert de 5 000 FCFA entre deux comptes : quelle implémentation garantit le mieux l'atomicité en JDBC ?",
+          "points": 0.5,
+          "a": "C : Désactiver l'auto-commit, exécuter les deux requêtes, appeler commit() uniquement si tout réussit et rollback() en cas d'échec."
+        },
+        {
+          "id": "e01p3q04",
+          "q": "4. En Java, le mot-clé transient est utilisé pour :",
+          "points": 0.5,
+          "a": "B : Exclure un champ de la sérialisation."
+        },
+        {
+          "id": "e01p3q05",
+          "q": "5. Relation @OneToMany(fetch = FetchType.LAZY) sur 100 départements dont on parcourt les employés : quelle affirmation est la plus juste ?",
+          "points": 0.5,
+          "a": "C : Cette approche peut provoquer le problème N+1 : une requête initiale, puis des requêtes supplémentaires pour charger les associations, selon le fournisseur et sa configuration."
+        },
+        {
+          "id": "e01p3q06",
+          "q": "6. Quel mot-clé / syntaxe est utilisé pour créer un thread ?",
+          "points": 0.5,
+          "a": "C : implements Runnable (ou héritage de Thread)."
+        },
+        {
+          "id": "e01p3q07",
+          "q": "7. String s1 = \"Java\"; String s2 = new String(\"Java\"); System.out.println(s1 == s2); Quelle est la sortie ?",
+          "points": 0.5,
+          "a": "B : false (l'opérateur == compare les références mémoires ; s1 pointe vers le Pool et s2 vers le Heap)."
+        },
+        {
+          "id": "e01p3q08",
+          "q": "8. Soit em.merge(e) sur une entité détachée e : quelle affirmation est correcte ?",
+          "points": 0.5,
+          "a": "B : merge(e) retourne une instance gérée contenant l'état fusionné ; l'objet original e reste détaché."
+        },
+        {
+          "id": "e01p3q09",
+          "q": "9. En JavaFX, quelle classe représente la racine d'une interface graphique ?",
+          "points": 0.5,
+          "a": "D : Parent."
+        },
+        {
+          "id": "e01p3q10",
+          "q": "10. Quelle méthode est utilisée pour exécuter (démarrer) un thread en Java ?",
+          "points": 0.5,
+          "a": "A : start()."
+        },
+        {
+          "id": "e01p3q11",
+          "q": "11. En JDBC, quelle méthode permet d'exécuter une requête SQL de type SELECT ?",
+          "points": 0.5,
+          "a": "B : executeQuery()."
+        },
+        {
+          "id": "e01p3q12",
+          "q": "12. Le design pattern Singleton garantit :",
+          "points": 0.5,
+          "a": "B : Une seule instance d'une classe."
+        },
+        {
+          "id": "e01p3q13",
+          "q": "13. Quelle annotation est utilisée pour indiquer qu'une méthode redéfinit une méthode de la superclasse ?",
+          "points": 0.5,
+          "a": "B : @Override."
+        },
+        {
+          "id": "e01p3q14",
+          "q": "14. En Java, un flux de type Stream<String> permet :",
+          "points": 0.5,
+          "a": "B : De traiter une collection de chaînes."
+        },
+        {
+          "id": "e01p3q15",
+          "q": "15. Quelle méthode d'un Stream exécute une action sans retourner de résultat ?",
+          "points": 0.5,
+          "a": "C : forEach()."
+        },
+        {
+          "id": "e01p3q16",
+          "q": "16. Quelle est la différence entre throw et throws ?",
+          "points": 0.5,
+          "a": "B : throw lance une exception, throws la déclare."
+        },
+        {
+          "id": "e01p3q17",
+          "q": "17. Dans JavaFX, quel fichier définit généralement l'interface utilisateur ?",
+          "points": 0.5,
+          "a": "C : .fxml."
+        },
+        {
+          "id": "e01p3q18",
+          "q": "18. Quelle interface représente une collection sans doublons ?",
+          "points": 0.5,
+          "a": "D : Set."
+        },
+        {
+          "id": "e01p3q19",
+          "q": "19. Quelle classe Java permet la synchronisation manuelle entre threads ?",
+          "points": 0.5,
+          "a": "B : Semaphore."
+        },
+        {
+          "id": "e01p3q20",
+          "q": "20. En Java, Optional est utilisé pour :",
+          "points": 0.5,
+          "a": "B : Gérer les valeurs nulles sans NullPointerException."
+        }
+      ]
+    }
+  ]
+}

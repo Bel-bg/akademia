@@ -1,0 +1,176 @@
+{
+  "id": "java",
+  "title": "Programmation Java & POO Avancée",
+  "subtitle": "POO, Collections, Streams, Concurrence, JDBC, JPA & Sujets d'Examen",
+  "description": "Cours complet et approfondi de Java : encapsulation, héritage, polymorphisme, classes abstraites, atomicité et exceptions, manipulation des chaînes et collections, API Stream, threads et synchronisation, persistance JDBC et JPA/Hibernate, avec l'étude de cas bancaire et les sujets d'examen corrigés.",
+  "emoji": "☕",
+  "color": "#E76F51",
+  "level": "Licence 3 / Master 1",
+  "estimatedHours": 16,
+  "parts": [
+    {
+      "id": "p1",
+      "title": "Partie 1 · Conception Objet & Architecture Robuste",
+      "chapters": [
+        "1-1-encapsulation-immutabilite",
+        "1-2-heritage-polymorphisme",
+        "1-3-gestion-exceptions-atomicite"
+      ]
+    },
+    {
+      "id": "p2",
+      "title": "Partie 2 · Chaînes, Collections & Design Patterns",
+      "chapters": [
+        "2-1-chaines-stringbuilder",
+        "2-2-framework-collections",
+        "2-3-design-patterns-singleton"
+      ]
+    },
+    {
+      "id": "p3",
+      "title": "Partie 3 · Programmation Fonctionnelle & Concurrence",
+      "chapters": [
+        "3-1-api-stream",
+        "3-2-multithreading-threads",
+        "3-3-synchronisation-concurrence"
+      ]
+    },
+    {
+      "id": "p4",
+      "title": "Partie 4 · Persistance des Données & IHM (JDBC, JPA & JavaFX)",
+      "chapters": [
+        "4-1-jdbc-transactions",
+        "4-2-jpa-hibernate",
+        "4-3-serialisation-javafx"
+      ]
+    },
+    {
+      "id": "p5",
+      "title": "Partie 5 · Épreuve Bancaire Officielle & Corrigé Intégral",
+      "chapters": [
+        "a-etude-cas-bancaire",
+        "b-epreuve-corrige-type"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "1-1-encapsulation-immutabilite",
+      "number": "1.1",
+      "title": "Encapsulation, validation défensive et immutabilité",
+      "summary": "Attributs privés, modificateur final, validation rigoureuse des paramètres avec isBlank() et Double.isFinite(), levée d'IllegalArgumentException.",
+      "minutes": 14,
+      "file": "1-1-encapsulation-immutabilite.md"
+    },
+    {
+      "id": "1-2-heritage-polymorphisme",
+      "number": "1.2",
+      "title": "Héritage, classes abstraites et polymorphisme",
+      "summary": "Classes abstraites, mot-clé extends, annotation @Override, liaison dynamique à l'exécution et substitution de Liskov.",
+      "minutes": 15,
+      "file": "1-2-heritage-polymorphisme.md"
+    },
+    {
+      "id": "1-3-gestion-exceptions-atomicite",
+      "number": "1.3",
+      "title": "Exceptions, atomicité et restauration d'état (Rollback)",
+      "summary": "Différence throw vs throws, hiérarchie RuntimeException, IllegalStateException, conception de transferts bancaires atomiques avec sauvegarde et restauration.",
+      "minutes": 16,
+      "file": "1-3-gestion-exceptions-atomicite.md"
+    },
+    {
+      "id": "2-1-chaines-stringbuilder",
+      "number": "2.1",
+      "title": "Chaînes de caractères : String, StringBuilder et String Pool",
+      "summary": "Immutabilité de String, optimisation des boucles avec StringBuilder.append(), String Pool, méthode intern() et piège de la comparaison == vs equals().",
+      "minutes": 12,
+      "file": "2-1-chaines-stringbuilder.md"
+    },
+    {
+      "id": "2-2-framework-collections",
+      "number": "2.2",
+      "title": "Le Framework Collections : List, Set et Map",
+      "summary": "Interfaces List vs Set (sans doublons) vs Map, implémentations ArrayList, HashSet, HashMap, recherche et manipulation générique.",
+      "minutes": 14,
+      "file": "2-2-framework-collections.md"
+    },
+    {
+      "id": "2-3-design-patterns-singleton",
+      "number": "2.3",
+      "title": "Design Pattern Singleton & robustesse avec Optional",
+      "summary": "Pattern Singleton (instance unique, constructeur privé, accès thread-safe), classe Optional<T> pour éradiquer les NullPointerException.",
+      "minutes": 13,
+      "file": "2-3-design-patterns-singleton.md"
+    },
+    {
+      "id": "3-1-api-stream",
+      "number": "3.1",
+      "title": "L'API Stream : traitement déclaratif des données",
+      "summary": "Flux de données Stream<T>, opérations intermédiaires (filter, map), opérations terminales avec action sans retour (forEach) et réductions (collect).",
+      "minutes": 14,
+      "file": "3-1-api-stream.md"
+    },
+    {
+      "id": "3-2-multithreading-threads",
+      "number": "3.2",
+      "title": "Multithreading : création et cycle de vie des Threads",
+      "summary": "Classe Thread, interface Runnable (implements Runnable), différence fondamentale entre start() et run(), états d'un thread.",
+      "minutes": 15,
+      "file": "3-2-multithreading-threads.md"
+    },
+    {
+      "id": "3-3-synchronisation-concurrence",
+      "number": "3.3",
+      "title": "Synchronisation manuelle, verrous et Semaphore",
+      "summary": "Sections critiques, mot-clé synchronized, classe Semaphore pour la synchronisation manuelle, classes atomiques et interblocages.",
+      "minutes": 14,
+      "file": "3-3-synchronisation-concurrence.md"
+    },
+    {
+      "id": "4-1-jdbc-transactions",
+      "number": "4.1",
+      "title": "JDBC, requêtes SQL et transactions ACID",
+      "summary": "Connexions JDBC, executeQuery() pour SELECT vs executeUpdate(), atomicité via setAutoCommit(false), commit() et rollback(), isolation TRANSACTION_REPEATABLE_READ.",
+      "minutes": 16,
+      "file": "4-1-jdbc-transactions.md"
+    },
+    {
+      "id": "4-2-jpa-hibernate",
+      "number": "4.2",
+      "title": "JPA / Hibernate : cycle de vie et problème du N+1",
+      "summary": "EntityManager, entités détachées vs managées, fonctionnement exact de merge(e), FetchType.LAZY sur @OneToMany et piège de performance des requêtes N+1.",
+      "minutes": 16,
+      "file": "4-2-jpa-hibernate.md"
+    },
+    {
+      "id": "4-3-serialisation-javafx",
+      "number": "4.3",
+      "title": "Sérialisation (transient) et interfaces graphiques JavaFX",
+      "summary": "Interface Serializable, exclusion de champs avec le mot-clé transient, architecture JavaFX (Stage, Scene, racine Parent) et fichiers de vue .fxml.",
+      "minutes": 13,
+      "file": "4-3-serialisation-javafx.md"
+    },
+    {
+      "id": "a-etude-cas-bancaire",
+      "number": "A",
+      "title": "Étude de cas bancaire : modélisation complète pas à pas",
+      "summary": "Mise en œuvre intégrale de CompteBancaire, CompteCourant (-50 000 FCFA), CompteEpargne et Banque avec transferts atomiques.",
+      "minutes": 18,
+      "file": "a-etude-cas-bancaire.md"
+    },
+    {
+      "id": "b-epreuve-corrige-type",
+      "number": "B",
+      "title": "Épreuve officielle & corrigé type universitaire",
+      "summary": "Sujet officiel complet décortiqué : Partie I (code + 4 questions d'analyse) et Partie II (20 questions QCM corrigées et justifiées).",
+      "minutes": 20,
+      "file": "b-epreuve-corrige-type.md"
+    }
+  ],
+  "features": {
+    "quiz": true,
+    "blitz": true,
+    "exams": true,
+    "flashcards": true
+  }
+}
