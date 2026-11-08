@@ -103,9 +103,67 @@ create policy "messages_update_recipient_read" on public.messages
   using (auth.uid() = recipient_id)
   with check (auth.uid() = recipient_id);
 
+drop policy if exists "messages_delete_participant" on public.messages;
+create policy "messages_delete_participant" on public.messages
+  for delete to authenticated
+  using (auth.uid() = sender_id or auth.uid() = recipient_id);
+
+-- Suppression personnelle : masquer un message sans effacer la copie de l’autre participant
+create table if not exists public.message_deletions (
+  user_id     uuid not null references auth.users(id) on delete cascade,
+  message_id  uuid not null references public.messages(id) on delete cascade,
+  deleted_at  timestamptz not null default now(),
+  primary key (user_id, message_id)
+);
+create index if not exists message_deletions_user_idx on public.message_deletions (user_id, deleted_at desc);
+alter table public.message_deletions enable row level security;
+
+drop policy if exists "message_deletions_select_own" on public.message_deletions;
+create policy "message_deletions_select_own" on public.message_deletions
+  for select to authenticated using (auth.uid() = user_id);
+
+drop policy if exists "message_deletions_insert_own_participant" on public.message_deletions;
+create policy "message_deletions_insert_own_participant" on public.message_deletions
+  for insert to authenticated
+  with check (
+    auth.uid() = user_id
+    and exists (
+      select 1 from public.messages m
+      where m.id = message_id and (m.sender_id = auth.uid() or m.recipient_id = auth.uid())
+    )
+  );
+
+drop policy if exists "message_deletions_delete_own" on public.message_deletions;
+create policy "message_deletions_delete_own" on public.message_deletions
+  for delete to authenticated using (auth.uid() = user_id);
+
+revoke all on public.message_deletions from anon, authenticated;
+grant select, insert, delete on public.message_deletions to authenticated;
+
+create or replace function public.hide_conversation(p_partner_id uuid)
+returns void
+language sql
+security invoker
+set search_path = public
+as $$
+  insert into public.message_deletions (user_id, message_id)
+  select auth.uid(), m.id
+  from public.messages m
+  where auth.uid() is not null
+    and p_partner_id <> auth.uid()
+    and (
+      (m.sender_id = auth.uid() and m.recipient_id = p_partner_id)
+      or (m.sender_id = p_partner_id and m.recipient_id = auth.uid())
+    )
+  on conflict (user_id, message_id) do nothing;
+$$;
+revoke all on function public.hide_conversation(uuid) from public, anon;
+grant execute on function public.hide_conversation(uuid) to authenticated;
+
 revoke all on public.messages from anon, authenticated;
 grant select, insert on public.messages to authenticated;
 grant update (read_at) on public.messages to authenticated;
+grant delete on public.messages to authenticated;
 
 do $$
 begin
@@ -117,6 +175,8 @@ begin
   end if;
 end;
 $$;
+
+alter table public.messages replica identity full;
 
 -- 6) Abonnements Web Push (gérés uniquement par le backend)
 create table if not exists public.push_subscriptions (

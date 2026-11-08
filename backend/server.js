@@ -139,6 +139,34 @@ app.post('/api/messages', requireUser, async (req, res, next) => {
   }
 });
 
+app.delete('/api/messages/conversations/:partnerId', requireUser, async (req, res, next) => {
+  const { partnerId } = req.params;
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(partnerId)
+    || partnerId === req.auth.user.id) {
+    return res.status(400).json({ error: 'Discussion invalide.' });
+  }
+  try {
+    const deleted = await progressService.deleteConversationForParticipants(req.auth.accessToken, req.auth.user.id, partnerId);
+    res.json({ ok: true, deleted });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.delete('/api/messages/:messageId', requireUser, async (req, res, next) => {
+  const { messageId } = req.params;
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(messageId)) {
+    return res.status(400).json({ error: 'Message invalide.' });
+  }
+  try {
+    const deleted = await progressService.deleteMessageForParticipants(req.auth.accessToken, req.auth.user.id, messageId);
+    if (!deleted) return res.status(404).json({ error: 'Message introuvable ou accès refusé.' });
+    res.json({ ok: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get('/api/progress', requireUser, async (req, res, next) => {
   try {
     const state = await progressService.loadProgress(req.auth.accessToken, req.auth.user.id);

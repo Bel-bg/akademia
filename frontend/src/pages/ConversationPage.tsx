@@ -2,7 +2,8 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Send } from 'lucide-react';
 import { Empty, Spinner } from '@/components/ui';
-import { DirectMessage, getConversation, getPublicProfile, markConversationRead, PublicProfile, sendMessage, subscribeToConversation } from '@/data/social';
+import MessageDeleteMenu from '@/components/MessageDeleteMenu';
+import { deleteMessageForEveryone, deleteMessageForUser, DirectMessage, getConversation, getPublicProfile, markConversationRead, PublicProfile, sendMessage, subscribeToConversation } from '@/data/social';
 import { supabase } from '@/data/supabase';
 import { useAuth } from '@/state/AuthContext';
 
@@ -22,6 +23,7 @@ export default function ConversationPage() {
   const [messages, setMessages] = useState<DirectMessage[] | null>(null);
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -50,12 +52,15 @@ export default function ConversationPage() {
 
   useEffect(() => {
     if (!user || user.guest || !cloud || !partnerId || partnerId === user.id) return;
-    const channel = subscribeToConversation(user.id, partnerId, (message) => {
-      setMessages((current) => current ? appendMessage(current, message) : current);
-      if (message.recipient_id === user.id) {
-        void markConversationRead(user.id, partnerId).catch(() => undefined);
-      }
-    });
+    const channel = subscribeToConversation(
+      user.id,
+      partnerId,
+      (message) => {
+        setMessages((current) => current ? appendMessage(current, message) : current);
+        if (message.recipient_id === user.id) void markConversationRead(user.id, partnerId).catch(() => undefined);
+      },
+      (messageId) => setMessages((current) => current?.filter((message) => message.id !== messageId) ?? []),
+    );
     return () => { if (supabase) void supabase.removeChannel(channel); };
   }, [cloud, partnerId, user]);
 
@@ -88,6 +93,34 @@ export default function ConversationPage() {
     }
   };
 
+  const removeMessage = async (messageId: string) => {
+    if (!confirm('Supprimer ce message de ta conversation ? L’autre joueur conservera sa copie.')) return;
+    setDeletingId(messageId);
+    setError('');
+    try {
+      await deleteMessageForUser(user.id, messageId);
+      setMessages((current) => current?.filter((message) => message.id !== messageId) ?? []);
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : 'Impossible de supprimer ce message.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const permanentlyRemoveMessage = async (messageId: string) => {
+    if (!confirm('Supprimer définitivement ce message pour vous deux ? Cette action est irréversible.')) return;
+    setDeletingId(messageId);
+    setError('');
+    try {
+      await deleteMessageForEveryone(user.id, messageId);
+      setMessages((current) => current?.filter((message) => message.id !== messageId) ?? []);
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : 'Impossible de supprimer définitivement ce message.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <section className="mx-auto flex h-[min(76vh,760px)] min-h-[420px] max-w-3xl flex-col overflow-hidden rounded-xl border border-line bg-card">
       <header className="flex items-center gap-3 border-b border-line px-4 py-3">
@@ -103,11 +136,13 @@ export default function ConversationPage() {
         {messages.map((message) => {
           const own = message.sender_id === user.id;
           return (
-            <div key={message.id} className={`flex ${own ? 'justify-end' : 'justify-start'}`}>
+            <div key={message.id} className={`flex items-center gap-1 ${own ? 'justify-end' : 'justify-start'}`}>
+              {!own && <MessageDeleteMenu label="ce message" disabled={deletingId === message.id} onDeleteForMe={() => void removeMessage(message.id)} onDeleteForEveryone={() => void permanentlyRemoveMessage(message.id)} />}
               <article className={`max-w-[85%] rounded-2xl px-4 py-2.5 sm:max-w-[72%] ${own ? 'rounded-br-sm bg-brand text-white' : 'rounded-bl-sm bg-soft text-ink'}`}>
                 <p className="whitespace-pre-wrap break-words text-sm">{message.body}</p>
                 <p className={`mt-1 text-right text-[10px] ${own ? 'text-white/70' : 'text-muted'}`}>{messageClock(message.created_at)}</p>
               </article>
+              {own && <MessageDeleteMenu label="ce message" disabled={deletingId === message.id} onDeleteForMe={() => void removeMessage(message.id)} onDeleteForEveryone={() => void permanentlyRemoveMessage(message.id)} />}
             </div>
           );
         })}

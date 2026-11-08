@@ -41,6 +41,13 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
 }
 
 export async function getConversations(userId: string): Promise<ConversationPreview[]> {
+  const { data: hiddenRows, error: hiddenError } = await client()
+    .from('message_deletions')
+    .select('message_id')
+    .eq('user_id', userId);
+  if (hiddenError) throw hiddenError;
+  const hidden = new Set((hiddenRows ?? []).map((row) => row.message_id as string));
+
   const { data, error } = await client()
     .from('messages')
     .select('id, sender_id, recipient_id, body, created_at, read_at')
@@ -51,6 +58,7 @@ export async function getConversations(userId: string): Promise<ConversationPrev
 
   const latestByPartner = new Map<string, { latest: DirectMessage; unread: number }>();
   for (const row of (data ?? []) as DirectMessage[]) {
+    if (hidden.has(row.id)) continue;
     const partnerId = row.sender_id === userId ? row.recipient_id : row.sender_id;
     const current = latestByPartner.get(partnerId);
     if (current) {
@@ -81,6 +89,13 @@ export async function getConversations(userId: string): Promise<ConversationPrev
 }
 
 export async function getConversation(userId: string, partnerId: string): Promise<DirectMessage[]> {
+  const { data: hiddenRows, error: hiddenError } = await client()
+    .from('message_deletions')
+    .select('message_id')
+    .eq('user_id', userId);
+  if (hiddenError) throw hiddenError;
+  const hidden = new Set((hiddenRows ?? []).map((row) => row.message_id as string));
+
   const { data, error } = await client()
     .from('messages')
     .select('id, sender_id, recipient_id, body, created_at, read_at')
@@ -88,7 +103,45 @@ export async function getConversation(userId: string, partnerId: string): Promis
     .order('created_at', { ascending: true })
     .limit(300);
   if (error) throw error;
-  return (data ?? []) as DirectMessage[];
+  return ((data ?? []) as DirectMessage[]).filter((message) => !hidden.has(message.id));
+}
+
+export async function deleteMessageForUser(userId: string, messageId: string): Promise<void> {
+  const { data: session, error: sessionError } = await client().auth.getSession();
+  if (sessionError || session.session?.user.id !== userId) throw new Error('Reconnecte-toi pour supprimer ce message.');
+  const { error } = await client().from('message_deletions').upsert(
+    { user_id: userId, message_id: messageId },
+    { onConflict: 'user_id,message_id', ignoreDuplicates: true },
+  );
+  if (error) throw error;
+}
+
+export async function deleteConversationForUser(userId: string, partnerId: string): Promise<void> {
+  const { data: session, error: sessionError } = await client().auth.getSession();
+  if (sessionError || session.session?.user.id !== userId) throw new Error('Reconnecte-toi pour supprimer cette discussion.');
+  const { error } = await client().rpc('hide_conversation', { p_partner_id: partnerId });
+  if (error) throw error;
+}
+
+async function deleteForEveryone(userId: string, path: string): Promise<void> {
+  const { data: session, error: sessionError } = await client().auth.getSession();
+  if (sessionError || !session.session?.access_token || session.session.user.id !== userId) {
+    throw new Error('Reconnecte-toi pour supprimer définitivement.');
+  }
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${session.session.access_token}` },
+  });
+  const result = await response.json().catch(() => null) as { error?: string } | null;
+  if (!response.ok) throw new Error(result?.error || `Suppression impossible (${response.status}).`);
+}
+
+export function deleteMessageForEveryone(userId: string, messageId: string): Promise<void> {
+  return deleteForEveryone(userId, `/messages/${encodeURIComponent(messageId)}`);
+}
+
+export function deleteConversationForEveryone(userId: string, partnerId: string): Promise<void> {
+  return deleteForEveryone(userId, `/messages/conversations/${encodeURIComponent(partnerId)}`);
 }
 
 export async function sendMessage(senderId: string, recipientId: string, body: string): Promise<DirectMessage> {
@@ -127,6 +180,7 @@ export function subscribeToConversation(
   userId: string,
   partnerId: string,
   onMessage: (message: DirectMessage) => void,
+  onDelete?: (messageId: string) => void,
 ): RealtimeChannel {
   const channel = client().channel(`dm:${[userId, partnerId].sort().join(':')}`);
   const receive = (message: DirectMessage) => {
@@ -137,6 +191,12 @@ export function subscribeToConversation(
   channel
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `recipient_id=eq.${userId}` }, (event) => receive(event.new as DirectMessage))
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `sender_id=eq.${userId}` }, (event) => receive(event.new as DirectMessage))
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, (event) => {
+      const deleted = event.old as Partial<DirectMessage>;
+      const belongsToConversation = (deleted.sender_id === userId && deleted.recipient_id === partnerId)
+        || (deleted.sender_id === partnerId && deleted.recipient_id === userId);
+      if (belongsToConversation && deleted.id) onDelete?.(deleted.id);
+    })
     .subscribe();
   return channel;
 }

@@ -36,7 +36,7 @@ Les comptes, la progression, le classement et les notifications passent par Expr
 ### Notifications Web Push
 1. Génère une paire VAPID depuis la racine avec `npm --prefix backend exec -- web-push generate-vapid-keys`.
 2. Ajoute les clés VAPID et `SUPABASE_SERVICE_ROLE_KEY` uniquement dans les variables du service Render. Utilise `VAPID_SUBJECT=mailto:admin@ton-domaine.fr`; ne mets jamais ces secrets dans Vercel.
-3. Exécute `frontend/supabase/schema.sql` dans Supabase pour créer `push_subscriptions` et activer les messages temps réel.
+3. Exécute `frontend/supabase/schema.sql` dans Supabase pour créer `push_subscriptions`, le registre de masquage personnel, les politiques d’effacement définitif des messages et activer les messages temps réel.
 4. Après le déploiement, connecte-toi au site en HTTPS et clique sur l’icône de cloche pour autoriser les notifications dans le navigateur. Les push sont envoyés pour les nouveaux messages et les joueurs dépassés au classement.
 
 La clé `service_role` contourne RLS : elle doit rester uniquement dans les variables du backend Render. Le backend ne l’expose dans aucune réponse API.

@@ -94,6 +94,29 @@ async function insertMessage(accessToken, senderId, recipientId, body) {
   return rows?.[0] ?? null;
 }
 
+async function deleteMessageForParticipants(accessToken, userId, messageId) {
+  const query = new URLSearchParams({
+    select: 'id',
+    id: `eq.${messageId}`,
+    or: `(sender_id.eq.${userId},recipient_id.eq.${userId})`,
+  });
+  const rows = await supabaseRequest(`/rest/v1/messages?${query}`, accessToken, {
+    method: 'DELETE',
+    headers: { Prefer: 'return=representation' },
+  });
+  return rows?.length ?? 0;
+}
+
+async function deleteConversationForParticipants(accessToken, userId, partnerId) {
+  const conversation = `(and(sender_id.eq.${userId},recipient_id.eq.${partnerId}),and(sender_id.eq.${partnerId},recipient_id.eq.${userId}))`;
+  const query = new URLSearchParams({ select: 'id', or: conversation });
+  const rows = await supabaseRequest(`/rest/v1/messages?${query}`, accessToken, {
+    method: 'DELETE',
+    headers: { Prefer: 'return=representation' },
+  });
+  return rows?.length ?? 0;
+}
+
 async function getActionReceipt(accessToken, userId, actionId) {
   const query = new URLSearchParams({ select: 'result', user_id: `eq.${userId}`, action_id: `eq.${actionId}`, limit: '1' });
   const rows = await supabaseRequest(`/rest/v1/progress_action_receipts?${query}`, accessToken);
@@ -115,4 +138,4 @@ function overtakenPlayerIds(before, after, userId) {
   return before.slice(newRank, oldRank).map((player) => player.id);
 }
 
-module.exports = { getActionReceipt, getLeaderboard, getProfile, insertMessage, isConfigured, loadProgress, overtakenPlayerIds, readResponse, saveActionReceipt, saveProgress, verifyAccessToken };
+module.exports = { deleteConversationForParticipants, deleteMessageForParticipants, getActionReceipt, getLeaderboard, getProfile, insertMessage, isConfigured, loadProgress, overtakenPlayerIds, readResponse, saveActionReceipt, saveProgress, verifyAccessToken };
