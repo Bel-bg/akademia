@@ -1,40 +1,161 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { fetchBackendTheme } from '@/data/repo';
+import { themeForFiliere } from '@/lib/progress';
+import type { BackendThemeId, FiliereId } from '@/lib/types';
+import { useStore } from './Store';
 
-type Mode = 'light' | 'dark' | 'system';
-const Ctx = createContext<{ mode: Mode; dark: boolean; setMode(m: Mode): void } | null>(null);
+export type ThemeId = BackendThemeId;
+export type { FiliereId };
 
-function systemDark() {
-  return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+export interface ThemeMeta {
+  id: ThemeId;
+  name: string;
+  subtitle: string;
+  brandHex: string;
+  mascotHex: string;
+  ctaHex: string;
+  bgHex: string;
 }
 
+export const THEMES: ThemeMeta[] = [
+  {
+    id: 'corail',
+    name: 'Rouge Corail (ARI)',
+    subtitle: 'Architecture des Réseaux & IoT',
+    brandHex: '#FF574A',
+    mascotHex: '#FF7266',
+    ctaHex: '#FF574A',
+    bgHex: '#FBF7EF',
+  },
+  {
+    id: 'violet',
+    name: 'Violet Royal & Or (AIP)',
+    subtitle: 'Automatique & Informatique Industrielle',
+    brandHex: '#7C3AED',
+    mascotHex: '#8B49F7',
+    ctaHex: '#FFD026',
+    bgHex: '#FBF7EF',
+  },
+];
+
+export const FILIERES: { id: FiliereId; name: string; full: string; color: string; theme: ThemeId }[] = [
+  {
+    id: 'ARI',
+    name: 'ARI',
+    full: 'Architecture des Réseaux & IoT',
+    color: '#FF574A',
+    theme: 'corail',
+  },
+  {
+    id: 'AIP',
+    name: 'AIP',
+    full: 'Automatique & Informatique Industrielle',
+    color: '#7C3AED',
+    theme: 'violet',
+  },
+];
+
+interface ThemeContextValue {
+  theme: ThemeId;
+  themeMeta: ThemeMeta;
+  filiere: FiliereId;
+  rawFiliere: FiliereId | null;
+  hasFiliere: boolean;
+  setFiliere(f: FiliereId): Promise<void>;
+  customPseudo: string;
+  setCustomPseudo(name: string): void;
+}
+
+const Ctx = createContext<ThemeContextValue | null>(null);
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<Mode>(() => {
+  const { state, setUserFiliere } = useStore();
+  const rawFiliere: FiliereId | null = state.filiere === 'ARI' || state.filiere === 'AIP' ? state.filiere : null;
+  const [backendTheme, setBackendTheme] = useState<ThemeId>(() => themeForFiliere(rawFiliere));
+
+  const [customPseudo, setCustomPseudoState] = useState<string>(() => {
     try {
-      return (localStorage.getItem('akademia:theme') as Mode) || 'system';
+      return localStorage.getItem('akademia:pseudo') || 'Belmonde';
     } catch {
-      return 'system';
+      return 'Belmonde';
     }
   });
-  const [dark, setDark] = useState(mode === 'dark' || (mode === 'system' && systemDark()));
+
+  // Synchronisation du thème avec le backend en fonction de la filière (ARI -> corail, AIP -> violet, défaut -> corail)
+  useEffect(() => {
+    let active = true;
+    const fallback = themeForFiliere(rawFiliere);
+    setBackendTheme(fallback);
+    fetchBackendTheme(rawFiliere)
+      .then((res) => {
+        if (active && (res.theme === 'corail' || res.theme === 'violet')) {
+          setBackendTheme(res.theme);
+        }
+      })
+      .catch(() => {
+        if (active) setBackendTheme(fallback);
+      });
+    return () => {
+      active = false;
+    };
+  }, [rawFiliere]);
 
   useEffect(() => {
-    const apply = () => {
-      const d = mode === 'dark' || (mode === 'system' && systemDark());
-      setDark(d);
-      document.documentElement.classList.toggle('dark', d);
-    };
-    apply();
+    document.documentElement.setAttribute('data-theme', backendTheme);
+    document.documentElement.classList.remove('dark');
+    const metaInfo = THEMES.find((x) => x.id === backendTheme) ?? THEMES[0];
+    const metaTag = document.querySelector('meta[name="theme-color"]');
+    if (metaTag) metaTag.setAttribute('content', metaInfo.brandHex);
     try {
-      localStorage.setItem('akademia:theme', mode);
+      if (rawFiliere) {
+        localStorage.setItem('akademia:filiere', rawFiliere);
+      } else {
+        localStorage.removeItem('akademia:filiere');
+      }
+      localStorage.setItem('akademia:theme', backendTheme);
     } catch {
       /* ignore */
     }
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    mq.addEventListener('change', apply);
-    return () => mq.removeEventListener('change', apply);
-  }, [mode]);
+  }, [backendTheme, rawFiliere]);
 
-  return <Ctx.Provider value={{ mode, dark, setMode }}>{children}</Ctx.Provider>;
+  const setFiliere = useCallback(
+    async (f: FiliereId) => {
+      const immediateTheme = themeForFiliere(f);
+      setBackendTheme(immediateTheme);
+      await setUserFiliere(f);
+    },
+    [setUserFiliere],
+  );
+
+  const setCustomPseudo = (name: string) => {
+    const clean = name.trim() || 'Belmonde';
+    setCustomPseudoState(clean);
+    try {
+      localStorage.setItem('akademia:pseudo', clean);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const themeMeta = THEMES.find((t) => t.id === backendTheme) ?? THEMES[0];
+  const filiere: FiliereId = rawFiliere ?? 'ARI';
+
+  return (
+    <Ctx.Provider
+      value={{
+        theme: backendTheme,
+        themeMeta,
+        filiere,
+        rawFiliere,
+        hasFiliere: rawFiliere !== null,
+        setFiliere,
+        customPseudo,
+        setCustomPseudo,
+      }}
+    >
+      {children}
+    </Ctx.Provider>
+  );
 }
 
 export const useTheme = () => {

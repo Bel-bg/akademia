@@ -1,87 +1,307 @@
+@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/baloo-2';
 @import '@fontsource-variable/plus-jakarta-sans';
 @import '@fontsource-variable/jetbrains-mono';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --bg: 246 247 252;
+/* ---------- 1. Thème Ciel (Bleu Azur — par défaut) ---------- */
+:root,
+[data-theme='ciel'] {
+  --bg: 251 247 239;          /* #FBF7EF Crème doux */
+  --bg-tinted: 230 242 255;   /* #E6F2FF Bleu très pâle (Onboarding) */
+  --card: 255 255 255;        /* #FFFFFF */
+  --soft: 223 238 255;        /* #DFEEFF Pastilles douces */
+  --ink: 18 32 58;            /* #12203A Bleu nuit profond */
+  --muted: 96 112 138;        /* #60708A */
+  --line: 229 224 213;        /* #E5E0D5 Bordure crème chaude */
+  --brand: 29 111 255;        /* #1D6FFF Bleu électrique */
+  --brand-light: 126 182 255; /* #7EB6FF Bleu mascotte nuage */
+  --brand-deep: 18 80 196;    /* #1250C4 Relief 3D */
+  --cta: 29 111 255;          /* #1D6FFF */
+  --cta-deep: 18 80 196;      /* #1250C4 */
+  --cta-ink: 255 255 255;     /* #FFFFFF */
+  --night: 12 38 78;          /* #0C264E Écran Filière gagnante */
+  --accent: 255 176 32;       /* #FFB020 */
+  --good: 34 197 94;          /* #22C55E */
+  --bad: 239 68 68;           /* #EF4444 */
+  --gold: 255 201 60;         /* #FFC93C */
+  --shadow: 18 32 58;
+}
+
+/* ---------- 2. Thème Corail (Rouge / Corail Énergique) ---------- */
+[data-theme='corail'] {
+  --bg: 251 247 239;          /* #FBF7EF Crème doux */
+  --bg-tinted: 255 239 235;   /* #FFEFEB Pêche très pâle */
   --card: 255 255 255;
-  --soft: 238 240 250;
-  --ink: 18 24 38;
-  --muted: 91 100 117;
-  --line: 227 231 241;
-  --brand: 91 75 255;
+  --soft: 255 229 224;        /* #FFE5E0 */
+  --ink: 36 22 22;            /* #241616 Brun-noir chaud */
+  --muted: 120 102 102;       /* #786666 */
+  --line: 235 224 220;        /* #EBE0DC */
+  --brand: 255 87 74;         /* #FF574A Corail vif */
+  --brand-light: 255 114 102; /* #FF7266 Corail mascotte */
+  --brand-deep: 214 56 44;    /* #D6382C Relief 3D */
+  --cta: 255 87 74;           /* #FF574A */
+  --cta-deep: 214 56 44;      /* #D6382C */
+  --cta-ink: 255 255 255;
+  --night: 28 37 89;          /* #1C2559 Bleu nuit royal */
   --accent: 255 176 32;
-  --good: 18 183 106;
-  --bad: 240 68 56;
-  --shadow: 20 28 60;
-}
-.dark {
-  --bg: 11 16 32;
-  --card: 19 26 46;
-  --soft: 28 38 66;
-  --ink: 238 241 250;
-  --muted: 152 162 184;
-  --line: 38 50 84;
-  --brand: 139 125 255;
-  --accent: 255 196 70;
-  --good: 52 211 153;
-  --bad: 251 113 100;
-  --shadow: 0 0 0;
+  --good: 34 197 94;
+  --bad: 239 68 68;
+  --gold: 255 201 60;
+  --shadow: 42 20 20;
 }
 
-html { color-scheme: light; }
-html.dark { color-scheme: dark; }
-body { @apply bg-bg text-ink font-sans antialiased; min-height: 100vh; }
-::selection { background: rgb(var(--brand) / 0.25); }
-*:focus-visible { outline: 2px solid rgb(var(--brand)); outline-offset: 2px; border-radius: 6px; }
+/* ---------- 3. Thème Cyan (Turquoise Polaire) ---------- */
+[data-theme='cyan'] {
+  --bg: 244 250 252;          /* #F4FAFC Blanc glacé doux */
+  --bg-tinted: 228 246 252;   /* #E4F6FC */
+  --card: 255 255 255;
+  --soft: 214 242 250;        /* #D6F2FA */
+  --ink: 15 41 58;            /* #0F293A Bleu pétrole foncé */
+  --muted: 90 118 136;        /* #5A7688 */
+  --line: 216 234 240;        /* #D8EAF0 */
+  --brand: 24 184 232;        /* #18B8E8 Cyan lumineux */
+  --brand-light: 45 198 245;  /* #2DC6F5 Cyan mascotte */
+  --brand-deep: 14 141 181;   /* #0E8DB5 Relief 3D */
+  --cta: 24 184 232;          /* #18B8E8 */
+  --cta-deep: 14 141 181;     /* #0E8DB5 */
+  --cta-ink: 255 255 255;
+  --night: 7 66 89;           /* #074259 Pétrole profond */
+  --accent: 255 176 32;
+  --good: 34 197 94;
+  --bad: 239 68 68;
+  --gold: 255 201 60;
+  --shadow: 12 45 64;
+}
 
-.btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[.98] disabled:opacity-50 disabled:pointer-events-none; }
-.btn-primary { @apply bg-brand text-white shadow-card hover:brightness-110; }
-.btn-soft { @apply bg-soft text-ink hover:brightness-95 dark:hover:brightness-125; }
-.btn-ghost { @apply text-muted hover:bg-soft hover:text-ink; }
-.btn-good { @apply bg-good text-white hover:brightness-110; }
-.btn-lg { @apply px-6 py-3.5 text-base rounded-2xl; }
-.card { @apply bg-card rounded-2xl border border-line shadow-card; }
-.chip { @apply inline-flex items-center gap-1.5 rounded-full bg-soft px-3 py-1 text-xs font-semibold text-ink; }
-.h-display { @apply font-extrabold tracking-tight; }
+/* ---------- 4. Thème Violet (Violet Royal & Or) ---------- */
+[data-theme='violet'] {
+  --bg: 251 247 239;          /* #FBF7EF Crème doux */
+  --bg-tinted: 243 238 255;   /* #F3EEFF Lavande très pâle */
+  --card: 255 255 255;
+  --soft: 237 228 255;        /* #EDE4FF */
+  --ink: 30 25 59;            /* #1E193B Indigo profond */
+  --muted: 110 104 136;       /* #6E6888 */
+  --line: 230 224 240;        /* #E6E0F0 */
+  --brand: 124 58 237;        /* #7C3AED Violet royal */
+  --brand-light: 139 73 247;  /* #8B49F7 Violet mascotte */
+  --brand-deep: 91 33 182;    /* #5B21B6 Relief 3D violet */
+  --cta: 255 208 38;          /* #FFD026 Bouton Jaune Or (fidèle à la maquette) */
+  --cta-deep: 217 166 0;      /* #D9A600 Relief 3D Or */
+  --cta-ink: 30 25 59;        /* #1E193B Texte foncé sur bouton Or */
+  --night: 27 25 84;          /* #1B1954 Indigo nuit */
+  --accent: 255 176 32;
+  --good: 34 197 94;
+  --bad: 239 68 68;
+  --gold: 255 208 38;
+  --shadow: 30 20 60;
+}
 
-/* ---------- Mise en forme du cours ---------- */
-.prose-k { @apply text-[15.5px] leading-[1.75] text-ink; }
-.prose-k h2 { @apply mt-10 mb-3 text-2xl font-extrabold tracking-tight scroll-mt-24 border-b border-line pb-2; }
-.prose-k h3 { @apply mt-8 mb-2 text-lg font-bold text-brand scroll-mt-24; }
-.prose-k h4 { @apply mt-6 mb-1 text-[15px] font-bold uppercase tracking-wide text-accent scroll-mt-24; }
-.prose-k p { @apply my-3; }
-.prose-k ul { @apply my-3 list-disc space-y-1.5 pl-6 marker:text-accent; }
-.prose-k ol { @apply my-3 list-decimal space-y-1.5 pl-6 marker:font-bold marker:text-brand; }
-.prose-k li > p { @apply my-1; }
-.prose-k strong { @apply font-bold; }
-.prose-k a { @apply text-brand underline underline-offset-2; }
-.prose-k code { @apply rounded-md bg-soft px-1.5 py-0.5 font-mono text-[13px] text-brand; }
-.prose-k pre { @apply my-4 overflow-x-auto rounded-xl border border-line bg-soft p-4 text-[13px] leading-relaxed; }
-.prose-k pre code { @apply bg-transparent p-0 text-ink; }
-.prose-k table { @apply w-full border-collapse text-[13.5px]; }
-.prose-k th { @apply bg-brand/10 px-3 py-2 text-left font-bold; }
-.prose-k td { @apply border-t border-line px-3 py-2 align-top; }
-.prose-k tr:nth-child(even) td { @apply bg-soft/60; }
-.prose-k img { @apply mx-auto my-5 max-w-full rounded-xl bg-white p-3 shadow-card; }
-.prose-k sub, .prose-k sup { @apply text-[0.75em]; }
-.prose-k hr { @apply my-8 border-line; }
-.reader-lg .prose-k { font-size: 17.5px; }
-.reader-sm .prose-k { font-size: 14px; }
+html {
+  color-scheme: light;
+  -webkit-tap-highlight-color: transparent;
+}
 
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { scrollbar-width: none; }
+body {
+  @apply bg-bg text-ink font-sans antialiased selection:bg-brand/20;
+  min-height: 100dvh;
+}
 
+*:focus-visible {
+  outline: 3px solid rgb(var(--brand) / 0.55);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
 
-@media (prefers-reduced-motion: reduce) { * { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+/* Native <dialog> scroll containment (Modern Web Guidance) */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: rgb(15 23 42 / 0.55);
+  backdrop-filter: blur(4px);
+}
+
+/* ---------- Composants Gamifiés Playful Soft UI ---------- */
+.h-display {
+  @apply font-display font-extrabold tracking-tight;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-extrabold transition-all duration-150 select-none active:translate-y-[2px] disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.btn-primary {
+  @apply bg-cta text-cta-ink shadow-btn-cta hover:brightness-105 active:shadow-none;
+}
+
+.btn-brand {
+  @apply bg-brand text-white shadow-btn-brand hover:brightness-105 active:shadow-none;
+}
+
+.btn-soft {
+  @apply bg-soft text-ink shadow-btn-soft hover:brightness-95 active:shadow-none;
+}
+
+.btn-dark {
+  @apply bg-ink text-white shadow-[0_4px_0_0_#090D1A] hover:brightness-110 active:shadow-none;
+}
+
+.btn-ghost {
+  @apply text-muted hover:bg-soft/80 hover:text-ink active:translate-y-0;
+}
+
+.btn-good {
+  @apply bg-good text-white shadow-btn-good hover:brightness-105 active:shadow-none;
+}
+
+.btn-social {
+  @apply bg-card text-ink border border-line/80 shadow-card hover:bg-soft/40 py-3.5 px-6 text-[15px] font-extrabold rounded-full;
+}
+
+.btn-lg {
+  @apply px-7 py-3.5 text-base font-extrabold rounded-full min-h-[52px];
+}
+
+.card {
+  @apply bg-card rounded-3xl border border-line/60 shadow-card;
+}
+
+.card-soft {
+  @apply bg-soft/65 rounded-3xl border border-brand/10;
+}
+
+.chip {
+  @apply inline-flex items-center gap-1.5 rounded-full bg-soft px-3.5 py-1 text-xs font-extrabold text-ink;
+}
+
+/* ---------- Motifs pour cadres d'apprentissage ---------- */
+.pattern-dots {
+  background-image: radial-gradient(rgb(var(--brand) / 0.12) 1.25px, transparent 1.25px);
+  background-size: 14px 14px;
+}
+
+.pattern-grid {
+  background-image:
+    linear-gradient(to right, rgb(var(--brand) / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--brand) / 0.06) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/* ---------- Mise en forme du cours (.prose-k) ---------- */
+.prose-k {
+  @apply text-[15.5px] leading-[1.78] text-ink;
+}
+.prose-k h2 {
+  @apply mt-10 mb-3 font-display text-2xl font-extrabold tracking-tight scroll-mt-24 border-b-2 border-line pb-2;
+}
+.prose-k h3 {
+  @apply mt-8 mb-2 font-display text-lg font-extrabold text-brand scroll-mt-24;
+}
+.prose-k h4 {
+  @apply mt-6 mb-1 text-[15px] font-extrabold uppercase tracking-wide text-accent scroll-mt-24;
+}
+.prose-k p {
+  @apply my-3;
+}
+.prose-k ul {
+  @apply my-3 list-disc space-y-1.5 pl-6 marker:text-brand;
+}
+.prose-k ol {
+  @apply my-3 list-decimal space-y-1.5 pl-6 marker:font-extrabold marker:text-brand;
+}
+.prose-k li > p {
+  @apply my-1;
+}
+.prose-k strong {
+  @apply font-extrabold text-ink;
+}
+.prose-k a {
+  @apply text-brand font-bold underline underline-offset-2;
+}
+.prose-k code {
+  @apply rounded-lg bg-soft px-1.5 py-0.5 font-mono text-[13px] font-semibold text-brand;
+}
+.prose-k pre {
+  @apply my-4 overflow-x-auto rounded-2xl border-2 border-line bg-[#141B2D] p-4 text-[13px] leading-relaxed text-slate-100 shadow-card;
+}
+.prose-k pre code {
+  @apply bg-transparent p-0 text-slate-100 font-normal;
+}
+.prose-k table {
+  @apply w-full border-collapse text-[13.5px];
+}
+.prose-k th {
+  @apply bg-soft px-3.5 py-2.5 text-left font-extrabold text-ink;
+}
+.prose-k td {
+  @apply border-t border-line px-3.5 py-2.5 align-top;
+}
+.prose-k tr:nth-child(even) td {
+  @apply bg-soft/35;
+}
+.prose-k img {
+  @apply mx-auto my-5 max-w-full rounded-2xl bg-white p-3 shadow-card;
+}
+.prose-k sub,
+.prose-k sup {
+  @apply text-[0.75em];
+}
+.prose-k hr {
+  @apply my-8 border-line;
+}
+.reader-lg .prose-k {
+  font-size: 17.5px;
+}
+.reader-sm .prose-k {
+  font-size: 14.5px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
 
 /* Pas de ligatures dans le code : != et <= doivent rester lisibles en SQL */
-code, pre, kbd { font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; }
+code,
+pre,
+kbd {
+  font-variant-ligatures: none;
+  font-feature-settings: 'calt' 0, 'liga' 0;
+}
 
 /* Corrigés masqués dans les chapitres */
-.prose-k details { margin: 0.75rem 0 1.25rem; border: 1px solid rgb(var(--line)); border-radius: 0.9rem; background: rgb(var(--soft)); padding: 0 1rem; }
-.prose-k details > summary { cursor: pointer; padding: 0.7rem 0; font-weight: 700; color: rgb(var(--brand)); list-style-position: inside; }
-.prose-k details[open] > summary { border-bottom: 1px solid rgb(var(--line)); margin-bottom: 0.6rem; }
-.prose-k details > :last-child { margin-bottom: 0.9rem; }
+.prose-k details {
+  margin: 0.75rem 0 1.25rem;
+  border: 1px solid rgb(var(--line));
+  border-radius: 1rem;
+  background: rgb(var(--soft));
+  padding: 0 1rem;
+}
+.prose-k details > summary {
+  cursor: pointer;
+  padding: 0.7rem 0;
+  font-weight: 700;
+  color: rgb(var(--brand));
+  list-style-position: inside;
+}
+.prose-k details[open] > summary {
+  border-bottom: 1px solid rgb(var(--line));
+  margin-bottom: 0.6rem;
+}
+.prose-k details > :last-child {
+  margin-bottom: 0.9rem;
+}

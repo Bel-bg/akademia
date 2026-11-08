@@ -3,12 +3,22 @@
  * Facile à tester et indépendante du stockage (local ou Supabase).
  */
 import { BADGES, Ctx, XP, evaluateBadges, levelFromXp } from './gamification';
-import type { Attempt, AttemptKind, Summary, UserState, XpLine } from './types';
+import type { Attempt, AttemptKind, BackendThemeId, FiliereId, Summary, UserState, XpLine } from './types';
 import { addDays, diffDays, todayKey, uid } from './utils';
+
+export function normalizeFiliere(value: unknown): FiliereId | null {
+  if (typeof value !== 'string') return null;
+  const upper = value.trim().toUpperCase();
+  return upper === 'ARI' || upper === 'AIP' ? upper : null;
+}
+
+export function themeForFiliere(filiere: FiliereId | null | undefined): BackendThemeId {
+  return filiere === 'AIP' ? 'violet' : 'corail';
+}
 
 export function defaultState(): UserState {
   return {
-    v: 1, xp: 0, streak: 0, bestStreak: 0, lastActive: null,
+    v: 1, filiere: null, theme: 'corail', xp: 0, streak: 0, bestStreak: 0, lastActive: null,
     daily: { date: todayKey(), xp: 0 }, dailyGoal: XP.dailyGoal,
     chaptersRead: {}, attempts: [], badges: {}, review: {}, chapterStats: {}, examBest: {},
     counters: { quizzes: 0, perfectQuizzes: 0, blitzBest: 0, maxCombo: 0, cardsKnown: 0, exams: 0 },
@@ -19,12 +29,27 @@ export function normalizeState(raw: unknown): UserState {
   const d = defaultState();
   if (!raw || typeof raw !== 'object') return d;
   const r = raw as Partial<UserState>;
+  const filiere = normalizeFiliere(r.filiere);
   return {
     ...d, ...r,
+    filiere,
+    theme: themeForFiliere(filiere),
     daily: { ...d.daily, ...(r.daily ?? {}) },
     counters: { ...d.counters, ...(r.counters ?? {}) },
     chaptersRead: r.chaptersRead ?? {}, attempts: r.attempts ?? [], badges: r.badges ?? {},
     review: r.review ?? {}, chapterStats: r.chapterStats ?? {}, examBest: r.examBest ?? {},
+  };
+}
+
+export function applySetFiliere(s: UserState, filiere: FiliereId): { state: UserState; summary: Summary | null } {
+  const normalized = normalizeFiliere(filiere) ?? 'ARI';
+  return {
+    state: {
+      ...s,
+      filiere: normalized,
+      theme: themeForFiliere(normalized),
+    },
+    summary: null,
   };
 }
 

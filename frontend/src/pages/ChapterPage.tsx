@@ -1,13 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check, Gamepad2, Minus, Plus } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Minus, Plus, Tasks } from '@getpapillon/papicons';
 import { Course } from '@/components/Markdown';
 import { Spinner } from '@/components/ui';
 import { chapterNeighbors, getChapter, getModule, loadChapter } from '@/lib/content';
 import { cn } from '@/lib/utils';
 import { useStore } from '@/state/Store';
+import { Mascot } from '@/components/Mascot';
+import { ConfettiBackdrop, HexStarMedal } from '@/components/Decor';
+import { fireConfetti } from '@/components/Celebrations';
 
-interface Head { id: string; text: string; level: number }
+interface Head {
+  id: string;
+  text: string;
+  level: number;
+}
 
 export default function ChapterPage() {
   const { moduleId, chapterId } = useParams();
@@ -20,23 +27,32 @@ export default function ChapterPage() {
   const [active, setActive] = useState('');
   const [progress, setProgress] = useState(0);
   const [big, setBig] = useState(() => {
-    try { return localStorage.getItem('akademia:reader') === 'lg'; } catch { return false; }
+    try {
+      return localStorage.getItem('akademia:reader') === 'lg';
+    } catch {
+      return false;
+    }
   });
   const [gained, setGained] = useState<number | null>(null);
   const body = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!m || !c) return;
-    setText(null); setGained(null);
+    setText(null);
+    setGained(null);
     window.scrollTo(0, 0);
     let live = true;
     loadChapter(m.id, c.file).then((t) => live && setText(t));
-    return () => { live = false; };
+    return () => {
+      live = false;
+    };
   }, [m, c]);
 
   useEffect(() => {
     if (text === null || !body.current) return;
-    const hs = Array.from(body.current.querySelectorAll('h2, h3')).filter((h) => h.id).map((h) => ({ id: h.id, text: h.textContent ?? '', level: h.tagName === 'H2' ? 2 : 3 }));
+    const hs = Array.from(body.current.querySelectorAll('h2, h3'))
+      .filter((h) => h.id)
+      .map((h) => ({ id: h.id, text: h.textContent ?? '', level: h.tagName === 'H2' ? 2 : 3 }));
     setHeads(hs);
   }, [text]);
 
@@ -65,12 +81,20 @@ export default function ChapterPage() {
 
   const toggleSize = (v: boolean) => {
     setBig(v);
-    try { localStorage.setItem('akademia:reader', v ? 'lg' : 'sm'); } catch { /* ignore */ }
+    try {
+      localStorage.setItem('akademia:reader', v ? 'lg' : 'sm');
+    } catch {
+      /* ignore */
+    }
   };
+
   const markRead = async () => {
     try {
       const result = await chapterRead(m.id, c.id);
-      if (result) setGained(result.xp);
+      if (result) {
+        setGained(result.xp);
+        fireConfetti(false);
+      }
     } catch (error) {
       window.alert(error instanceof Error ? error.message : 'Impossible d’enregistrer ce chapitre.');
     }
@@ -78,25 +102,54 @@ export default function ChapterPage() {
 
   return (
     <div>
-      <div className="fixed inset-x-0 top-0 z-50 h-1 bg-transparent lg:pl-64">
-        <div className="h-full bg-brand transition-[width]" style={{ width: `${progress * 100}%` }} />
+      {/* Barre de progression de lecture en haut */}
+      <div className="fixed inset-x-0 top-0 z-50 h-1.5 bg-transparent lg:pl-72">
+        <div
+          className="h-full rounded-r-full bg-brand transition-[width]"
+          style={{ width: `${progress * 100}%` }}
+        />
       </div>
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <Link to={`/m/${m.id}`} className="btn btn-ghost !px-2"><ArrowLeft size={16} /> {m.title}</Link>
-        <div className="flex items-center gap-1" role="group" aria-label="Taille du texte">
-          <button className="btn btn-ghost !px-2.5" onClick={() => toggleSize(false)} aria-label="Texte plus petit"><Minus size={16} /></button>
-          <span className="text-xs font-bold text-muted">Aa</span>
-          <button className="btn btn-ghost !px-2.5" onClick={() => toggleSize(true)} aria-label="Texte plus grand"><Plus size={16} /></button>
+        <Link to={`/m/${m.id}`} className="btn btn-soft !px-3.5 !py-1.5 text-xs">
+          <ArrowLeft size={15} /> {m.title}
+        </Link>
+        <div
+          className="flex items-center gap-1 rounded-full bg-card px-2 py-1 shadow-sm"
+          role="group"
+          aria-label="Taille du texte"
+        >
+          <button
+            type="button"
+            className="btn btn-ghost !p-1.5"
+            onClick={() => toggleSize(false)}
+            aria-label="Texte plus petit"
+          >
+            <Minus size={15} />
+          </button>
+          <span className="px-1 text-xs font-extrabold text-muted">Aa</span>
+          <button
+            type="button"
+            className="btn btn-ghost !p-1.5"
+            onClick={() => toggleSize(true)}
+            aria-label="Texte plus grand"
+          >
+            <Plus size={15} />
+          </button>
         </div>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_240px]">
         <article className="min-w-0">
-          <header className="mb-6">
-            <p className="text-xs font-extrabold uppercase tracking-widest" style={{ color: m.color }}>Chapitre {c.number} · {c.minutes} min de lecture</p>
-            <h1 className="h-display mt-1 text-3xl sm:text-4xl">{c.title}</h1>
-            <p className="mt-2 text-muted">{c.summary}</p>
+          <header className="card mb-6 p-6">
+            <span
+              className="inline-block rounded-full px-3 py-0.5 text-xs font-extrabold uppercase tracking-wider text-white"
+              style={{ background: m.color }}
+            >
+              Chapitre {c.number} · {c.minutes} min de lecture
+            </span>
+            <h1 className="h-display mt-2 text-3xl sm:text-4xl">{c.title}</h1>
+            <p className="mt-1.5 font-semibold text-muted">{c.summary}</p>
           </header>
 
           <div ref={body} className={cn('card p-5 sm:p-8', big ? 'reader-lg' : 'reader-sm')}>
@@ -104,39 +157,93 @@ export default function ChapterPage() {
           </div>
 
           {text !== null && (
-            <div className="card mt-6 p-6 text-center">
+            <div className="card relative mt-6 overflow-hidden p-6 text-center">
               {done || gained !== null ? (
-                <>
-                  <p className="font-extrabold text-good"><Check className="mr-1 inline" size={18} />Chapitre terminé{gained ? ` · +${gained} XP` : ''}</p>
-                  <div className="mt-4 flex flex-wrap justify-center gap-2">
-                    {m.features.quiz && <Link to={`/m/${m.id}/qcm?chap=${c.id}`} className="btn btn-soft"><Gamepad2 size={16} /> Teste-toi sur ce chapitre</Link>}
-                    {next && <Link to={`/m/${m.id}/lire/${next.id}`} className="btn btn-primary">Chapitre suivant <ArrowRight size={16} /></Link>}
-                    {!next && <button className="btn btn-primary" onClick={() => nav(`/m/${m.id}`)}>Retour au module</button>}
+                <div className="relative z-10 flex flex-col items-center">
+                  {gained !== null && <ConfettiBackdrop />}
+                  <HexStarMedal size={56} />
+                  <Mascot mood="excited" eyelashes size={130} className="-my-2" />
+                  <p className="h-display text-2xl font-extrabold text-good">
+                    Chapitre validé{gained ? ` · +${gained} XP !` : ' !'}
+                  </p>
+                  <div className="mt-4 flex flex-wrap justify-center gap-2.5">
+                    {m.features.quiz && (
+                      <Link to={`/m/${m.id}/qcm?chap=${c.id}`} className="btn btn-soft">
+                        <Tasks size={16} /> Teste-toi sur ce chapitre
+                      </Link>
+                    )}
+                    {next && (
+                      <Link to={`/m/${m.id}/lire/${next.id}`} className="btn btn-primary">
+                        Chapitre suivant <ArrowRight size={16} />
+                      </Link>
+                    )}
+                    {!next && (
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => nav(`/m/${m.id}`)}
+                      >
+                        Retour au module
+                      </button>
+                    )}
                   </div>
-                </>
+                </div>
               ) : (
-                <>
-                  <p className="text-muted">Tu as fini ce chapitre ?</p>
-                  <button className="btn btn-good btn-lg mt-3" onClick={markRead}><Check size={18} /> Marquer comme lu (+25 XP)</button>
-                </>
+                <div className="flex flex-col items-center">
+                  <Mascot mood="happy" size={115} className="-mt-2" />
+                  <p className="font-display text-lg font-extrabold text-ink">
+                    Tu as terminé la lecture de ce chapitre ?
+                  </p>
+                  <button type="button" className="btn btn-good btn-lg mt-3" onClick={markRead}>
+                    <Check size={18} /> Marquer comme lu (+25 XP)
+                  </button>
+                </div>
               )}
             </div>
           )}
 
           <nav className="mt-6 flex justify-between gap-3">
-            {prev ? <Link to={`/m/${m.id}/lire/${prev.id}`} className="btn btn-soft"><ArrowLeft size={16} /> {prev.number} {prev.title}</Link> : <span />}
-            {next ? <Link to={`/m/${m.id}/lire/${next.id}`} className="btn btn-soft">{next.number} {next.title} <ArrowRight size={16} /></Link> : <span />}
+            {prev ? (
+              <Link to={`/m/${m.id}/lire/${prev.id}`} className="btn btn-soft">
+                <ArrowLeft size={16} /> {prev.number} {prev.title}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <Link to={`/m/${m.id}/lire/${next.id}`} className="btn btn-soft">
+                {next.number} {next.title} <ArrowRight size={16} />
+              </Link>
+            ) : (
+              <span />
+            )}
           </nav>
         </article>
 
         <aside className="hidden lg:block">
-          <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
-            <p className="mb-2 text-[11px] font-extrabold uppercase tracking-wider text-muted">Dans ce chapitre</p>
-            <ul className="space-y-0.5 border-l border-line">
+          <div className="card sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto p-4">
+            <p className="mb-2 text-[11px] font-extrabold uppercase tracking-wider text-muted">
+              Dans ce chapitre
+            </p>
+            <ul className="space-y-1 border-l-2 border-line">
               {heads.map((h) => (
                 <li key={h.id}>
-                  <a href={`#${h.id}`} onClick={(e) => { e.preventDefault(); document.getElementById(h.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                    className={cn('-ml-px block border-l-2 py-1 pr-2 text-[13px] leading-snug transition', h.level === 3 ? 'pl-6' : 'pl-3', active === h.id ? 'border-brand font-bold text-brand' : 'border-transparent text-muted hover:text-ink')}>
+                  <a
+                    href={`#${h.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document
+                        .getElementById(h.id)
+                        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                    className={cn(
+                      '-ml-0.5 block border-l-2 py-1 pr-2 text-xs leading-snug transition',
+                      h.level === 3 ? 'pl-5' : 'pl-3',
+                      active === h.id
+                        ? 'border-brand font-extrabold text-brand'
+                        : 'border-transparent font-semibold text-muted hover:text-ink',
+                    )}
+                  >
                     {h.text}
                   </a>
                 </li>

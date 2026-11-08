@@ -1,61 +1,110 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { badgeById, RARITY_STYLE, tierFor } from '@/lib/gamification';
+import { badgeById, tierFor } from '@/lib/gamification';
 import { useStore } from '@/state/Store';
+import { Mascot } from './Mascot';
+import { ConfettiBackdrop, FlameBadgeIcon, HexStarMedal } from './Decor';
 
 export function fireConfetti(big = false) {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) return;
-  const colors = ['#7B6CFF', '#FFB020', '#12B76A', '#F04438', '#38BDF8'];
-  confetti({ particleCount: big ? 160 : 70, spread: big ? 100 : 70, origin: { y: 0.65 }, colors });
-  if (big) setTimeout(() => confetti({ particleCount: 90, angle: 60, spread: 70, origin: { x: 0, y: 0.7 }, colors }), 220);
-  if (big) setTimeout(() => confetti({ particleCount: 90, angle: 120, spread: 70, origin: { x: 1, y: 0.7 }, colors }), 220);
+  const colors = ['#1D6FFF', '#FF574A', '#18B8E8', '#7C3AED', '#FFD026', '#22C55E'];
+  confetti({ particleCount: big ? 140 : 65, spread: big ? 100 : 70, origin: { y: 0.62 }, colors });
+  if (big) {
+    setTimeout(() => confetti({ particleCount: 80, angle: 60, spread: 70, origin: { x: 0, y: 0.7 }, colors }), 200);
+    setTimeout(() => confetti({ particleCount: 80, angle: 120, spread: 70, origin: { x: 1, y: 0.7 }, colors }), 200);
+  }
 }
 
-/** Affiche, un par un, les passages de niveau et badges débloqués. */
+/**
+ * Affiche, un par un, les passages de niveau et badges débloqués dans un <dialog> natif
+ * au style Playful Gamified EdTech (médaillon hexagonal étoilé + mascotte nuage + confettis).
+ */
 export default function Celebrations() {
   const { events, dismissEvent } = useStore();
   const ev = events[0];
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    if (!ev) return;
-    if (ev.type === 'level') fireConfetti(true);
-    if (ev.type === 'badge') fireConfetti(false);
+    const dlg = dialogRef.current;
+    if (!dlg) return;
+    if (ev) {
+      if (!dlg.open) dlg.showModal();
+      if (ev.type === 'level') fireConfetti(true);
+      if (ev.type === 'badge') fireConfetti(false);
+    } else if (dlg.open) {
+      dlg.close();
+    }
   }, [ev]);
 
   if (!ev) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
-      <div className="card w-full max-w-sm animate-pop p-7 text-center shadow-pop">
-        {ev.type === 'level' && (() => {
-          const t = tierFor(ev.level);
-          return (
-            <>
-              <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full text-5xl" style={{ background: t.color + '2a' }}>{t.emoji}</div>
-              <p className="mt-4 text-xs font-extrabold uppercase tracking-widest text-accent">Niveau supérieur !</p>
-              <h2 className="h-display mt-1 text-4xl">Niveau {ev.level}</h2>
-              <p className="mt-2 text-muted">Palier de puissance : <b className="text-ink">{t.name}</b></p>
-            </>
-          );
-        })()}
-        {ev.type === 'badge' && (() => {
-          const b = badgeById(ev.id);
-          if (!b) return null;
-          return (
-            <>
-              <div className={`mx-auto flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br text-5xl shadow-pop ${RARITY_STYLE[b.rarity]}`}>{b.emoji}</div>
-              <p className="mt-4 text-xs font-extrabold uppercase tracking-widest text-accent">Nouveau badge · {b.rarity}</p>
-              <h2 className="h-display mt-1 text-2xl">{b.name}</h2>
-              <p className="mt-2 text-muted">{b.desc}</p>
-              <p className="mt-2 text-sm font-bold text-good">+20 XP</p>
-            </>
-          );
-        })()}
-        <button autoFocus className="btn btn-primary btn-lg mt-6 w-full" onClick={dismissEvent}>
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="celebration-title"
+      onClose={dismissEvent}
+      className="m-auto w-[calc(100%-2rem)] max-w-sm overflow-visible rounded-4xl border-0 bg-bg p-6 text-center text-ink shadow-pop outline-none animate-pop"
+    >
+      <div className="relative flex flex-col items-center pt-2">
+        <ConfettiBackdrop />
+
+        <HexStarMedal size={68} className="relative z-10 mb-1" />
+
+        <Mascot
+          mood={ev.type === 'level' ? 'proud' : 'excited'}
+          crown={ev.type === 'level'}
+          eyelashes={ev.type === 'badge'}
+          size={170}
+          className="relative z-10 -my-2"
+        />
+
+        <div className="card relative z-10 mt-1 w-full p-6 shadow-card">
+          {ev.type === 'level' && (() => {
+            const t = tierFor(ev.level);
+            return (
+              <>
+                <p className="text-xs font-extrabold uppercase tracking-widest text-brand">Niveau supérieur !</p>
+                <h2 id="celebration-title" className="h-display mt-1 text-4xl text-ink">
+                  Niveau {ev.level}
+                </h2>
+                <p className="mt-1.5 flex items-center justify-center gap-1.5 text-base font-bold text-muted">
+                  Palier : <span className="font-extrabold text-ink">{t.name}</span>
+                  <FlameBadgeIcon size={20} />
+                </p>
+              </>
+            );
+          })()}
+
+          {ev.type === 'badge' && (() => {
+            const b = badgeById(ev.id);
+            if (!b) return null;
+            return (
+              <>
+                <p className="text-xs font-extrabold uppercase tracking-widest text-brand">
+                  Nouveau badge · {b.rarity}
+                </p>
+                <h2 id="celebration-title" className="h-display mt-1 text-3xl text-ink">
+                  +20 XP
+                </h2>
+                <p className="mt-1 flex items-center justify-center gap-1.5 text-base font-extrabold text-ink">
+                  {b.name} <FlameBadgeIcon size={18} />
+                </p>
+                <p className="mt-1 text-xs font-semibold text-muted">{b.desc}</p>
+              </>
+            );
+          })()}
+        </div>
+
+        <button
+          type="button"
+          autoFocus
+          className="btn btn-primary btn-lg relative z-10 mt-5 w-full"
+          onClick={dismissEvent}
+        >
           {events.length > 1 ? 'Suivant' : 'Continuer'}
         </button>
       </div>
-    </div>
+    </dialog>
   );
 }

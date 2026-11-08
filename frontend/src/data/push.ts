@@ -1,4 +1,5 @@
 import { API_BASE_URL, supabase } from './supabase';
+import { getStoredToken } from './repo';
 
 interface PushConfig {
   enabled: boolean;
@@ -12,6 +13,8 @@ function fromBase64Url(value: string): Uint8Array {
 }
 
 async function getAccessToken(): Promise<string> {
+  const stored = getStoredToken();
+  if (stored) return stored;
   if (!supabase) throw new Error('Les notifications nécessitent un compte en ligne.');
   const { data, error } = await supabase.auth.getSession();
   if (error || !data.session?.access_token) throw new Error('Reconnecte-toi pour gérer tes notifications.');
