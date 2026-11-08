@@ -1,5 +1,33 @@
 const { randomUUID } = require('crypto');
 
+const FILIERES = {
+  ARI: {
+    id: 'ARI',
+    code: 'ARI',
+    name: 'Architecture des Réseaux & IoT',
+    theme: 'corail',
+  },
+  AIP: {
+    id: 'AIP',
+    code: 'AIP',
+    name: 'Automatique & Informatique Industrielle',
+    theme: 'violet',
+  },
+};
+
+const DEFAULT_THEME = 'corail';
+
+function normalizeFiliere(value) {
+  if (typeof value !== 'string') return null;
+  const upper = value.trim().toUpperCase();
+  return upper === 'ARI' || upper === 'AIP' ? upper : null;
+}
+
+function themeForFiliere(filiere) {
+  const normalized = normalizeFiliere(filiere);
+  return normalized ? FILIERES[normalized].theme : DEFAULT_THEME;
+}
+
 const XP = {
   chapterRead: 25,
   perfectQuiz: 30,
@@ -34,6 +62,8 @@ function levelFromXp(xp) {
 function defaultState() {
   return {
     v: 1,
+    filiere: null,
+    theme: DEFAULT_THEME,
     xp: 0,
     streak: 0,
     bestStreak: 0,
@@ -54,6 +84,8 @@ function normalizeState(raw) {
   const base = defaultState();
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return base;
   const state = { ...base, ...raw };
+  state.filiere = normalizeFiliere(raw.filiere);
+  state.theme = themeForFiliere(state.filiere);
   state.daily = { ...base.daily, ...(raw.daily || {}) };
   state.counters = { ...base.counters, ...(raw.counters || {}) };
   for (const key of ['chaptersRead', 'attempts', 'badges', 'review', 'chapterStats', 'examBest']) {
@@ -257,22 +289,38 @@ function applyCards(state, modules, input, content) {
   return finish(attempted, modules, { score: known.length, max: known.length + unknown.length }, lines, gain);
 }
 
+function applySetFiliere(state, filiereInput) {
+  if (state.filiere) {
+    throw new Error('La filière ne peut plus être modifiée une fois choisie.');
+  }
+  const filiere = normalizeFiliere(filiereInput);
+  if (!filiere) throw new Error('Filière invalide (ARI ou AIP attendu)');
+  const next = {
+    ...state,
+    filiere,
+    theme: themeForFiliere(filiere),
+  };
+  return { state: next, summary: null };
+}
+
 function applyAction(rawState, input, content) {
   const state = normalizeState(rawState);
   const modules = content.getModules();
   if (!input || typeof input !== 'object') throw new Error('Action invalide');
+  if (input.type === 'set-filiere') return applySetFiliere(state, input.filiere);
   if (input.type === 'chapter-read') return applyChapterRead(state, modules, input.moduleId, input.chapterId, content);
   if (input.type === 'quiz') return applyQuiz(state, modules, input, content);
   if (input.type === 'exam') return applyExam(state, modules, input, content);
   if (input.type === 'cards') return applyCards(state, modules, input, content);
-  if (input.type === 'reset') return { state: defaultState(), summary: null };
+  if (input.type === 'reset') return { state: { ...defaultState(), filiere: state.filiere, theme: themeForFiliere(state.filiere) }, summary: null };
   throw new Error('Action inconnue');
 }
 
 function importLegacyState(rawState, content) {
   if (!rawState || typeof rawState !== 'object' || Array.isArray(rawState)) throw new Error('Progression à importer invalide');
   const modules = content.getModules();
-  let state = defaultState();
+  const filiere = normalizeFiliere(rawState.filiere);
+  let state = { ...defaultState(), filiere, theme: themeForFiliere(filiere) };
   const readEntries = Object.entries(rawState.chaptersRead || {});
   if (readEntries.length > 100) throw new Error('Progression à importer trop volumineuse');
   for (const [moduleId, chapterIds] of readEntries) {
@@ -294,4 +342,93 @@ function importLegacyState(rawState, content) {
   return state;
 }
 
-module.exports = { applyAction, defaultState, importLegacyState, normalizeState, levelFromXp };
+function getBattleWeekBounds(date = new Date()) {
+  const d = new Date(date);
+  const day = d.getDay(); // 0: Dimanche, 1: Lundi, ..., 6: Samedi
+  const daysSinceMonday = (day + 6) % 7; // Lundi = 0, Mardi = 1, ..., Samedi = 5, Dimanche = 6
+
+  const monday = new Date(d);
+  monday.setDate(d.getDate() - daysSinceMonday);
+  monday.setHours(0, 0, 0, 0);
+
+  const saturday18h = new Date(monday);
+  saturday18h.setDate(monday.getDate() + 5);
+  saturday18h.setHours(18, 0, 0, 0);
+
+  const nextMonday = new Date(monday);
+  nextMonday.setDate(monday.getDate() + 7);
+  nextMonday.setHours(0, 0, 0, 0);
+
+  const isFinished = d.getTime() >= saturday18h.getTime();
+
+  const year = monday.getFullYear();
+  const month = String(monday.getMonth() + 1).padStart(2, '0');
+  const dayOfMonth = String(monday.getDate()).padStart(2, '0');
+  const id = `battle-${year}-${month}-${dayOfMonth}`;
+
+  const satDay = String(saturday18h.getDate()).padStart(2, '0');
+  const satMonth = String(saturday18h.getMonth() + 1).padStart(2, '0');
+  const weekLabel = `Semaine du ${dayOfMonth}/${month} au ${satDay}/${satMonth}`;
+
+  return {
+    id,
+    weekLabel,
+    startsAt: monday.toISOString(),
+    endsAt: saturday18h.toISOString(),
+    nextStartsAt: nextMonday.toISOString(),
+    isFinished,
+  };
+}
+
+function computeBattleScores(users = {}, referenceDate = new Date()) {
+  const bounds = getBattleWeekBounds(referenceDate);
+  const userList = Object.values(users || {});
+
+  let ariScore = 0;
+  let aipScore = 0;
+  let ariMembers = 0;
+  let aipMembers = 0;
+
+  for (const u of userList) {
+    const filiere = normalizeFiliere(u.state?.filiere ?? u.filiere);
+    const xp = Number(u.state?.xp ?? u.xp) || 0;
+    if (filiere === 'ARI') {
+      ariScore += xp;
+      ariMembers += 1;
+    } else if (filiere === 'AIP') {
+      aipScore += xp;
+      aipMembers += 1;
+    }
+  }
+
+  let winner = null;
+  if (bounds.isFinished) {
+    if (aipScore > ariScore) winner = 'AIP';
+    else if (ariScore > aipScore) winner = 'ARI';
+    else winner = 'EGALITE';
+  }
+
+  return {
+    ...bounds,
+    ariScore,
+    aipScore,
+    ariMembers,
+    aipMembers,
+    winner,
+    status: bounds.isFinished ? 'completed' : 'active',
+  };
+}
+
+module.exports = {
+  FILIERES,
+  DEFAULT_THEME,
+  normalizeFiliere,
+  themeForFiliere,
+  applyAction,
+  defaultState,
+  importLegacyState,
+  normalizeState,
+  levelFromXp,
+  getBattleWeekBounds,
+  computeBattleScores,
+};

@@ -3,13 +3,38 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
-import { AlertTriangle, GraduationCap, Lightbulb, Pin } from 'lucide-react';
+import { AlertTriangle, Bookmark, GraduationHat, Sparkles } from '@getpapillon/papicons';
+import { Mascot, MascotMood } from './Mascot';
 
 const KINDS = {
-  retenir: { label: 'À retenir', icon: Pin, cls: 'border-brand/50 bg-brand/10 text-brand' },
-  exemple: { label: 'Exemple', icon: Lightbulb, cls: 'border-accent/60 bg-accent/10 text-accent' },
-  attention: { label: 'Attention', icon: AlertTriangle, cls: 'border-bad/50 bg-bad/10 text-bad' },
-  examen: { label: "Pour l'examen", icon: GraduationCap, cls: 'border-good/50 bg-good/10 text-good' },
+  retenir: {
+    label: 'À retenir',
+    icon: Bookmark,
+    mood: 'happy' as MascotMood,
+    cls: 'border-brand/35 bg-soft/75 pattern-dots',
+    badgeCls: 'bg-brand text-white',
+  },
+  exemple: {
+    label: 'Exemple concret',
+    icon: Sparkles,
+    mood: 'wink' as MascotMood,
+    cls: 'border-amber-400/45 bg-amber-50/80 pattern-grid',
+    badgeCls: 'bg-amber-500 text-white',
+  },
+  attention: {
+    label: 'Attention / Piège',
+    icon: AlertTriangle,
+    mood: 'surprised' as MascotMood,
+    cls: 'border-bad/35 bg-bad/10 pattern-dots',
+    badgeCls: 'bg-bad text-white',
+  },
+  examen: {
+    label: "Pour l'examen",
+    icon: GraduationHat,
+    mood: 'proud' as MascotMood,
+    cls: 'border-good/40 bg-good/10 pattern-grid',
+    badgeCls: 'bg-good text-white',
+  },
 } as const;
 type Kind = keyof typeof KINDS;
 
@@ -48,14 +73,14 @@ function Md({ text }: { text: string }) {
       rehypePlugins={plugins.rehype}
       components={{
         table: ({ children }) => (
-          <div className="my-5 overflow-x-auto rounded-xl border border-line">
+          <div className="my-5 overflow-x-auto rounded-2xl border border-line bg-card shadow-sm">
             <table>{children}</table>
           </div>
         ),
         img: ({ src, alt }) => (
           <figure className="my-5">
             <img src={src} alt={alt ?? ''} loading="lazy" className="!my-0 mx-auto w-full max-w-[640px]" />
-            {alt && <figcaption className="mt-2 text-center text-xs text-muted">{alt}</figcaption>}
+            {alt && <figcaption className="mt-2 text-center text-xs font-bold text-muted">{alt}</figcaption>}
           </figure>
         ),
         a: ({ href, children }) => (
@@ -70,7 +95,10 @@ function Md({ text }: { text: string }) {
   );
 }
 
-/** Rendu d'un chapitre : Markdown + encadrés pédagogiques (:::retenir, :::exemple, :::attention, :::examen). */
+/**
+ * Rendu d'un chapitre : Markdown + Cadres d'apprentissage illustrés
+ * (:::retenir, :::exemple, :::attention, :::examen) avec motif de fond, icône Papicons et mini-mascotte.
+ */
 export function Course({ text }: { text: string }) {
   const segs = useMemo(() => split(text), [text]);
   return (
@@ -79,15 +107,28 @@ export function Course({ text }: { text: string }) {
         s.type === 'md' ? (
           <Md key={i} text={s.text} />
         ) : (
-          <aside key={i} className={`my-5 rounded-2xl border-l-4 p-4 ${KINDS[s.kind].cls}`}>
-            <div className="mb-1 flex flex-wrap items-center gap-x-2 text-xs font-extrabold uppercase tracking-wide"><span className="flex items-center gap-2 whitespace-nowrap">
-              {(() => {
-                const I = KINDS[s.kind].icon;
-                return <I size={15} />;
-              })()}
-              {KINDS[s.kind].label}</span>
-              {s.title && <span className="font-bold normal-case tracking-normal text-ink">· {s.title}</span>}
+          <aside
+            key={i}
+            className={`my-6 relative overflow-hidden rounded-3xl border-2 p-5 shadow-sm ${KINDS[s.kind].cls}`}
+          >
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold uppercase tracking-wide shadow-sm ${KINDS[s.kind].badgeCls}`}
+                >
+                  {(() => {
+                    const I = KINDS[s.kind].icon;
+                    return <I size={15} />;
+                  })()}
+                  {KINDS[s.kind].label}
+                </span>
+                {s.title && (
+                  <span className="font-display text-base font-extrabold text-ink">{s.title}</span>
+                )}
+              </div>
+              <Mascot mood={KINDS[s.kind].mood} size={44} animate={false} className="-my-2 shrink-0" />
             </div>
+
             <div className="text-ink [&>*:first-child]:mt-1 [&>*:last-child]:mb-0 [&_p]:my-2 [&_ul]:my-2">
               <Md text={s.body} />
             </div>
@@ -152,7 +193,7 @@ function renderAnswerText(raw: string[], keyPrefix: string): ReactNode[] {
   return items;
 }
 
-const ANSWER_PRE = 'my-1.5 overflow-x-auto rounded-xl border border-line bg-soft p-3 font-mono text-[12.5px] leading-relaxed text-ink';
+const ANSWER_PRE = 'my-1.5 overflow-x-auto rounded-2xl border border-line bg-[#141B2D] p-3.5 font-mono text-[12.5px] leading-relaxed text-slate-100 shadow-card';
 
 export function AnswerText({ text }: { text: string }) {
   const clean = text.replace(/\r/g, '');
@@ -173,6 +214,7 @@ export function AnswerText({ text }: { text: string }) {
   const head = (firstBullet === -1 ? raw : raw.slice(0, firstBullet)).join('\n').replace(/\s+$/, '');
   const isCode = CODE_START.test(head.trimStart());
   const rest = isCode ? (firstBullet === -1 ? [] : raw.slice(firstBullet)) : raw;
+
   return (
     <div className="text-[14.5px] leading-relaxed">
       {isCode && (
@@ -187,6 +229,12 @@ export function AnswerText({ text }: { text: string }) {
 
 export function textOf(node: ReactNode): string {
   return Children.toArray(node)
-    .map((c) => (typeof c === 'string' ? c : isValidElement(c) ? textOf((c.props as { children?: ReactNode }).children) : ''))
+    .map((c) =>
+      typeof c === 'string'
+        ? c
+        : isValidElement(c)
+          ? textOf((c.props as { children?: ReactNode }).children)
+          : '',
+    )
     .join('');
 }

@@ -1,5 +1,5 @@
 import { KeyboardEvent, useState } from 'react';
-import { MoreVertical } from 'lucide-react';
+import { Dots } from '@getpapillon/papicons';
 
 interface Props {
   label: string;
@@ -8,7 +8,12 @@ interface Props {
   disabled?: boolean;
 }
 
-export default function MessageDeleteMenu({ label, onDeleteForMe, onDeleteForEveryone, disabled = false }: Props) {
+export default function MessageDeleteMenu({
+  label,
+  onDeleteForMe,
+  onDeleteForEveryone,
+  disabled = false,
+}: Props) {
   const [open, setOpen] = useState(false);
   const closeOnEscape = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Escape') setOpen(false);
@@ -25,14 +30,33 @@ export default function MessageDeleteMenu({ label, onDeleteForMe, onDeleteForEve
         disabled={disabled}
         onClick={() => setOpen((value) => !value)}
       >
-        <MoreVertical size={17} />
+        <Dots size={17} />
       </button>
       {open && (
-        <div role="menu" className="absolute right-0 top-full z-30 min-w-52 rounded-lg border border-line bg-card p-1 shadow-card">
-          <button type="button" role="menuitem" className="w-full rounded-md px-3 py-2 text-left text-sm hover:bg-soft" onClick={() => { setOpen(false); onDeleteForMe(); }}>
+        <div
+          role="menu"
+          className="absolute right-0 top-full z-30 min-w-52 rounded-2xl border border-line bg-card p-1.5 shadow-pop"
+        >
+          <button
+            type="button"
+            role="menuitem"
+            className="w-full rounded-xl px-3 py-2 text-left text-xs font-bold hover:bg-soft transition"
+            onClick={() => {
+              setOpen(false);
+              onDeleteForMe();
+            }}
+          >
             Supprimer pour moi
           </button>
-          <button type="button" role="menuitem" className="w-full rounded-md px-3 py-2 text-left text-sm text-bad hover:bg-bad/10" onClick={() => { setOpen(false); onDeleteForEveryone(); }}>
+          <button
+            type="button"
+            role="menuitem"
+            className="w-full rounded-xl px-3 py-2 text-left text-xs font-bold text-bad hover:bg-bad/10 transition"
+            onClick={() => {
+              setOpen(false);
+              onDeleteForEveryone();
+            }}
+          >
             Supprimer définitivement pour tous
           </button>
         </div>
