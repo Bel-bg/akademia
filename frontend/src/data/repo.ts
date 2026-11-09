@@ -199,6 +199,15 @@ export function localRepo(key = 'guest'): Repo {
   };
 }
 
+/** UUID v4 ; repli si crypto.randomUUID est absent (contexte non sécurisé, anciens navigateurs). */
+function newActionId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+
 export function apiRepo(userId = 'me'): CloudRepo {
   let flushing: Promise<{
     state: UserState | null;
@@ -268,14 +277,14 @@ export function apiRepo(userId = 'me'): CloudRepo {
           '/progress/actions',
           {
             method: 'POST',
-            body: JSON.stringify(action),
+            body: JSON.stringify({ actionId: newActionId(), action }),
           },
         );
         return { state: normalizeState(res.state), summary: res.summary };
       }
 
       const snapshot = readSnapshot(userId) ?? { state: optimistic.state, pending: [] };
-      const pending = { id: crypto.randomUUID(), action };
+      const pending = { id: newActionId(), action };
       const next = { state: optimistic.state, pending: [...snapshot.pending, pending] };
       writeSnapshot(userId, next);
       if (!navigator.onLine) return optimistic;
@@ -324,7 +333,7 @@ export function apiRepo(userId = 'me'): CloudRepo {
         return normalizeState(res.state);
       }
       const snapshot = readSnapshot(userId) ?? { state: optimistic, pending: [] };
-      const reset = { id: crypto.randomUUID(), action: resetAction };
+      const reset = { id: newActionId(), action: resetAction };
       writeSnapshot(userId, { state: optimistic, pending: [...snapshot.pending, reset] });
       if (!navigator.onLine) return optimistic;
       try {
