@@ -45,13 +45,13 @@ export function CustomAvatar({
   const initials = getInitials(name);
   const isAip = filiere === 'AIP';
 
-  // Palette par filière : AIP -> Violet (#7C3AED), ARI -> Rouge/Corail (#FF574A, par défaut)
+  // Palette par filière : AIP -> Violet (#7C3AED), ARI -> Bleu (#1D6FFF, par défaut)
   const bgGradient = isAip
     ? 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)'
-    : 'linear-gradient(135deg, #FF6F61 0%, #E11D48 100%)';
+    : 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)';
 
-  const borderColor = isAip ? 'rgba(237, 233, 254, 0.9)' : 'rgba(254, 226, 226, 0.9)';
-  const shadowColor = isAip ? '0 4px 12px rgba(124, 58, 237, 0.35)' : '0 4px 12px rgba(255, 87, 74, 0.35)';
+  const borderColor = isAip ? 'rgba(237, 233, 254, 0.9)' : 'rgba(219, 234, 254, 0.9)';
+  const shadowColor = isAip ? '0 4px 12px rgba(124, 58, 237, 0.35)' : '0 4px 12px rgba(29, 111, 255, 0.35)';
 
   const fontSize = Math.max(10, Math.round(pixelSize * 0.42));
 
@@ -78,7 +78,7 @@ export function CustomAvatar({
         <span
           className={cn(
             'absolute -bottom-0.5 -right-0.5 flex items-center justify-center rounded-full font-black text-white ring-2 ring-card shadow-sm',
-            isAip ? 'bg-[#7C3AED]' : 'bg-[#FF574A]',
+            isAip ? 'bg-[#7C3AED]' : 'bg-[#1D6FFF]',
           )}
           style={{
             fontSize: `${Math.max(8, Math.round(pixelSize * 0.22))}px`,

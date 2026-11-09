@@ -19,12 +19,12 @@ export interface ThemeMeta {
 
 export const THEMES: ThemeMeta[] = [
   {
-    id: 'corail',
-    name: 'Rouge Corail (ARI)',
+    id: 'ciel',
+    name: 'Bleu Azur (ARI)',
     subtitle: 'Architecture des Réseaux & IoT',
-    brandHex: '#FF574A',
-    mascotHex: '#FF7266',
-    ctaHex: '#FF574A',
+    brandHex: '#1D6FFF',
+    mascotHex: '#7EB6FF',
+    ctaHex: '#1D6FFF',
     bgHex: '#FBF7EF',
   },
   {
@@ -43,8 +43,8 @@ export const FILIERES: { id: FiliereId; name: string; full: string; color: strin
     id: 'ARI',
     name: 'ARI',
     full: 'Architecture des Réseaux & IoT',
-    color: '#FF574A',
-    theme: 'corail',
+    color: '#1D6FFF',
+    theme: 'ciel',
   },
   {
     id: 'AIP',
@@ -81,14 +81,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   });
 
-  // Synchronisation du thème avec le backend en fonction de la filière (ARI -> corail, AIP -> violet, défaut -> corail)
+  // Synchronisation du thème avec le backend en fonction de la filière (ARI -> ciel, AIP -> violet, défaut -> ciel)
   useEffect(() => {
     let active = true;
     const fallback = themeForFiliere(rawFiliere);
     setBackendTheme(fallback);
     fetchBackendTheme(rawFiliere)
       .then((res) => {
-        if (active && (res.theme === 'corail' || res.theme === 'violet')) {
+        if (active && (res.theme === 'ciel' || res.theme === 'violet')) {
           setBackendTheme(res.theme);
         }
       })

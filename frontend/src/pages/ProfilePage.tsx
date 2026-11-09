@@ -227,7 +227,7 @@ export default function ProfilePage() {
           <span
             className={cn(
               'inline-flex items-center gap-1 rounded-full px-3.5 py-1 text-xs font-extrabold text-white shadow-sm',
-              theme === 'corail' ? 'bg-[#8B5CF6]' : 'bg-brand',
+              theme === 'ciel' ? 'bg-[#8B5CF6]' : 'bg-brand',
             )}
           >
             <Star size={13} />

@@ -74,11 +74,11 @@ export default function LeaderboardPage() {
   const top3 = entries[2];
   const rest = hasPodium ? entries.slice(3) : entries;
 
-  // Couleurs du podium selon le thème (Corail vs Violet)
+  // Couleurs du podium selon le thème (Bleu Ciel vs Violet)
   const podiumColors =
-    theme === 'corail'
+    theme === 'ciel'
       ? {
-          c1Mascot: '#FF574A',
+          c1Mascot: '#1D6FFF',
           c1Bar: 'bg-[#FDE047] text-ink border-[#FACC15]',
           c2Mascot: '#8B5CF6',
           c2Bar: 'bg-[#DDD6FE] text-ink border-[#C4B5FD]',

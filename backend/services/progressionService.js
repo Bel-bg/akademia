@@ -5,7 +5,7 @@ const FILIERES = {
     id: 'ARI',
     code: 'ARI',
     name: 'Architecture des Réseaux & IoT',
-    theme: 'corail',
+    theme: 'ciel',
   },
   AIP: {
     id: 'AIP',
@@ -15,7 +15,7 @@ const FILIERES = {
   },
 };
 
-const DEFAULT_THEME = 'corail';
+const DEFAULT_THEME = 'ciel';
 
 function normalizeFiliere(value) {
   if (typeof value !== 'string') return null;

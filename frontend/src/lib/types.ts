@@ -89,7 +89,7 @@ export interface ReviewItem {
   seen: number;
 }
 export type FiliereId = 'ARI' | 'AIP';
-export type BackendThemeId = 'corail' | 'violet';
+export type BackendThemeId = 'ciel' | 'violet';
 
 export interface UserState {
   v: 1;
