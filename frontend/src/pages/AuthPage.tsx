@@ -301,7 +301,7 @@ export default function AuthPage() {
                   <User size={18} className="shrink-0 text-brand" />
                   <input
                     className={inputCls}
-                    placeholder="Ton pseudo étudiant (ex. Belmonde)"
+                    placeholder="Ton pseudo étudiant (ex. Miracle)"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required

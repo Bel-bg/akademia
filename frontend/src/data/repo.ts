@@ -493,6 +493,15 @@ export function localRepo(key = 'guest'): Repo {
   };
 }
 
+/** UUID v4 ; repli si crypto.randomUUID est absent (contexte non sécurisé, anciens navigateurs). */
+function newActionId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+
 export function apiRepo(userId = 'me'): CloudRepo {
   let flushing: Promise<{
     state: UserState | null;
@@ -595,7 +604,7 @@ export function apiRepo(userId = 'me'): CloudRepo {
       ]);
     },
     async applyAction(action, optimistic) {
-      const actionId = crypto.randomUUID();
+      const actionId = newActionId();
       if (!optimistic) {
         const res = await apiRequest<{ state: UserState; summary: Summary | null }>(
           '/progress/actions',
@@ -674,7 +683,7 @@ export function apiRepo(userId = 'me'): CloudRepo {
         return normalized;
       } catch {
         const snapshot = readSnapshot(userId) ?? { state: fallbackState, pending: [] };
-        const reset = { id: crypto.randomUUID(), action: resetAction };
+        const reset = { id: newActionId(), action: resetAction };
         writeSnapshot(userId, { state: fallbackState, pending: [...snapshot.pending, reset] });
         return fallbackState;
       }
