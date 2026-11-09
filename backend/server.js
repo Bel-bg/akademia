@@ -296,8 +296,7 @@ app.post('/api/battle/vote', requireUser, async (req, res, next) => {
     return next(error);
   }
 });
-  }
-});
+
 
 app.get('/api/progress', requireUser, async (req, res, next) => {
   try {

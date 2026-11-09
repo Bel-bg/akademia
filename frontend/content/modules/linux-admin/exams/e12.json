@@ -1,0 +1,78 @@
+{
+ "n": 12,
+ "title": "Épreuve n° 12 · Planification et journalisation",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : cron et at",
+   "points": 10,
+   "intro": "Écrivez les lignes de crontab ou les commandes.",
+   "questions": [
+    {
+     "id": "e12p1q1",
+     "q": "Écrivez la ligne de crontab : tous les jours à 2 h 30.",
+     "points": 1.5,
+     "a": "```text\n30 2 * * * /opt/sauvegarde.sh\n```\n- Champs : minute heure jour-du-mois mois jour-de-la-semaine."
+    },
+    {
+     "id": "e12p1q2",
+     "q": "Toutes les 10 minutes, du lundi au vendredi, de 8 h à 17 h.",
+     "points": 2,
+     "a": "```text\n*/10 8-17 * * 1-5 /opt/verif.sh\n```"
+    },
+    {
+     "id": "e12p1q3",
+     "q": "Le premier jour de chaque mois à minuit.",
+     "points": 1.5,
+     "a": "```text\n0 0 1 * * /opt/rapport.sh\n```"
+    },
+    {
+     "id": "e12p1q4",
+     "q": "Que signifie `@reboot /opt/init.sh` ? Pourquoi un script marche en terminal mais pas dans cron ?",
+     "points": 2.5,
+     "a": "- `@reboot` : exécuté une fois au démarrage.\n- Cron fournit un environnement minimal (PATH réduit, pas de variables de session). Remède : chemins absolus, `PATH=` en tête de crontab, redirection `>> /var/log/job.log 2>&1`."
+    },
+    {
+     "id": "e12p1q5",
+     "q": "Planifiez dans 30 minutes l'exécution de `date >> ~/h.txt` avec `at`, puis listez et supprimez la tâche.",
+     "points": 2.5,
+     "a": "```bash\nat now + 30 minutes\n# at> date >> ~/h.txt\n# Ctrl+D\natq\natrm 1\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : logs",
+   "points": 10,
+   "intro": "Extrait de `/var/log/auth.log` : `Failed password for root from 10.0.0.5`, `Failed password for invalid user bob from 10.0.0.9`, `Accepted password for alice from 10.0.0.7`, `Failed password for root from 10.0.0.5`.",
+   "questions": [
+    {
+     "id": "e12p2q1",
+     "q": "Affichez les lignes d'échec d'authentification et comptez-les.",
+     "points": 2,
+     "a": "```bash\ngrep 'Failed password' /var/log/auth.log\ngrep -c 'Failed password' /var/log/auth.log\n```\n- Sur l'extrait : 3 échecs."
+    },
+    {
+     "id": "e12p2q2",
+     "q": "Classez les adresses IP source des échecs par nombre d'échecs décroissant.",
+     "points": 3,
+     "a": "```bash\ngrep 'Failed password' /var/log/auth.log | awk '{print $(NF)}' | sort | uniq -c | sort -nr\n```\n- Ici `$(NF)` est le dernier champ, l'adresse IP. Résultat : `2 10.0.0.5` puis `1 10.0.0.9`. Adaptez le champ à la forme réelle de la ligne."
+    },
+    {
+     "id": "e12p2q3",
+     "q": "Écrivez la règle rsyslog qui envoie la facility `local5` dans `/var/log/monapp.log`, puis testez-la.",
+     "points": 2,
+     "a": "```text\nlocal5.*    /var/log/monapp.log\n```\n```bash\nsudo systemctl restart rsyslog\nlogger -p local5.info -t monapp \"test\"\ntail /var/log/monapp.log\n```"
+    },
+    {
+     "id": "e12p2q4",
+     "q": "Écrivez la configuration logrotate : rotation hebdomadaire, 4 archives, compression, pas d'erreur si le fichier manque.",
+     "points": 3,
+     "a": "```text\n/var/log/monapp.log {\n    weekly\n    rotate 4\n    compress\n    delaycompress\n    missingok\n    notifempty\n    create 0640 root adm\n}\n```\n- Fichier à placer dans `/etc/logrotate.d/monapp`. Test : `sudo logrotate -d /etc/logrotate.d/monapp` (simulation)."
+    }
+   ]
+  }
+ ]
+}

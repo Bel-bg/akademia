@@ -1,0 +1,86 @@
+{
+ "n": 24,
+ "title": "Épreuve n° 24 · Examen blanc B",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : stockage",
+   "points": 7,
+   "intro": "Deux disques vides `/dev/sdb` et `/dev/sdc`.",
+   "questions": [
+    {
+     "id": "e24p1q1",
+     "q": "Créez un volume LVM `lv_data` de 8 Go dans `vg0` et montez-le sur `/data`.",
+     "points": 3.5,
+     "a": "```bash\nsudo pvcreate /dev/sdb /dev/sdc\nsudo vgcreate vg0 /dev/sdb /dev/sdc\nsudo lvcreate -L 8G -n lv_data vg0\nsudo mkfs.ext4 /dev/vg0/lv_data\nsudo mkdir /data && sudo mount /dev/vg0/lv_data /data\n```"
+    },
+    {
+     "id": "e24p1q2",
+     "q": "Rendez le montage permanent avec l'UUID.",
+     "points": 2,
+     "a": "```bash\nsudo blkid /dev/vg0/lv_data\n```\n```text\nUUID=…  /data  ext4  defaults  0  2\n```\n- Tester avec `sudo mount -a`."
+    },
+    {
+     "id": "e24p1q3",
+     "q": "Agrandissez-le de 2 Go à chaud.",
+     "points": 1.5,
+     "a": "```bash\nsudo lvextend -r -L +2G /dev/vg0/lv_data\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : accès et automatisation",
+   "points": 7,
+   "intro": "Utilisateur `ops`.",
+   "questions": [
+    {
+     "id": "e24p2q1",
+     "q": "Autorisez `ops` à redémarrer seulement `nginx`, sans mot de passe.",
+     "points": 2.5,
+     "a": "```bash\nsudo visudo -f /etc/sudoers.d/ops\n```\n```text\nops ALL=(root) NOPASSWD: /usr/bin/systemctl restart nginx\n```\n- Fichier en `0440`. Vérifier : `sudo visudo -c`."
+    },
+    {
+     "id": "e24p2q2",
+     "q": "Planifiez `/opt/archive.sh` du lundi au vendredi à 23 h.",
+     "points": 2,
+     "a": "```text\n0 23 * * 1-5 /opt/archive.sh >> /var/log/archive.log 2>&1\n```"
+    },
+    {
+     "id": "e24p2q3",
+     "q": "Autorisez `ops` à se connecter par clé uniquement.",
+     "points": 2.5,
+     "a": "```bash\nssh-copy-id ops@srv\n```\n- Dans `sshd_config` : `PasswordAuthentication no`. Valider avec `sshd -t`, puis `systemctl reload ssh`."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : analyse",
+   "points": 6,
+   "intro": "Fichier `/var/log/auth.log`.",
+   "questions": [
+    {
+     "id": "e24p3q1",
+     "q": "Combien d'échecs de connexion SSH ?",
+     "points": 2,
+     "a": "```bash\ngrep -c 'Failed password' /var/log/auth.log\n```"
+    },
+    {
+     "id": "e24p3q2",
+     "q": "Quelles sont les 3 IP les plus actives dans les échecs ?",
+     "points": 2.5,
+     "a": "```bash\ngrep 'Failed password' /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -nr | head -3\n```\n- Le champ dépend du format de la ligne (`from IP port N ssh2`) : vérifiez avec `awk '{print NF}'`."
+    },
+    {
+     "id": "e24p3q3",
+     "q": "Quel service doit-on vérifier si les logs sont vides ?",
+     "points": 1.5,
+     "a": "- `rsyslog` (`systemctl status rsyslog`) et l'espace disque ; sur système récent, `journalctl -u ssh`."
+    }
+   ]
+  }
+ ]
+}

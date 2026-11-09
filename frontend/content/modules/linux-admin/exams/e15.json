@@ -1,0 +1,80 @@
+{
+ "n": 15,
+ "title": "Épreuve n° 15 · LVM, RAID, swap et quotas",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : LVM",
+   "points": 8,
+   "intro": "Deux disques `/dev/sdb` et `/dev/sdc` sont disponibles.",
+   "questions": [
+    {
+     "id": "e15p1q1",
+     "q": "Créez un groupe `vg_data` avec les deux disques et un volume `lv_files` de 10 Go formaté en ext4.",
+     "points": 3.5,
+     "a": "```bash\nsudo pvcreate /dev/sdb /dev/sdc\nsudo vgcreate vg_data /dev/sdb /dev/sdc\nsudo lvcreate -L 10G -n lv_files vg_data\nsudo mkfs.ext4 /dev/vg_data/lv_files\n```\n- Ordre : volumes physiques, groupe, volumes logiques."
+    },
+    {
+     "id": "e15p1q2",
+     "q": "Agrandissez le volume de 5 Go à chaud avec son système de fichiers.",
+     "points": 2.5,
+     "a": "```bash\nsudo lvextend -r -L +5G /dev/vg_data/lv_files\n```\n- `-r` appelle `resize2fs` (ext4) ou `xfs_growfs` (XFS)."
+    },
+    {
+     "id": "e15p1q3",
+     "q": "Quelle différence de réduction entre ext4 et XFS ?",
+     "points": 2,
+     "a": "- ext4 peut être réduit (démonté) ; XFS ne peut **pas** être réduit, seulement agrandi."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : RAID",
+   "points": 7,
+   "intro": "Calculez et répondez.",
+   "questions": [
+    {
+     "id": "e15p2q1",
+     "q": "Capacité utile de 4 disques de 2 To en RAID 0, 1, 5, 6 et 10.",
+     "points": 3,
+     "a": "- RAID 0 : 8 To ; RAID 1 : 2 To (miroir complet) ; RAID 5 : 6 To ; RAID 6 : 4 To ; RAID 10 : 4 To.\n- Tolérance : 0, n−1, 1 disque, 2 disques, un disque par miroir."
+    },
+    {
+     "id": "e15p2q2",
+     "q": "Créez un RAID 1 de `/dev/sdb1` et `/dev/sdc1`.",
+     "points": 2,
+     "a": "```bash\nsudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1\ncat /proc/mdstat\n```"
+    },
+    {
+     "id": "e15p2q3",
+     "q": "Un disque tombe en panne : comment le remplacer ?",
+     "points": 2,
+     "a": "```bash\nsudo mdadm /dev/md0 --fail /dev/sdb1\nsudo mdadm /dev/md0 --remove /dev/sdb1\nsudo mdadm /dev/md0 --add /dev/sdd1\n```\n- Un RAID n'est pas une sauvegarde : il ne protège pas d'une suppression."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Partie 3 : swap et quotas",
+   "points": 5,
+   "intro": "Répondez avec les commandes.",
+   "questions": [
+    {
+     "id": "e15p3q1",
+     "q": "Créez un swapfile de 2 Go actif en permanence.",
+     "points": 3,
+     "a": "```bash\nsudo fallocate -l 2G /swapfile\nsudo chmod 600 /swapfile\nsudo mkswap /swapfile\nsudo swapon /swapfile\n```\n```text\n/swapfile none swap sw 0 0\n```\n- Ligne ajoutée à `/etc/fstab`. Vérifier : `swapon --show`."
+    },
+    {
+     "id": "e15p3q2",
+     "q": "Quelles options de `fstab` activent les quotas ? Quelle commande fixe la limite d'un utilisateur ?",
+     "points": 2,
+     "a": "- Options `usrquota,grpquota`, puis `quotacheck`, `quotaon`.\n- Limites : `sudo edquota -u alice` ou `setquota`. Soft = avertissement (délai de grâce), hard = limite stricte."
+    }
+   ]
+  }
+ ]
+}

@@ -78,5 +78,118 @@
   "cas": "systemctl, journalctl, fstab, LVM, ip, ss, ufw",
   "durationMinutes": 120,
   "points": 20
+ },
+ {
+  "n": 11,
+  "title": "Épreuve n° 11 · systemd, services et journaux",
+  "scenario": "Service web et service maison",
+  "cas": "systemctl, unité .service, drop-in, targets, journalctl",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 12,
+  "title": "Épreuve n° 12 · Planification et journalisation",
+  "scenario": "Tâches automatiques d'une PME",
+  "cas": "cron, at, timers, rsyslog, logrotate, analyse de logs",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 13,
+  "title": "Épreuve n° 13 · Gestion des paquets",
+  "scenario": "Parc Ubuntu et serveur Red Hat",
+  "cas": "apt, dpkg, rpm, dnf, dépôts, compilation",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 14,
+  "title": "Épreuve n° 14 · Disques, systèmes de fichiers et fstab",
+  "scenario": "Ajout d'un disque /dev/sdb de 20 Go",
+  "cas": "fdisk, mkfs, mount, fstab, loop, inodes",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 15,
+  "title": "Épreuve n° 15 · LVM, RAID, swap et quotas",
+  "scenario": "Serveur de fichiers",
+  "cas": "LVM, mdadm, capacité RAID, swapfile, quotas",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 16,
+  "title": "Épreuve n° 16 · Réseau",
+  "scenario": "Réseau local d'une agence",
+  "cas": "ip, netplan, DNS, ss, diagnostic, CIDR",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 17,
+  "title": "Épreuve n° 17 · SSH et pare-feu",
+  "scenario": "Sécurisation d'un serveur exposé",
+  "cas": "clés SSH, sshd_config, tunnels, ufw, firewalld",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 18,
+  "title": "Épreuve n° 18 · Scripting Bash avancé",
+  "scenario": "Scripts d'administration",
+  "cas": "fonctions, boucles, getopts, trap, tableaux, codes de retour",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 19,
+  "title": "Épreuve n° 19 · Archivage et sauvegarde",
+  "scenario": "Plan de sauvegarde d'un serveur de fichiers",
+  "cas": "tar, rsync, règle 3-2-1, restauration, cron",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 20,
+  "title": "Épreuve n° 20 · Dépannage",
+  "scenario": "Serveur lent puis service en panne",
+  "cas": "top, free, df, lsof, journalctl, méthode USE",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 21,
+  "title": "Épreuve n° 21 · Démarrage, noyau et GRUB",
+  "scenario": "Compréhension du boot",
+  "cas": "BIOS/UEFI, GRUB, initramfs, noyau, modules, runlevels",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 22,
+  "title": "Épreuve n° 22 · Expressions régulières, sed et awk",
+  "scenario": "Traitement de fichiers texte",
+  "cas": "grep -E, sed, awk, cut, sort, uniq",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 23,
+  "title": "Épreuve n° 23 · Examen blanc A",
+  "scenario": "Format de l'examen réel (2 h)",
+  "cas": "utilisateurs, droits, script, find, grep, système",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 24,
+  "title": "Épreuve n° 24 · Examen blanc B",
+  "scenario": "Administration d'un serveur d'entreprise",
+  "cas": "LVM, sudo, cron, ssh, journaux",
+  "durationMinutes": 120,
+  "points": 20
  }
 ]
+

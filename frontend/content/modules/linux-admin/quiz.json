@@ -2434,5 +2434,523 @@
   ],
   "answer": 2,
   "explain": "`/home` : personnels ; `/dev` : périphériques."
+ },
+ {
+  "id": "lx-q175",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 1,
+  "q": "Quel port TCP utilise SSH par défaut ?",
+  "options": [
+   "22",
+   "443",
+   "23",
+   "21"
+  ],
+  "answer": 0,
+  "explain": "SSH écoute sur le port 22 ; Telnet utilise 23 et FTP 21."
+ },
+ {
+  "id": "lx-q176",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 1,
+  "q": "Quelle commande copie votre clé publique sur un serveur ?",
+  "options": [
+   "`ssh-keygen -c user@hôte`",
+   "`ssh-copy-id user@hôte`",
+   "`scp id_rsa user@hôte`",
+   "`ssh-add user@hôte`"
+  ],
+  "answer": 1,
+  "explain": "ssh-copy-id ajoute la clé à authorized_keys avec les bons droits."
+ },
+ {
+  "id": "lx-q177",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Quels droits pour `~/.ssh/authorized_keys` ?",
+  "options": [
+   "777",
+   "000",
+   "600",
+   "644 obligatoirement lisible par tous"
+  ],
+  "answer": 2,
+  "explain": "Des droits trop ouverts font ignorer le fichier par sshd (StrictModes)."
+ },
+ {
+  "id": "lx-q178",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Quelle directive interdit la connexion directe de root par SSH ?",
+  "options": [
+   "`AllowRoot false`",
+   "`PermitRootLogin no`",
+   "`RootLogin off`",
+   "`DenyRoot yes`"
+  ],
+  "answer": 1,
+  "explain": "PermitRootLogin no dans /etc/ssh/sshd_config."
+ },
+ {
+  "id": "lx-q179",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Comment vérifier la syntaxe de sshd_config avant de recharger ?",
+  "options": [
+   "`sudo sshd -t`",
+   "`ssh -t`",
+   "`systemctl check ssh`",
+   "`sshd --lint`"
+  ],
+  "answer": 0,
+  "explain": "sshd -t teste la configuration sans rien appliquer."
+ },
+ {
+  "id": "lx-q180",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Quelle option crée un tunnel local ?",
+  "options": [
+   "`-L`",
+   "`-T`",
+   "`-D`",
+   "`-R`"
+  ],
+  "answer": 0,
+  "explain": "-L redirige un port local ; -R un port distant ; -D un proxy SOCKS."
+ },
+ {
+  "id": "lx-q181",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 1,
+  "q": "Quelle commande active ufw ?",
+  "options": [
+   "`sudo ufw on`",
+   "`sudo ufw run`",
+   "`sudo ufw enable`",
+   "`sudo ufw start`"
+  ],
+  "answer": 2,
+  "explain": "ufw enable active le pare-feu et le lance au démarrage."
+ },
+ {
+  "id": "lx-q182",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Pourquoi autoriser SSH avant `ufw enable` ?",
+  "options": [
+   "Sinon le port 22 est fermé pour le local",
+   "Sinon on se coupe de la machine distante",
+   "Ce n'est pas nécessaire",
+   "Sinon ufw refuse de démarrer"
+  ],
+  "answer": 1,
+  "explain": "Activer un pare-feu qui refuse tout entrant coupe la session SSH."
+ },
+ {
+  "id": "lx-q183",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 2,
+  "q": "Quelle commande firewalld rend une règle permanente ?",
+  "options": [
+   "`firewall-cmd --persist`",
+   "`firewall-cmd --permanent --add-service=http`",
+   "`firewall-cmd --add-service=http --forever`",
+   "`firewall-cmd --save`"
+  ],
+  "answer": 1,
+  "explain": "--permanent écrit la règle ; --reload l'applique."
+ },
+ {
+  "id": "lx-q184",
+  "chapter": "4-4-ssh-pare-feu",
+  "difficulty": 3,
+  "q": "Que fait fail2ban ?",
+  "options": [
+   "Bannit les IP après trop d'échecs d'authentification",
+   "Remplace sshd",
+   "Sauvegarde les logs",
+   "Chiffre les mots de passe"
+  ],
+  "answer": 0,
+  "explain": "Il lit les logs et ajoute des règles de pare-feu temporaires."
+ },
+ {
+  "id": "lx-q185",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 1,
+  "q": "Que contient `$#` ?",
+  "options": [
+   "Le nom du script",
+   "Le code de retour",
+   "Le nombre d'arguments",
+   "Le PID du script"
+  ],
+  "answer": 2,
+  "explain": "$# compte les arguments passés au script."
+ },
+ {
+  "id": "lx-q186",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 1,
+  "q": "Que contient `$?` ?",
+  "options": [
+   "Le nom du shell",
+   "Le PID",
+   "Le code de retour de la dernière commande",
+   "Les arguments"
+  ],
+  "answer": 2,
+  "explain": "0 signifie succès, toute autre valeur une erreur."
+ },
+ {
+  "id": "lx-q187",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 1,
+  "q": "Quelle première ligne choisit l'interpréteur ?",
+  "options": [
+   "`#!/bin/bash`",
+   "`#bash`",
+   "`!#/bin/bash`",
+   "`//bin/bash`"
+  ],
+  "answer": 0,
+  "explain": "Le shebang indique l'interpréteur à utiliser."
+ },
+ {
+  "id": "lx-q188",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 2,
+  "q": "Quel test vérifie qu'un fichier existe ?",
+  "options": [
+   "`[ -e fichier ]`",
+   "`[ -z fichier ]`",
+   "`[ fichier ]`",
+   "`[ -n fichier ]`"
+  ],
+  "answer": 0,
+  "explain": "-e teste l'existence ; -f fichier ordinaire ; -d répertoire."
+ },
+ {
+  "id": "lx-q189",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 2,
+  "q": "Quelle forme conserve les arguments séparés ?",
+  "options": [
+   "`\"$@\"`",
+   "`$*` sans guillemets",
+   "`\"$#\"`",
+   "`$@@`"
+  ],
+  "answer": 0,
+  "explain": "\"$@\" garde chaque argument, même avec des espaces."
+ },
+ {
+  "id": "lx-q190",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 2,
+  "q": "Que fait `set -u` ?",
+  "options": [
+   "Ignore les erreurs",
+   "Erreur si on utilise une variable non définie",
+   "Affiche les commandes",
+   "Désactive les jokers"
+  ],
+  "answer": 1,
+  "explain": "Évite les fautes de frappe silencieuses sur les variables."
+ },
+ {
+  "id": "lx-q191",
+  "chapter": "5-1-scripts-bash",
+  "difficulty": 3,
+  "q": "À quoi sert `trap '...' EXIT` ?",
+  "options": [
+   "Exécuter un nettoyage à la sortie du script",
+   "Intercepter les erreurs de syntaxe",
+   "Ignorer Ctrl+C",
+   "Lancer en arrière-plan"
+  ],
+  "answer": 0,
+  "explain": "La commande trap s'exécute quelle que soit la façon de quitter."
+ },
+ {
+  "id": "lx-q192",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 1,
+  "q": "Quelle option tar extrait une archive ?",
+  "options": [
+   "`t`",
+   "`x`",
+   "`r`",
+   "`c`"
+  ],
+  "answer": 1,
+  "explain": "x extrait, c crée, t liste."
+ },
+ {
+  "id": "lx-q193",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 1,
+  "q": "Que signifie la règle 3-2-1 ?",
+  "options": [
+   "3 jours, 2 serveurs, 1 disque",
+   "1 copie par jour pendant 3 semaines",
+   "3 disques, 2 sites, 1 cloud",
+   "3 copies, 2 supports, 1 hors site"
+  ],
+  "answer": 3,
+  "explain": "Elle protège contre la panne matérielle et le sinistre."
+ },
+ {
+  "id": "lx-q194",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 2,
+  "q": "Quelle différence entre `rsync -a src/ dest` et `rsync -a src dest` ?",
+  "options": [
+   "Avec `/` on copie récursivement seulement",
+   "Aucune",
+   "Sans `/` rsync échoue",
+   "Avec `/` on copie le contenu, sans on copie le dossier"
+  ],
+  "answer": 3,
+  "explain": "Le slash final change le niveau de copie."
+ },
+ {
+  "id": "lx-q195",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 2,
+  "q": "Quelle option rsync simule sans rien modifier ?",
+  "options": [
+   "`-n` (`--dry-run`)",
+   "`-t`",
+   "`-c`",
+   "`-q`"
+  ],
+  "answer": 0,
+  "explain": "À utiliser surtout avec --delete."
+ },
+ {
+  "id": "lx-q196",
+  "chapter": "5-2-sauvegarde",
+  "difficulty": 2,
+  "q": "Quelle option tar compresse en gzip ?",
+  "options": [
+   "`j`",
+   "`z`",
+   "`J`",
+   "`g`"
+  ],
+  "answer": 1,
+  "explain": "j correspond à bzip2 et J à xz."
+ },
+ {
+  "id": "lx-q197",
+  "chapter": "5-3-depannage",
+  "difficulty": 1,
+  "q": "Quelle commande affiche l'espace disque des systèmes de fichiers ?",
+  "options": [
+   "`free -h`",
+   "`df -h`",
+   "`lsblk -h`",
+   "`du -h /`"
+  ],
+  "answer": 1,
+  "explain": "df montre l'usage par système de fichiers ; du par répertoire."
+ },
+ {
+  "id": "lx-q198",
+  "chapter": "5-3-depannage",
+  "difficulty": 2,
+  "q": "`df -h` montre de la place libre mais « No space left on device » : cause probable ?",
+  "options": [
+   "Swap plein",
+   "Disque physique en panne",
+   "Inodes épuisés",
+   "Mauvais droits"
+  ],
+  "answer": 2,
+  "explain": "Vérifier avec df -i."
+ },
+ {
+  "id": "lx-q199",
+  "chapter": "5-3-depannage",
+  "difficulty": 2,
+  "q": "Un fichier supprimé n'a pas libéré l'espace : quelle commande ?",
+  "options": [
+   "`lsof +L1`",
+   "`df -i`",
+   "`fsck`",
+   "`free`"
+  ],
+  "answer": 0,
+  "explain": "Un processus tient encore le fichier supprimé ouvert."
+ },
+ {
+  "id": "lx-q200",
+  "chapter": "5-3-depannage",
+  "difficulty": 2,
+  "q": "Quelle colonne de `free -h` reflète la mémoire réellement disponible ?",
+  "options": [
+   "buff",
+   "shared",
+   "free",
+   "available"
+  ],
+  "answer": 3,
+  "explain": "Le cache disque est récupérable : available en tient compte."
+ },
+ {
+  "id": "lx-q201",
+  "chapter": "5-3-depannage",
+  "difficulty": 2,
+  "q": "Où lire les messages d'erreur d'un service systemd ?",
+  "options": [
+   "`journalctl -u service`",
+   "`dmesg -u`",
+   "`systemctl logs`",
+   "`/etc/service.log`"
+  ],
+  "answer": 0,
+  "explain": "journalctl -u filtre par unité."
+ },
+ {
+  "id": "lx-q202",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 2,
+  "q": "Quelle commande rend un service actif au démarrage ET le lance ?",
+  "options": [
+   "`systemctl enable --now`",
+   "`systemctl autostart`",
+   "`systemctl run --enable`",
+   "`systemctl start --boot`"
+  ],
+  "answer": 0,
+  "explain": "--now combine enable et start."
+ },
+ {
+  "id": "lx-q203",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 2,
+  "q": "Que faire après modification d'un fichier .service ?",
+  "options": [
+   "Rien",
+   "`systemctl reboot`",
+   "`systemctl daemon-reload`",
+   "`systemctl refresh`"
+  ],
+  "answer": 2,
+  "explain": "systemd doit relire les unités."
+ },
+ {
+  "id": "lx-q204",
+  "chapter": "3-2-systemd-boot",
+  "difficulty": 3,
+  "q": "Quelle option du noyau dans GRUB démarre en mode rescue ?",
+  "options": [
+   "`runlevel=rescue`",
+   "`systemd.unit=rescue.target`",
+   "`single-user=yes`",
+   "`boot=rescue`"
+  ],
+  "answer": 1,
+  "explain": "Option ajoutée temporairement à la ligne linux."
+ },
+ {
+  "id": "lx-q205",
+  "chapter": "3-3-planification-journaux",
+  "difficulty": 2,
+  "q": "Que signifie `*/10 8-17 * * 1-5` ?",
+  "options": [
+   "Chaque 10 h",
+   "10 fois par jour",
+   "Le 10 de chaque mois",
+   "Toutes les 10 min, de 8 h à 17 h, du lundi au vendredi"
+  ],
+  "answer": 3,
+  "explain": "Champs : minute, heure, jour du mois, mois, jour de semaine."
+ },
+ {
+  "id": "lx-q206",
+  "chapter": "3-4-paquets",
+  "difficulty": 2,
+  "q": "Quelle commande affiche le paquet propriétaire d'un fichier (Debian) ?",
+  "options": [
+   "`dpkg -i fichier`",
+   "`dpkg -L fichier`",
+   "`dpkg -S fichier`",
+   "`apt show fichier`"
+  ],
+  "answer": 2,
+  "explain": "-S cherche, -L liste les fichiers d'un paquet."
+ },
+ {
+  "id": "lx-q207",
+  "chapter": "4-1-disques-fs",
+  "difficulty": 2,
+  "q": "Pourquoi tester `mount -a` après avoir modifié fstab ?",
+  "options": [
+   "Pour formater",
+   "Pour sauvegarder",
+   "Une erreur peut bloquer le démarrage",
+   "Pour monter /proc"
+  ],
+  "answer": 2,
+  "explain": "Mieux vaut détecter l'erreur avant le redémarrage."
+ },
+ {
+  "id": "lx-q208",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 2,
+  "q": "Quelle commande agrandit un LV et son système de fichiers ?",
+  "options": [
+   "`lvextend -r -L +5G /dev/vg/lv`",
+   "`vgextend -r`",
+   "`resize2fs -L`",
+   "`lvresize --fs`"
+  ],
+  "answer": 0,
+  "explain": "-r redimensionne aussi le système de fichiers."
+ },
+ {
+  "id": "lx-q209",
+  "chapter": "4-2-lvm-raid-swap",
+  "difficulty": 3,
+  "q": "Capacité utile de 4 disques de 2 To en RAID 5 ?",
+  "options": [
+   "8 To",
+   "6 To",
+   "2 To",
+   "4 To"
+  ],
+  "answer": 1,
+  "explain": "RAID 5 perd un disque de parité : (n-1) × taille."
+ },
+ {
+  "id": "lx-q210",
+  "chapter": "4-3-reseau",
+  "difficulty": 2,
+  "q": "Combien d'hôtes utilisables dans un /26 ?",
+  "options": [
+   "126",
+   "64",
+   "30",
+   "62"
+  ],
+  "answer": 3,
+  "explain": "2^6 - 2 = 62."
+ },
+ {
+  "id": "lx-q211",
+  "chapter": "4-3-reseau",
+  "difficulty": 2,
+  "q": "`ping 8.8.8.8` marche mais pas `ping google.com` : quelle panne ?",
+  "options": [
+   "Câble débranché",
+   "Pare-feu local",
+   "Passerelle absente",
+   "Résolution DNS"
+  ],
+  "answer": 3,
+  "explain": "L'IP est joignable, seul le nom ne se résout pas."
  }
 ]

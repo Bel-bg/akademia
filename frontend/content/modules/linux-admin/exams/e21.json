@@ -1,0 +1,72 @@
+{
+ "n": 21,
+ "title": "Épreuve n° 21 · Démarrage, noyau et GRUB",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : séquence de démarrage",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e21p1q1",
+     "q": "Ordonnez les étapes du démarrage d'un PC Linux.",
+     "points": 3.5,
+     "a": "1. Firmware (BIOS/UEFI) et auto-test.\n2. Chargeur d'amorçage (GRUB).\n3. Chargement du noyau et de l'`initramfs`.\n4. Montage de la racine, lancement de `systemd` (PID 1).\n5. Atteinte de la target par défaut."
+    },
+    {
+     "id": "e21p1q2",
+     "q": "Rôle de l'`initramfs` ?",
+     "points": 2,
+     "a": "- Mini-système en mémoire contenant les pilotes nécessaires pour accéder à la racine (disque, LVM, RAID, chiffrement) avant de la monter."
+    },
+    {
+     "id": "e21p1q3",
+     "q": "Quelle différence entre BIOS/MBR et UEFI/GPT ?",
+     "points": 2.5,
+     "a": "- BIOS/MBR : 4 partitions primaires, disques jusqu'à 2 To. UEFI/GPT : très grands disques, nombreuses partitions, partition ESP, Secure Boot."
+    },
+    {
+     "id": "e21p1q4",
+     "q": "Quel est le PID du premier processus et son rôle ?",
+     "points": 2,
+     "a": "- PID 1 : `systemd` (ou `init`). Il démarre les services, adopte les orphelins, gère l'arrêt."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : GRUB, noyau, modules",
+   "points": 10,
+   "intro": "Écrivez les commandes.",
+   "questions": [
+    {
+     "id": "e21p2q1",
+     "q": "Où se règle GRUB et comment régénérer sa configuration ?",
+     "points": 3,
+     "a": "- Fichier `/etc/default/grub` (timeout, options noyau).\n```bash\nsudo update-grub                          # Ubuntu\nsudo grub2-mkconfig -o /boot/grub2/grub.cfg   # Red Hat\n```\n- Ne jamais éditer `grub.cfg` à la main."
+    },
+    {
+     "id": "e21p2q2",
+     "q": "Affichez la version du noyau, les modules chargés et les informations du module `ext4`.",
+     "points": 2.5,
+     "a": "```bash\nuname -r\nlsmod\nmodinfo ext4\n```"
+    },
+    {
+     "id": "e21p2q3",
+     "q": "Chargez et déchargez un module, puis expliquez la différence avec `insmod`.",
+     "points": 2.5,
+     "a": "```bash\nsudo modprobe loop\nsudo modprobe -r loop\n```\n- `modprobe` résout les dépendances ; `insmod` charge un fichier précis sans dépendances."
+    },
+    {
+     "id": "e21p2q4",
+     "q": "Comment démarrer une fois en mode rescue sans changer la configuration ?",
+     "points": 2,
+     "a": "- Dans GRUB, touche `e`, ajouter `systemd.unit=rescue.target` à la ligne `linux`, puis `Ctrl+X`. Effet limité à ce démarrage."
+    }
+   ]
+  }
+ ]
+}

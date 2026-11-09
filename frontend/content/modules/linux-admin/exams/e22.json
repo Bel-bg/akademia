@@ -1,0 +1,84 @@
+{
+ "n": 22,
+ "title": "Épreuve n° 22 · Expressions régulières, sed et awk",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : grep et regex",
+   "points": 10,
+   "intro": "Écrivez la commande `grep` adaptée.",
+   "questions": [
+    {
+     "id": "e22p1q1",
+     "q": "Lignes qui commencent par `root` dans `/etc/passwd`.",
+     "points": 1.5,
+     "a": "```bash\ngrep '^root' /etc/passwd\n```\n- `^` début de ligne, `$` fin de ligne."
+    },
+    {
+     "id": "e22p1q2",
+     "q": "Lignes terminées par `/bin/bash`.",
+     "points": 1.5,
+     "a": "```bash\ngrep '/bin/bash$' /etc/passwd\n```"
+    },
+    {
+     "id": "e22p1q3",
+     "q": "Affichez les lignes non vides et non commentées d'un fichier de configuration.",
+     "points": 2.5,
+     "a": "```bash\ngrep -Ev '^[[:space:]]*(#|$)' fichier.conf\n```"
+    },
+    {
+     "id": "e22p1q4",
+     "q": "Extrayez les adresses IPv4 d'un fichier (forme simple).",
+     "points": 2.5,
+     "a": "```bash\ngrep -Eo '([0-9]{1,3}\\.){3}[0-9]{1,3}' fichier\n```\n- `-o` n'affiche que la partie trouvée. Ce motif accepte aussi 999.999.999.999."
+    },
+    {
+     "id": "e22p1q5",
+     "q": "Cherchez « erreur » sans tenir compte de la casse, en récursif, avec numéros de ligne.",
+     "points": 2,
+     "a": "```bash\ngrep -rin 'erreur' /var/log/monapp/\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : sed et awk",
+   "points": 10,
+   "intro": "Fichier `notes.csv` : `nom,matiere,note`, ex. `alice,maths,15`.",
+   "questions": [
+    {
+     "id": "e22p2q1",
+     "q": "Remplacez `maths` par `math` partout dans le fichier, en conservant une sauvegarde.",
+     "points": 2,
+     "a": "```bash\nsed -i.bak 's/maths/math/g' notes.csv\n```"
+    },
+    {
+     "id": "e22p2q2",
+     "q": "Supprimez la ligne d'en-tête, puis affichez les lignes 3 à 5.",
+     "points": 2,
+     "a": "```bash\nsed '1d' notes.csv\nsed -n '3,5p' notes.csv\n```"
+    },
+    {
+     "id": "e22p2q3",
+     "q": "Calculez la moyenne des notes (3e colonne).",
+     "points": 3,
+     "a": "```bash\nawk -F, 'NR>1 {s+=$3; n++} END {print s/n}' notes.csv\n```\n- `NR>1` saute l'en-tête ; `END` s'exécute après la dernière ligne."
+    },
+    {
+     "id": "e22p2q4",
+     "q": "Affichez le nom des élèves ayant plus de 12.",
+     "points": 1.5,
+     "a": "```bash\nawk -F, 'NR>1 && $3>12 {print $1}' notes.csv\n```"
+    },
+    {
+     "id": "e22p2q5",
+     "q": "Comptez le nombre de notes par matière.",
+     "points": 1.5,
+     "a": "```bash\ncut -d, -f2 notes.csv | tail -n +2 | sort | uniq -c\n```"
+    }
+   ]
+  }
+ ]
+}

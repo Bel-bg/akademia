@@ -1,0 +1,84 @@
+{
+ "n": 19,
+ "title": "Épreuve n° 19 · Archivage et sauvegarde",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : tar et compression",
+   "points": 10,
+   "intro": "Écrivez les commandes.",
+   "questions": [
+    {
+     "id": "e19p1q1",
+     "q": "Archivez `/home/alice` en `alice.tar.gz`, listez le contenu, puis extrayez-le dans `/tmp/restore`.",
+     "points": 3,
+     "a": "```bash\ntar -czf alice.tar.gz /home/alice\ntar -tzf alice.tar.gz\nmkdir /tmp/restore\ntar -xzf alice.tar.gz -C /tmp/restore\n```\n- `c` créer, `x` extraire, `t` lister, `z` gzip, `f` fichier."
+    },
+    {
+     "id": "e19p1q2",
+     "q": "Extrayez un seul fichier de l'archive.",
+     "points": 1.5,
+     "a": "```bash\ntar -xzf alice.tar.gz home/alice/notes.txt\n```\n- Le chemin est celui stocké dans l'archive (voir `tar -t`)."
+    },
+    {
+     "id": "e19p1q3",
+     "q": "Quelle différence entre gzip, bzip2 et xz ? Option tar associée ?",
+     "points": 2,
+     "a": "- gzip (`z`) : rapide, bon compromis ; bzip2 (`j`) : meilleure compression, plus lent ; xz (`J`) : taux maximal, le plus lent."
+    },
+    {
+     "id": "e19p1q4",
+     "q": "Excluez `*.tmp` et le dossier `cache` de l'archive.",
+     "points": 1.5,
+     "a": "```bash\ntar -czf a.tar.gz --exclude='*.tmp' --exclude='cache' /home/alice\n```"
+    },
+    {
+     "id": "e19p1q5",
+     "q": "Comment vérifier qu'une archive n'est pas corrompue ?",
+     "points": 2,
+     "a": "```bash\ntar -tzf alice.tar.gz > /dev/null && echo OK\nsha256sum alice.tar.gz > alice.sha256\nsha256sum -c alice.sha256\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : rsync et stratégie",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e19p2q1",
+     "q": "Synchronisez `/data/` vers `backup:/srv/data/` en conservant droits et dates, avec progression.",
+     "points": 2.5,
+     "a": "```bash\nrsync -avz --progress /data/ backup:/srv/data/\n```\n- `-a` archive (droits, dates, liens, propriétaires), `-z` compression, `-v` détail."
+    },
+    {
+     "id": "e19p2q2",
+     "q": "Quelle différence entre `rsync -a src dest` et `rsync -a src/ dest` ?",
+     "points": 2,
+     "a": "- Sans `/` : le dossier `src` lui-même est copié dans `dest/src`. Avec `/` : seul son contenu est copié dans `dest`."
+    },
+    {
+     "id": "e19p2q3",
+     "q": "Que fait `--delete` ? Comment le tester sans danger ?",
+     "points": 2,
+     "a": "- Supprime à destination les fichiers absents de la source (miroir exact).\n- Tester avec `-n` (`--dry-run`) avant."
+    },
+    {
+     "id": "e19p2q4",
+     "q": "Expliquez la règle 3-2-1 et planifiez une sauvegarde tous les jours à 1 h 30.",
+     "points": 2.5,
+     "a": "- 3 copies, sur 2 supports différents, dont 1 hors site.\n```text\n30 1 * * * /opt/sauvegarde.sh >> /var/log/sauvegarde.log 2>&1\n```"
+    },
+    {
+     "id": "e19p2q5",
+     "q": "Pourquoi une sauvegarde non testée n'est-elle pas une sauvegarde ?",
+     "points": 1,
+     "a": "- Seule une restauration réussie prouve que les données sont exploitables : testez périodiquement."
+    }
+   ]
+  }
+ ]
+}
