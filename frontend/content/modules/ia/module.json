@@ -1,0 +1,158 @@
+{
+  "id": "ia",
+  "title": "Intelligence Artificielle",
+  "subtitle": "Espaces d'états, Recherche, Jeux & Algorithmes Génétiques · ENEAM & Batna · Licence 3",
+  "description": "Fondements de l'IA symbolique et heuristique : formalisation en espaces d'états, recherche aveugle (DFS, BFS, UCS), recherche informée (Hill Climbing, A*), jeux à deux joueurs (Min-Max, Alpha-Bêta) et algorithmes génétiques.",
+  "emoji": "🧠",
+  "color": "#7C3AED",
+  "level": "Licence 3",
+  "estimatedHours": 12,
+  "parts": [
+    {
+      "id": "p1",
+      "title": "Chapitre 1 · Espaces d'états et modélisation de problèmes",
+      "chapters": [
+        "1-1-notion-espace-etats",
+        "1-2-problemes-classiques-modelisation"
+      ]
+    },
+    {
+      "id": "p2",
+      "title": "Chapitre 2 · Stratégies de recherche non informée (aveugle)",
+      "chapters": [
+        "2-1-criteres-recherche-non-informee",
+        "2-2-dfs-profondeur-d-abord",
+        "2-3-bfs-largeur-et-cout-uniforme"
+      ]
+    },
+    {
+      "id": "p3",
+      "title": "Chapitre 3 · Recherche informée et algorithmes heuristiques",
+      "chapters": [
+        "3-1-fonctions-heuristiques",
+        "3-2-hill-climbing-et-glouton",
+        "3-3-algorithme-a-etoile"
+      ]
+    },
+    {
+      "id": "p4",
+      "title": "Chapitre 4 · Jeux à deux joueurs et algorithmes génétiques",
+      "chapters": [
+        "4-1-jeux-minmax-alpha-beta",
+        "4-2-algorithmes-genetiques"
+      ]
+    },
+    {
+      "id": "ann",
+      "title": "Annexes · Synthèse et méthodologie d'examen",
+      "chapters": [
+        "a-fiches-synthese-revisions",
+        "b-methodologie-epreuves-corrigees"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "1-1-notion-espace-etats",
+      "number": "1.1",
+      "title": "Notion d'espace d'états et formalisation",
+      "summary": "Définition formelle (S, s0, F, Q), algorithme général de recherche, fonction de coût, optimalité et admissibilité.",
+      "minutes": 10,
+      "file": "1-1-notion-espace-etats.md"
+    },
+    {
+      "id": "1-2-problemes-classiques-modelisation",
+      "number": "1.2",
+      "title": "Problèmes types et modélisation formelle",
+      "summary": "Tours de Hanoï, Touristes & Terroristes, Bidons d'eau, Monde des 4 pions, Taquin 8 et Coloration CSP.",
+      "minutes": 14,
+      "file": "1-2-problemes-classiques-modelisation.md"
+    },
+    {
+      "id": "2-1-criteres-recherche-non-informee",
+      "number": "2.1",
+      "title": "Principes et critères de performance",
+      "summary": "Recherche aveugle vs informée, optimalité, complétude, complexités en temps et espace, structures Q, C et S.",
+      "minutes": 8,
+      "file": "2-1-criteres-recherche-non-informee.md"
+    },
+    {
+      "id": "2-2-dfs-profondeur-d-abord",
+      "number": "2.2",
+      "title": "Recherche en profondeur d'abord (DFS)",
+      "summary": "Principe de la pile LIFO, pseudo-code formel, gestion des cycles avec C, atouts mémoire et écueils.",
+      "minutes": 9,
+      "file": "2-2-dfs-profondeur-d-abord.md"
+    },
+    {
+      "id": "2-3-bfs-largeur-et-cout-uniforme",
+      "number": "2.3",
+      "title": "Recherche en largeur d'abord (BFS) et à coût uniforme (UCS)",
+      "summary": "File FIFO, complétude, optimalité unitaire vs coût variable avec UCS, explosion mémoire et comparaison DFS/BFS.",
+      "minutes": 11,
+      "file": "2-3-bfs-largeur-et-cout-uniforme.md"
+    },
+    {
+      "id": "3-1-fonctions-heuristiques",
+      "number": "3.1",
+      "title": "Fonctions heuristiques et admissibilité",
+      "summary": "Définition h(n), coût vs mérite, distance de Manhattan, pièces mal placées et condition d'admissibilité h(n) ≤ h*(n).",
+      "minutes": 10,
+      "file": "3-1-fonctions-heuristiques.md"
+    },
+    {
+      "id": "3-2-hill-climbing-et-glouton",
+      "number": "3.2",
+      "title": "Ascension de colline (Hill Climbing) et Meilleur d'abord",
+      "summary": "Algorithme glouton, Hill Climbing en 5 étapes, absence de retour arrière, pièges des optima locaux et plateaux.",
+      "minutes": 9,
+      "file": "3-2-hill-climbing-et-glouton.md"
+    },
+    {
+      "id": "3-3-algorithme-a-etoile",
+      "number": "3.3",
+      "title": "L'algorithme A*",
+      "summary": "Fonction d'évaluation f(n) = g(n) + h(n), fusion ordonnée dans Q, réouverture dans C, résolution de la carte routière Linz-Ulm.",
+      "minutes": 13,
+      "file": "3-3-algorithme-a-etoile.md"
+    },
+    {
+      "id": "4-1-jeux-minmax-alpha-beta",
+      "number": "4.1",
+      "title": "Jeux à deux adversaires : Min-Max et élagage Alpha-Bêta",
+      "summary": "Arbre de jeu à somme nulle, joueurs MAX et MIN, coupures Alpha et Bêta, application pas-à-pas au Morpion (Tic-Tac-Toe).",
+      "minutes": 12,
+      "file": "4-1-jeux-minmax-alpha-beta.md"
+    },
+    {
+      "id": "4-2-algorithmes-genetiques",
+      "number": "4.2",
+      "title": "Métaheuristiques et Algorithmes Génétiques",
+      "summary": "Chromosomes, fitness, sélection, croisement, mutation : maximisation de f(x) = x² + 1 et problème du voyageur de commerce (TSP).",
+      "minutes": 12,
+      "file": "4-2-algorithmes-genetiques.md"
+    },
+    {
+      "id": "a-fiches-synthese-revisions",
+      "number": "A",
+      "title": "Fiches de synthèse et aide-mémoire IA",
+      "summary": "Tableaux récapitulatifs des algorithmes, formules clés, structures de données et memento de révision express.",
+      "minutes": 7,
+      "file": "a-fiches-synthese-revisions.md"
+    },
+    {
+      "id": "b-methodologie-epreuves-corrigees",
+      "number": "B",
+      "title": "Méthodologie d'examen et résolution type",
+      "summary": "Guide méthodique pour rédiger les espaces d'états, dérouler A* et Alpha-Bêta sur table, pièges classiques d'examen.",
+      "minutes": 8,
+      "file": "b-methodologie-epreuves-corrigees.md"
+    }
+  ],
+  "features": {
+    "quiz": true,
+    "blitz": true,
+    "exams": true,
+    "flashcards": true
+  }
+}

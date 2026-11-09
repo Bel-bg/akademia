@@ -1,0 +1,492 @@
+[
+  {
+    "id": "q-asi-01",
+    "chapter": "1-1-donnees-info-systemes",
+    "difficulty": 1,
+    "q": "Lequel des éléments suivants correspond à une « donnée » brute sans contexte ?",
+    "options": [
+      "14,5",
+      "Marie a obtenu 14,5 en algèbre",
+      "Le taux de réussite en algèbre a chuté de 14,5%",
+      "Les étudiants ayant moins de 10 doivent suivre un tutorat"
+    ],
+    "answer": 0,
+    "explain": "14,5 seul est un fait brut, dépourvu de tout contexte ou signification : c'est la définition exacte d'une donnée."
+  },
+  {
+    "id": "q-asi-02",
+    "chapter": "1-1-donnees-info-systemes",
+    "difficulty": 1,
+    "q": "Dans la théorie des systèmes, que désigne la « rétroaction » (feedback) ?",
+    "options": [
+      "Le budget annuel alloué par la direction",
+      "Le retour d'information sur les résultats permettant au système de se corriger",
+      "L'ensemble des fiches papier détruites",
+      "La formation des nouveaux employés"
+    ],
+    "answer": 1,
+    "explain": "La rétroaction est le mécanisme par lequel les sorties et résultats du système sont réinjectés pour évaluer la performance et ajuster le fonctionnement."
+  },
+  {
+    "id": "q-asi-03",
+    "chapter": "1-2-si-vs-systeme-informatique",
+    "difficulty": 1,
+    "q": "Quelle est la définition exacte d'un Système d'Information (SI) ?",
+    "options": [
+      "L'ensemble des serveurs et câbles réseau d'une salle informatique",
+      "Un logiciel de gestion de base de données comme Oracle ou MySQL",
+      "L'ensemble organisé des ressources (personnes, données, procédures, matériels, logiciels) pour collecter, stocker, traiter et diffuser l'information",
+      "Le cahier de présence d'une école"
+    ],
+    "answer": 2,
+    "explain": "Le SI englobe les dimensions humaines, organisationnelles et techniques permettant de gérer l'information dans une organisation."
+  },
+  {
+    "id": "q-asi-04",
+    "chapter": "1-2-si-vs-systeme-informatique",
+    "difficulty": 2,
+    "q": "Un Système d'Information peut-il exister sans aucun système informatique ?",
+    "options": [
+      "Non, car le mot 'système' implique obligatoirement un microprocesseur",
+      "Oui, un SI peut fonctionner à l'aide de registres papier, de fiches et de règles orales",
+      "Non, uniquement si l'organisation compte plus de 10 personnes",
+      "Oui, mais uniquement dans les banques"
+    ],
+    "answer": 1,
+    "explain": "Le système informatique n'est que la composante technique automatisée du SI. Des organisations ont géré des SI efficaces pendant des siècles avec du papier et des procédures."
+  },
+  {
+    "id": "q-asi-05",
+    "chapter": "1-2-si-vs-systeme-informatique",
+    "difficulty": 2,
+    "q": "Quelle est la caractéristique distinctive majeure d'un ERP / PGI ?",
+    "options": [
+      "Il est totalement gratuit et sans licence",
+      "Tous ses modules partagent une même base de données unique et commune",
+      "Il ne fonctionne que sur téléphone mobile",
+      "Il remplace automatiquement le directeur de l'entreprise"
+    ],
+    "answer": 1,
+    "explain": "La force d'un ERP/PGI réside dans l'intégration de tous les départements métier autour d'une base de données unique, éliminant les ressaisies manuelles."
+  },
+  {
+    "id": "q-asi-06",
+    "chapter": "1-3-alignement-et-transformation",
+    "difficulty": 1,
+    "q": "Quel niveau de décision s'appuie principalement sur des tableaux de bord synthétiques à moyen terme (mois, semestre) ?",
+    "options": [
+      "Le niveau opérationnel",
+      "Le niveau tactique",
+      "Le niveau stratégique",
+      "Le niveau législatif"
+    ],
+    "answer": 1,
+    "explain": "Le niveau tactique correspond aux cadres intermédiaires (chefs de service) qui pilotent les objectifs mensuels ou semestriels à l'aide de synthèses et tableaux de bord."
+  },
+  {
+    "id": "q-asi-07",
+    "chapter": "1-3-alignement-et-transformation",
+    "difficulty": 2,
+    "q": "Lequel des éléments suivants est un symptôme caractéristique d'un DÉSALIGNEMENT du SI ?",
+    "options": [
+      "L'ensemble des agents utilisent l'outil centralisé sans contestation",
+      "Les utilisateurs contournent l'application officielle en tenant leurs propres fichiers Excel",
+      "La direction dispose de chiffres exacts à tout instant",
+      "Les bulletins de notes sont générés automatiquement en un clic"
+    ],
+    "answer": 1,
+    "explain": "Le contournement des outils officiels par des fichiers Excel parallèles est le symptôme numéro un d'un SI inadapté aux réalités du terrain."
+  },
+  {
+    "id": "q-asi-08",
+    "chapter": "1-3-alignement-et-transformation",
+    "difficulty": 2,
+    "q": "Quelle est la différence entre « numérisation » et « digitalisation » ?",
+    "options": [
+      "La numérisation change le support (scanner un papier), la digitalisation applique l'outil numérique à une activité métier",
+      "La numérisation concerne les banques et la digitalisation les écoles",
+      "La digitalisation est gratuite alors que la numérisation est payante",
+      "Il n'y a aucune différence, ce sont de purs synonymes"
+    ],
+    "answer": 0,
+    "explain": "Numériser consiste simplement à convertir un document en octets (scanner). Digitaliser consiste à informatiser l'exécution d'une activité (formulaire web)."
+  },
+  {
+    "id": "q-asi-09",
+    "chapter": "1-3-alignement-et-transformation",
+    "difficulty": 3,
+    "q": "Pourquoi la démarche de transformation doit-elle impérativement débuter par « Numériser et centraliser les données » ?",
+    "options": [
+      "Parce que c'est l'étape la moins chère",
+      "Parce que sans données fiables et centralisées, on ne peut ni automatiser les processus ni ouvrir des services en ligne",
+      "Parce que la loi l'impose obligatoirement",
+      "Pour licencier le personnel d'accueil"
+    ],
+    "answer": 1,
+    "explain": "Des données éparpillées ou erronées empêchent toute automatisation : vouloir digitaliser un processus sans base de données saine conduit inévitablement à l'échec."
+  },
+  {
+    "id": "q-asi-10",
+    "chapter": "2-1-organisation-et-matrice-raci",
+    "difficulty": 1,
+    "q": "Que montre un organigramme d'entreprise et que ne montre-t-il PAS ?",
+    "options": [
+      "Il montre les salaires mais ne montre pas les noms",
+      "Il montre la hiérarchie et les services, mais ne montre pas comment le travail circule au quotidien",
+      "Il montre les algorithmes mais pas le code source",
+      "Il montre les processus mais pas les personnes"
+    ],
+    "answer": 1,
+    "explain": "L'organigramme décrit la structure formelle et les liens hiérarchiques, mais reste totalement muet sur la circulation transversale des flux de travail."
+  },
+  {
+    "id": "q-asi-11",
+    "chapter": "2-1-organisation-et-matrice-raci",
+    "difficulty": 2,
+    "q": "Dans une matrice RACI, quelle est la règle impérative concernant la lettre « A » (Accountable) ?",
+    "options": [
+      "Il doit y avoir au moins trois 'A' par tâche",
+      "Il ne doit y avoir qu'UN SEUL 'A' par tâche (par ligne)",
+      "La lettre 'A' est interdite pour le directeur",
+      "Toute personne qui a un 'R' doit avoir un 'C'"
+    ],
+    "answer": 1,
+    "explain": "Une tâche doit obligatoirement avoir un responsable final unique. Avoir plusieurs 'A' dilue la responsabilité et engendre des conflits d'arbitrage."
+  },
+  {
+    "id": "q-asi-12",
+    "chapter": "2-1-organisation-et-matrice-raci",
+    "difficulty": 2,
+    "q": "Que signifie la lettre « R » dans la matrice RACI ?",
+    "options": [
+      "Recruteur",
+      "Responsible : la personne qui réalise concrètement la tâche",
+      "Retardataire",
+      "Rétroaction"
+    ],
+    "answer": 1,
+    "explain": "R (Responsible) désigne le ou les exécutants opérationnels de l'activité."
+  },
+  {
+    "id": "q-asi-13",
+    "chapter": "2-2-cartographie-et-bpmn",
+    "difficulty": 1,
+    "q": "Quelle famille de processus correspond aux activités de base créant directement la valeur pour le client ?",
+    "options": [
+      "Les processus de management",
+      "Les processus de réalisation (cœur de métier)",
+      "Les processus de support",
+      "Les processus financiers"
+    ],
+    "answer": 1,
+    "explain": "Les processus de réalisation représentent le cœur de métier de l'entreprise (accueillir, former, fabriquer, livrer)."
+  },
+  {
+    "id": "q-asi-14",
+    "chapter": "2-2-cartographie-et-bpmn",
+    "difficulty": 1,
+    "q": "En notation BPMN 2.0, comment doit être nommée une tâche (activité) ?",
+    "options": [
+      "Par un nom commun (ex: 'Inscription')",
+      "Par un verbe d'action à l'infinitif suivi d'un complément (ex: 'Inscrire un apprenant')",
+      "Par le nom de la personne responsable (ex: 'Madame la secrétaire')",
+      "Par une formule mathématique"
+    ],
+    "answer": 1,
+    "explain": "La norme BPMN exige qu'une activité soit formulée avec un verbe à l'infinitif et un objet pour indiquer clairement l'action accomplie."
+  },
+  {
+    "id": "q-asi-15",
+    "chapter": "2-2-cartographie-et-bpmn",
+    "difficulty": 2,
+    "q": "Quelle est la signification d'une passerelle marquée d'un signe « + » en BPMN ?",
+    "options": [
+      "Une passerelle exclusive où l'on choisit un seul chemin",
+      "Une passerelle parallèle où tous les chemins connectés sont exécutés en même temps",
+      "Une étape payante",
+      "Une fin de processus"
+    ],
+    "answer": 1,
+    "explain": "La passerelle parallèle (+) divise le flux en plusieurs branches synchrones ou rassemble plusieurs branches concurrentes."
+  },
+  {
+    "id": "q-asi-16",
+    "chapter": "2-2-cartographie-et-bpmn",
+    "difficulty": 2,
+    "q": "En BPMN, quelle flèche utilise-t-on pour relier deux pools (participants distincts) ?",
+    "options": [
+      "Un flux de séquence en trait plein",
+      "Un flux de message en pointillés",
+      "Un flux d'association avec une croix",
+      "On ne relie jamais deux pools"
+    ],
+    "answer": 1,
+    "explain": "Entre deux pools distincts, la norme interdit les flux de séquence et impose des flux de messages en pointillés."
+  },
+  {
+    "id": "q-asi-17",
+    "chapter": "2-3-diagnostic-et-optimisation",
+    "difficulty": 2,
+    "q": "Qu'est-ce qu'un « goulot d'étranglement » dans un processus ?",
+    "options": [
+      "L'étape la plus rapide qui attend les autres",
+      "L'étape ayant la plus faible capacité de traitement journalière, qui bride tout le flux",
+      "Un bogue informatique dans la base de données",
+      "La rupture de stock d'encre d'imprimante"
+    ],
+    "answer": 1,
+    "explain": "Le goulot d'étranglement est l'étape la plus étroite du circuit ; le débit global du processus ne peut jamais dépasser la capacité de ce goulot."
+  },
+  {
+    "id": "q-asi-18",
+    "chapter": "2-3-diagnostic-et-optimisation",
+    "difficulty": 3,
+    "q": "Dans quel ordre hiérarchique applique-t-on les 4 leviers d'optimisation d'un processus ?",
+    "options": [
+      "Automatiser, Simplifier, Supprimer, Paralléliser",
+      "Supprimer, Simplifier, Paralléliser, Automatiser",
+      "Paralléliser, Automatiser, Supprimer, Simplifier",
+      "Simplifier, Supprimer, Automatiser, Paralléliser"
+    ],
+    "answer": 1,
+    "explain": "On commence toujours par SUPPRIMER l'inutile, puis SIMPLIFIER, ensuite PARALLÉLISER, et seulement en dernier lieu AUTOMATISER."
+  },
+  {
+    "id": "q-asi-19",
+    "chapter": "3-1-parties-prenantes-et-collecte",
+    "difficulty": 1,
+    "q": "Dans la matrice Influence x Intérêt, comment traite-t-on les parties prenantes à fort pouvoir et fort intérêt (ex: Direction) ?",
+    "options": [
+      "Surveiller de loin",
+      "Collaborer étroitement",
+      "Tenir informé uniquement par e-mail",
+      "Ignorer"
+    ],
+    "answer": 1,
+    "explain": "Les acteurs clés à forte influence et fort intérêt doivent être associés étroitement aux décisions et aux arbitrages majeurs."
+  },
+  {
+    "id": "q-asi-20",
+    "chapter": "3-1-parties-prenantes-et-collecte",
+    "difficulty": 2,
+    "q": "Lors d'un entretien, pourquoi évite-t-on de demander « Voulez-vous un logiciel ? » ?",
+    "options": [
+      "Parce que c'est une question trop longue",
+      "Parce que c'est une question fermée qui suggère d'emblée la solution au lieu d'explorer le besoin réel",
+      "Parce que le logiciel est déjà acheté",
+      "Parce que l'utilisateur n'a pas le droit de parler"
+    ],
+    "answer": 1,
+    "explain": "Cette question impose une solution technique toute faite et empêche de comprendre les difficultés de travail réelles de l'interlocuteur."
+  },
+  {
+    "id": "q-asi-21",
+    "chapter": "3-1-parties-prenantes-et-collecte",
+    "difficulty": 2,
+    "q": "Que révèle généralement l'observation d'un contournement (ex. secrétaire gardant un cahier à côté de l'ordinateur) ?",
+    "options": [
+      "Que la secrétaire ne sait pas taper au clavier",
+      "L'existence d'un besoin fonctionnel réel non couvert par le système informatique actuel",
+      "Une panne de courant",
+      "Une tentative de fraude comptable"
+    ],
+    "answer": 1,
+    "explain": "Les utilisateurs créent des contournements pour combler les manques des outils officiels. C'est un gisement précieux pour identifier les vrais besoins."
+  },
+  {
+    "id": "q-asi-22",
+    "chapter": "3-2-exigences-et-priorisation",
+    "difficulty": 1,
+    "q": "L'énoncé « Le temps de réponse d'affichage d'un dossier ne doit pas dépasser 2 secondes » est :",
+    "options": [
+      "Une exigence fonctionnelle",
+      "Une exigence non fonctionnelle de performance",
+      "Un souhait esthétique",
+      "Une clause contractuelle financière"
+    ],
+    "answer": 1,
+    "explain": "Il s'agit d'une exigence non fonctionnelle mesurable précisant la qualité de service et la rapidité attendue du système."
+  },
+  {
+    "id": "q-asi-23",
+    "chapter": "3-2-exigences-et-priorisation",
+    "difficulty": 2,
+    "q": "Pourquoi la phrase « Le système doit être convivial et rapide » est-elle une MAUVAISE exigence ?",
+    "options": [
+      "Parce qu'elle contient trop de mots",
+      "Parce qu'elle mélange deux idées et utilise des termes subjectifs impossibles à tester objectivement",
+      "Parce qu'elle est écrite en français",
+      "Parce que la rapidité est inutile"
+    ],
+    "answer": 1,
+    "explain": "Une bonne exigence doit être unique (une seule idée) et vérifiable (quantifiable sans ambiguïté)."
+  },
+  {
+    "id": "q-asi-24",
+    "chapter": "3-2-exigences-et-priorisation",
+    "difficulty": 2,
+    "q": "Dans la méthode MoSCoW, quelle catégorie d'exigences sacrifie-t-on en PREMIER en cas de manque de temps ?",
+    "options": [
+      "Les Must (M)",
+      "Les Could (C)",
+      "Les Should (S)",
+      "Toutes en même temps"
+    ],
+    "answer": 1,
+    "explain": "Les exigences 'Could' sont des éléments de confort et de valeur secondaire : elles forment la première marge d'ajustement du chef de projet."
+  },
+  {
+    "id": "q-asi-25",
+    "chapter": "3-3-modelisation-uml-et-tracabilite",
+    "difficulty": 1,
+    "q": "Quel diagramme UML relie les acteurs externes aux services fonctionnels rendus par le système ?",
+    "options": [
+      "Le diagramme de classes",
+      "Le diagramme de cas d'utilisation (Use Case)",
+      "Le diagramme de déploiement",
+      "Le diagramme d'objets"
+    ],
+    "answer": 1,
+    "explain": "Le diagramme de cas d'utilisation modélise les interactions entre les acteurs (rôles) et les fonctionnalités attendues du système."
+  },
+  {
+    "id": "q-asi-26",
+    "chapter": "3-3-modelisation-uml-et-tracabilite",
+    "difficulty": 2,
+    "q": "Dans une matrice de traçabilité, à quoi chaque exigence fonctionnelle doit-elle obligatoirement être associée ?",
+    "options": [
+      "À une facture fournisseur",
+      "À un cas d'utilisation UML et à un scénario de test de recette",
+      "À l'organigramme de l'entreprise",
+      "À un mot de passe administrateur"
+    ],
+    "answer": 1,
+    "explain": "La traçabilité garantit qu'une exigence est matérialisée dans la conception (cas d'utilisation) et formellement vérifiée lors des tests."
+  },
+  {
+    "id": "q-asi-27",
+    "chapter": "4-1-gestion-projet-wbs-gantt",
+    "difficulty": 1,
+    "q": "Qu'est-ce que le WBS (Work Breakdown Structure) ?",
+    "options": [
+      "Un progiciel de comptabilité générale",
+      "L'organigramme de découpage hiérarchique d'un projet en lots et en tâches élémentaires",
+      "Un câble réseau à haut débit",
+      "Un serveur web Apache"
+    ],
+    "answer": 1,
+    "explain": "Le WBS découpe progressivement le projet jusqu'à obtenir des tâches unifiées, assignables et mesurables."
+  },
+  {
+    "id": "q-asi-28",
+    "chapter": "4-1-gestion-projet-wbs-gantt",
+    "difficulty": 2,
+    "q": "Dans un diagramme de Gantt, qu'appelle-t-on le « chemin critique » ?",
+    "options": [
+      "Le chemin reliant les bureaux de la direction aux serveurs",
+      "La séquence de tâches dépendantes la plus longue dont tout retard décale la date de fin du projet",
+      "La liste des erreurs de programmation",
+      "Les tâches qui ne coûtent aucun argent"
+    ],
+    "answer": 1,
+    "explain": "Le chemin critique fixe la durée incompressible du projet : aucun retard ne peut y être toléré sans repousser la livraison finale."
+  },
+  {
+    "id": "q-asi-29",
+    "chapter": "4-1-gestion-projet-wbs-gantt",
+    "difficulty": 2,
+    "q": "Comment évalue-t-on la criticité d'un risque projet dans le registre des risques ?",
+    "options": [
+      "Par son coût en euros divisé par deux",
+      "En multipliant sa probabilité d'occurrence par la gravité de son impact",
+      "En comptant le nombre de personnes concernées",
+      "En attendant que le risque se produise"
+    ],
+    "answer": 1,
+    "explain": "La formule standard de criticité d'un risque est Criticité = Probabilité x Impact."
+  },
+  {
+    "id": "q-asi-30",
+    "chapter": "4-2-methodes-predictives-vs-agiles",
+    "difficulty": 1,
+    "q": "Lequel des énoncés suivants fait partie des 4 valeurs du Manifeste Agile (2001) ?",
+    "options": [
+      "Les procédures écrites priment sur les relations humaines",
+      "Un logiciel qui fonctionne prime sur une documentation exhaustive",
+      "Le suivi aveugle du plan prime sur les demandes du client",
+      "La négociation contractuelle prime sur le produit fini"
+    ],
+    "answer": 1,
+    "explain": "Le Manifeste Agile valorise la livraison d'un logiciel qui fonctionne concrètement avant la rédaction de pavés documentaires."
+  },
+  {
+    "id": "q-asi-31",
+    "chapter": "4-2-methodes-predictives-vs-agiles",
+    "difficulty": 2,
+    "q": "Dans la méthode Kanban, que signifie la règle de « limitation du WIP » (Work In Progress) ?",
+    "options": [
+      "Limiter le nombre de cartes en cours de traitement pour obliger à finir les tâches avant d'en démarrer d'autres",
+      "Interdire les pauses café",
+      "Limiter le nombre d'employés dans la salle",
+      "Réduire le nombre de réunions du lundi"
+    ],
+    "answer": 0,
+    "explain": "Limiter le WIP évite la dispersion et le multitâche néfaste en appliquant la devise : 'Arrêter de commencer, commencer par finir'."
+  },
+  {
+    "id": "q-asi-32",
+    "chapter": "4-3-cadre-scrum-approfondi",
+    "difficulty": 1,
+    "q": "Dans Scrum, quel rôle porte la responsabilité de la valeur du produit et gère l'ordre du Backlog ?",
+    "options": [
+      "Le Scrum Master",
+      "Le Product Owner (PO)",
+      "Le chef de projet informatique",
+      "L'administrateur système"
+    ],
+    "answer": 1,
+    "explain": "Le Product Owner est le garant de la valeur métier et de la priorité des éléments inscrits dans le backlog."
+  },
+  {
+    "id": "q-asi-33",
+    "chapter": "4-3-cadre-scrum-approfondi",
+    "difficulty": 2,
+    "q": "Quelle est la règle concernant la date de fin d'un Sprint Scrum si l'équipe n'a pas fini ses stories ?",
+    "options": [
+      "On repousse la date de fin jusqu'à ce que tout soit terminé",
+      "Le sprint se termine impérativement à la date prévue et les stories inachevées sont reportées",
+      "On annule le projet",
+      "Le Scrum Master termine le code pendant la nuit"
+    ],
+    "answer": 1,
+    "explain": "Le sprint est un bloc de temps rigide (timebox) dont l'échéance n'est jamais décalée, garantissant un rythme régulier d'inspection."
+  },
+  {
+    "id": "q-asi-34",
+    "chapter": "4-3-cadre-scrum-approfondi",
+    "difficulty": 2,
+    "q": "Qu'est-ce que la « Définition de Fini » (Definition of Done - DoD) dans Scrum ?",
+    "options": [
+      "La date de fin du contrat de travail des développeurs",
+      "Une liste de contrôle partagée par l'équipe garantissant le niveau de qualité et de test requis pour considérer un élément achevé",
+      "L'envoi de la facture finale au client",
+      "La fermeture du tableau Trello"
+    ],
+    "answer": 1,
+    "explain": "La DoD est le contrat de qualité de l'équipe (tests passés, revue de code, documentation, non-régression) évitant l'illusion du 'presque fini'."
+  },
+  {
+    "id": "q-asi-35",
+    "chapter": "4-3-cadre-scrum-approfondi",
+    "difficulty": 3,
+    "q": "Dans Scrum à plusieurs équipes, qu'est-ce que la « Mêlée des Mêlées » (Scrum of Scrums) ?",
+    "options": [
+      "Un tournoi de rugby inter-entreprises",
+      "Une réunion courte tenue tous les 2 à 3 jours par des représentants de chaque équipe pour synchroniser les travaux et lever les dépendances",
+      "Une réunion de négociation salariale",
+      "La revue générale de fin d'année"
+    ],
+    "answer": 1,
+    "explain": "Le Scrum of Scrums permet à des ambassadeurs d'équipes distinctes de se coordonner et d'éliminer les frictions d'interfaces sur un produit commun."
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "n": 5,
+  "title": "Épreuve n° 5 · Méthodes Agiles, Cadre Scrum & Définition de Fini",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e05p1",
+      "title": "Première partie : Valeurs agiles et principes fondateurs de Scrum",
+      "points": 5,
+      "intro": "Questions théoriques sur l'agilité et l'empirisme.",
+      "questions": [
+        {
+          "id": "e05p1q1",
+          "q": "Énoncez les 4 valeurs fondamentales du Manifeste Agile (2001) et expliquez la formule 'nous privilégions les éléments de gauche aux éléments de droite'.",
+          "a": "Les 4 valeurs du Manifeste Agile sont :\n1. Les personnes et leurs interactions plutôt que les processus et les outils ;\n2. Un logiciel fonctionnel plutôt qu'une documentation exhaustive ;\n3. La collaboration avec les clients plutôt que la négociation contractuelle ;\n4. L'adaptation au changement plutôt que le suivi d'un plan.\nExplication : Cette formule signifie que les éléments de droite (processus, documentation, contrat, plan) conservent leur utilité, mais que l'équipe accorde une valeur supérieure et prioritaire aux éléments de gauche en cas d'arbitrage opérationnel.",
+          "points": 2.5
+        },
+        {
+          "id": "e05p1q2",
+          "q": "Définissez les trois piliers du contrôle empirique des processus dans Scrum (Transparence, Inspection, Adaptation).",
+          "a": "- Transparence : tous les aspects clés du projet (backlog, obstacles, avancement) doivent être clairement visibles et partagés par toute l'équipe et les parties prenantes.\n- Inspection : évaluation méthodique et régulière des artefacts et de l'incrément pour détecter les écarts par rapport au but du sprint.\n- Adaptation : ajustement immédiat du produit, du backlog ou du processus dès qu'un dysfonctionnement ou une dérive est constaté lors de l'inspection.",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e05p2",
+      "title": "Deuxième partie : Rôles Scrum, rituels et Définition de Fini (DoD)",
+      "points": 8,
+      "context": "Une équipe Scrum développe un nouveau portail universitaire.",
+      "questions": [
+        {
+          "id": "e05p2q1",
+          "q": "Distinguez les responsabilités respectives du Product Owner (PO) et du Scrum Master (SM). Pourquoi dit-on que le Scrum Master n'est pas un chef de projet ?",
+          "a": "- Le Product Owner (PO) porte la vision du produit et la responsabilité de la valeur métier livrée. Il gère, affine et ordonne le Backlog Produit et décide du moment de la mise en service.\n- Le Scrum Master (SM) est un leader-serviteur garant du cadre Scrum. Il aide l'équipe à devenir autonome, facilite les événements et élimine les obstacles (impediments) bloquant le travail.\n- Le SM n'est pas un chef de projet car il ne possède AUCUNE autorité hiérarchique sur les développeurs : il ne leur assigne pas de tâches, ne contrôle pas leurs horaires et ne prend pas de décisions produit à leur place.",
+          "points": 4
+        },
+        {
+          "id": "e05p2q2",
+          "q": "Qu'est-ce que la Définition de Fini (Definition of Done - DoD) ? Présentez les trois catégories de vérification indispensables pour qu'une User Story soit déclarée 'finie'.",
+          "a": "La Définition de Fini (DoD) est une liste de critères partagée et validée par toute l'équipe garantissant le niveau d'exigence de qualité indispensable pour qu'un incrément soit prêt à être livré sans dette technique.\nLes trois catégories de vérification sont :\n1. Fonctionnement : validation de l'ensemble des critères d'acceptation fonctionnels de la story.\n2. Qualité externe (visible par l'utilisateur) : utilisabilité vérifiée, respect des normes d'accessibilité, temps de réponse sous le seuil contractuel, absence de régression sur les fonctionnalités existantes.\n3. Qualité interne (visible par l'équipe) : code relu par un pair (code review), couverture de tests unitaires satisfaisante, documentation technique et code commité sur la branche principale.",
+          "points": 4
+        }
+      ]
+    },
+    {
+      "id": "e05p3",
+      "title": "Troisième partie : Pilotage par le burndown et Scrum multi-équipes",
+      "points": 7,
+      "context": "L'organisation compte désormais 4 équipes Scrum travaillant sur le même produit logiciel.",
+      "questions": [
+        {
+          "id": "e05p3q1",
+          "q": "Comment interprète-t-on un Burndown Chart de sprint lorsque la courbe réelle se maintient au-dessus de la ligne théorique idéale ? Quelles décisions le Product Owner et l'équipe doivent-ils prendre ?",
+          "a": "Interprétation : Si la courbe réelle reste au-dessus de la droite idéale, le travail restant est supérieur aux prévisions : l'équipe accumule du retard et ne pourra pas achever la totalité des stories prévues avant l'échéance du sprint.\nDécisions : La date de fin du sprint étant non négociable (timebox), l'équipe et le Product Owner négocient immédiatement pour retirer une ou plusieurs stories de faible priorité (ex. du type 'Could' ou 'Should') et les réintégrer dans le backlog produit, afin de concentrer l'effort restant sur l'atteinte de l'objectif central du sprint.",
+          "points": 3.5
+        },
+        {
+          "id": "e05p3q2",
+          "q": "Dans une configuration Scrum à plusieurs équipes, comment organise-t-on la synchronisation des sprints, la gestion du backlog et la coordination inter-équipes (Scrum de Scrums) ?",
+          "a": "1. Synchronisation : toutes les équipes travaillent au même rythme cadencé (elles démarrent et achèvent leurs sprints le même jour), ce qui permet une intégration continue et une revue de sprint commune.\n2. Backlog : il existe un Backlog de fourniture unique pour tout le produit, géré par un groupe de PO coordonné par un Product Manager (PM).\n3. Coordination inter-équipes : tenue régulière d'une 'Mêlée des Mêlées' (Scrum of Scrums) réunissant des ambassadeurs de chaque équipe (tous les 2 à 3 jours) pour échanger sur les dépendances croisées, les interfaces communes et lever les obstacles inter-équipes.",
+          "points": 3.5
+        }
+      ]
+    }
+  ]
+}

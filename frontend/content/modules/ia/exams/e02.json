@@ -1,0 +1,68 @@
+{
+  "n": 2,
+  "title": "Épreuve n° 2 · Recherche heuristique A* et Hill Climbing",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e02p1",
+      "title": "Première partie : Fonctions heuristiques et admissibilité",
+      "points": 6,
+      "intro": "Analyse des fonctions heuristiques pour le Taquin 8.",
+      "questions": [
+        {
+          "id": "e02p1q1",
+          "q": "Définissez les heuristiques h1 (plaquettes mal placées) et h2 (distance de Manhattan) pour le jeu de Taquin. Calculez leurs valeurs pour l'état initial : ligne 1: [5, vide, 8], ligne 2: [4, 2, 1], ligne 3: [7, 3, 6], sachant que le but ordonne les plaquettes de 1 à 8 avec la case vide en bas à droite.",
+          "a": "- h1 est le nombre de plaquettes n'occupant pas leur position but (hors case vide). Dans l'état donné : les plaquettes 1, 2, 3, 5, 6, 8 ne sont pas à leur place (seules 4 et 7 sont bien placées), donc h1 = 6.\n- h2 est la somme des distances de Manhattan (|x - x_but| + |y - y_but|) de chaque plaquette à sa position finale. Calcul : plaquette 1 (dist=3), 2 (dist=1), 3 (dist=3), 4 (dist=0), 5 (dist=2), 6 (dist=1), 7 (dist=0), 8 (dist=3). Total h2 = 3 + 1 + 3 + 0 + 2 + 1 + 0 + 3 = 13.",
+          "points": 3
+        },
+        {
+          "id": "e02p1q2",
+          "q": "Démontrez pourquoi h1 et h2 sont des heuristiques admissibles, et expliquez laquelle domine l'autre.",
+          "a": "Une heuristique est admissible si 0 ≤ h(n) ≤ h*(n) (elle ne surestime jamais le coût réel restant).\n- h1 est admissible car chaque plaquette mal placée nécessite au strict minimum un déplacement pour atteindre sa position but (h1(n) ≤ h*(n)).\n- h2 est admissible car chaque plaquette nécessite au minimum un nombre de mouvements égal à sa distance de Manhattan dans le cas optimal sans obstacle ; les pièces se gênant mutuellement dans la réalité, le nombre réel d'actions sera toujours supérieur ou égal à h2 (h2(n) ≤ h*(n)).\n- Comme chaque plaquette mal placée est à une distance d'au moins 1 case de sa cible, on a toujours h2(n) ≥ h1(n) pour tout état n. Donc h2 domine h1. A* guidé par h2 développera moins ou autant de nœuds qu'avec h1.",
+          "points": 3
+        }
+      ]
+    },
+    {
+      "id": "e02p2",
+      "title": "Deuxième partie : Résolution sur carte routière (Linz à Ulm)",
+      "points": 7,
+      "context": "On cherche à relier Linz à Ulm. Les distances à vol d'oiseau jusqu'à Ulm fournissent l'heuristique h : Linz=318, Salzburg=236, Passau=257, München=120, Rosenheim=168, Memmingen=47, Stuttgart=75, Ulm=0.",
+      "questions": [
+        {
+          "id": "e02p2q1",
+          "q": "Décrivez les 5 étapes de l'algorithme Hill Climbing et expliquez pourquoi il ne garantit pas de trouver la solution optimale globale.",
+          "a": "Les 5 étapes sont :\n1. Considérer l'état de départ comme état courant ;\n2. Générer les enfants de l'état courant ;\n3. Évaluer les enfants et choisir le meilleur enfant ;\n4. Si le meilleur enfant est encore meilleur que l'état courant, avancer dessus (il devient le nouvel état courant) et reprendre à l'étape 2 ;\n5. Sinon, arrêt.\nHill Climbing ne considère qu'un seul chemin, écarte tous les autres et n'autorise aucun retour arrière (pas de backtracking). Il s'arrête au premier optimum local rencontré ou se perd sur des plateaux, sans garantie d'atteindre l'optimum global.",
+          "points": 3.5
+        },
+        {
+          "id": "e02p2q2",
+          "q": "Appliquez le principe de Hill Climbing depuis Linz pour rejoindre Ulm en utilisant les valeurs heuristiques ci-dessus.",
+          "a": "1. État courant = Linz (h = 318).\n2. Successeurs immédiats : Passau (h = 257) et Salzburg (h = 236).\n3. Évaluation : Salzburg a la plus petite valeur heuristique (236 < 257).\n4. Comme 236 < 318, l'algorithme avance sur Salzburg, qui devient le nouvel état courant.\n5. Depuis Salzburg, les successeurs sont München (h = 120), Rosenheim (h = 168), etc. München est choisi.\n6. Depuis München, les successeurs mènent à Memmingen (h = 47), puis enfin à Ulm (h = 0).\nHill Climbing s'engage de façon irréversible sur la branche passant par Salzburg sans jamais évaluer si la route via Passau aurait pu avoir un coût routier total inférieur.",
+          "points": 3.5
+        }
+      ]
+    },
+    {
+      "id": "e02p3",
+      "title": "Troisième partie : L'algorithme A* et sa trace d'exécution",
+      "points": 7,
+      "context": "Soit un graphe d'états avec état de départ S et état but G. Coûts des arcs : S-A=2, S-D=5, A-B=1, B-C=4, C-G=5, D-E=2, E-F=4, F-G=3. Heuristiques h : S=11, A=10.4, B=6.7, C=4.0, D=8.9, E=6.9, F=3.0, G=0.",
+      "questions": [
+        {
+          "id": "e02p3q1",
+          "q": "Donnez la fonction d'évaluation f(n) de A* et la condition de réouverture d'un nœud dans la liste fermée C.",
+          "a": "f(n) = g(n) + h(n), où g(n) est le coût accumulé exact depuis la racine S jusqu'au nœud n, et h(n) l'estimation heuristique du coût restant jusqu'au but.\nUn nœud n est retraité (réouvert) si (n ∉ C) OU si (n ≡ n' ∈ C mais g(n) < g(n')), c'est-à-dire si le chemin nouvellement découvert pour atteindre n est strictement moins coûteux que l'ancien chemin connu.",
+          "points": 3.5
+        },
+        {
+          "id": "e02p3q2",
+          "q": "Déroulez les premières étapes de l'algorithme A* en indiquant pour chaque nœud extrait les valeurs de g, h et f ainsi que le contenu de la file Q triée.",
+          "a": "- Initialisation : Q = [(S, g=0, h=11.0, f=11.0)], C = []\n- Itération 1 : Extraction de S (f=11.0). Successeurs : A (g=2, h=10.4, f=12.4), D (g=5, h=8.9, f=13.9). C = [S]. Q = [(A, f=12.4), (D, f=13.9)].\n- Itération 2 : Extraction de A (f=12.4, le plus petit f). Successeur : B (g=2+1=3, h=6.7, f=9.7). C = [S, A]. Q triée = [(B, f=9.7), (D, f=13.9)].\n- Itération 3 : Extraction de B (f=9.7). Successeur : C (g=3+4=7, h=4.0, f=11.0). C = [S, A, B]. Q triée = [(C, f=11.0), (D, f=13.9)].\n- Itération 4 : Extraction de C (f=11.0). Successeur : G (g=7+5=12, h=0, f=12.0). C = [S, A, B, C]. Q triée = [(G, f=12.0), (D, f=13.9)].\n- Itération 5 : Extraction de G (f=12.0 < 13.9). G est l'état but, fin de l'algorithme ! Chemin trouvé : S → A → B → C → G de coût optimal 12.",
+          "points": 3.5
+        }
+      ]
+    }
+  ]
+}

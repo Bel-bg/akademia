@@ -1,0 +1,68 @@
+{
+  "n": 2,
+  "title": "Épreuve n° 2 · Analyse des Processus Métier & Modélisation BPMN",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e02p1",
+      "title": "Première partie : Organisation, acteurs et matrice RACI",
+      "points": 6,
+      "intro": "Gouvernance organisationnelle et répartition des responsabilités.",
+      "questions": [
+        {
+          "id": "e02p1q1",
+          "q": "Expliquez la différence conceptuelle entre un organigramme, un processus métier et une procédure de travail.",
+          "a": "- L'organigramme décrit la structure hiérarchique statique (qui est subordonné à qui au sein des départements).\n- Le processus métier est transversal et dynamique : il décrit comment les activités s'enchaînent de bout en bout entre plusieurs services pour transformer des entrées en livrables de valeur pour un client.\n- La procédure est une consigne opératoire détaillée décrivant la manière pas à pas d'exécuter une tâche spécifique au sein d'un service.",
+          "points": 3
+        },
+        {
+          "id": "e02p1q2",
+          "q": "Construisez la matrice RACI pour les activités d'un centre de formation : Inscrire un apprenant, Encaisser une mensualité, Saisir les notes, et Éditer les bulletins. Justifiez le respect des règles d'or.",
+          "a": "| Activité | Direction | Secrétaire | Comptable | Formateurs |\n|---|:---:|:---:|:---:|:---:|\n| Inscrire un apprenant | I | R / A | C | I |\n| Encaisser une mensualité | I | C | R / A | — |\n| Saisir les notes | A | — | — | R |\n| Éditer les bulletins | A | R | I | C |\nJustification : Chaque ligne comporte exactement UN SEUL 'A' (l'autorité responsable du résultat est non ambiguë) et AU MOINS UN 'R' (la tâche est assurée de façon concrète). Le cumul R/A est parfaitement valide pour un acteur unique assumant réalisation et responsabilité directe.",
+          "points": 3
+        }
+      ]
+    },
+    {
+      "id": "e02p2",
+      "title": "Deuxième partie : Diagnostic du processus existant (AS-IS)",
+      "points": 7,
+      "context": "Parcours d'inscription actuel : le candidat se présente au secrétariat et remplit une fiche papier (capacité : 30 dossiers/jour). La secrétaire recopie chaque fiche dans un fichier Excel (capacité : 12 dossiers/jour). Le candidat se rend à la caisse où la comptable encaisse et note le montant dans un cahier (capacité : 25 dossiers/jour). La secrétaire envoie une photo de la liste sur un groupe WhatsApp. Le formateur reçoit l'information et démarre le cours.",
+      "questions": [
+        {
+          "id": "e02p2q1",
+          "q": "Identifiez le goulot d'étranglement de ce processus. Quelle est la capacité maximale d'inscription du centre par jour, et pourquoi accélérer l'encaissement ne servirait à rien ?",
+          "a": "Le goulot d'étranglement est l'étape 'Recopier dans Excel' assurée par la secrétaire, car sa capacité journalière est la plus faible de toute la chaîne (12 dossiers par jour).\nPar conséquent, la capacité maximale globale du centre est bridée à 12 inscriptions par jour. Accélérer l'encaissement (qui traite déjà 25 dossiers/jour) ne changerait strictement rien au résultat final car les dossiers arriveraient de toute façon au rythme de 12 par jour imposé par le goulot de recopie.",
+          "points": 3.5
+        },
+        {
+          "id": "e02p2q2",
+          "q": "Dressez le tableau de diagnostic du processus AS-IS en mettant en évidence les 4 symptômes classiques de dysfonctionnement (doubles saisies, attentes, pertes d'informations, retours en arrière).",
+          "a": "| Symptôme | Constat mesuré dans le processus AS-IS | Cause racine identifiée |\n|---|---|---|\n| Double saisie | La même identité est écrite 4 fois (fiche papier, fichier Excel, cahier de caisse, WhatsApp). | Absence de référentiel de données centralisé partagé. |\n| Temps d'attente | Délais de 3 jours entre la venue du candidat et la confirmation de classe. | Transferts manuels et temps de traitement asynchrones entre bureaux. |\n| Perte d'information | Candidats oubliés ou noms mal orthographiés lors du passage sur WhatsApp. | Utilisation d'un canal de messagerie grand public non structuré. |\n| Retours en arrière | Dossier incomplet découvert à la comptabilité après encaissement. | Absence de passerelle de contrôle de complétude en amont. |",
+          "points": 3.5
+        }
+      ]
+    },
+    {
+      "id": "e02p3",
+      "title": "Troisième partie : Conception du processus cible optimisé (TO-BE)",
+      "points": 7,
+      "context": "L'analyste applique les 4 leviers d'optimisation (Supprimer, Simplifier, Paralléliser, Automatiser) pour concevoir le processus TO-BE en BPMN 2.0.",
+      "questions": [
+        {
+          "id": "e02p3q1",
+          "q": "Détaillez concrètement comment les quatre leviers d'optimisation sont appliqués pour concevoir la version TO-BE de l'inscription.",
+          "a": "1. Supprimer : élimination totale de la tâche de recopie manuelle de la fiche papier vers Excel.\n2. Simplifier : saisie directe unique par le candidat lui-même via un formulaire web responsive (libre-service).\n3. Paralléliser : dès que le paiement est validé, l'émission de la quittance et l'affectation automatique de l'étudiant dans sa classe se font simultanément grâce à une passerelle parallèle (+).\n4. Automatiser : génération immédiate de la quittance en PDF et envoi automatique d'un e-mail de confirmation à l'apprenant, avec mise à jour instantanée de la liste de classe pour les formateurs.",
+          "points": 3.5
+        },
+        {
+          "id": "e02p3q2",
+          "q": "Décrivez l'architecture du diagramme BPMN 2.0 TO-BE : participants (pools), couloirs (lanes), typologie des passerelles et flux d'échanges.",
+          "a": "- Pool 1 : Candidat (participant externe). Tâche : 'Remplir le formulaire en ligne'. Envoie un flux de message vers le centre.\n- Pool 2 : Centre Avenir Formation (organisation), divisé en trois couloirs (lanes) :\n  * Couloir Secrétaire : 'Vérifier le dossier' suivie d'une passerelle exclusive (X) [dossier incomplet -> demande pièces ; dossier complet -> poursuivre].\n  * Couloir Comptable : 'Valider le paiement'.\n  * Couloir Application automatique : passerelle parallèle (+) qui déclenche 'Envoyer le reçu par e-mail' et 'Affecter l'apprenant à une classe', refermée par une seconde passerelle (+) menant à l'événement de fin.\n- Flux : flux de messages en pointillés entre le candidat et l'application ; flux de séquence en trait plein au sein des couloirs internes.",
+          "points": 3.5
+        }
+      ]
+    }
+  ]
+}

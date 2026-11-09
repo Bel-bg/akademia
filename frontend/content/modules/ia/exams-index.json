@@ -1,0 +1,50 @@
+[
+  {
+    "n": 1,
+    "title": "Épreuve n° 1 · Espaces d'états & Recherches aveugles",
+    "scenario": "Formalisation formelle et traversée de rivière",
+    "cas": "Tours de Hanoï, Touristes & Terroristes, DFS vs BFS",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 2,
+    "title": "Épreuve n° 2 · Recherche heuristique A* et Hill Climbing",
+    "scenario": "Réseau routier européen et Taquin à 8 cases",
+    "cas": "De Linz à Ulm, fonctions heuristiques et déroulement pas à pas",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 3,
+    "title": "Épreuve n° 3 · Modélisation avancée et CSP",
+    "scenario": "Problèmes de manipulation et contraintes",
+    "cas": "Les deux bidons (4L et 3L), les 4 pions (A,B,C,D) et coloration de carte",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 4,
+    "title": "Épreuve n° 4 · Jeux à deux adversaires : Min-Max et Alpha-Bêta",
+    "scenario": "Stratégie à somme nulle et réduction d'arbre",
+    "cas": "Arbre Min-Max, élagage Alpha-Bêta et coup optimal au Morpion 3x3",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 5,
+    "title": "Épreuve n° 5 · Métaheuristiques et Algorithmes Génétiques",
+    "scenario": "Optimisation bio-inspirée",
+    "cas": "Maximisation de f(x)=x²+1 et Voyageur de commerce (TSP 5 villes)",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 6,
+    "title": "Épreuve n° 6 · Examen de synthèse générale Master/Licence",
+    "scenario": "Épreuve intégrale de fin de semestre",
+    "cas": "Théorie, modélisation d'espace d'états, A*, Alpha-Bêta et génétique",
+    "durationMinutes": 120,
+    "points": 20
+  }
+]
