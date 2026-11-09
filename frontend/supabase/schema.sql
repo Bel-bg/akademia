@@ -3,18 +3,7 @@
 -- À exécuter dans la console Supabase : SQL Editor > New query > Run
 -- ============================================================
 
--- 0) Nettoyage des anciens utilisateurs sans filière (Legacy)
--- Supprime de auth.users (et en cascade de profiles, user_state, etc.)
--- tous les comptes créés à l'époque où la filière n'était pas encore définie/obligatoire.
-delete from auth.users
-where id in (
-  select u.id
-  from auth.users u
-  left join public.profiles p on p.id = u.id
-  where p.id is null or p.filiere is null or p.filiere not in ('ARI', 'AIP')
-);
-
--- Note : Pour réinitialiser TOUS les utilisateurs de test et repartir complètement de zéro, décommentez la ligne ci-dessous :
+-- 0) Optionnel : Nettoyage manuel des comptes de test (décommenter uniquement si souhaité)
 -- delete from auth.users;
 
 -- 1) Table des profils publics (Classement & Filière)
@@ -127,7 +116,7 @@ grant select, insert, update on public.user_state to authenticated;
 grant select on public.battles to anon, authenticated;
 grant select on public.filiere_scores to anon, authenticated;
 
--- 7) Création automatique du profil à l'inscription avec filière
+-- 7) Création automatique du profil et de l'état initial à l'inscription avec filière
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -137,21 +126,53 @@ declare
   wanted_username text := nullif(trim(new.raw_user_meta_data->>'username'), '');
   wanted_filiere  text := upper(nullif(trim(new.raw_user_meta_data->>'filiere'), ''));
   final_username  text;
-  valid_filiere   text := null;
+  valid_filiere   text := 'ARI';
+  initial_theme   text := 'ciel';
 begin
   if wanted_filiere in ('ARI', 'AIP') then
     valid_filiere := wanted_filiere;
+  end if;
+  if valid_filiere = 'AIP' then
+    initial_theme := 'violet';
   end if;
 
   final_username := coalesce(wanted_username, 'etudiant_' || substr(replace(new.id::text, '-', ''), 1, 6));
   begin
     insert into public.profiles (id, username, filiere)
-    values (new.id, final_username, valid_filiere);
+    values (new.id, final_username, valid_filiere)
+    on conflict (id) do update
+      set filiere = coalesce(public.profiles.filiere, excluded.filiere);
   exception when unique_violation then
     -- pseudo déjà pris : ajout d'un suffixe unique pour ne jamais bloquer l'inscription
     insert into public.profiles (id, username, filiere)
-    values (new.id, left(final_username, 20) || '_' || substr(replace(new.id::text, '-', ''), 1, 5), valid_filiere);
+    values (new.id, left(final_username, 20) || '_' || substr(replace(new.id::text, '-', ''), 1, 5), valid_filiere)
+    on conflict (id) do nothing;
   end;
+
+  insert into public.user_state (user_id, state)
+  values (
+    new.id,
+    jsonb_build_object(
+      'v', 1,
+      'filiere', valid_filiere,
+      'theme', initial_theme,
+      'xp', 0,
+      'streak', 0,
+      'bestStreak', 0,
+      'lastActive', null,
+      'daily', jsonb_build_object('date', to_char(now() at time zone 'utc', 'YYYY-MM-DD'), 'xp', 0),
+      'dailyGoal', 50,
+      'chaptersRead', '{}'::jsonb,
+      'attempts', '[]'::jsonb,
+      'badges', '{}'::jsonb,
+      'review', '{}'::jsonb,
+      'chapterStats', '{}'::jsonb,
+      'examBest', '{}'::jsonb,
+      'counters', jsonb_build_object('quizzes', 0, 'perfectQuizzes', 0, 'blitzBest', 0, 'maxCombo', 0, 'cardsKnown', 0, 'exams', 0)
+    )
+  )
+  on conflict (user_id) do nothing;
+
   return new;
 end;
 $$;
@@ -161,15 +182,22 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
--- Backfill automatique : garantit qu'aucun compte dans auth.users ne se retrouve sans profil
+-- Backfill automatique : garantit qu'aucun compte dans auth.users ne se retrouve sans profil ni filière
 insert into public.profiles (id, username, filiere)
 select
   u.id,
   coalesce(nullif(trim(u.raw_user_meta_data->>'username'), ''), 'etudiant_' || substr(replace(u.id::text, '-', ''), 1, 6)),
-  case when upper(trim(u.raw_user_meta_data->>'filiere')) in ('ARI', 'AIP') then upper(trim(u.raw_user_meta_data->>'filiere')) else null end
+  case when upper(trim(u.raw_user_meta_data->>'filiere')) in ('ARI', 'AIP') then upper(trim(u.raw_user_meta_data->>'filiere')) else 'ARI' end
 from auth.users u
 where not exists (select 1 from public.profiles p where p.id = u.id)
 on conflict (id) do nothing;
+
+update public.profiles p
+set filiere = coalesce(
+  (select case when upper(us.state->>'filiere') in ('ARI', 'AIP') then upper(us.state->>'filiere') else null end from public.user_state us where us.user_id = p.id),
+  'ARI'
+)
+where p.filiere is null or p.filiere not in ('ARI', 'AIP');
 
 -- 5) Messages privés entre deux comptes
 create table if not exists public.messages (

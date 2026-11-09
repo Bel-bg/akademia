@@ -152,3 +152,66 @@ test('ranking notifications target only players passed by the moving player', ()
 test('push subscriptions reject non-HTTPS endpoints before storage', async () => {
   await assert.rejects(pushService.saveSubscription('user-id', { endpoint: 'http://example.test', keys: {} }), (error) => error.status === 400);
 });
+
+test('user account and progress persist across signout, session refresh, and signin', async () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const dbPath = path.resolve(__dirname, '../data/db.json');
+  const originalDb = fs.existsSync(dbPath) ? fs.readFileSync(dbPath, 'utf8') : null;
+
+  try {
+    const uniqueSuffix = Date.now().toString(36);
+    const email = `persist_${uniqueSuffix}@akademia.test`;
+    const username = `user_${uniqueSuffix}`.slice(0, 20);
+    const password = 'secretPassword123';
+
+    // 1. Sign up
+    const signup = await progressStore.signUpUser({
+      email,
+      password,
+      username,
+      filiere: 'AIP',
+    });
+    assert.ok(signup.token);
+    assert.equal(signup.user.username, username);
+    assert.equal(signup.user.filiere, 'AIP');
+    assert.equal(signup.user.theme, 'violet');
+
+    // 2. Apply and save progress
+    const chapterId = moduleMeta.chapters[0].id;
+    const progressed = progression.applyAction(
+      signup.state,
+      { type: 'chapter-read', moduleId: moduleMeta.id, chapterId },
+      content,
+    );
+    const savedState = await progressStore.saveProgress(
+      signup.token,
+      signup.user.id,
+      progressed.state,
+    );
+    assert.ok(savedState.xp > 0);
+    assert.deepEqual(savedState.chaptersRead[moduleMeta.id], [chapterId]);
+
+    // 3. Sign out
+    await progressStore.signOutUser(signup.token);
+
+    // 4. Sign back in and verify account + progress are intact
+    const signin = await progressStore.signInUser({ email, password });
+    assert.equal(signin.user.id, signup.user.id);
+    assert.equal(signin.user.username, username);
+    assert.equal(signin.user.filiere, 'AIP');
+    assert.equal(signin.state.xp, savedState.xp);
+    assert.deepEqual(signin.state.chaptersRead[moduleMeta.id], [chapterId]);
+
+    // 5. Refresh session and verify loadProgress still returns full state
+    const refreshed = await progressStore.refreshUserSession(signin.refreshToken);
+    assert.ok(refreshed.token);
+    const loadedAfterRefresh = await progressStore.loadProgress(refreshed.token, signin.user.id);
+    assert.equal(loadedAfterRefresh.xp, savedState.xp);
+    assert.deepEqual(loadedAfterRefresh.chaptersRead[moduleMeta.id], [chapterId]);
+  } finally {
+    if (originalDb !== null) {
+      fs.writeFileSync(dbPath, originalDb, 'utf8');
+    }
+  }
+});

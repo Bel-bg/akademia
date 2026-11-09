@@ -1,5 +1,6 @@
 import type { RealtimeChannel } from '@supabase/supabase-js';
-import { API_BASE_URL, supabase } from './supabase';
+import { apiRequest } from './repo';
+import { supabase } from './supabase';
 
 export interface PublicProfile {
   id: string;
@@ -123,17 +124,8 @@ export async function deleteConversationForUser(userId: string, partnerId: strin
   if (error) throw error;
 }
 
-async function deleteForEveryone(userId: string, path: string): Promise<void> {
-  const { data: session, error: sessionError } = await client().auth.getSession();
-  if (sessionError || !session.session?.access_token || session.session.user.id !== userId) {
-    throw new Error('Reconnecte-toi pour supprimer définitivement.');
-  }
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method: 'DELETE',
-    headers: { Authorization: `Bearer ${session.session.access_token}` },
-  });
-  const result = await response.json().catch(() => null) as { error?: string } | null;
-  if (!response.ok) throw new Error(result?.error || `Suppression impossible (${response.status}).`);
+async function deleteForEveryone(_userId: string, path: string): Promise<void> {
+  await apiRequest(path, { method: 'DELETE' });
 }
 
 export function deleteMessageForEveryone(userId: string, messageId: string): Promise<void> {
@@ -148,20 +140,10 @@ export async function sendMessage(senderId: string, recipientId: string, body: s
   const text = body.trim();
   if (!text || text.length > 2000) throw new Error('Le message doit contenir de 1 à 2 000 caractères.');
   if (senderId === recipientId) throw new Error('Tu ne peux pas t’envoyer un message.');
-  const { data, error: sessionError } = await client().auth.getSession();
-  if (sessionError || !data.session?.access_token || data.session.user.id !== senderId) {
-    throw new Error('Reconnecte-toi pour envoyer un message.');
-  }
-  const response = await fetch(`${API_BASE_URL}/messages`, {
+  const result = await apiRequest<DirectMessage>('/messages', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${data.session.access_token}`,
-    },
     body: JSON.stringify({ recipientId, body: text }),
   });
-  const result = await response.json().catch(() => null) as DirectMessage | { error?: string } | null;
-  if (!response.ok) throw new Error((result as { error?: string } | null)?.error || `Envoi impossible (${response.status}).`);
   if (!result || !('id' in result)) throw new Error('Le serveur n’a pas confirmé le message.');
   return result;
 }
