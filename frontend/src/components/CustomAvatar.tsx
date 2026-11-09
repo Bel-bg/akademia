@@ -73,21 +73,6 @@ export function CustomAvatar({
       >
         <span>{initials}</span>
       </div>
-
-      {showBadge && filiere && (
-        <span
-          className={cn(
-            'absolute -bottom-0.5 -right-0.5 flex items-center justify-center rounded-full font-black text-white ring-2 ring-card shadow-sm',
-            isAip ? 'bg-[#7C3AED]' : 'bg-[#1D6FFF]',
-          )}
-          style={{
-            fontSize: `${Math.max(8, Math.round(pixelSize * 0.22))}px`,
-            padding: `${Math.max(1, Math.round(pixelSize * 0.04))}px ${Math.max(3, Math.round(pixelSize * 0.1))}px`,
-          }}
-        >
-          {filiere}
-        </span>
-      )}
     </div>
   );
 }

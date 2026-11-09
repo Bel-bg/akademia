@@ -3,6 +3,20 @@
 -- À exécuter dans la console Supabase : SQL Editor > New query > Run
 -- ============================================================
 
+-- 0) Nettoyage des anciens utilisateurs sans filière (Legacy)
+-- Supprime de auth.users (et en cascade de profiles, user_state, etc.)
+-- tous les comptes créés à l'époque où la filière n'était pas encore définie/obligatoire.
+delete from auth.users
+where id in (
+  select u.id
+  from auth.users u
+  left join public.profiles p on p.id = u.id
+  where p.id is null or p.filiere is null or p.filiere not in ('ARI', 'AIP')
+);
+
+-- Note : Pour réinitialiser TOUS les utilisateurs de test et repartir complètement de zéro, décommentez la ligne ci-dessous :
+-- delete from auth.users;
+
 -- 1) Table des profils publics (Classement & Filière)
 create table if not exists public.profiles (
   id          uuid primary key references auth.users(id) on delete cascade,
@@ -105,6 +119,14 @@ create policy "state_update_own" on public.user_state for update to authenticate
 drop policy if exists "battles_select" on public.battles;
 create policy "battles_select" on public.battles for select to authenticated using (true);
 
+-- Permissions de base pour les rôles authenticated et anon
+grant usage on schema public to anon, authenticated;
+grant select on public.profiles to anon;
+grant select, insert, update on public.profiles to authenticated;
+grant select, insert, update on public.user_state to authenticated;
+grant select on public.battles to anon, authenticated;
+grant select on public.filiere_scores to anon, authenticated;
+
 -- 7) Création automatique du profil à l'inscription avec filière
 create or replace function public.handle_new_user()
 returns trigger
@@ -138,6 +160,16 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
+
+-- Backfill automatique : garantit qu'aucun compte dans auth.users ne se retrouve sans profil
+insert into public.profiles (id, username, filiere)
+select
+  u.id,
+  coalesce(nullif(trim(u.raw_user_meta_data->>'username'), ''), 'etudiant_' || substr(replace(u.id::text, '-', ''), 1, 6)),
+  case when upper(trim(u.raw_user_meta_data->>'filiere')) in ('ARI', 'AIP') then upper(trim(u.raw_user_meta_data->>'filiere')) else null end
+from auth.users u
+where not exists (select 1 from public.profiles p where p.id = u.id)
+on conflict (id) do nothing;
 
 -- 5) Messages privés entre deux comptes
 create table if not exists public.messages (
