@@ -1,0 +1,68 @@
+{
+  "n": 5,
+  "title": "Épreuve n° 5 · Métaheuristiques et Algorithmes Génétiques",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e05p1",
+      "title": "Première partie : Principes fondamentaux des algorithmes génétiques",
+      "points": 5,
+      "intro": "Questions théoriques sur les algorithmes bio-inspirés.",
+      "questions": [
+        {
+          "id": "e05p1q1",
+          "q": "Définissez les notions d'individu (chromosome), de gène, de population et de fonction fitness dans un algorithme génétique.",
+          "a": "- Gène : une composante ou variable élémentaire de la solution.\n- Chromosome (ou individu) : une solution candidate complète encodée sous forme d'une chaîne (binaire, entière ou permutation).\n- Population : l'ensemble des N chromosomes en concurrence à une génération donnée.\n- Fonction fitness (adaptation) : fonction mathématique qui mesure l'efficacité ou la qualité d'une solution candidate. Plus le fitness est grand, plus l'individu est favorisé lors de la sélection.",
+          "points": 2.5
+        },
+        {
+          "id": "e05p1q2",
+          "q": "Expliquez le rôle des trois opérateurs génétiques fondamentaux : la sélection, le croisement (crossover) et la mutation.",
+          "a": "- Sélection : retient les individus les plus performants pour constituer le pool des parents, simulant la survie du plus apte de Darwin.\n- Croisement (Crossover) : combine le matériel génétique de deux parents en échangeant des sous-chaînes pour créer de nouveaux enfants porteurs de caractéristiques mixtes potentiellement supérieures.\n- Mutation : altère aléatoirement des gènes avec une faible probabilité pour introduire de la diversité génétique nouvelle et empêcher la population de rester piégée dans un optimum local.",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e05p2",
+      "title": "Deuxième partie : Maximisation de f(x) = x² + 1 sur [0, 31]",
+      "points": 7,
+      "context": "On cherche à maximiser la fonction f(x) = x² + 1 pour x ∈ [0, 31] à l'aide d'un algorithme génétique.",
+      "questions": [
+        {
+          "id": "e05p2q1",
+          "q": "Expliquez pourquoi un chromosome de 5 bits est adapté. Donnez la représentation binaire et le fitness pour x = 12 et x = 25.",
+          "a": "- Comme l'intervalle [0, 31] contient 32 entiers et que 2⁵ = 32, 5 bits suffisent exactement pour représenter sans perte tout entier de cet intervalle.\n- Pour x = 12 : en binaire 12 = 8 + 4 = 01100. Fitness f(12) = 12² + 1 = 144 + 1 = 145.\n- Pour x = 25 : en binaire 25 = 16 + 8 + 1 = 11001. Fitness f(25) = 25² + 1 = 625 + 1 = 626.",
+          "points": 3.5
+        },
+        {
+          "id": "e05p2q2",
+          "q": "Soient les deux parents P1 = 01100 (x=12) et P2 = 11001 (x=25). Effectuez un croisement en un point après le 2ᵉ bit. Donnez les enfants obtenus, leur valeur décimale et leur fitness.",
+          "a": "Point de coupure après le 2ᵉ bit :\n- P1 = 01 | 100\n- P2 = 11 | 001\nEnfants générés par échange des segments de queue :\n- Enfant E1 = 01 | 001 → valeur décimale = 1 + 8 = 9. Fitness f(9) = 9² + 1 = 81 + 1 = 82.\n- Enfant E2 = 11 | 100 → valeur décimale = 16 + 8 + 4 = 28. Fitness f(28) = 28² + 1 = 784 + 1 = 785.\nRemarque : E2 dépasse en performance ses deux parents (fitness 785 > 626 > 145), illustrant l'efficacité du brassage génétique.",
+          "points": 3.5
+        }
+      ]
+    },
+    {
+      "id": "e05p3",
+      "title": "Troisième partie : Le problème du voyageur de commerce (TSP 5 villes)",
+      "points": 8,
+      "context": "Cinq villes doivent être visitées sans répétition avec retour au départ. Matrice des distances (km) : Ville 1: [0, 2, 6, 12, 5] ; Ville 2: [2, 0, 4, 8, 1] ; Ville 3: [6, 4, 0, 3, 3] ; Ville 4: [12, 8, 3, 0, 10] ; Ville 5: [5, 1, 3, 10, 0].",
+      "questions": [
+        {
+          "id": "e05p3q1",
+          "q": "Pourquoi la représentation par vecteur de permutation d'entiers est-elle requise ? Calculez la distance totale du chromosome (1, 3, 4, 5, 2, 1).",
+          "a": "- Le problème du voyageur de commerce exige que chaque ville soit visitée exactement une fois. Un codage binaire standard risquerait de dupliquer des villes ou d'en omettre. Le vecteur de permutation garantit la bijectivité des étapes du parcours.\n- Calcul de la distance totale pour (1, 3, 4, 5, 2, 1) :\n  * d(1, 3) = 6 km\n  * d(3, 4) = 3 km\n  * d(4, 5) = 10 km\n  * d(5, 2) = 1 km\n  * d(2, 1) = 2 km\n  * Distance totale = 6 + 3 + 10 + 1 + 2 = 22 km.",
+          "points": 4
+        },
+        {
+          "id": "e05p3q2",
+          "q": "Comment définir formellement la fonction fitness du TSP et calculer le fitness relatif pour l'itinéraire (1, 2, 5, 3, 4, 1) par rapport à (1, 3, 4, 5, 2, 1) ?",
+          "a": "- Comme l'objectif du TSP est de minimiser la distance totale D, la fonction fitness doit être décroissante par rapport à D. On pose par exemple fitness = 1000 / D ou fitness = Constante - D.\n- Évaluons l'itinéraire (1, 2, 5, 3, 4, 1) :\n  * d(1, 2) = 2 km\n  * d(2, 5) = 1 km\n  * d(5, 3) = 3 km\n  * d(3, 4) = 3 km\n  * d(4, 1) = 12 km\n  * Distance totale = 2 + 1 + 3 + 3 + 12 = 21 km.\n- Comparaison : Comme 21 km < 22 km, l'itinéraire (1, 2, 5, 3, 4, 1) est plus court. Sa fonction fitness est donc strictement plus élevée que celle de (1, 3, 4, 5, 2, 1), lui conférant une probabilité de sélection supérieure lors du tirage de la roulette.",
+          "points": 4
+        }
+      ]
+    }
+  ]
+}

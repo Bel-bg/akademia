@@ -1,0 +1,68 @@
+{
+  "n": 3,
+  "title": "Épreuve n° 3 · Ingénierie des Exigences & Modélisation UML",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e03p1",
+      "title": "Première partie : Théorie des exigences et recueil des besoins",
+      "points": 5,
+      "intro": "Questions théoriques sur l'ingénierie des exigences.",
+      "questions": [
+        {
+          "id": "e03p1q1",
+          "q": "Distinguez clairement les notions de Besoin, Solution et Souhait. Pourquoi est-il dangereux de figer une solution technique dans l'expression d'un besoin ?",
+          "a": "- Besoin : ce dont l'organisation a réellement besoin pour atteindre ses objectifs, formulé sans imposer la technologie (ex: 'Savoir si un livre est disponible').\n- Solution : une réponse technique particulière parmi d'autres (ex: 'Un fichier Excel partagé sur le réseau local').\n- Souhait : un agrément ou une préférence de confort non indispensable au métier (ex: 'Un logo animé sur la page d'accueil').\nDanger : Si un besoin est rédigé en imposant un outil ou une solution technique, l'analyste s'interdit d'explorer des solutions plus performantes, pérennes et moins coûteuses.",
+          "points": 2.5
+        },
+        {
+          "id": "e03p1q2",
+          "q": "Énoncez les 4 qualités indispensables que doit posséder toute exigence pour être exploitable par une équipe informatique.",
+          "a": "1. Claire : compréhensible par tous sans ambiguïté, avec un vocabulaire métier précis.\n2. Unique : n'exprime qu'une seule idée atomique (pas de fonctionnalités combinées dans la même phrase).\n3. Vérifiable (Testable) : on peut concevoir un test objectif qui tranche par 'succès' ou 'échec'.\n4. Sans solution technique imposée : décrit le service attendu ('quoi') et non l'implémentation de bas niveau ('comment').",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e03p2",
+      "title": "Deuxième partie : Spécification et priorisation (MoSCoW)",
+      "points": 8,
+      "context": "Cas de la bibliothèque universitaire : gestion des emprunts et retours d'ouvrages sur cahier manuscrit. Problèmes : temps perdu par le bibliothécaire à rechercher qui a un livre, étudiants se déplaçant pour des livres indisponibles, absence de statistiques mensuelles pour le responsable, bibliothèque ouverte de 8h à 17h.",
+      "questions": [
+        {
+          "id": "e03p2q1",
+          "q": "Rédigez 4 exigences fonctionnelles (EF) complètes et rigoureuses pour ce système en utilisant la syntaxe recommandée 'Le système doit...'.",
+          "a": "- EF-01 : Le système doit enregistrer l'emprunt d'un livre à un étudiant inscrit et marquer l'exemplaire comme indisponible.\n- EF-02 : Le système doit enregistrer la restitution d'un livre, remettre l'exemplaire en état disponible et signaler tout dépassement de délai.\n- EF-03 : Le système doit permettre à un étudiant de rechercher un ouvrage par titre, auteur ou mot-clé et d'afficher sa disponibilité en temps réel.\n- EF-04 : Le système doit générer le premier jour de chaque mois la liste ordonnée des dix ouvrages les plus empruntés au cours du mois écoulé.",
+          "points": 4
+        },
+        {
+          "id": "e03p2q2",
+          "q": "Rédigez 2 exigences non fonctionnelles mesurables (une de performance et une de sécurité), puis appliquez la méthode MoSCoW à l'ensemble des 6 exigences en justifiant le choix des 'Must'.",
+          "a": "- ENF-01 (Performance) : Le moteur de recherche du catalogue doit afficher les résultats en moins de 1,5 seconde pour une base de 10 000 ouvrages.\n- ENF-02 (Sécurité) : Les opérations de saisie de prêt, retour et modification d'inventaire doivent être restreintes aux comptes bibliothécaires authentifiés par mot de passe fort.\nPriorisation MoSCoW :\n- Must : EF-01, EF-02, ENF-02. Justification : Sans enregistrement sécurisé des prêts et des retours, le système ne remplit pas sa finalité primaire et les stocks de livres ne sont pas maîtrisés.\n- Should : EF-03, ENF-01. Très importants pour le confort des étudiants mais le service physique de prêt peut démarrer sans eux.\n- Could : Notification d'alerte par e-mail avant retard (fonctionnalité d'agrément, première abandonnée en cas de retard de projet).",
+          "points": 4
+        }
+      ]
+    },
+    {
+      "id": "e03p3",
+      "title": "Troisième partie : Modélisation UML et Traçabilité",
+      "points": 7,
+      "context": "L'analyste relie les exigences aux modèles de conception et prépare la recette utilisateur.",
+      "questions": [
+        {
+          "id": "e03p3q1",
+          "q": "Construisez le diagramme de Cas d'Utilisation UML textuel : identifiez les acteurs principaux et reliez chaque cas d'utilisation au code d'exigence correspondant.",
+          "a": "Acteurs identifiés :\n- Bibliothécaire (acteur principal opérationnel)\n- Étudiant (acteur utilisateur du catalogue)\n- Responsable de bibliothèque (acteur décideur)\nCas d'utilisation et liaisons :\n- Le Bibliothécaire est relié à 'Enregistrer un prêt [EF-01]' et 'Enregistrer un retour [EF-02]'.\n- L'Étudiant est relié à 'Rechercher et consulter la disponibilité d'un ouvrage [EF-03]'.\n- Le Responsable est relié à 'Éditer le rapport statistique mensuel des emprunts [EF-04]'.\n- Tous les cas d'utilisation s'inscrivent dans la frontière du rectangle 'Système de Gestion de Bibliothèque'.",
+          "points": 3.5
+        },
+        {
+          "id": "e03p3q2",
+          "q": "Dressez la matrice de traçabilité complète pour les exigences EF-01, EF-02, EF-03 et ENF-01 en précisant pour chacune le cas de test de recette correspondant.",
+          "a": "| Exigence | Cas d'utilisation associé | Test de recette prévu | Résultat attendu |\n|---|---|---|---|\n| EF-01 | Enregistrer prêt | Tenter de prêter un exemplaire déjà marqué 'Emprunté'. | Blocage immédiat de la validation avec message d'erreur : 'Ouvrage non disponible'. |\n| EF-02 | Enregistrer retour | Valider le retour d'un ouvrage dont la date limite était dépassée de 3 jours. | L'exemplaire redevient disponible et une pénalité de retard de 3 jours est consignée. |\n| EF-03 | Rechercher livre | Lancer une requête de recherche sur un titre partiel existant. | Liste exhaustive des exemplaires avec leur statut exact (disponible/emprunté). |\n| ENF-01 | Rechercher livre | Chronométrer 10 recherches consécutives sur le catalogue complet. | Tous les temps de réponse mesurés sont strictement inférieurs à 1,5 seconde. |",
+          "points": 3.5
+        }
+      ]
+    }
+  ]
+}

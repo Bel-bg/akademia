@@ -1,0 +1,290 @@
+[
+  {
+    "id": "fc-asi-01",
+    "front": "Quelle est la distinction fondamentale entre Donnée, Information et Connaissance ?",
+    "back": "- Donnée : fait brut sans contexte (ex: 14,5).\n- Information : donnée contextualisée ayant un sens (ex: Marie a eu 14,5 en algèbre).\n- Connaissance : information comprise et reliée à d'autres permettant d'agir et de décider (ex: les élèves sous 8 en algèbre échouent en analyse, donc soutien requis).",
+    "tag": "Fondamentaux SI"
+  },
+  {
+    "id": "fc-asi-02",
+    "front": "Comment se définit un système selon l'approche systémique ?",
+    "back": "Un ensemble d'éléments en interaction dynamique, organisé pour atteindre un but au sein d'un environnement. Il reçoit des entrées, les transforme, produit des sorties et s'ajuste grâce à la rétroaction (feedback).",
+    "tag": "Fondamentaux SI"
+  },
+  {
+    "id": "fc-asi-03",
+    "front": "Quelle est la définition d'un Système d'Information (SI) ?",
+    "back": "L'ensemble organisé des ressources (personnes, données, procédures, matériels, logiciels) permettant de collecter, stocker, traiter et diffuser l'information dans une organisation.",
+    "tag": "Fondamentaux SI"
+  },
+  {
+    "id": "fc-asi-04",
+    "front": "Quelle est la différence essentielle entre Système d'Information (SI) et Système Informatique ?",
+    "back": "Le système informatique n'est que la partie technique automatisée du SI (équipements matériels et logiciels). Le SI englobe en plus les acteurs humains, les procédures de travail et les données, même sous format papier.",
+    "tag": "Fondamentaux SI"
+  },
+  {
+    "id": "fc-asi-05",
+    "front": "Un Système d'Information peut-il exister sans aucun ordinateur ?",
+    "back": "Oui ! Un SI peut fonctionner avec des registres papier, des fiches cartonnées et des procédures orales. En revanche, un système informatique ne peut exister sans ordinateurs.",
+    "tag": "Fondamentaux SI"
+  },
+  {
+    "id": "fc-asi-06",
+    "front": "Quelles sont les quatre fonctions universelles assurées par tout SI ?",
+    "back": "1. Collecter (recueillir la donnée à sa source)\n2. Stocker (conserver de façon fiable et retrouvable)\n3. Traiter (calculer, ordonner, recouper)\n4. Diffuser (mettre à disposition du bon acteur au bon moment).",
+    "tag": "Fondamentaux SI"
+  },
+  {
+    "id": "fc-asi-07",
+    "front": "Quelles sont les 5 composantes d'un SI et quel piège doit-on éviter ?",
+    "back": "Personnes, Procédures, Données, Logiciels, Matériel et réseau.\nLe piège classique est d'oublier les Personnes et les Procédures : le meilleur logiciel échoue sans règles claires et sans adhésion des utilisateurs.",
+    "tag": "Fondamentaux SI"
+  },
+  {
+    "id": "fc-asi-08",
+    "front": "Qu'est-ce qu'un ERP / PGI et quel est son atout majeur ?",
+    "back": "ERP (Enterprise Resource Planning) ou PGI (Progiciel de Gestion Intégré) : grand logiciel unique composé de modules (scolarité, compta, RH) qui partagent une BASE DE DONNÉES UNIQUE. Une saisie dans un service est visible instantanément par tous les autres.",
+    "tag": "Fondamentaux SI"
+  },
+  {
+    "id": "fc-asi-09",
+    "front": "Pourquoi doit-on consolider le rôle de « support » du SI avant de viser un « avantage concurrentiel » ?",
+    "back": "Parce qu'une organisation qui ne maîtrise pas ses opérations quotidiennes (saisie sans erreur, suivi des factures) échouera si elle tente d'innover prématurément. Le support est le socle obligatoire de l'avantage concurrentiel.",
+    "tag": "Stratégie SI"
+  },
+  {
+    "id": "fc-asi-10",
+    "front": "Quels sont les trois niveaux de décision dans une organisation et leurs horizons ?",
+    "back": "- Opérationnel : jour/semaine, information détaillée et unitaire (valider un dossier).\n- Tactique : mois/semestre, information agrégée et tableaux de bord (relancer impayés).\n- Stratégique : 3 à 5 ans, chiffres globaux et tendances (ouvrir une filière).",
+    "tag": "Stratégie SI"
+  },
+  {
+    "id": "fc-asi-11",
+    "front": "Qu'est-ce que l'alignement stratégique d'un SI ?",
+    "back": "Faire en sorte que le SI serve fidèlement les objectifs de l'organisation, et que la stratégie générale prenne en compte les opportunités technologiques offertes par le SI.",
+    "tag": "Stratégie SI"
+  },
+  {
+    "id": "fc-asi-12",
+    "front": "Quels sont les 4 symptômes classiques d'un désalignement du SI ?",
+    "back": "1. Les utilisateurs contournent l'outil (fichiers Excel ou carnets parallèles)\n2. La même information existe en plusieurs versions contradictoires\n3. La direction manque de chiffres fiables pour décider\n4. L'informatique est vue comme un coût subi plutôt que comme un levier.",
+    "tag": "Stratégie SI"
+  },
+  {
+    "id": "fc-asi-13",
+    "front": "Distinguez Numérisation, Digitalisation et Transformation numérique.",
+    "back": "- Numérisation : passage du support papier au numérique (scanner une fiche).\n- Digitalisation : réalisation d'une activité avec un outil numérique (formulaire en ligne).\n- Transformation numérique : repenser en profondeur le fonctionnement, l'offre et la culture de l'organisation.",
+    "tag": "Stratégie SI"
+  },
+  {
+    "id": "fc-asi-14",
+    "front": "Dans quel ordre doit-on mener les 3 étapes de transformation d'un SI et pourquoi ?",
+    "back": "Étape 1 : Numériser et centraliser les données.\nÉtape 2 : Digitaliser les processus.\nÉtape 3 : Transformer l'offre.\nJustification : sans données fiables et centralisées (étape 1), on ne peut ni automatiser les processus (2) ni créer de nouveaux services (3).",
+    "tag": "Stratégie SI"
+  },
+  {
+    "id": "fc-asi-15",
+    "front": "Quelle est la limite majeure d'un organigramme hiérarchique ?",
+    "back": "Il montre qui dépend de qui et découpe les services, mais il ne montre JAMAIS comment le travail circule d'un service à l'autre au quotidien. Pour cela, il faut étudier les processus.",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-16",
+    "front": "Que signifient les 4 lettres de la matrice RACI ?",
+    "back": "- R : Responsible (celui qui réalise concrètement la tâche)\n- A : Accountable (celui qui répond du résultat final, validateur)\n- C : Consulted (expert ou acteur consulté pour avis)\n- I : Informed (acteur tenu informé de l'avancement/résultat).",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-17",
+    "front": "Quelles sont les deux règles d'or d'une matrice RACI valide ?",
+    "back": "1. UN SEUL « A » par ligne (responsabilité claire et non diluée)\n2. AU MOINS UN « R » par ligne (la tâche est obligatoirement réalisée par quelqu'un).",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-18",
+    "front": "Qu'est-ce qu'un processus métier ?",
+    "back": "Un enchaînement d'activités réalisées par des acteurs, qui transforme des entrées en sorties apportant de la valeur à un client ou bénéficiaire.",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-19",
+    "front": "Quelles sont les 3 familles de processus d'une cartographie d'entreprise ?",
+    "back": "1. Processus de Management (stratégie, objectifs, pilotage)\n2. Processus de Réalisation (cœur de métier produisant la valeur pour le client)\n3. Processus de Support (fourniture des moyens : compta, RH, matériel, SI).",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-20",
+    "front": "En BPMN, quelle est la règle impérative de libellé d'une tâche ?",
+    "back": "Une tâche doit toujours être nommée par un VERBE À L'INFINITIF suivi d'un complément d'objet précis (ex: « Vérifier le dossier », « Éditer la quittance »).",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-21",
+    "front": "Distinguez la passerelle exclusive (X) de la passerelle parallèle (+) en BPMN.",
+    "back": "- Passerelle exclusive (X) : un seul chemin alternatif est emprunté selon une condition (ex: dossier complet OU incomplet).\n- Passerelle parallèle (+) : toutes les branches sont exécutées simultanément, synchronisées par une seconde passerelle (+).",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-22",
+    "front": "Quelle est la différence entre un Pool et un Couloir (Lane) en BPMN ?",
+    "back": "- Pool : représente un participant ou une organisation externe autonome (ex: le Candidat, la Banque).\n- Couloir (Lane) : sous-division à l'intérieur d'un pool représentant un acteur, un rôle ou un service interne (ex: Secrétaire, Comptable).",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-23",
+    "front": "Quelle est la règle sur l'usage des flux de messages en BPMN ?",
+    "back": "Les flux de messages (flèches en pointillés) circulent EXCLUSIVEMENT entre deux pools distincts. On ne trace JAMAIS de flux de séquence (flèche pleine) entre deux pools différents.",
+    "tag": "Processus & BPMN"
+  },
+  {
+    "id": "fc-asi-24",
+    "front": "Qu'est-ce qu'un goulot d'étranglement dans un processus ?",
+    "back": "L'étape dont la capacité de traitement journalière est la plus faible. C'est elle qui bride et plafonne le débit de tout le processus (accélérer les autres étapes ne change rien au résultat).",
+    "tag": "Diagnostic & Optimisation"
+  },
+  {
+    "id": "fc-asi-25",
+    "front": "Dans quel ordre précis doit-on appliquer les 4 leviers d'optimisation de processus ?",
+    "back": "1. SUPPRIMER les étapes inutiles\n2. SIMPLIFIER les étapes restantes\n3. PARALLÉLISER les activités indépendantes\n4. AUTOMATISER en dernier lieu par un outil logiciel.",
+    "tag": "Diagnostic & Optimisation"
+  },
+  {
+    "id": "fc-asi-26",
+    "front": "Pourquoi automatise-t-on toujours en dernier lieu ?",
+    "back": "Parce qu'automatiser une étape inutile ou mal conçue ne fait qu'accélérer un gaspillage pour rien sans améliorer la valeur finale du processus.",
+    "tag": "Diagnostic & Optimisation"
+  },
+  {
+    "id": "fc-asi-27",
+    "front": "Sur quels deux critères classe-t-on les parties prenantes ?",
+    "back": "Leur niveau d'INFLUENCE (pouvoir d'agir ou de bloquer le projet) et leur niveau d'INTÉRÊT (à quel point le projet les concerne directement).",
+    "tag": "Ingénierie des besoins"
+  },
+  {
+    "id": "fc-asi-28",
+    "front": "Dans un entretien de recueil de besoins, pourquoi privilégie-t-on les questions ouvertes ?",
+    "back": "Les questions ouvertes (« comment... ? », « qu'est-ce qui... ? ») permettent à l'utilisateur de décrire sa réalité sans biaiser ses propos, contrairement aux questions fermées qui suggèrent d'emblée la solution.",
+    "tag": "Ingénierie des besoins"
+  },
+  {
+    "id": "fc-asi-29",
+    "front": "Distinguez Besoin, Solution et Souhait.",
+    "back": "- Besoin : ce qu'on doit pouvoir faire, indépendamment de toute technique (ex: consulter les paiements).\n- Solution : outil technique particulier pour y répondre (ex: un tableur Excel partagé).\n- Souhait : élément de confort non essentiel (ex: fond d'écran bleu).",
+    "tag": "Ingénierie des besoins"
+  },
+  {
+    "id": "fc-asi-30",
+    "front": "Quelle est la différence entre exigence fonctionnelle et exigence non fonctionnelle ?",
+    "back": "- Fonctionnelle : dit CE QUE le système doit faire (services métier : « Le système doit enregistrer l'inscription »).\n- Non fonctionnelle : dit COMMENT il doit le faire (qualité et contraintes : performance, sécurité, ergonomie, disponibilité).",
+    "tag": "Ingénierie des besoins"
+  },
+  {
+    "id": "fc-asi-31",
+    "front": "Quelles sont les 4 qualités d'une exigence bien rédigée ?",
+    "back": "1. Claire (une seule interprétation possible)\n2. Unique (une seule idée atomique par exigence)\n3. Vérifiable (testable objectivement par oui ou non)\n4. Sans solution technique imposée.",
+    "tag": "Ingénierie des besoins"
+  },
+  {
+    "id": "fc-asi-32",
+    "front": "Que signifient les lettres de la méthode de priorisation MoSCoW ?",
+    "back": "- Must : indispensable absolu (sans elle, pas de livraison possible)\n- Should : très importante mais contournable à court terme\n- Could : confort, variable d'ajustement en cas de retard\n- Won't : reportée à une version ultérieure.",
+    "tag": "Ingénierie des besoins"
+  },
+  {
+    "id": "fc-asi-33",
+    "front": "Qu'est-ce que la traçabilité des exigences et à quoi sert-elle ?",
+    "back": "La capacité de relier une exigence à sa source (besoin métier), à ses modèles (cas d'utilisation UML) et à sa vérification (tests de recette). Elle permet de s'assurer que tout est testé et de mesurer l'impact des changements.",
+    "tag": "Ingénierie des besoins"
+  },
+  {
+    "id": "fc-asi-34",
+    "front": "Quel diagramme UML répond à la question « Qui utilise le système et pour quoi faire ? » ?",
+    "back": "Le diagramme de Cas d'Utilisation (Use Case Diagram), qui relie les acteurs externes aux cas d'utilisation (services rendus).",
+    "tag": "UML"
+  },
+  {
+    "id": "fc-asi-35",
+    "front": "Quelle est la différence entre un Projet et une Activité courante ?",
+    "back": "Un projet a une date de début et de fin précises, des ressources limitées et vise un résultat unique et novateur. L'activité courante est un service répété en continu sans fin prédéfinie.",
+    "tag": "Gestion de projet"
+  },
+  {
+    "id": "fc-asi-36",
+    "front": "Qu'est-ce que la triple contrainte de la gestion de projet ?",
+    "back": "Le triangle Périmètre - Délai - Coût. Si l'un des sommets bouge sans que les autres ne s'ajustent, c'est la QUALITÉ finale au centre qui est dégradée.",
+    "tag": "Gestion de projet"
+  },
+  {
+    "id": "fc-asi-37",
+    "front": "Qu'est-ce que le WBS (Work Breakdown Structure) ?",
+    "back": "La structure de découpage hiérarchique du projet en lots puis en tâches élémentaires dotées d'un responsable unique, d'une durée et d'un résultat vérifiable.",
+    "tag": "Gestion de projet"
+  },
+  {
+    "id": "fc-asi-38",
+    "front": "Quelle est la différence entre la Charge et la Durée d'une tâche ?",
+    "back": "- Charge : quantité d'effort requise en jours-homme (j/h).\n- Durée : temps calendaire écoulé. 10 j/h confiés à 2 développeurs à plein temps peuvent être réalisés en 5 jours calendaires.",
+    "tag": "Gestion de projet"
+  },
+  {
+    "id": "fc-asi-39",
+    "front": "Qu'est-ce que le Chemin Critique dans un diagramme de Gantt ?",
+    "back": "La séquence de tâches dépendantes la plus longue du projet. Tout retard d'une seule journée sur une tâche du chemin critique retarde d'autant la fin du projet entier.",
+    "tag": "Gestion de projet"
+  },
+  {
+    "id": "fc-asi-40",
+    "front": "Comment évalue-t-on un risque dans un projet et quelles sont les 4 réponses possibles ?",
+    "back": "Évaluation : Criticité = Probabilité × Impact.\nLes 4 réponses : Éviter (supprimer la cause), Réduire (actions de mitigation), Transférer (assurance, sous-traitance), Accepter (prévoir une réserve).",
+    "tag": "Gestion de projet"
+  },
+  {
+    "id": "fc-asi-41",
+    "front": "Quel est le défaut majeur de la méthode en cascade (Waterfall) ?",
+    "back": "L'effet tunnel : le client ne voit le logiciel fonctionner qu'au tout dernier mois. Si un besoin a été mal compris, le coût pour corriger en fin de projet est astronomique.",
+    "tag": "Méthodes Agiles"
+  },
+  {
+    "id": "fc-asi-42",
+    "front": "Qu'est-ce que la règle de limitation du WIP en Kanban ?",
+    "back": "Limiter le travail en cours (Work In Progress) dans chaque colonne pour forcer l'équipe à finir les tâches commencées avant d'en ouvrir de nouvelles (« Arrêter de commencer, commencer par finir »).",
+    "tag": "Méthodes Agiles"
+  },
+  {
+    "id": "fc-asi-43",
+    "front": "Quels sont les 3 rôles officiels dans une équipe Scrum ?",
+    "back": "1. Product Owner (PO) : vision produit, maximisation de la valeur, gestion du backlog\n2. Scrum Master (SM) : facilitateur, garant des règles Scrum, suppression des obstacles\n3. Développeurs : équipe pluridisciplinaire auto-organisée réalisant l'incrément.",
+    "tag": "Scrum"
+  },
+  {
+    "id": "fc-asi-44",
+    "front": "Le Scrum Master est-il le chef hiérarchique de l'équipe ?",
+    "back": "NON ! Le Scrum Master n'a aucune autorité hiérarchique sur l'équipe. Il est un leader-serviteur facilitateur. Le chef de projet traditionnel est éliminé dans Scrum.",
+    "tag": "Scrum"
+  },
+  {
+    "id": "fc-asi-45",
+    "front": "Peut-on repousser la date de fin d'un Sprint Scrum si tout n'est pas fini ?",
+    "back": "NON, JAMAIS ! Un sprint est un bloc de temps rigide (timebox). Si une story n'est pas achevée, le sprint se termine à la date prévue et la story est reportée au sprint suivant.",
+    "tag": "Scrum"
+  },
+  {
+    "id": "fc-asi-46",
+    "front": "Qu'est-ce que la Définition de Fini (Definition of Done - DoD) dans Scrum ?",
+    "back": "Une liste de contrôle partagée par l'équipe garantissant la qualité : vérification du fonctionnement (tests d'acceptation), qualité externe (performance, ergonomie) et qualité interne (revue de code, tests unitaires, documentation).",
+    "tag": "Scrum"
+  },
+  {
+    "id": "fc-asi-47",
+    "front": "Quels sont les 4 événements officiels qui rythment un Sprint Scrum ?",
+    "back": "1. Sprint Planning (début de sprint, définition du Sprint Goal)\n2. Daily Scrum / Mêlée (15 min quotidien debout, synchronisation)\n3. Sprint Review (démo du résultat aux parties prenantes, feedback)\n4. Sprint Retrospective (bilan d'équipe pour améliorer le processus).",
+    "tag": "Scrum"
+  },
+  {
+    "id": "fc-asi-48",
+    "front": "Qu'est-ce qu'un Burndown Chart dans un suivi Scrum ?",
+    "back": "Un graphique montrant l'effort restant (en jours-homme ou points) jour après jour. Si la courbe réelle reste au-dessus de la ligne idéale, l'équipe est en retard et doit ajuster le contenu.",
+    "tag": "Scrum"
+  }
+]

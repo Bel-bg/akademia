@@ -2,7 +2,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const root = path.resolve('content/modules');
+const scriptDir = path.dirname(new URL(import.meta.url).pathname);
+const root = fs.existsSync(path.resolve('content/modules')) ? path.resolve('content/modules') : path.resolve(scriptDir, '../content/modules');
+const publicDir = fs.existsSync(path.resolve('public')) ? path.resolve('public') : path.resolve(scriptDir, '../public');
 let errors = 0, warns = 0;
 const err = (m) => { errors++; console.log('  ✗ ' + m); };
 const warn = (m) => { warns++; console.log('  ! ' + m); };
@@ -36,7 +38,7 @@ for (const dir of fs.readdirSync(root, { withFileTypes: true }).filter((d) => d.
     const opens = (txt.match(/^:::(retenir|exemple|attention|examen)/gm) || []).length;
     const closes = (txt.match(/^:::\s*$/gm) || []).length;
     if (opens !== closes) err(`chapters/${f} : encadrés non fermés (${opens} ouverts, ${closes} fermés)`);
-    for (const im of txt.matchAll(/!\[[^\]]*\]\((\/[^)]+)\)/g)) if (!fs.existsSync(path.join('public', im[1]))) err(`chapters/${f} : image introuvable ${im[1]}`);
+    for (const im of txt.matchAll(/!\[[^\]]*\]\((\/[^)]+)\)/g)) if (!fs.existsSync(path.join(publicDir, im[1]))) err(`chapters/${f} : image introuvable ${im[1]}`);
   }
 
   const qf = path.join(base, 'quiz.json');

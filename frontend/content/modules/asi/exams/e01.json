@@ -1,0 +1,98 @@
+{
+  "n": 1,
+  "title": "Épreuve n° 1 · Fondamentaux, Diagnostic & Alignement stratégique",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e01p1",
+      "title": "Première partie : Questions de cours fondamentales",
+      "points": 5,
+      "intro": "Répondez de manière précise et concise aux questions conceptuelles suivantes.",
+      "questions": [
+        {
+          "id": "e01p1q1",
+          "q": "Définissez les notions de Donnée, Information et Connaissance en donnant un exemple illustratif pour chacune.",
+          "a": "- Donnée : fait brut sans contexte ni interprétation (ex: le nombre 14,5 seul).\n- Information : donnée mise en contexte qui prend une signification intelligible (ex: 'Marie a obtenu 14,5 à l'examen d'algèbre').\n- Connaissance : information comprise, analysée et reliée à d'autres permettant d'agir et de décider (ex: 'Les étudiants ayant moins de 8 en algèbre échouent en analyse, donc un soutien précoce est requis').",
+          "points": 1
+        },
+        {
+          "id": "e01p1q2",
+          "q": "Donnez la définition officielle d'un Système d'Information (SI) et listez ses quatre fonctions fondamentales.",
+          "a": "Un SI est l'ensemble organisé des ressources (personnes, données, procédures, matériels, logiciels) permettant de collecter, stocker, traiter et diffuser l'information dans une organisation.\nSes quatre fonctions universelles sont : 1. Collecter, 2. Stocker, 3. Traiter, 4. Diffuser.",
+          "points": 1
+        },
+        {
+          "id": "e01p1q3",
+          "q": "En quoi un Système Informatique diffère-t-il d'un Système d'Information ?",
+          "a": "Le système informatique n'est que la partie purement technique et automatisée du SI (ordinateurs, serveurs, logiciels, réseaux). Le SI est plus vaste car il englobe obligatoirement les acteurs humains, les procédures de travail et les flux organisationnels, même sous format papier.",
+          "points": 1
+        },
+        {
+          "id": "e01p1q4",
+          "q": "Définissez la notion d'alignement stratégique d'un Système d'Information.",
+          "a": "L'alignement stratégique consiste à assurer la cohérence bidirectionnelle entre la stratégie de l'entreprise, ses processus métier et son SI : le SI doit servir fidèlement les objectifs de l'organisation, et la stratégie doit intégrer les opportunités offertes par les technologies.",
+          "points": 1
+        },
+        {
+          "id": "e01p1q5",
+          "q": "Distinguez Numérisation, Digitalisation et Transformation numérique.",
+          "a": "- Numérisation : conversion de documents physiques en format numérique (ex: scanner des fiches papier).\n- Digitalisation : informatisation d'un processus ou d'une activité métier (ex: formulaire d'inscription en ligne).\n- Transformation numérique : refonte globale du fonctionnement, de l'offre de valeur et de la culture de l'organisation.",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "e01p2",
+      "title": "Deuxième partie : Diagnostic organisationnel du Centre Avenir Formation",
+      "points": 7,
+      "context": "Le Centre Avenir Formation est un institut privé accueillant chaque année des apprenants dans 3 filières. Le fonctionnement actuel repose sur : fiches papier au secrétariat, un fichier Excel isolé par formateur pour les notes, paiements notés dans un cahier manuscrit par la comptable, emplois du temps transmis par WhatsApp, et bulletins saisis manuellement en fin de semestre.",
+      "questions": [
+        {
+          "id": "e01p2q1",
+          "q": "Identifiez et analysez les 5 composantes du Système d'Information actuel du Centre Avenir Formation.",
+          "a": "1. Personnes : secrétaire, comptable, formateurs, apprenants, direction.\n2. Procédures : inscription sur papier, notation isolée, encaissement au cahier, édition manuelle des bulletins.\n3. Données : fiches cartonnées, classeurs Excel individuels, cahier de caisse, messages WhatsApp.\n4. Logiciels : tableur Excel, application WhatsApp (aucun progiciel commun).\n5. Matériel et réseau : quelques ordinateurs de bureau, une imprimante, une connexion Internet.\nConstat : les 5 composantes existent mais ne sont pas reliées entre elles.",
+          "points": 2
+        },
+        {
+          "id": "e01p2q2",
+          "q": "Relevez au moins trois symptômes démontrant que le SI du centre est actuellement désaligné.",
+          "a": "1. Contournement et dispersion : chaque formateur conserve ses propres notes sur son fichier personnel au lieu d'une base commune.\n2. Multiplicité des versions de la vérité : des apprenants sont saisis deux fois avec des orthographes différentes, créant des incohérences.\n3. Cécité de la direction : impossibilité de connaître en temps réel l'état des encaissements et les impayés.\n4. Retard structurel : les bulletins de notes sont produits manuellement avec plusieurs semaines de retard, contredisant l'objectif d'excellence du centre.",
+          "points": 2.5
+        },
+        {
+          "id": "e01p2q3",
+          "q": "Expliquez pourquoi le SI du centre joue actuellement un rôle de support défaillant et ne peut prétendre à un avantage concurrentiel.",
+          "a": "Le rôle de support exige que les activités courantes (inscrire, noter, encaisser) soient exécutées sans erreur et de façon fluide. Comme le centre souffre de pertes de données, de retards de bulletins et d'erreurs d'affectation, son socle de support n'est pas fiabilisé. Selon la règle de priorité des SI, une organisation ne peut bâtir un avantage concurrentiel (ex. portail e-learning, certification rapide) tant que son support opérationnel n'est pas robuste.",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e01p3",
+      "title": "Troisième partie : Élaboration d'une feuille de route de transformation",
+      "points": 8,
+      "context": "La direction décide de lancer la modernisation intégrale du Système d'Information du centre.",
+      "questions": [
+        {
+          "id": "e01p3q1",
+          "q": "Présentez la démarche de transformation en trois étapes successives et justifiez impérativement la cohérence de leur ordre.",
+          "a": "- Étape 1 : Numériser et centraliser (rassembler fiches, notes et paiements dans une base de données relationnelle unique).\n- Étape 2 : Digitaliser les processus (mise en place d'un portail web pour les inscriptions en ligne et l'édition automatisée des bulletins).\n- Étape 3 : Transformer l'offre (développement de cours hybrides à distance et suivi personnalisé des carrières).\nJustification de l'ordre : Sans données centralisées et assainies (étape 1), il est techniquement impossible d'automatiser les processus (étape 2) ou de proposer des services numériques fiables aux apprenants (étape 3).",
+          "points": 2.5
+        },
+        {
+          "id": "e01p3q2",
+          "q": "Détaillez comment actionner les quatre leviers de la transformation (Processus, Données, Clients, Culture) dans ce projet.",
+          "a": "1. Levier Processus : supprimer les recopies manuelles, simplifier le circuit d'inscription et automatiser l'édition des reçus.\n2. Levier Données : créer un référentiel unique (identifiant apprenant unique) garantissant l'intégrité des dossiers.\n3. Levier Relation Client : permettre aux apprenants et parents de consulter leurs relevés de notes et situation financière en ligne.\n4. Levier Culture : former le secrétariat et les formateurs à la nouvelle application, et valoriser le gain de temps pour vaincre la résistance au changement.",
+          "points": 2.5
+        },
+        {
+          "id": "e01p3q3",
+          "q": "Identifiez deux obstacles majeurs prévisibles lors de cette transformation et proposez pour chacun une mesure concrète d'atténuation.",
+          "a": "1. Résistance au changement du personnel administratif et des formateurs (crainte de perdre leurs habitudes Excel) : mesure d'atténuation par la co-conception dès le début, la mise en place d'ateliers pratiques et la désignation d'ambassadeurs relais.\n2. Risque sur la sécurité et la disponibilité des données (risque de perte ou fuite de données lors de la centralisation) : mise en place d'une politique d'habilitations strictes par rôles, sauvegardes automatisées quotidiennes chiffrées et plan de reprise d'activité.",
+          "points": 3
+        }
+      ]
+    }
+  ]
+}

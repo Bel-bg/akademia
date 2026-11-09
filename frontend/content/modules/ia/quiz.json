@@ -1,0 +1,492 @@
+[
+  {
+    "id": "q01",
+    "chapter": "1-1-notion-espace-etats",
+    "difficulty": 1,
+    "q": "Dans le quadruplet (S, s0, F, Q) définissant un espace d'états, que représente Q ?",
+    "options": [
+      "La file des nœuds à explorer en mémoire",
+      "L'ensemble des fonctions partielles de transition d'un état à l'autre",
+      "L'ensemble des états solutions finaux",
+      "La quantité d'heuristique associée à chaque nœud"
+    ],
+    "answer": 1,
+    "explain": "Q : S → S désigne l'ensemble des fonctions partielles de transition d'un état à un autre, c'est-à-dire les opérateurs acceptables."
+  },
+  {
+    "id": "q02",
+    "chapter": "1-1-notion-espace-etats",
+    "difficulty": 1,
+    "q": "Est-il obligatoire de mémoriser l'intégralité du graphe d'états avant de lancer la recherche ?",
+    "options": [
+      "Oui, car aucun algorithme ne peut fonctionner sans la matrice d'adjacence complète",
+      "Non, le graphe peut être construit dynamiquement lors de la recherche de la solution",
+      "Oui, uniquement pour les algorithmes non informés",
+      "Non, sauf si on utilise l'algorithme A*"
+    ],
+    "answer": 1,
+    "explain": "Comme le souligne le cours du Pr Dagba, il n'est pas nécessaire d'avoir à mémoriser ce graphe à l'avance ; il est construit dynamiquement au fil de l'exploration."
+  },
+  {
+    "id": "q03",
+    "chapter": "1-1-notion-espace-etats",
+    "difficulty": 2,
+    "q": "Une méthode de recherche est dite admissible si :",
+    "options": [
+      "Elle trouve une solution dans un temps inférieur à une seconde",
+      "Chaque fois qu'il existe une solution optimale, la méthode la trouve en un temps fini",
+      "Elle explore obligatoirement moins de nœuds que la recherche en largeur",
+      "Elle ne consomme aucune mémoire vive pour stocker les états déjà visités"
+    ],
+    "answer": 1,
+    "explain": "Par définition, une méthode est dite admissible si chaque fois qu'il existe une solution optimale, elle est garantie de la trouver en un temps fini."
+  },
+  {
+    "id": "q04",
+    "chapter": "1-1-notion-espace-etats",
+    "difficulty": 2,
+    "q": "Quelle est la première étape indispensable pour résoudre un problème dans un espace d'états ?",
+    "options": [
+      "Choisir le langage de programmation",
+      "Déterminer la représentation symbolique du problème dans l'espace d'états",
+      "Calculer la complexité asymptotique de l'algorithme",
+      "Dérouler l'élagage Alpha-Bêta"
+    ],
+    "answer": 1,
+    "explain": "La première des 4 étapes de résolution consiste à déterminer la représentation du problème dans l'espace d'états."
+  },
+  {
+    "id": "q05",
+    "chapter": "1-2-problemes-classiques-modelisation",
+    "difficulty": 1,
+    "q": "Dans le problème des Tours de Hanoï avec 2 disques sur la tour 1, quel est l'état initial E0 ?",
+    "options": [
+      "E0 = (∅, {1, 2}, ∅)",
+      "E0 = ({1, 2}, ∅, ∅)",
+      "E0 = ({1}, {2}, ∅)",
+      "E0 = (∅, ∅, {1, 2})"
+    ],
+    "answer": 1,
+    "explain": "Dans le triplet (A, B, C) décrivant les disques sur les tours 1, 2 et 3, l'état initial où les disques 1 et 2 sont sur la première tour est E0 = ({1, 2}, ∅, ∅)."
+  },
+  {
+    "id": "q06",
+    "chapter": "1-2-problemes-classiques-modelisation",
+    "difficulty": 2,
+    "q": "Pourquoi dit-on que les opérateurs mij des Tours de Hanoï admettent des inverses ?",
+    "options": [
+      "Parce qu'ils divisent le nombre de disques par deux",
+      "Parce que déplacer un disque de la tour i vers la tour j peut être annulé par le déplacement inverse mji",
+      "Parce qu'ils ne modifient jamais l'état courant",
+      "Parce qu'ils ne sont applicables qu'aux états buts"
+    ],
+    "answer": 1,
+    "explain": "Si on applique m12 depuis E0 vers E1 = ({2}, {1}, ∅), l'application de m21 ramène immédiatement à l'état initial E0."
+  },
+  {
+    "id": "q07",
+    "chapter": "1-2-problemes-classiques-modelisation",
+    "difficulty": 2,
+    "q": "Dans le problème des 3 touristes et 3 terroristes, quelle configuration sur une rive est mortelle ?",
+    "options": [
+      "3 touristes et 2 terroristes",
+      "1 touriste et 2 terroristes",
+      "0 touriste et 3 terroristes",
+      "2 touristes et 2 terroristes"
+    ],
+    "answer": 1,
+    "explain": "La condition mortelle est le cas où les terroristes dépassent strictement les touristes alors qu'il y a des touristes présents. Avec 1 touriste et 2 terroristes, le touriste est tué. En revanche, 0 touriste et 3 terroristes est sans danger."
+  },
+  {
+    "id": "q08",
+    "chapter": "1-2-problemes-classiques-modelisation",
+    "difficulty": 3,
+    "q": "Dans le jeu de Taquin 3x3, quel est le facteur de branchement moyen b de l'arbre ?",
+    "options": [
+      "4",
+      "2",
+      "24/9 ≈ 2,67",
+      "9"
+    ],
+    "answer": 2,
+    "explain": "La case vide a 2 mouvements dans les 4 coins, 3 mouvements sur les 4 bords non-coins, et 4 mouvements au centre : ((4×2) + (4×3) + (1×4)) / 9 = 24 / 9 ≈ 2,67."
+  },
+  {
+    "id": "q09",
+    "chapter": "1-2-problemes-classiques-modelisation",
+    "difficulty": 2,
+    "q": "Dans le monde des 4 pions (A, B, C, D), lequel de ces états est INTERDIT ?",
+    "options": [
+      "ABCD",
+      "CBAD",
+      "BACD",
+      "DCBA"
+    ],
+    "answer": 3,
+    "explain": "La règle stipule que le pion A ne peut pas être plus à droite que D. Dans DCBA, D est en position 1 et A en position 4, ce qui est formellement interdit."
+  },
+  {
+    "id": "q10",
+    "chapter": "2-1-criteres-recherche-non-informee",
+    "difficulty": 1,
+    "q": "Un algorithme de recherche est qualifié de « complet » si :",
+    "options": [
+      "Il explore 100% des nœuds de l'espace d'états",
+      "Il garantit de trouver une solution si elle existe",
+      "Il trouve toujours la solution la moins coûteuse",
+      "Sa complexité en mémoire est logarithmique"
+    ],
+    "answer": 1,
+    "explain": "La complétude est la garantie formelle qu'une solution sera trouvée dès lors qu'il en existe une dans l'espace d'états."
+  },
+  {
+    "id": "q11",
+    "chapter": "2-1-criteres-recherche-non-informee",
+    "difficulty": 1,
+    "q": "Quel est le rôle de la structure de données C dans les algorithmes de recherche ?",
+    "options": [
+      "Stocker la liste des opérateurs possibles",
+      "Contenir la liste des nœuds déjà explorés pour éviter les cycles",
+      "Mémoriser l'état initial s0",
+      "Enregistrer les coordonnées de la case vide"
+    ],
+    "answer": 1,
+    "explain": "C représente l'ensemble ou la file des nœuds déjà explorés (les fermés) afin de ne pas réexplorer un état déjà traité."
+  },
+  {
+    "id": "q12",
+    "chapter": "2-1-criteres-recherche-non-informee",
+    "difficulty": 2,
+    "q": "Quelle est la différence fondamentale entre une recherche non informée et une recherche informée ?",
+    "options": [
+      "La recherche non informée utilise du code C et la recherche informée du Prolog",
+      "La recherche informée utilise une fonction heuristique estimant la distance au but",
+      "La recherche non informée ne trouve jamais de solution",
+      "La recherche informée ne nécessite aucun état initial"
+    ],
+    "answer": 1,
+    "explain": "Les algorithmes informés utilisent des informations supplémentaires (heuristiques) guidant la progression vers le but, contrairement aux algorithmes aveugles."
+  },
+  {
+    "id": "q13",
+    "chapter": "2-2-dfs-profondeur-d-abord",
+    "difficulty": 1,
+    "q": "Dans la recherche en profondeur d'abord (DFS), comment les successeurs S sont-ils ajoutés à Q ?",
+    "options": [
+      "À la fin de Q via append(Q, S)",
+      "Au début de Q via append(S, Q)",
+      "De façon aléatoire",
+      "Uniquement si leur coût est pair"
+    ],
+    "answer": 1,
+    "explain": "Dans DFS, Q fonctionne comme une pile (LIFO) : les successeurs S sont placés en tête de file par append(S, Q)."
+  },
+  {
+    "id": "q14",
+    "chapter": "2-2-dfs-profondeur-d-abord",
+    "difficulty": 2,
+    "q": "Quelle est la complexité en espace de la recherche en profondeur d'abord (DFS) ?",
+    "options": [
+      "O(b^d)",
+      "O(b · m)",
+      "O(1)",
+      "O(m!)"
+    ],
+    "answer": 1,
+    "explain": "La complexité en mémoire de DFS est linéaire en la profondeur maximale : O(b · m), car il ne stocke que la branche courante et ses nœuds frères inexplorés."
+  },
+  {
+    "id": "q15",
+    "chapter": "2-2-dfs-profondeur-d-abord",
+    "difficulty": 2,
+    "q": "Pourquoi DFS n'est-il pas optimal ?",
+    "options": [
+      "Parce qu'il ne s'arrête jamais",
+      "Parce qu'il renvoie le premier chemin atteignant le but, même s'il est très long et coûteux",
+      "Parce qu'il utilise trop de mémoire vive",
+      "Parce qu'il ne fonctionne que sur les arbres binaires"
+    ],
+    "answer": 1,
+    "explain": "DFS s'enfonce dans la première branche rencontrée ; s'il y trouve un but très profond, il le retourne sans savoir qu'une solution optimale se trouvait à faible profondeur sur une autre branche."
+  },
+  {
+    "id": "q16",
+    "chapter": "2-3-bfs-largeur-et-cout-uniforme",
+    "difficulty": 1,
+    "q": "Dans la recherche en largeur d'abord (BFS), quelle opération régit l'insertion dans la file Q ?",
+    "options": [
+      "Q = append(S, Q)",
+      "Q = append(Q, S)",
+      "Q = sort(S)",
+      "Q = rest(S)"
+    ],
+    "answer": 1,
+    "explain": "Dans BFS, Q fonctionne en file FIFO : les successeurs sont ajoutés à la fin de Q via append(Q, S)."
+  },
+  {
+    "id": "q17",
+    "chapter": "2-3-bfs-largeur-et-cout-uniforme",
+    "difficulty": 2,
+    "q": "Quel est le point faible majeur de la recherche en largeur (BFS) ?",
+    "options": [
+      "Elle n'est jamais complète",
+      "Sa complexité en mémoire exponentielle O(b^d) qui sature rapidement la RAM",
+      "Elle ne trouve jamais la solution la plus courte",
+      "Elle s'arrête à la première feuille rencontrée"
+    ],
+    "answer": 1,
+    "explain": "Comme BFS doit stocker l'intégralité des nœuds du niveau courant dans Q, sa complexité spatiale O(b^d) provoque très vite une saturation mémoire."
+  },
+  {
+    "id": "q18",
+    "chapter": "2-3-bfs-largeur-et-cout-uniforme",
+    "difficulty": 3,
+    "q": "Pour des actions ayant des coûts variables positifs (k1 ≠ k2), quel algorithme garantit l'optimalité ?",
+    "options": [
+      "DFS (Profondeur d'abord)",
+      "BFS standard (Largeur d'abord)",
+      "UCS (Recherche à coût uniforme)",
+      "Hill Climbing"
+    ],
+    "answer": 2,
+    "explain": "UCS ordonne sa file selon le coût accumulé g(n) et extrait systématiquement le chemin le moins cher, garantissant l'optimalité même avec des coûts variables."
+  },
+  {
+    "id": "q19",
+    "chapter": "3-1-fonctions-heuristiques",
+    "difficulty": 1,
+    "q": "Quelle est la signature mathématique d'une fonction heuristique ?",
+    "options": [
+      "h : ℕ → ℝ",
+      "h : E → ℝ (où E est l'espace d'états et ℝ l'ensemble des réels)",
+      "h : Q → C",
+      "h : S → S"
+    ],
+    "answer": 1,
+    "explain": "La fonction heuristique h est une fonction h : E → ℝ qui associe à tout état de l'espace d'états une valeur réelle (coût ou mérite)."
+  },
+  {
+    "id": "q20",
+    "chapter": "3-1-fonctions-heuristiques",
+    "difficulty": 2,
+    "q": "Dans le jeu de Taquin 8, qu'est-ce que l'heuristique h2 de Manhattan ?",
+    "options": [
+      "Le nombre total de mouvements effectués depuis le début",
+      "Le nombre de plaquettes qui ne sont pas à leur place finale",
+      "La somme des distances horizontales et verticales de chaque plaquette à sa case cible",
+      "Le produit des numéros des cases vides"
+    ],
+    "answer": 2,
+    "explain": "L'heuristique de Manhattan h2 somme pour chaque plaquette la distance |x - x_but| + |y - y_but|."
+  },
+  {
+    "id": "q21",
+    "chapter": "3-1-fonctions-heuristiques",
+    "difficulty": 2,
+    "q": "Une fonction heuristique h(n) est dite admissible si :",
+    "options": [
+      "Elle surestime toujours le coût réel pour aller plus vite",
+      "Elle ne surestime jamais le coût réel : 0 ≤ h(n) ≤ h*(n)",
+      "Elle vaut 0 pour tous les états de l'espace",
+      "Elle est calculable en temps exponentiel"
+    ],
+    "answer": 1,
+    "explain": "L'admissibilité exige que l'heuristique soit optimiste, c'est-à-dire qu'elle soit toujours inférieure ou égale au coût réel minimal h*(n) pour atteindre le but."
+  },
+  {
+    "id": "q22",
+    "chapter": "3-1-fonctions-heuristiques",
+    "difficulty": 3,
+    "q": "Si h2(n) ≥ h1(n) pour tout état n et que les deux sont admissibles, que peut-on affirmer ?",
+    "options": [
+      "h1 est plus efficace que h2",
+      "h2 domine h1 et A* développera moins ou autant de nœuds avec h2 qu'avec h1",
+      "h2 n'est plus admissible",
+      "A* ne pourra pas converger avec h2"
+    ],
+    "answer": 1,
+    "explain": "Quand h2 domine h1 tout en étant admissible, h2 est une estimation plus serrée et plus proche du coût réel, ce qui permet à A* d'élaguer davantage de nœuds."
+  },
+  {
+    "id": "q23",
+    "chapter": "3-2-hill-climbing-et-glouton",
+    "difficulty": 1,
+    "q": "Quel est le comportement de Hill Climbing si aucun enfant n'est meilleur que l'état courant ?",
+    "options": [
+      "Il revient au nœud parent précédent (backtracking)",
+      "Il s'arrête immédiatement",
+      "Il relance la recherche en largeur",
+      "Il permute les disques au hasard"
+    ],
+    "answer": 1,
+    "explain": "Dans Hill Climbing, si le meilleur enfant n'est pas meilleur que l'état courant, l'algorithme s'arrête (étape 5)."
+  },
+  {
+    "id": "q24",
+    "chapter": "3-2-hill-climbing-et-glouton",
+    "difficulty": 2,
+    "q": "Pourquoi Hill Climbing s'arrête-t-il souvent sur des optima locaux ?",
+    "options": [
+      "Parce qu'il ne conserve qu'un seul chemin et ne peut pas revenir en arrière",
+      "Parce qu'il utilise trop de mémoire",
+      "Parce que sa fonction de coût est toujours nulle",
+      "Parce qu'il ne génère jamais de successeurs"
+    ],
+    "answer": 0,
+    "explain": "Hill Climbing écarte définitivement tous les autres chemins dès qu'un choix est fait. S'il rencontre un pic local sans issue, il s'y fige sans retour arrière possible."
+  },
+  {
+    "id": "q25",
+    "chapter": "3-3-algorithme-a-etoile",
+    "difficulty": 1,
+    "q": "Dans l'algorithme A*, comment est définie la fonction d'évaluation f(n) ?",
+    "options": [
+      "f(n) = g(n) - h(n)",
+      "f(n) = g(n) + h(n)",
+      "f(n) = g(n) × h(n)",
+      "f(n) = h(n) / g(n)"
+    ],
+    "answer": 1,
+    "explain": "f(n) = g(n) + h(n) combine le coût déjà exploré g(n) et l'estimation de la partie future h(n)."
+  },
+  {
+    "id": "q26",
+    "chapter": "3-3-algorithme-a-etoile",
+    "difficulty": 2,
+    "q": "Dans A*, quand vérifie-t-on si un nœud n est un état but ?",
+    "options": [
+      "Lorsqu'il est généré dans les successeurs S",
+      "Lorsqu'il est extrait de la file Q (dépilé)",
+      "Uniquement après avoir visité tous les nœuds",
+      "Avant même d'initialiser Q"
+    ],
+    "answer": 1,
+    "explain": "C'est une règle d'or d'A* : on ne teste l'objectif qu'au moment où le nœud est retiré de Q pour être développé, garantissant l'optimalité du chemin retenu."
+  },
+  {
+    "id": "q27",
+    "chapter": "3-3-algorithme-a-etoile",
+    "difficulty": 3,
+    "q": "Que fait l'algorithme A* si un nœud n' déjà présent dans C est réatteint avec un coût g(n) < g(n') ?",
+    "options": [
+      "Il ignore le nouveau chemin",
+      "Il s'arrête en échec",
+      "Il remplace l'ancien chemin par le nouveau chemin moins coûteux (réouverture)",
+      "Il supprime l'état but de F"
+    ],
+    "answer": 2,
+    "explain": "La condition IF ( (n ∉ C) OU (n ≡ n' ∈ C mais g(n) < g(n')) ) permet de réévaluer le nœud car un chemin plus économique vers cet état vient d'être découvert."
+  },
+  {
+    "id": "q28",
+    "chapter": "4-1-jeux-minmax-alpha-beta",
+    "difficulty": 1,
+    "q": "Dans un arbre de jeu Min-Max, que cherche à faire le joueur MIN ?",
+    "options": [
+      "Maximiser le score final",
+      "Minimiser le gain du joueur MAX",
+      "Choisir un coup aléatoire",
+      "Arrêter la partie au bout de 2 coups"
+    ],
+    "answer": 1,
+    "explain": "Le joueur MIN cherche à minimiser la valeur pour MAX, en sélectionnant la valeur minimale parmi les nœuds enfants."
+  },
+  {
+    "id": "q29",
+    "chapter": "4-1-jeux-minmax-alpha-beta",
+    "difficulty": 2,
+    "q": "Quelle condition déclenche une coupure dans l'algorithme Alpha-Bêta ?",
+    "options": [
+      "α < β",
+      "α ≥ β",
+      "α = 0",
+      "β = +∞"
+    ],
+    "answer": 1,
+    "explain": "Dès que α ≥ β, le joueur courant sait qu'il dispose déjà d'un choix au moins aussi bon ailleurs, rendant inutile l'exploration des autres alternatives de cette branche."
+  },
+  {
+    "id": "q30",
+    "chapter": "4-1-jeux-minmax-alpha-beta",
+    "difficulty": 2,
+    "q": "L'élagage Alpha-Bêta modifie-t-il la valeur optimale obtenue à la racine par rapport à Min-Max ?",
+    "options": [
+      "Oui, il donne une valeur approchée",
+      "Non, il renvoie rigoureusement la même valeur et le même coup optimal",
+      "Oui, mais uniquement au joueur MIN",
+      "Oui, il surestime toujours le résultat"
+    ],
+    "answer": 1,
+    "explain": "L'élagage Alpha-Bêta est une optimisation exacte : il ne coupe que des branches mathématiquement sans influence sur la décision finale."
+  },
+  {
+    "id": "q31",
+    "chapter": "4-2-algorithmes-genetiques",
+    "difficulty": 1,
+    "q": "Dans un algorithme génétique, que représente la fonction « Fitness » ?",
+    "options": [
+      "La durée de calcul du processeur",
+      "Une mesure de la qualité et de l'adaptation d'une solution candidate",
+      "Le nombre d'octets du fichier",
+      "La probabilité de faire une erreur"
+    ],
+    "answer": 1,
+    "explain": "La fonction de fitness mesure l'adaptation d'un chromosome au problème posé : plus elle est haute, plus l'individu a de chances de se reproduire."
+  },
+  {
+    "id": "q32",
+    "chapter": "4-2-algorithmes-genetiques",
+    "difficulty": 2,
+    "q": "Pour maximiser f(x) = x² + 1 sur [0, 31], combien de bits sont requis pour coder chaque individu ?",
+    "options": [
+      "3 bits",
+      "5 bits",
+      "31 bits",
+      "10 bits"
+    ],
+    "answer": 1,
+    "explain": "Comme 2⁵ = 32, 5 bits permettent de représenter tous les entiers de 0 (00000) à 31 (11111)."
+  },
+  {
+    "id": "q33",
+    "chapter": "4-2-algorithmes-genetiques",
+    "difficulty": 2,
+    "q": "Dans le problème du voyageur de commerce (TSP), pourquoi utilise-t-on un vecteur de permutation ?",
+    "options": [
+      "Pour empêcher qu'une ville soit visitée plusieurs fois ou oubliée",
+      "Pour accélérer l'affichage graphique",
+      "Parce que le binaire est interdit en IA",
+      "Pour réduire le nombre de villes à zéro"
+    ],
+    "answer": 0,
+    "explain": "Chaque ville devant être visitée une fois et une seule avant le retour au départ, l'encodage par permutation d'entiers garantit la validité de l'itinéraire."
+  },
+  {
+    "id": "q34",
+    "chapter": "a-fiches-synthese-revisions",
+    "difficulty": 1,
+    "q": "Quel algorithme de recherche possède la plus faible complexité en mémoire ?",
+    "options": [
+      "BFS (Largeur d'abord)",
+      "DFS (Profondeur d'abord)",
+      "UCS (Coût uniforme)",
+      "Recherche exhaustive par matrice"
+    ],
+    "answer": 1,
+    "explain": "DFS possède une complexité en espace linéaire O(b · m), nettement inférieure à celle exponentielle de BFS O(b^d)."
+  },
+  {
+    "id": "q35",
+    "chapter": "b-methodologie-epreuves-corrigees",
+    "difficulty": 2,
+    "q": "Dans un tableau d'exécution d'A*, pourquoi est-il crucial de trier la file Q à chaque étape ?",
+    "options": [
+      "Pour afficher les états par ordre alphabétique",
+      "Pour s'assurer que le nœud extrait à l'itération suivante est bien celui de f(n) minimal",
+      "Pour vider la mémoire de l'ordinateur",
+      "Pour transformer A* en recherche aveugle"
+    ],
+    "answer": 1,
+    "explain": "Le principe d'A* repose sur l'expansion prioritaire du chemin le plus prometteur globalement, ce qui impose d'extraire toujours l'état ayant le plus petit f(n) = g(n) + h(n)."
+  }
+]

@@ -1,0 +1,254 @@
+[
+  {
+    "id": "fc-01",
+    "front": "Comment est formellement défini un problème en Intelligence Artificielle classique ?",
+    "back": "Un problème est défini par trois éléments :\n1. Une situation de départ (état initial s0) ;\n2. Un objectif (ensemble d'états d'arrivée désirés F) ;\n3. Un ensemble O = {O1, O2, ...} d'opérations (opérateurs de transition).",
+    "tag": "Espace d'états"
+  },
+  {
+    "id": "fc-02",
+    "front": "Quel est le quadruplet définissant un espace d'états ?",
+    "back": "(S, s0, F, Q) où :\n- S : ensemble de tous les états possibles ;\n- s0 : état initial ;\n- F (F ⊆ S) : ensemble des états finaux/solutions ;\n- Q : S → S : ensemble des fonctions partielles de transition d'un état à l'autre.",
+    "tag": "Espace d'états"
+  },
+  {
+    "id": "fc-03",
+    "front": "Faut-il mémoriser l'intégralité du graphe d'états en mémoire avant la recherche ?",
+    "back": "Non. Le graphe complet n'a pas besoin d'être stocké à l'avance ; l'arbre de recherche est généré dynamiquement au fur et à mesure de l'exploration.",
+    "tag": "Espace d'états"
+  },
+  {
+    "id": "fc-04",
+    "front": "Quelles sont les 4 étapes pour résoudre un problème par recherche dans un espace d'états ?",
+    "back": "1. Déterminer la représentation symbolique de l'état ;\n2. Déterminer les opérateurs acceptables et leurs préconditions ;\n3. Déterminer l'état initial et les états finaux ;\n4. Déterminer la stratégie de recherche.",
+    "tag": "Espace d'états"
+  },
+  {
+    "id": "fc-05",
+    "front": "Quel est l'algorithme général de recherche dans un espace d'états ?",
+    "back": "St ← état initial\nWHILE (St ≠ état final) DO\n    Op ← opérateur choisi pour l'état St\n    St ← le résultat de l'application de Op sur St\nEND",
+    "tag": "Espace d'états"
+  },
+  {
+    "id": "fc-06",
+    "front": "Quand dit-on qu'une solution est optimale ?",
+    "back": "Une solution est optimale s'il n'existe aucune solution de coût strictement inférieur (coût minimal).",
+    "tag": "Espace d'états"
+  },
+  {
+    "id": "fc-07",
+    "front": "Quand dit-on qu'une méthode de recherche est admissible ?",
+    "back": "Une méthode est admissible si chaque fois qu'il existe une solution optimale, l'algorithme la trouve obligatoirement en un temps fini.",
+    "tag": "Espace d'états"
+  },
+  {
+    "id": "fc-08",
+    "front": "Comment modélise-t-on un état dans le problème des Tours de Hanoï à 3 tours et 2 disques ?",
+    "back": "Par un triplet (A, B, C) où A, B, C sont les ensembles de disques situés sur chaque tour. État initial : E0 = ({1, 2}, ∅, ∅). États buts : Ef2 = (∅, {1, 2}, ∅) et Ef3 = (∅, ∅, {1, 2}).",
+    "tag": "Modélisation"
+  },
+  {
+    "id": "fc-09",
+    "front": "Que signifie la propriété d'inversibilité des opérateurs dans les Tours de Hanoï ?",
+    "back": "Chaque opérateur mij (déplacement du sommet de la tour i vers la tour j) admet un opérateur inverse mji. Si m12 mène à ({2}, {1}, ∅), m21 ramène à ({1, 2}, ∅, ∅).",
+    "tag": "Modélisation"
+  },
+  {
+    "id": "fc-10",
+    "front": "Quelle est la contrainte de sécurité dans le problème des 3 touristes et 3 terroristes ?",
+    "back": "Sur chaque rive (gauche et droite), le nombre de terroristes ne doit jamais être strictement supérieur au nombre de touristes, sauf s'il n'y a aucun touriste sur cette rive (Tg = 0 ou Tg ≥ Xg, et Td = 0 ou Td ≥ Xd).",
+    "tag": "Modélisation"
+  },
+  {
+    "id": "fc-11",
+    "front": "Comment est formalisé l'état et le but dans le problème des deux bidons (4L et 3L) ?",
+    "back": "État : couple (x, y) avec x ∈ {0, 1, 2, 3, 4} (volume bidon 1) et y ∈ {0, 1, 2, 3} (volume bidon 2). État initial : (0, 0). But : tout état avec x = 2.",
+    "tag": "Modélisation"
+  },
+  {
+    "id": "fc-12",
+    "front": "Quelle est la contrainte du monde des 4 pions (A, B, C, D) et quelles sont les actions autorisées ?",
+    "back": "Contrainte : le pion A ne doit jamais se trouver plus à droite que le pion D (pos(A) < pos(D)). Actions autorisées : echange(1, 2), echange(2, 3) et echange(2, 4) uniquement si l'état atteint respecte la contrainte.",
+    "tag": "Modélisation"
+  },
+  {
+    "id": "fc-13",
+    "front": "Quel est le facteur de branchement moyen (b) du Taquin à 8 cases ?",
+    "back": "b_moyen = (4 coins × 2 actions + 4 bords × 3 actions + 1 centre × 4 actions) / 9 = 24 / 9 ≈ 2,67.",
+    "tag": "Modélisation"
+  },
+  {
+    "id": "fc-14",
+    "front": "Quels sont les 4 critères d'évaluation des algorithmes de recherche ?",
+    "back": "1. Complétude : garantit de trouver une solution si elle existe ;\n2. Optimalité : garantit de trouver la solution de coût minimal ;\n3. Complexité en temps : durée / nombre d'états développés ;\n4. Complexité en espace : quantité maximale de mémoire utilisée.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-15",
+    "front": "Que représentent les structures de données Q, C et S dans les algorithmes de recherche ?",
+    "back": "- Q : file des nœuds découverts en attente d'exploration (la frontière) ;\n- C : ensemble des nœuds déjà explorés (les fermés) pour éviter les cycles ;\n- S : liste des successeurs directs générés pour le nœud courant.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-16",
+    "front": "Quel type de structure de données gouverne Q dans DFS et quelle est l'opération clé ?",
+    "back": "Une pile (LIFO). L'opération clé est `Q = append(S, Q)` : les successeurs sont insérés en tête de file.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-17",
+    "front": "Quel est le principal avantage de la recherche en profondeur (DFS) ?",
+    "back": "Sa très faible complexité en mémoire : O(b · m). Elle ne stocke que le chemin courant et ses frères inexplorés.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-18",
+    "front": "DFS est-il complet et optimal ?",
+    "back": "Non. DFS n'est pas optimal (il renvoie la première solution rencontrée) et n'est pas complet dans les espaces infinis ou avec des cycles non contrôlés.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-19",
+    "front": "Quel type de structure gouverne Q dans BFS et quelle est l'opération clé ?",
+    "back": "Une file FIFO (First In, First Out). L'opération clé est `Q = append(Q, S)` : les successeurs sont insérés à la fin de la file.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-20",
+    "front": "Dans quelles conditions BFS est-il optimal ?",
+    "back": "BFS est optimal si et seulement si toutes les actions ont un coût identique (coût unitaire ki = 1). Il trouve alors la solution de profondeur minimale.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-21",
+    "front": "Quel est le principal défaut de BFS ?",
+    "back": "L'explosion exponentielle de sa consommation mémoire : O(b^d), car tous les nœuds d'un niveau doivent être mémorisés dans Q.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-22",
+    "front": "Quel est le principe de la recherche à coût uniforme (UCS) ?",
+    "back": "UCS utilise une file de priorité ordonnée par coût croissant g(n) (coût cumulé depuis la racine). Il est complet et optimal pour n'importe quel coût positif.",
+    "tag": "Recherche aveugle"
+  },
+  {
+    "id": "fc-23",
+    "front": "Quelle est la définition mathématique d'une fonction heuristique ?",
+    "back": "h : E → ℝ, où E est l'espace d'états et ℝ l'ensemble des réels. Elle associe à chaque état une estimation de coût (à minimiser) ou de mérite (à maximiser).",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-24",
+    "front": "Comment sont définies les heuristiques h1 et h2 pour le jeu de Taquin à 8 cases ?",
+    "back": "- h1 : nombre de plaquettes mal placées (hors case vide) ;\n- h2 : somme des distances de Manhattan de chaque plaquette à sa position finale cible (|x - x*| + |y - y*|).",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-25",
+    "front": "Quelle est la condition formelle d'admissibilité d'une heuristique ?",
+    "back": "0 ≤ h(n) ≤ h*(n) pour tout nœud n, où h*(n) est le coût réel minimal pour atteindre le but. Une heuristique admissible est optimiste et ne surestime jamais le coût réel.",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-26",
+    "front": "Que signifie la dominance d'une heuristique h2 sur h1 ?",
+    "back": "Si pour tout état n, h2(n) ≥ h1(n) et les deux sont admissibles, alors h2 domine h1. Un algorithme A* utilisant h2 développera moins ou autant de nœuds qu'avec h1.",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-27",
+    "front": "Quelles sont les 5 étapes de l'algorithme Hill Climbing (Ascension de colline) ?",
+    "back": "1. État courant = état de départ ;\n2. Générer les enfants de l'état courant ;\n3. Évaluer les enfants et choisir le meilleur ;\n4. Si le meilleur est meilleur que le courant, avancer dessus et reprendre en 2 ;\n5. Sinon, arrêt.",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-28",
+    "front": "Pourquoi l'algorithme Hill Climbing peut-il échouer à trouver la solution globale ?",
+    "back": "Parce qu'il ne garde qu'un seul chemin, n'effectue aucun retour arrière (pas de backtracking) et s'arrête dès qu'aucun voisin immédiat n'est meilleur (pièges des optima locaux, plateaux et crêtes).",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-29",
+    "front": "Quelle est la fonction d'évaluation f(n) de l'algorithme A* ?",
+    "back": "f(n) = g(n) + h(n), où g(n) est le coût exact de la partie déjà explorée depuis la racine et h(n) l'estimation heuristique de la partie future pour atteindre le but.",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-30",
+    "front": "Comment la file Q est-elle gérée dans l'algorithme A* ?",
+    "back": "Q est maintenue en permanence triée par ordre croissant de la fonction f(n) grâce aux opérations sort(S, f) et merge(Q, S, f).",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-31",
+    "front": "Dans A*, à quel moment teste-t-on si un nœud est l'état but ?",
+    "back": "Au moment de l'EXTRACTION du nœud de la file Q (quand il est dépilé), et JAMAIS au moment de sa génération parmi les successeurs.",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-32",
+    "front": "Dans A*, que fait-on si un nœud successeur est déjà présent dans C avec un g plus grand ?",
+    "back": "On le met à jour avec le nouveau coût g plus faible (réouverture), car on vient de trouver un chemin strictement plus court pour y parvenir.",
+    "tag": "Recherche heuristique"
+  },
+  {
+    "id": "fc-33",
+    "front": "Quel est le principe de l'algorithme Min-Max pour les jeux à deux joueurs ?",
+    "back": "Le joueur MAX cherche à maximiser le score (prend le max des enfants) et le joueur MIN cherche à minimiser le score (prend le min des enfants). Les valeurs remontent depuis les feuilles terminales.",
+    "tag": "Jeux & Min-Max"
+  },
+  {
+    "id": "fc-34",
+    "front": "Que représentent alpha (α) et bêta (β) dans l'élagage Alpha-Bêta ?",
+    "back": "- α : la meilleure valeur (la plus haute) trouvée pour MAX le long du chemin (init: -∞) ;\n- β : la meilleure valeur (la plus basse) trouvée pour MIN le long du chemin (init: +∞).",
+    "tag": "Jeux & Min-Max"
+  },
+  {
+    "id": "fc-35",
+    "front": "Quelle est la condition déclenchant une coupure dans l'élagage Alpha-Bêta ?",
+    "back": "Dès que α ≥ β, on arrête l'exploration des successeurs restants du nœud courant.",
+    "tag": "Jeux & Min-Max"
+  },
+  {
+    "id": "fc-36",
+    "front": "L'élagage Alpha-Bêta modifie-t-il la décision finale retournée par rapport à Min-Max ?",
+    "back": "Non ! Alpha-Bêta retourne exactement la même décision et la même valeur que Min-Max complet, tout en éliminant les branches inutiles (complexité O(b^(d/2)) au mieux).",
+    "tag": "Jeux & Min-Max"
+  },
+  {
+    "id": "fc-37",
+    "front": "Quelles sont les valeurs terminales classiques pour le jeu du Morpion (Tic-Tac-Toe) avec joueur X (MAX) ?",
+    "back": "+1 si X gagne, 0 en cas de match nul, et -1 si O (MIN) gagne.",
+    "tag": "Jeux & Min-Max"
+  },
+  {
+    "id": "fc-38",
+    "front": "Quels sont les composants clés d'un algorithme génétique ?",
+    "back": "Une population de chromosomes (individus), une fonction fitness (d'adaptation), et trois opérateurs : la sélection, le croisement (crossover) et la mutation.",
+    "tag": "Algorithmes génétiques"
+  },
+  {
+    "id": "fc-39",
+    "front": "Dans la sélection par roulette biaisée, quelle est la probabilité de sélection d'un individu i ?",
+    "back": "pi = fitness(i) / ∑ fitness(k). La probabilité est directement proportionnelle à la qualité de l'individu.",
+    "tag": "Algorithmes génétiques"
+  },
+  {
+    "id": "fc-40",
+    "front": "Comment modélise-t-on le chromosome pour le problème du voyageur de commerce (TSP) ?",
+    "back": "Par un vecteur de permutation sans répétition (ex: 1 3 4 5 2 1), où chaque gène représente l'ordre de visite des villes.",
+    "tag": "Algorithmes génétiques"
+  },
+  {
+    "id": "fc-41",
+    "front": "Pour le voyageur de commerce (minimisation de distance), comment définir la fonction fitness ?",
+    "back": "Comme une fonction inverse de la distance totale (ex: fitness = 1 / Distance_totale ou C - Distance_totale) afin qu'une distance plus courte donne un fitness plus élevé.",
+    "tag": "Algorithmes génétiques"
+  },
+  {
+    "id": "fc-42",
+    "front": "Quel langage de programmation logique est préconisé dans l'atelier de programmation de systèmes intelligents de M. Dagba ?",
+    "back": "PROLOG, et plus particulièrement l'environnement SWI-PROLOG.",
+    "tag": "Outils & Méthodes"
+  }
+]

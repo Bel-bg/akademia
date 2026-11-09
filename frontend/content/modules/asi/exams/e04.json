@@ -1,0 +1,68 @@
+{
+  "n": 4,
+  "title": "Épreuve n° 4 · Gestion de Projet Informatique, WBS & Planification",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e04p1",
+      "title": "Première partie : Fondements de la gestion de projet",
+      "points": 5,
+      "intro": "Questions théoriques sur le pilotage de projet.",
+      "questions": [
+        {
+          "id": "e04p1q1",
+          "q": "Définissez ce qu'est un projet informatique et distinguez-le d'une activité récurrente d'exploitation (Run).",
+          "a": "Un projet informatique est une initiative temporaire ayant un début et une fin formalisés, mobilisant des ressources humaines et matérielles limitées pour atteindre un objectif novateur et unique (ex: développer une nouvelle application de scolarité).\nÀ l'inverse, l'activité récurrente (ou exploitation/Run) consiste à opérer et maintenir un service répétitif en continu, sans fin prévue dans le temps (ex: assister les utilisateurs, sauvegarder la base de données chaque nuit).",
+          "points": 2.5
+        },
+        {
+          "id": "e04p1q2",
+          "q": "Expliquez la relation entre Périmètre, Délai, Coût et Qualité dans le triangle de gestion de projet. Que se passe-t-il si le client ajoute des fonctionnalités sans allonger le calendrier ni le budget ?",
+          "a": "Les trois grandeurs (Périmètre, Délai, Coût) forment la triple contrainte entourant la Qualité au centre du triangle. Si le client augmente le périmètre fonctionnel sans augmenter le budget (Coût) ni allonger les délais de livraison, la pression se répercute inévitablement sur la variable d'ajustement restante : la Qualité est sévèrement dégradée (impasse sur les tests, code bâclé, instabilité technique et dette technique).",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e04p2",
+      "title": "Deuxième partie : Découpage WBS et estimation des charges",
+      "points": 8,
+      "context": "On planifie la réalisation du système d'inscription du Centre Avenir Formation. Exigences : EF-01 (saisie sans doublon), EF-02 (suivi des paiements), EF-03 (statistiques par filière), ENF-01 (rapidité < 3s), ENF-02 (sécurité des rôles). L'équipe comprend deux développeurs.",
+      "questions": [
+        {
+          "id": "e04p2q1",
+          "q": "Construisez le WBS du projet : structurez les lots de travaux et définissez au moins deux tâches élémentaires pour le module Inscription et le module Paiements.",
+          "a": "Arborescence du WBS :\n1. Projet Système de Scolarité\n   1.1 Lot Inscription (EF-01, ENF-01)\n       1.1.1 Conception de la maquette de formulaire web\n       1.1.2 Programmation du contrôleur de détection des doublons\n       1.1.3 Tests unitaires et d'intégration de la saisie\n   1.2 Lot Paiements & Quittances (EF-02, ENF-02)\n       1.2.1 Conception du modèle de données des règlements\n       1.2.2 Programmation de la gestion des droits comptables\n       1.2.3 Tests de calcul des soldes et éditions des reçus\n   1.3 Lot Statistiques (EF-03)\n       1.3.1 Développement des requêtes d'agrégation par filière\n   1.4 Lot Déploiement et Formation\n       1.4.1 Installation sur serveur de production\n       1.4.2 Formation des secrétaires et comptables.",
+          "points": 4
+        },
+        {
+          "id": "e04p2q2",
+          "q": "Distinguez Charge (en jours-homme) et Durée calendaire. Pourquoi les estimations doivent-elles être données sous forme de fourchette (min-max) ?",
+          "a": "- La charge représente la quantité totale d'effort de travail nécessaire, exprimée en jours-homme (j/h). La durée calendaire est le temps réel écoulé sur le calendrier. Une tâche de 8 j/h confiée à deux développeurs travaillant de concert peut s'exécuter en 4 jours ouvrés.\n- Donner une estimation sous forme de fourchette (ex: 4 à 6 j/h) est obligatoire pour intégrer l'incertitude et les aléas techniques inhérents au développement logiciel. Un chiffre unique est faussement précis et presque toujours trop optimiste.",
+          "points": 4
+        }
+      ]
+    },
+    {
+      "id": "e04p3",
+      "title": "Troisième partie : Ordonnancement Gantt et gestion des risques",
+      "points": 7,
+      "context": "Tâches du projet : Tâche A 'Conception IHM' (3 jours, sans antécédent) ; Tâche B 'Programmation Inscriptions' (4 jours, dépend de A) ; Tâche C 'Programmation Paiements' (6 jours, dépend de A) ; Tâche D 'Tests d'intégration' (3 jours, dépend de B et C).",
+      "questions": [
+        {
+          "id": "e04p3q1",
+          "q": "Identifiez les chemins du projet, calculez leur durée respective et déterminez le chemin critique. Quel est l'impact d'un retard de 2 jours sur la tâche B ?",
+          "a": "Deux chemins mènent du début à la fin du projet :\n- Chemin 1 : Tâche A (3j) + Tâche B (4j) + Tâche D (3j) = 10 jours calendaires.\n- Chemin 2 : Tâche A (3j) + Tâche C (6j) + Tâche D (3j) = 12 jours calendaires.\nLe chemin critique est le chemin le plus long : Chemin 2 (A -> C -> D) avec une durée totale de 12 jours.\nImpact d'un retard de 2 jours sur B : la tâche B durerait alors 6 jours au lieu de 4. Le Chemin 1 atteindrait 3 + 6 + 3 = 12 jours, égalant la durée de C. La tâche D ne commençant qu'au jour 9 dans les deux cas, le projet se termine toujours au jour 12 : ce retard est absorbé par la marge de flottement de B et n'a AUCUN impact sur la date de fin globale.",
+          "points": 3.5
+        },
+        {
+          "id": "e04p3q2",
+          "q": "Établissez le registre des risques du projet : citez deux risques techniques et organisationnels plausibles, évaluez leur criticité et précisez la stratégie de réponse retenue.",
+          "a": "| Risque | Probabilité | Impact | Criticité | Stratégie de réponse |\n|---|:---:|:---:|:---:|---|\n| Démission ou indisponibilité prolongée d'un développeur | Faible | Fort | Moyenne | Réduire : binômage régulier, revue de code systématique et documentation partagée sur le dépôt Git. |\n| Rejet de l'application par la secrétaire (retour aux fiches papier) | Moyenne | Fort | Élevée | Éviter : organiser des sessions de test hebdomadaires avec la secrétaire dès la première semaine pour valider l'ergonomie. |",
+          "points": 3.5
+        }
+      ]
+    }
+  ]
+}

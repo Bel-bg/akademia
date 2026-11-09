@@ -1,0 +1,176 @@
+{
+  "id": "asi",
+  "title": "Analyse des Systèmes Informatiques",
+  "subtitle": "SI, Processus BPMN, Ingénierie des Exigences & Méthodes Agiles (Scrum) · Master & Licence",
+  "description": "Analyse approfondie des systèmes d'information : gouvernance et alignement stratégique, cartographie et modélisation BPMN 2.0 (AS-IS / TO-BE), ingénierie des exigences et UML, et pilotage agile de projets (Scrum, Kanban, estimation WBS).",
+  "emoji": "🧭",
+  "color": "#2563EB",
+  "level": "Licence 3 / Master",
+  "estimatedHours": 14,
+  "parts": [
+    {
+      "id": "p1",
+      "title": "Chapitre 1 · Fondamentaux et enjeux stratégiques des SI",
+      "chapters": [
+        "1-1-donnees-info-systemes",
+        "1-2-si-vs-systeme-informatique",
+        "1-3-alignement-et-transformation"
+      ]
+    },
+    {
+      "id": "p2",
+      "title": "Chapitre 2 · Analyse organisationnelle et processus métier (BPMN)",
+      "chapters": [
+        "2-1-organisation-et-matrice-raci",
+        "2-2-cartographie-et-bpmn",
+        "2-3-diagnostic-et-optimisation"
+      ]
+    },
+    {
+      "id": "p3",
+      "title": "Chapitre 3 · Ingénierie des besoins et modélisation UML",
+      "chapters": [
+        "3-1-parties-prenantes-et-collecte",
+        "3-2-exigences-et-priorisation",
+        "3-3-modelisation-uml-et-tracabilite"
+      ]
+    },
+    {
+      "id": "p4",
+      "title": "Chapitre 4 · Gestion de projet et Méthodes Agiles (Scrum & Kanban)",
+      "chapters": [
+        "4-1-gestion-projet-wbs-gantt",
+        "4-2-methodes-predictives-vs-agiles",
+        "4-3-cadre-scrum-approfondi"
+      ]
+    },
+    {
+      "id": "ann",
+      "title": "Annexes · Synthèse et Cas pratique d'examen",
+      "chapters": [
+        "a-fiches-synthese-revisions",
+        "b-etude-cas-bibliotheque-corrige"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "1-1-donnees-info-systemes",
+      "number": "1.1",
+      "title": "Données, information, connaissance et notion de système",
+      "summary": "Distinction donnée / information / connaissance, modèle systémique, entrées, traitement, sorties, rétroaction et cas fil rouge.",
+      "minutes": 8,
+      "file": "1-1-donnees-info-systemes.md"
+    },
+    {
+      "id": "1-2-si-vs-systeme-informatique",
+      "number": "1.2",
+      "title": "Système d'Information vs Système Informatique",
+      "summary": "Définitions, 4 fonctions (collecter, stocker, traiter, diffuser), 5 composantes du SI, et familles de SI (ERP/PGI).",
+      "minutes": 10,
+      "file": "1-2-si-vs-systeme-informatique.md"
+    },
+    {
+      "id": "1-3-alignement-et-transformation",
+      "number": "1.3",
+      "title": "Rôle stratégique, alignement et transformation numérique",
+      "summary": "Support vs avantage concurrentiel, 3 niveaux de décision, alignement stratégique, désalignement, numérisation vs digitalisation vs transformation.",
+      "minutes": 11,
+      "file": "1-3-alignement-et-transformation.md"
+    },
+    {
+      "id": "2-1-organisation-et-matrice-raci",
+      "number": "2.1",
+      "title": "Comprendre l'organisation, acteurs et matrice RACI",
+      "summary": "Mission, structure, ressources, environnement, limites de l'organigramme et matrice RACI (Responsible, Accountable, Consulted, Informed).",
+      "minutes": 9,
+      "file": "2-1-organisation-et-matrice-raci.md"
+    },
+    {
+      "id": "2-2-cartographie-et-bpmn",
+      "number": "2.2",
+      "title": "Processus métier et modélisation BPMN 2.0",
+      "summary": "Processus vs procédure, 3 familles de processus, fiche processus, éléments BPMN 2.0 (tâches, événements, passerelles X et +, pools, couloirs).",
+      "minutes": 12,
+      "file": "2-2-cartographie-et-bpmn.md"
+    },
+    {
+      "id": "2-3-diagnostic-et-optimisation",
+      "number": "2.3",
+      "title": "Diagnostic des dysfonctionnements et optimisation (AS-IS / TO-BE)",
+      "summary": "Symptômes (doubles saisies, attentes, pertes, retours), goulot d'étranglement, amélioration continue vs réingénierie (BPR), 4 leviers d'optimisation.",
+      "minutes": 11,
+      "file": "2-3-diagnostic-et-optimisation.md"
+    },
+    {
+      "id": "3-1-parties-prenantes-et-collecte",
+      "number": "3.1",
+      "title": "Parties prenantes et techniques de recueil des besoins",
+      "summary": "Cartographie influence x intérêt, entretiens (questions ouvertes), observation, étude documentaire, distinction besoin vs solution vs souhait.",
+      "minutes": 10,
+      "file": "3-1-parties-prenantes-et-collecte.md"
+    },
+    {
+      "id": "3-2-exigences-et-priorisation",
+      "number": "3.2",
+      "title": "Spécification et priorisation des exigences (MoSCoW)",
+      "summary": "Exigences fonctionnelles et non fonctionnelles, critères d'une bonne exigence, priorisation MoSCoW (Must, Should, Could, Won't), cahier des charges.",
+      "minutes": 11,
+      "file": "3-2-exigences-et-priorisation.md"
+    },
+    {
+      "id": "3-3-modelisation-uml-et-tracabilite",
+      "number": "3.3",
+      "title": "Modélisation UML, traçabilité et validation",
+      "summary": "Diagrammes UML (cas d'utilisation, classes, séquence, activités), matrice de traçabilité Exigence-Cas-Test, validation et gestion des changements.",
+      "minutes": 11,
+      "file": "3-3-modelisation-uml-et-tracabilite.md"
+    },
+    {
+      "id": "4-1-gestion-projet-wbs-gantt",
+      "number": "4.1",
+      "title": "Fondamentaux de projet, WBS, Gantt et gestion des risques",
+      "summary": "Projet vs activité courante, triangle coût-délai-périmètre et qualité, WBS, estimation en jours-homme (fourchette), Gantt, chemin critique, registre des risques.",
+      "minutes": 12,
+      "file": "4-1-gestion-projet-wbs-gantt.md"
+    },
+    {
+      "id": "4-2-methodes-predictives-vs-agiles",
+      "number": "4.2",
+      "title": "Approches prédictives (Cascade, Cycle en V) vs Agiles",
+      "summary": "Limites de la cascade et du cycle en V, Manifeste Agile (2001), développement itératif et incrémental, Kanban (limite du WIP), choix de méthode.",
+      "minutes": 10,
+      "file": "4-2-methodes-predictives-vs-agiles.md"
+    },
+    {
+      "id": "4-3-cadre-scrum-approfondi",
+      "number": "4.3",
+      "title": "Le cadre Scrum : rôles, événements, artefacts et passage à l'échelle",
+      "summary": "Sprints timeboxés, rôles (PO, SM, Développeurs), 4 rituels, backlog produit, stories et epics, Définition de Fini (DoD), burndown chart, Scrum multi-équipes.",
+      "minutes": 14,
+      "file": "4-3-cadre-scrum-approfondi.md"
+    },
+    {
+      "id": "a-fiches-synthese-revisions",
+      "number": "A",
+      "title": "Fiches de synthèse et aide-mémoire ASI",
+      "summary": "Mémento comparatif : SI vs informatique, grille RACI, symboles BPMN, tableau MoSCoW, règles Scrum et indicateurs clés.",
+      "minutes": 8,
+      "file": "a-fiches-synthese-revisions.md"
+    },
+    {
+      "id": "b-etude-cas-bibliotheque-corrige",
+      "number": "B",
+      "title": "Cas pratique d'examen corrigé : Système de la bibliothèque",
+      "summary": "Dossier d'analyse complet corrigé : parties prenantes, exigences fonctionnelles/non-fonctionnelles, cas d'utilisation UML, traçabilité et planning Scrum.",
+      "minutes": 9,
+      "file": "b-etude-cas-bibliotheque-corrige.md"
+    }
+  ],
+  "features": {
+    "quiz": true,
+    "blitz": true,
+    "exams": true,
+    "flashcards": true
+  }
+}

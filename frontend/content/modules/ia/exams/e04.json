@@ -1,0 +1,68 @@
+{
+  "n": 4,
+  "title": "Épreuve n° 4 · Jeux à deux adversaires : Min-Max et Alpha-Bêta",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e04p1",
+      "title": "Première partie : Fondements des jeux à somme nulle",
+      "points": 5,
+      "intro": "Questions théoriques sur les jeux à deux adversaires.",
+      "questions": [
+        {
+          "id": "e04p1q1",
+          "q": "Définissez ce qu'est un jeu à deux joueurs à somme nulle et à information parfaite. Quel est le rôle respectif des joueurs MAX et MIN ?",
+          "a": "Un jeu à deux joueurs à somme nulle est un jeu où le gain d'un joueur correspond exactement à la perte de son adversaire (gain_MAX + gain_MIN = 0). L'information est parfaite car chaque joueur a une visibilité complète et simultanée sur l'état du jeu à tout instant (aucun hasard ni carte cachée).\nLe joueur MAX cherche à maximiser la fonction d'utilité terminale, tandis que le joueur MIN cherche à minimiser cette même fonction d'utilité (minimiser le gain de MAX).",
+          "points": 2.5
+        },
+        {
+          "id": "e04p1q2",
+          "q": "Donnez la définition exacte des paramètres alpha (α) et bêta (β) dans l'élagage Alpha-Bêta, ainsi que la condition formelle de déclenchement d'une coupure.",
+          "a": "- α est la valeur de la meilleure option (la plus haute) découverte jusqu'à présent pour le joueur MAX le long du chemin depuis la racine (initialisé à -∞).\n- β est la valeur de la meilleure option (la plus basse) découverte jusqu'à présent pour le joueur MIN le long du chemin depuis la racine (initialisé à +∞).\n- Condition de coupure : dès que α ≥ β, l'exploration des successeurs restants du nœud courant est immédiatement interrompue (coupure α sous un nœud MIN ou coupure β sous un nœud MAX).",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e04p2",
+      "title": "Deuxième partie : Déroulement Min-Max et élagage Alpha-Bêta",
+      "points": 8,
+      "context": "Considérons un arbre de jeu à 3 niveaux. Racine A (nœud MAX). Niveau 1 : nœuds B, C, D (nœuds MIN). Niveau 2 : enfants sous B avec feuilles terminales [3, 12, 8] ; enfants sous C avec feuilles [2, 4, 6] ; enfants sous D avec feuilles [14, 5, 2].",
+      "questions": [
+        {
+          "id": "e04p2q1",
+          "q": "Calculez les valeurs remontées par l'algorithme Min-Max sans élagage pour chaque nœud B, C, D et pour la racine A. Quel coup MAX doit-il choisir ?",
+          "a": "- Au niveau des nœuds MIN (B, C, D), chaque nœud prend le minimum de ses enfants :\n  * v(B) = min(3, 12, 8) = 3\n  * v(C) = min(2, 4, 6) = 2\n  * v(D) = min(14, 5, 2) = 2\n- À la racine A (nœud MAX), la valeur est le maximum de ses enfants :\n  * v(A) = max(v(B), v(C), v(D)) = max(3, 2, 2) = 3.\n- Décision de MAX : choisir la branche B garantissant un gain de 3.",
+          "points": 4
+        },
+        {
+          "id": "e04p2q2",
+          "q": "Appliquez l'élagage Alpha-Bêta (parcours de gauche à droite). Précisez l'évolution de α et β et identifiez les branches coupées.",
+          "a": "1. Racine A : α = -∞, β = +∞.\n2. Nœud B (MIN) : reçoit α=-∞, β=+∞.\n   - Enfant 1 : feuille 3 → β = min(+∞, 3) = 3. Pas de coupure (α=-∞ < β=3).\n   - Enfant 2 : feuille 12 → β = min(3, 12) = 3.\n   - Enfant 3 : feuille 8 → β = min(3, 8) = 3.\n   - B renvoie 3 à A. Racine A met à jour son α : α = max(-∞, 3) = 3.\n3. Nœud C (MIN) : reçoit α=3, β=+∞ de A.\n   - Enfant 1 : feuille 2 → β = min(+∞, 2) = 2.\n   - Test de coupure : on a α=3 et β=2, donc α ≥ β (3 ≥ 2) ! Coupure α immédiate !\n   - Les feuilles 4 et 6 sous C ne sont pas explorées. C renvoie au maximum 2 à A.\n4. Nœud D (MIN) : reçoit α=3, β=+∞ de A.\n   - Enfant 1 : feuille 14 → β = min(+∞, 14) = 14.\n   - Enfant 2 : feuille 5 → β = min(14, 5) = 5.\n   - Enfant 3 : feuille 2 → β = min(5, 2) = 2.\n   - D renvoie 2 à A. A reste à max(3, 2) = 3.\nConclusion : coupure réussie des branches 4 et 6 sous C. Valeur finale retournée = 3, coup retenu = branche B.",
+          "points": 4
+        }
+      ]
+    },
+    {
+      "id": "e04p3",
+      "title": "Troisième partie : Application au Morpion (Tic-Tac-Toe)",
+      "points": 7,
+      "context": "Le jeu du Morpion se joue sur une grille 3x3 entre X (MAX) et O (MIN). Valeurs terminales : +1 pour gain de X, 0 pour match nul, -1 pour perte de X. On se trouve dans la configuration suivante où c'est à X de jouer :\nLigne 1 : [X, O, X]\nLigne 2 : [O, X, vide]\nLigne 3 : [vide, O, vide]",
+      "questions": [
+        {
+          "id": "e04p3q1",
+          "q": "Identifiez les cases libres disponibles pour X et analysez les menaces immédiates dans cette configuration.",
+          "a": "Numérotons les cases de (1,1) à (3,3) :\n- Cases libres : (2,3), (3,1) et (3,3).\n- Analyse des alignements :\n  * La diagonale principale (1,1)[X], (2,2)[X], (3,3) contient déjà deux X alignés !\n  * Si X joue en (3,3), il complète immédiatement sa diagonale de 3 X et gagne la partie sans laisser à O la moindre chance de répliquer.",
+          "points": 3.5
+        },
+        {
+          "id": "e04p3q2",
+          "q": "En appliquant la règle Min-Max, calculez la valeur du coup en (3,3) comparée aux deux autres coups possibles. Quel coup X doit-il jouer ?",
+          "a": "- Coup 1 : X joue en (3,3). L'état résultant est un état terminal victorieux pour X. Valeur d'utilité terminale = +1. Aucun coup subséquent de O n'est requis.\n- Coup 2 : X joue en (3,1). O peut alors jouer en (3,3) pour bloquer la diagonale de X. La valeur de cet état sera au mieux 0 ou -1.\n- Coup 3 : X joue en (2,3). O peut également répliquer en bloquant (3,3) ou créant sa propre menace.\nComme le coup (3,3) a une valeur de +1 (la valeur maximale possible de l'arbre), Min-Max sélectionne sans ambiguïté le coup (3,3) qui garantit la victoire immédiate de X.",
+          "points": 3.5
+        }
+      ]
+    }
+  ]
+}

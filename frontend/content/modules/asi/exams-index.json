@@ -1,0 +1,42 @@
+[
+  {
+    "n": 1,
+    "title": "Épreuve n° 1 · Fondamentaux, Diagnostic & Alignement stratégique",
+    "scenario": "Diagnostic du Système d'Information du Centre Avenir Formation",
+    "cas": "Composantes du SI, détection du désalignement et plan de transformation en 3 étapes",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 2,
+    "title": "Épreuve n° 2 · Analyse des Processus Métier & Modélisation BPMN",
+    "scenario": "Optimisation du parcours d'inscription d'un établissement de formation",
+    "cas": "Cartographie, modélisation AS-IS, goulot d'étranglement et conception TO-BE",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 3,
+    "title": "Épreuve n° 3 · Ingénierie des Exigences & Modélisation UML",
+    "scenario": "Modernisation du système de gestion de la bibliothèque universitaire",
+    "cas": "Parties prenantes, spécification MoSCoW, cas d'utilisation UML et traçabilité",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 4,
+    "title": "Épreuve n° 4 · Gestion de Projet Informatique, WBS & Planification",
+    "scenario": "Pilotage et ordonnancement d'un projet de scolarité sous contraintes",
+    "cas": "Découpage WBS, estimation en jours-homme, diagramme de Gantt et gestion des risques",
+    "durationMinutes": 120,
+    "points": 20
+  },
+  {
+    "n": 5,
+    "title": "Épreuve n° 5 · Méthodes Agiles, Cadre Scrum & Définition de Fini",
+    "scenario": "Déploiement agile d'une plateforme de services numériques",
+    "cas": "Backlog produit, rôles Scrum, Définition de Fini (DoD), burndown et Scrum multi-équipes",
+    "durationMinutes": 120,
+    "points": 20
+  }
+]

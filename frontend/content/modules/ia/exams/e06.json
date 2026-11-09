@@ -1,0 +1,88 @@
+{
+  "n": 6,
+  "title": "Épreuve n° 6 · Examen de synthèse générale Master/Licence",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e06p1",
+      "title": "Première partie : Synthèse théorique",
+      "points": 5,
+      "intro": "Questions de synthèse sur l'espace d'états et les algorithmes de recherche.",
+      "questions": [
+        {
+          "id": "e06p1q1",
+          "q": "Rappelez le quadruplet (S, s0, F, Q) d'un espace d'états et expliquez pourquoi la recherche de solution se modélise par un graphe orienté.",
+          "a": "Le quadruplet (S, s0, F, Q) comprend : S (ensemble des états), s0 (état initial), F (ensemble des états solutions), Q (fonctions partielles de transition). La recherche se modélise comme un graphe orienté où les sommets sont les états et les arcs orientés sont les applications des opérateurs O ∈ Q modélisant les actions du monde réel.",
+          "points": 2.5
+        },
+        {
+          "id": "e06p1q2",
+          "q": "Dressez un tableau synthétique comparant DFS, BFS, UCS et A* selon les critères : complétude, optimalité, complexité en temps et en espace.",
+          "a": "- DFS : Non complet (si boucles/infini) ; Non optimal ; Temps O(b^m) ; Espace O(b · m) minimal.\n- BFS : Complet (si b fini) ; Optimal (si coûts unitaires) ; Temps O(b^d) ; Espace O(b^d) exponentiel.\n- UCS : Complet (si coûts ≥ ε > 0) ; Optimal (coûts généraux) ; Temps et Espace O(b^(1 + ⌊C*/ε⌋)).\n- A* : Complet (si h admissible) ; Optimal (si h admissible) ; Temps et Espace O(b^d).",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e06p2",
+      "title": "Deuxième partie : Recherches aveugles et comparaison",
+      "points": 5,
+      "context": "Soit un graphe orienté avec racine S et état final G. On applique DFS puis BFS.",
+      "questions": [
+        {
+          "id": "e06p2q1",
+          "q": "Expliquez comment la contrainte de non-réexploration via l'ensemble C évite les cycles infinis dans DFS.",
+          "a": "Dans un graphe quelconque pouvant comporter des cycles (ou des chemins menant au même état), DFS risque de tourner en boucle indéfiniment. L'ensemble C mémorise tous les états déjà visités. Avant d'étendre un état n, l'algorithme vérifie s'il appartient à C. Si c'est le cas, il l'écarte immédiatement, garantissant que chaque état n'est développé qu'une seule fois.",
+          "points": 2.5
+        },
+        {
+          "id": "e06p2q2",
+          "q": "Dans quel contexte précis privilégie-t-on DFS plutôt que BFS, et inversement ?",
+          "a": "- On privilégie DFS lorsque la mémoire vive est très limitée (car son encombrement O(b · m) est linéaire), lorsqu'il existe de nombreuses solutions et qu'on cherche n'importe quelle solution rapidement sans exiger le coût minimal.\n- On privilégie BFS lorsqu'on veut impérativement trouver la solution de profondeur minimale, lorsque l'arbre possède des branches infinies et que la mémoire disponible est suffisante pour supporter l'explosion de Q.",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e06p3",
+      "title": "Troisième partie : Algorithme A* et discussion d'admissibilité",
+      "points": 5,
+      "context": "Soit un problème de recherche de chemin avec état initial S et but G. Deux heuristiques h1 et h2 sont proposées : pour tout nœud n, h1(n) ≤ h2(n) ≤ h*(n).",
+      "questions": [
+        {
+          "id": "e06p3q1",
+          "q": "Énoncez le théorème d'optimalité de l'algorithme A* et expliquez la signification de la formule f(n) = g(n) + h(n).",
+          "a": "Théorème : Si l'heuristique h est admissible (0 ≤ h(n) ≤ h*(n)), A* est garanti de trouver une solution de coût optimal.\nFormule f(n) = g(n) + h(n) : g(n) mesure le coût effectif déjà payé pour aller de la racine au nœud n, tandis que h(n) estime le coût restant pour relier n à l'objectif. f(n) est donc l'estimation globale du coût du chemin complet.",
+          "points": 2.5
+        },
+        {
+          "id": "e06p3q2",
+          "q": "Entre h1 et h2, laquelle devez-vous choisir et pourquoi ? Quel est le risque si une heuristique surestime le coût réel (non admissible) ?",
+          "a": "- Il faut choisir h2 car h2 domine h1 (h2(n) ≥ h1(n)) tout en restant admissible (h2(n) ≤ h*(n)). A* guidé par h2 développera au plus autant de nœuds qu'avec h1, réduisant le temps de recherche.\n- Si une heuristique surestime le coût (h(n) > h*(n)), elle n'est plus admissible : A* peut négliger à tort un chemin menant à la véritable solution optimale et retourner une solution sous-optimale.",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e06p4",
+      "title": "Quatrième partie : Jeux à deux joueurs et élagage Alpha-Bêta",
+      "points": 5,
+      "context": "Considérons un nœud MAX à la racine avec deux enfants MIN : le nœud N1 et le nœud N2.",
+      "questions": [
+        {
+          "id": "e06p4q1",
+          "q": "Supposons que le nœud N1 ait déjà été évalué et ait retourné la valeur 7. Le nœud N2 est maintenant examiné, et son premier enfant terminal a pour valeur 4. Peut-on effectuer une coupure ?",
+          "a": "Oui, immédiatement !\n- La racine MAX a reçu 7 de son premier enfant N1, donc elle a fixé sa borne α = 7.\n- Le nœud N2 (de type MIN) hérite de α = 7 et possède initialement β = +∞.\n- Dès que le premier enfant de N2 renvoie 4, N2 met à jour son β : β = min(+∞, 4) = 4.\n- On compare α et β : on a α = 7 et β = 4, d'où α ≥ β (7 ≥ 4) !\n- La condition de coupure α est satisfaite. N2, étant un nœud MIN, choisira une valeur inférieure ou égale à 4, qui ne pourra jamais dépasser le 7 déjà garanti par N1 à la racine. On coupe donc immédiatement tous les enfants restants de N2.",
+          "points": 2.5
+        },
+        {
+          "id": "e06p4q2",
+          "q": "Quel est le gain théorique apporté par un élagage Alpha-Bêta optimal sur le facteur de branchement et la profondeur explorable ?",
+          "a": "Dans le cas où les coups sont idéalement ordonnés (du meilleur au pire), la complexité en temps passe de O(b^d) pour Min-Max complet à O(b^(d/2)) = O((√b)^d) avec Alpha-Bêta. Le facteur de branchement effectif est ramené à sa racine carrée, ce qui permet à l'algorithme d'explorer deux fois plus profondément dans le même temps imparti.",
+          "points": 2.5
+        }
+      ]
+    }
+  ]
+}

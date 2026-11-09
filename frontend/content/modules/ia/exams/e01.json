@@ -1,0 +1,98 @@
+{
+  "n": 1,
+  "title": "Épreuve n° 1 · Espaces d'états & Recherches aveugles",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e01p1",
+      "title": "Première partie : Questions de cours fondamentales",
+      "points": 5,
+      "intro": "Répondez aux questions avec précision et concision.",
+      "questions": [
+        {
+          "id": "e01p1q1",
+          "q": "Définissez formellement un espace d'états à l'aide de son quadruplet et précisez la signification de chaque terme.",
+          "a": "Un espace d'états est un quadruplet (S, s0, F, Q) où :\n- S est l'ensemble de tous les états possibles du problème ;\n- s0 ∈ S est l'état initial ;\n- F ⊆ S est l'ensemble des positions finales ou états solutions ;\n- Q : S → S est l'ensemble des fonctions partielles de transition d'un état à l'autre (opérateurs).",
+          "points": 1
+        },
+        {
+          "id": "e01p1q2",
+          "q": "Quelles sont les 4 étapes indispensables pour résoudre un problème par la méthode de recherche dans un espace d'états ?",
+          "a": "1. Déterminer la représentation symbolique du problème dans l'espace d'états ;\n2. Déterminer les opérateurs acceptables permettant de passer d'un état à ses successeurs ;\n3. Déterminer l'état initial et caractériser les états finaux ;\n4. Déterminer la stratégie de recherche (méthode de sélection de l'opérateur).",
+          "points": 1
+        },
+        {
+          "id": "e01p1q3",
+          "q": "Quand dit-on qu'une solution est optimale, et qu'une méthode de recherche est admissible ?",
+          "a": "- Une solution est dite optimale s'il n'existe aucune autre solution de coût strictement inférieur.\n- Une méthode de recherche est dite admissible si, dès lors qu'il existe une solution optimale, elle garantit de la trouver en un temps fini.",
+          "points": 1
+        },
+        {
+          "id": "e01p1q4",
+          "q": "Citez les quatre critères utilisés pour apprécier les performances des algorithmes de recherche.",
+          "a": "1. Complétude (garantie de trouver une solution si elle existe) ;\n2. Optimalité (garantie de trouver la meilleure solution) ;\n3. Complexité en temps (estimation de la durée / nombre de nœuds explorés) ;\n4. Complexité en espace (mémoire nécessaire à l'algorithme).",
+          "points": 1
+        },
+        {
+          "id": "e01p1q5",
+          "q": "Comparez le mode de fonctionnement de la file Q entre DFS et BFS.",
+          "a": "Dans DFS, Q fonctionne comme une pile (LIFO) : les successeurs S sont insérés au début de Q via append(S, Q). Dans BFS, Q fonctionne comme une file d'attente (FIFO) : les successeurs S sont insérés à la fin de Q via append(Q, S).",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "e01p2",
+      "title": "Deuxième partie : Le problème des Tours de Hanoï",
+      "points": 7,
+      "context": "On considère le problème des Tours de Hanoï avec trois tours (1, 2, 3) et deux disques (le petit n°1 et le grand n°2) initialement empilés sur la tour 1. Un disque ne peut reposer que sur un disque de taille supérieure ou sur une tour libre. On n'a pas spécifié la tour d'arrivée finale.",
+      "questions": [
+        {
+          "id": "e01p2q1",
+          "q": "Donnez la représentation formelle d'un état, ainsi que l'état initial E0 et les états solutions finaux.",
+          "a": "- Un état est décrit par un triplet (A, B, C) où A, B, C sont les ensembles de disques situés respectivement sur les tours 1, 2 et 3.\n- État initial : E0 = ({1, 2}, ∅, ∅).\n- États finaux : Ef2 = (∅, {1, 2}, ∅) et Ef3 = (∅, ∅, {1, 2}).",
+          "points": 2
+        },
+        {
+          "id": "e01p2q2",
+          "q": "Définissez formellement l'ensemble des opérateurs acceptables M et expliquez la notion d'opérateur inverse.",
+          "a": "L'ensemble d'opérateurs est M = {mij / i=1,2,3 ; j=1,2,3 avec i ≠ j}, où mij désigne le déplacement du plus petit disque situé au sommet de la tour i vers la tour j (sous réserve que la règle de taille soit respectée).\nLes opérateurs admettent des inverses : si l'opérateur m12 appliqué à E0 donne E1 = ({2}, {1}, ∅), alors l'opérateur inverse m21 appliqué à E1 ramène exactement à l'état E0.",
+          "points": 2.5
+        },
+        {
+          "id": "e01p2q3",
+          "q": "Donnez la suite ordonnée des opérateurs permettant de mener de l'état initial E0 à l'état Ef3 en un nombre minimal de déplacements.",
+          "a": "La suite minimale de 3 déplacements est :\n1. m12 : transition vers ({2}, {1}, ∅)\n2. m13 : transition vers (∅, {1}, {2})\n3. m23 : transition vers (∅, ∅, {1, 2}) = Ef3.",
+          "points": 2.5
+        }
+      ]
+    },
+    {
+      "id": "e01p3",
+      "title": "Troisième partie : Traversée de rivière des 3 touristes et 3 terroristes",
+      "points": 8,
+      "context": "Trois touristes et trois terroristes sont sur la rive gauche d'une rivière qu'ils doivent traverser avec une barque de 2 places au maximum. La barque doit être conduite par au moins une personne. Si le nombre de terroristes dépasse celui des touristes sur une rive, les touristes présents sur cette rive sont tués.",
+      "questions": [
+        {
+          "id": "e01p3q1",
+          "q": "Proposez une représentation symbolique d'un état et écrivez la condition formelle de sécurité sur les deux rives.",
+          "a": "- Représentation d'état : triplet (Tg, Xg, B) où Tg ∈ {0,1,2,3} est le nombre de touristes sur la rive gauche, Xg ∈ {0,1,2,3} le nombre de terroristes sur la rive gauche, et B ∈ {G, D} la position de la barque (G=gauche, D=droite). Sur la rive droite, on a Td = 3 - Tg et Xd = 3 - Xg.\n- Condition de sécurité : (Tg = 0 ou Tg ≥ Xg) ET (Td = 0 ou Td ≥ Xd).",
+          "points": 2.5
+        },
+        {
+          "id": "e01p3q2",
+          "q": "Précisez l'état initial, l'état final et l'ensemble des opérateurs de traversée possibles.",
+          "a": "- État initial : (3, 3, G).\n- État final : (0, 0, D).\n- Opérateurs : déplacement dans la barque de (ΔT, ΔX) personnes où ΔT + ΔX ∈ {1, 2}. Les combinaisons possibles sont : (1,0), (2,0), (0,1), (0,2), (1,1).",
+          "points": 2.5
+        },
+        {
+          "id": "e01p3q3",
+          "q": "Donnez le cheminement complet étape par étape conduisant de l'état initial à l'état final en respectant toutes les contraintes.",
+          "a": "Cheminement valide en 11 étapes :\n1. (3,3,G) → 2 terroristes traversent → (3,1,D)\n2. (3,1,D) → 1 terroriste revient → (3,2,G)\n3. (3,2,G) → 2 terroristes traversent → (3,0,D)\n4. (3,0,D) → 1 terroriste revient → (3,1,G)\n5. (3,1,G) → 2 touristes traversent → (1,1,D)\n6. (1,1,D) → 1 touriste et 1 terroriste reviennent → (2,2,G)\n7. (2,2,G) → 2 touristes traversent → (0,2,D)\n8. (0,2,D) → 1 terroriste revient → (0,3,G)\n9. (0,3,G) → 2 terroristes traversent → (0,1,D)\n10. (0,1,D) → 1 terroriste revient → (0,2,G)\n11. (0,2,G) → 2 terroristes traversent → (0,0,D) (But atteint !)",
+          "points": 3
+        }
+      ]
+    }
+  ]
+}

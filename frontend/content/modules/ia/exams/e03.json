@@ -1,0 +1,68 @@
+{
+  "n": 3,
+  "title": "Épreuve n° 3 · Modélisation avancée et CSP",
+  "durationMinutes": 120,
+  "points": 20,
+  "parts": [
+    {
+      "id": "e03p1",
+      "title": "Première partie : Le problème des deux bidons (4L et 3L)",
+      "points": 6,
+      "context": "On a deux bidons vides. Le bidon 1 a une capacité de 4 litres et le bidon 2 une capacité de 3 litres. L'objectif est d'obtenir exactement 2 litres dans le bidon 1.",
+      "questions": [
+        {
+          "id": "e03p1q1",
+          "q": "Donnez la formalisation mathématique de l'état, de l'état initial, de l'état but, et formulez les 8 opérations acceptables.",
+          "a": "- Représentation d'état : couple (x, y) où x ∈ {0, 1, 2, 3, 4} est le volume d'eau dans le bidon 1, et y ∈ {0, 1, 2, 3} le volume d'eau dans le bidon 2.\n- État initial : (0, 0).\n- État but : tout état (2, y) où y ∈ {0, 1, 2, 3}.\n- Les 8 opérations acceptables :\n1. Remplir 1 : (x, y) → (4, y) si x < 4\n2. Remplir 2 : (x, y) → (x, 3) si y < 3\n3. Vider 1 : (x, y) → (0, y) si x > 0\n4. Vider 2 : (x, y) → (x, 0) si y > 0\n5. Verser 1 dans 2 jusqu'à vider 1 : (x, y) → (0, x+y) si x+y ≤ 3\n6. Verser 2 dans 1 jusqu'à vider 2 : (x, y) → (x+y, 0) si x+y ≤ 4\n7. Compléter 1 à partir de 2 : (x, y) → (4, y - (4 - x)) si x+y ≥ 4 et y > 0\n8. Compléter 2 à partir de 1 : (x, y) → (x - (3 - y), 3) si x+y ≥ 3 et x > 0",
+          "points": 3
+        },
+        {
+          "id": "e03p1q2",
+          "q": "Présentez une suite d'opérations menant de l'état initial à un état solution contenant 2 litres dans le premier bidon.",
+          "a": "Cheminement complet en 6 transitions :\n1. (0, 0) → Remplir le bidon 2 → (0, 3)\n2. (0, 3) → Verser 2 dans 1 jusqu'à vider 2 → (3, 0)\n3. (3, 0) → Remplir le bidon 2 → (3, 3)\n4. (3, 3) → Compléter 1 à partir de 2 (verser 1L de 2 vers 1) → (4, 2)\n5. (4, 2) → Vider le bidon 1 → (0, 2)\n6. (0, 2) → Verser 2 dans 1 jusqu'à vider 2 → (2, 0) : But atteint avec exactement 2 litres dans le bidon 1.",
+          "points": 3
+        }
+      ]
+    },
+    {
+      "id": "e03p2",
+      "title": "Deuxième partie : Le monde des 4 pions (A, B, C, D)",
+      "points": 7,
+      "context": "On considère 4 pions non superposables (A, B, C, D). Ils peuvent être arrangés dans n'importe quel ordre, sauf que le pion A ne peut jamais être plus à droite que D (ABCD et CBAD sont légaux, DCBA et CDAB sont interdits). Actions autorisées : echange(1,2), echange(2,3) et echange(2,4). Chaque action coûte 1. Elles ne donnent un successeur que si l'état atteint est possible.",
+      "questions": [
+        {
+          "id": "e03p2q1",
+          "q": "Pour l'état initial ADBC, déterminez tous les successeurs directs possibles en appliquant les trois actions autorisées.",
+          "a": "Analysons les 3 actions depuis ADBC :\n1. echange(1, 2) : permute pos 1 (A) et pos 2 (D) → donne DABC. Or dans DABC, D est en pos 1 et A en pos 2, donc A est plus à droite que D : état INTERDIT. Aucun successeur généré.\n2. echange(2, 3) : permute pos 2 (D) et pos 3 (B) → donne ABDC. Dans ABDC, A est en pos 1 et D en pos 3, A est à gauche de D : état VALIDE. Successeur légal : ABDC.\n3. echange(2, 4) : permute pos 2 (D) et pos 4 (C) → donne ACBD. Dans ACBD, A est en pos 1 et D en pos 4, A est à gauche de D : état VALIDE. Successeur légal : ACBD.\nConclusion : depuis ADBC, les seuls successeurs valides sont ABDC et ACBD.",
+          "points": 3.5
+        },
+        {
+          "id": "e03p2q2",
+          "q": "On souhaite atteindre l'état CBAD depuis ADBC. Proposez une fonction heuristique h admissible pour ce problème et justifiez son admissibilité.",
+          "a": "Rappelons que chaque action echange permute exactement 2 pions à la fois.\nSoit M(n) le nombre de pions qui ne sont pas à la position requise par rapport à l'état cible CBAD.\nComme une action déplace au plus 2 pions vers leur position correcte, le nombre minimal d'actions nécessaires pour placer tous les pions est au moins ceil(M(n) / 2).\nDéfinissons l'heuristique : h(n) = ceil(M(n) / 2).\nJustification de l'admissibilité : Chaque opération diminuant M(n) d'au plus 2, le nombre réel d'opérations h*(n) vérifie obligatoirement h*(n) ≥ M(n) / 2. Par conséquent, h(n) ≤ h*(n) pour tout état. L'heuristique ne surestime jamais le coût restant et est donc admissible.",
+          "points": 3.5
+        }
+      ]
+    },
+    {
+      "id": "e03p3",
+      "title": "Troisième partie : Coloration de carte à 3 couleurs (CSP)",
+      "points": 7,
+      "context": "On dispose de 3 couleurs (Rouge, Vert, Bleu) pour colorier une carte de 5 pays P1, P2, P3, P4, P5 telle que deux pays adjacents partagent une frontière et n'aient jamais la même couleur. Adjacences : P1 est voisin de P2, P3, P4 ; P2 est voisin de P1, P3, P4, P5 ; P3 est voisin de P1, P2 ; P4 est voisin de P1, P2, P5 ; P5 est voisin de P2, P4.",
+      "questions": [
+        {
+          "id": "e03p3q1",
+          "q": "Donnez la formalisation en problème de satisfaction de contraintes (CSP) : variables, domaines, contraintes, état initial, but, et fonction de coût.",
+          "a": "- Variables : X = {P1, P2, P3, P4, P5}.\n- Domaines : D = {Rouge, Vert, Bleu} pour chaque variable.\n- Contraintes : Pi ≠ Pj pour tout couple (Pi, Pj) partageant une frontière (ex: P1 ≠ P2, P1 ≠ P3, P1 ≠ P4, P2 ≠ P3, P2 ≠ P4, P2 ≠ P5, P4 ≠ P5).\n- État initial : aucune variable affectée : (∅, ∅, ∅, ∅, ∅).\n- Fonction successeur : assigner une couleur légale du domaine à la variable non encore affectée suivante sans violer les contraintes d'adjacence avec les variables déjà instanciées.\n- But : toutes les 5 variables ont une couleur affectée sans aucun conflit.\n- Fonction de coût : coût unitaire par affectation (ou coût total = 5 étapes).",
+          "points": 3.5
+        },
+        {
+          "id": "e03p3q2",
+          "q": "Développez l'arbre d'exploration jusqu'au niveau 2 en partant de l'affectation de P1 puis P2.",
+          "a": "Niveau 0 (Racine) : (P1=?, P2=?, P3=?, P4=?, P5=?)\nNiveau 1 : Affectation de P1. Par symétrie des couleurs, fixons sans perte de généralité P1 = Rouge. (Les alternatives Vert et Bleu sont isomorphes).\nNiveau 2 : Affectation de P2. Comme P2 est adjacent à P1, P2 ne peut pas être Rouge. Deux choix valides sont possibles :\n- Branche 1 : P2 = Vert → configuration partielle (P1=Rouge, P2=Vert, P3=?, P4=?, P5=?)\n- Branche 2 : P2 = Bleu → configuration partielle (P1=Rouge, P2=Bleu, P3=?, P4=?, P5=?)\nAu niveau 2, les successeurs valides ont restreint le domaine des voisins restants (P3 est voisin de P1 et P2, son domaine n'a plus qu'une seule couleur possible : Bleu dans la branche 1, ou Vert dans la branche 2).",
+          "points": 3.5
+        }
+      ]
+    }
+  ]
+}
