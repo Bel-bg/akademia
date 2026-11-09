@@ -1,10 +1,25 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { apiRepo, CloudRepo, ProgressAction } from '@/data/repo';
-import { defaultState, CardsInput, ExamInput, QuizInput, themeForFiliere } from '@/lib/progress';
+import { modules } from '@/lib/content';
+import {
+  applyCards,
+  applyChapterRead,
+  applyExam,
+  applyQuiz,
+  applySetFiliere,
+  CardsInput,
+  defaultState,
+  ExamInput,
+  QuizInput,
+  themeForFiliere,
+} from '@/lib/progress';
 import type { FiliereId, Summary, UserState } from '@/lib/types';
 import { useAuth } from './AuthContext';
 
-export type CelebrationEvent = { type: 'level'; level: number } | { type: 'badge'; id: string } | { type: 'goal' };
+export type CelebrationEvent =
+  | { type: 'level'; level: number }
+  | { type: 'badge'; id: string }
+  | { type: 'goal' };
 
 interface StoreApi {
   state: UserState;
@@ -23,6 +38,7 @@ interface StoreApi {
 }
 
 const Ctx = createContext<StoreApi | null>(null);
+const progressCtx = { modules };
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
@@ -36,7 +52,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const repoRef = useRef<CloudRepo | null>(null);
   const syncTimer = useRef<number | undefined>(undefined);
 
-  // Chargement depuis le backend quand l'utilisateur connecté change
+  // Chargement depuis le backend & Supabase quand l'utilisateur connecté change
   useEffect(() => {
     let alive = true;
     setReady(false);
@@ -60,6 +76,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       let st = s ?? defaultState();
       if (!st.filiere && user.filiere) {
         st = { ...st, filiere: user.filiere, theme: themeForFiliere(user.filiere) };
+        if (repo.save) void repo.save(st);
       }
       setPendingSync(repo.pendingCount ? repo.pendingCount() : 0);
       ref.current = st;
@@ -84,18 +101,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const dispatch = useCallback(
-    async (action: ProgressAction) => {
+    async (
+      action: ProgressAction,
+      localResult: () => { state: UserState; summary: Summary | null },
+    ) => {
       const repo = repoRef.current ?? apiRepo(user?.id ?? 'me');
       repoRef.current = repo;
+      const optimistic = localResult();
       try {
-        const result = await repo.applyAction(action);
-        setPendingSync(repo.pendingCount ? repo.pendingCount() : 0);
-        setSyncError(null);
+        const result = await repo.applyAction(action, optimistic);
+        const remaining = repo.pendingCount ? repo.pendingCount() : 0;
+        setPendingSync(remaining);
+        if (remaining === 0) setSyncError(null);
         return commit(result);
       } catch (error) {
         setPendingSync(repo.pendingCount ? repo.pendingCount() : 0);
         setSyncError(error instanceof Error ? error.message : 'Synchronisation impossible');
-        throw error;
+        return commit(optimistic);
       }
     },
     [commit, user?.id],
@@ -150,48 +172,69 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       events,
       dismissEvent: () => setEvents((e) => e.slice(1)),
       setUserFiliere: async (filiere) => {
-        await dispatch({ type: 'set-filiere', filiere });
+        await dispatch(
+          { type: 'set-filiere', filiere },
+          () => applySetFiliere(ref.current, filiere),
+        );
       },
       chapterRead: async (moduleId, chapterId) =>
-        dispatch({ type: 'chapter-read', moduleId, chapterId }),
+        dispatch(
+          { type: 'chapter-read', moduleId, chapterId },
+          () => applyChapterRead(ref.current, progressCtx, moduleId, chapterId),
+        ),
       finishQuiz: async (input) => {
-        const result = await dispatch({
-          type: 'quiz',
-          moduleId: input.moduleId,
-          kind: input.kind,
-          label: input.label,
-          results: input.results.map(({ id, answerIndex, elapsedSeconds }) => ({
-            id,
-            answerIndex,
-            elapsedSeconds,
-          })),
-        });
+        const result = await dispatch(
+          {
+            type: 'quiz',
+            moduleId: input.moduleId,
+            kind: input.kind,
+            label: input.label,
+            results: input.results.map(({ id, answerIndex, elapsedSeconds }) => ({
+              id,
+              answerIndex,
+              elapsedSeconds,
+            })),
+          },
+          () => applyQuiz(ref.current, progressCtx, input),
+        );
         if (!result) throw new Error('Résultat de quiz manquant.');
         return result;
       },
       finishExam: async (input) => {
-        const result = await dispatch({
-          type: 'exam',
-          moduleId: input.moduleId,
-          n: input.n,
-          score: input.score,
-        });
+        const result = await dispatch(
+          {
+            type: 'exam',
+            moduleId: input.moduleId,
+            n: input.n,
+            score: input.score,
+          },
+          () => applyExam(ref.current, progressCtx, input),
+        );
         if (!result) throw new Error('Résultat d’épreuve manquant.');
         return result;
       },
       finishCards: async (input) => {
-        const result = await dispatch({
-          type: 'cards',
-          moduleId: input.moduleId,
-          known: input.known,
-          unknown: input.unknown,
-        });
+        const result = await dispatch(
+          {
+            type: 'cards',
+            moduleId: input.moduleId,
+            known: input.known,
+            unknown: input.unknown,
+          },
+          () => applyCards(ref.current, progressCtx, input),
+        );
         if (!result) throw new Error('Résultat de cartes manquant.');
         return result;
       },
       resetProgress: async () => {
         const repo = repoRef.current ?? apiRepo(user?.id ?? 'me');
-        const resetState = await repo.reset(defaultState());
+        const currentFiliere = ref.current.filiere ?? user?.filiere ?? 'ARI';
+        const empty = {
+          ...defaultState(),
+          filiere: currentFiliere,
+          theme: themeForFiliere(currentFiliere),
+        };
+        const resetState = await repo.reset(empty);
         setPendingSync(repo.pendingCount ? repo.pendingCount() : 0);
         commit({ state: resetState, summary: null });
       },

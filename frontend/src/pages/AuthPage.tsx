@@ -87,7 +87,13 @@ export default function AuthPage() {
       setCustomPseudo(cleanName);
       const r = await signUp(email.trim(), pw, cleanName, selectedFiliere);
       if (r.error) setMsg({ ok: false, t: r.error });
-      else nav('/');
+      else if (r.needsConfirmation) {
+        setAuthMode('in');
+        setMsg({
+          ok: true,
+          t: 'Compte créé ! Vérifie ta boîte mail pour confirmer ton adresse, puis connecte-toi.',
+        });
+      } else nav('/');
     }
     setBusy(false);
   };
