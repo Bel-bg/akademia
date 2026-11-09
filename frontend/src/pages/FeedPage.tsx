@@ -125,12 +125,12 @@ export default function FeedPage() {
             className={cn(
               'relative flex flex-col items-center rounded-3xl border-2 p-4 text-center transition',
               currentLeader === 'ARI'
-                ? 'border-[#FF574A] bg-[#FF574A]/10 shadow-sm'
+                ? 'border-[#1D6FFF] bg-[#1D6FFF]/10 shadow-sm'
                 : 'border-line bg-card',
             )}
           >
-            <Mascot mood={currentLeader === 'ARI' ? 'happy' : 'idle'} size={72} color="#FF574A" animate={false} />
-            <div className="mt-2 font-display text-xl font-black text-[#FF574A]">ARI</div>
+            <Mascot mood={currentLeader === 'ARI' ? 'happy' : 'idle'} size={72} color="#1D6FFF" animate={false} />
+            <div className="mt-2 font-display text-xl font-black text-[#1D6FFF]">ARI</div>
             <div className="text-xs font-bold text-muted">Réseaux & IoT</div>
             <div className="mt-2 font-display text-lg font-black text-ink">
               {currentBattle.ariScore} XP
@@ -145,7 +145,7 @@ export default function FeedPage() {
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs font-black">
             <span className="text-[#7C3AED]">AIP : {aipPct}%</span>
-            <span className="text-[#FF574A]">ARI : {ariPct}%</span>
+            <span className="text-[#1D6FFF]">ARI : {ariPct}%</span>
           </div>
           <div className="flex h-3.5 w-full overflow-hidden rounded-full bg-soft">
             <div
@@ -154,7 +154,7 @@ export default function FeedPage() {
               title={`AIP: ${aipPct}%`}
             />
             <div
-              className="bg-[#FF574A] transition-all duration-700"
+              className="bg-[#1D6FFF] transition-all duration-700"
               style={{ width: `${ariPct}%` }}
               title={`ARI: ${ariPct}%`}
             />
@@ -216,7 +216,7 @@ export default function FeedPage() {
           <div className="space-y-3">
             {history.map((item) => {
               const isAip = item.winner === 'AIP';
-              const winnerColor = isAip ? '#7C3AED' : '#FF574A';
+              const winnerColor = isAip ? '#7C3AED' : '#1D6FFF';
               const total = Math.max(1, item.ariScore + item.aipScore);
               const pct = Math.round(
                 ((isAip ? item.aipScore : item.ariScore) / total) * 100,
@@ -252,7 +252,7 @@ export default function FeedPage() {
                       <span className="rounded-lg bg-[#7C3AED]/10 px-2 py-1 text-[#7C3AED]">
                         AIP : {item.aipScore} XP
                       </span>
-                      <span className="rounded-lg bg-[#FF574A]/10 px-2 py-1 text-[#FF574A]">
+                      <span className="rounded-lg bg-[#1D6FFF]/10 px-2 py-1 text-[#1D6FFF]">
                         ARI : {item.ariScore} XP
                       </span>
                     </div>

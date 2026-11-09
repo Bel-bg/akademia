@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: me.email,
         username: me.username,
         filiere: me.filiere ?? null,
-        theme: me.theme ?? 'corail',
+        theme: me.theme ?? 'ciel',
         guest: false,
       });
     } catch {
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             email: res.user.email,
             username: res.user.username,
             filiere: res.user.filiere ?? null,
-            theme: res.user.theme ?? 'corail',
+            theme: res.user.theme ?? 'ciel',
             guest: false,
           });
           return null;
@@ -125,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             email: res.user.email,
             username: res.user.username,
             filiere: res.user.filiere ?? null,
-            theme: res.user.theme ?? 'corail',
+            theme: res.user.theme ?? 'ciel',
             guest: false,
           });
           return {};
@@ -173,7 +173,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             email: res.user.email,
             username: res.user.username,
             filiere: res.user.filiere ?? null,
-            theme: res.user.theme ?? 'corail',
+            theme: res.user.theme ?? 'ciel',
             guest: false,
           });
           return null;

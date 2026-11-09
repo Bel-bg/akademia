@@ -56,13 +56,13 @@ export default function AuthPage() {
     return () => window.clearTimeout(timer);
   }, [screen]);
 
-  // Adaptation immédiate du thème selon la filière choisie à l'inscription (ARI -> rouge corail, AIP -> violet)
+  // Adaptation immédiate du thème selon la filière choisie à l'inscription (ARI -> bleu ciel, AIP -> violet)
   useEffect(() => {
     if (screen === 'join' && authMode === 'up') {
-      const targetTheme = selectedFiliere === 'AIP' ? 'violet' : 'corail';
+      const targetTheme = selectedFiliere === 'AIP' ? 'violet' : 'ciel';
       document.documentElement.setAttribute('data-theme', targetTheme);
     } else if (screen === 'join' && authMode === 'in') {
-      document.documentElement.setAttribute('data-theme', 'corail');
+      document.documentElement.setAttribute('data-theme', 'ciel');
     }
   }, [screen, authMode, selectedFiliere]);
 
@@ -101,7 +101,7 @@ export default function AuthPage() {
     screen === 'join' && authMode === 'up'
       ? selectedFiliere === 'AIP'
         ? 'violet'
-        : 'corail'
+        : 'ciel'
       : theme;
 
   return (
@@ -235,7 +235,7 @@ export default function AuthPage() {
               <Mascot
                 mood={authMode === 'up' ? 'happy' : 'idle'}
                 size={110}
-                color={authMode === 'up' ? (selectedFiliere === 'AIP' ? '#7C3AED' : '#FF574A') : undefined}
+                color={authMode === 'up' ? (selectedFiliere === 'AIP' ? '#7C3AED' : '#1D6FFF') : undefined}
                 animate={false}
               />
               <h1 className="h-display mt-2 text-3xl sm:text-4xl">
@@ -248,7 +248,7 @@ export default function AuthPage() {
               </p>
             </div>
 
-            {/* Sélection de la filière universitaire (uniquement ARI -> Rouge et AIP -> Violet) */}
+            {/* Sélection de la filière universitaire (uniquement ARI -> Bleu et AIP -> Violet) */}
             {authMode === 'up' && (
               <div className="mb-4 rounded-3xl bg-card p-3.5 shadow-card">
                 <div className="mb-2 flex items-center justify-between text-xs font-extrabold text-muted">
@@ -278,7 +278,7 @@ export default function AuthPage() {
                             {active && <Check size={14} className="text-brand" />}
                           </div>
                           <div className="truncate text-[10px] font-bold text-muted">
-                            {f.id === 'ARI' ? 'Thème Rouge' : 'Thème Violet'}
+                            {f.id === 'ARI' ? 'Thème Bleu' : 'Thème Violet'}
                           </div>
                         </div>
                       </button>

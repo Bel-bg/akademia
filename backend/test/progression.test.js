@@ -65,11 +65,11 @@ test('content service rejects traversal paths', () => {
 test('filiere defines backend theme and is immutable once set', () => {
   const initial = progression.defaultState();
   assert.equal(initial.filiere, null);
-  assert.equal(initial.theme, 'corail');
+  assert.equal(initial.theme, 'ciel');
 
   const ari = progression.applyAction(initial, { type: 'set-filiere', filiere: 'ARI' }, content);
   assert.equal(ari.state.filiere, 'ARI');
-  assert.equal(ari.state.theme, 'corail');
+  assert.equal(ari.state.theme, 'ciel');
 
   // Once set, cannot be modified
   assert.throws(

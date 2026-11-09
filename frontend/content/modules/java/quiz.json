@@ -1,0 +1,1010 @@
+[
+  {
+    "id": "java-q001",
+    "chapter": "1-1-encapsulation-immutabilite",
+    "difficulty": 1,
+    "q": "Quelle est la visibilité recommandée pour les attributs d'une classe bien encapsulée ?",
+    "options": [
+      "public",
+      "protected",
+      "package-private",
+      "private"
+    ],
+    "answer": 3,
+    "explain": "Les attributs doivent toujours être private pour garantir l'encapsulation et empêcher toute modification incontrôlée depuis l'extérieur."
+  },
+  {
+    "id": "java-q002",
+    "chapter": "1-1-encapsulation-immutabilite",
+    "difficulty": 2,
+    "q": "Que permet de vérifier la méthode String.isBlank() introduite en Java 11 ?",
+    "options": [
+      "Si la chaîne est nulle",
+      "Si la chaîne est vide ou ne contient que des espaces blancs",
+      "Si la chaîne contient au moins un caractère",
+      "Si la chaîne est égale à null"
+    ],
+    "answer": 1,
+    "explain": "isBlank() renvoie true si la chaîne est vide ou composée exclusivement d'espaces blancs, contrairement à isEmpty() qui ne teste que la longueur 0."
+  },
+  {
+    "id": "java-q003",
+    "chapter": "1-1-encapsulation-immutabilite",
+    "difficulty": 2,
+    "q": "Pourquoi doit-on utiliser Double.isFinite(montant) lors de la validation d'un montant financier en Java ?",
+    "options": [
+      "Pour vérifier que le montant est un entier",
+      "Pour convertir le double en BigDecimal",
+      "Pour rejeter Double.NaN et les infinis positifs ou négatifs",
+      "Pour arrondir à deux décimales"
+    ],
+    "answer": 2,
+    "explain": "En Java, Double.NaN <= 0 renvoie false ! Tester montant <= 0 ne suffit pas à rejeter NaN. Double.isFinite() garantit qu'il s'agit d'un nombre réel fini."
+  },
+  {
+    "id": "java-q004",
+    "chapter": "1-1-encapsulation-immutabilite",
+    "difficulty": 1,
+    "q": "Quel modificateur permet de rendre un attribut réassignable une seule et unique fois lors de la construction ?",
+    "options": [
+      "static",
+      "final",
+      "transient",
+      "volatile"
+    ],
+    "answer": 1,
+    "explain": "Le mot-clé final garantit que l'attribut ne peut plus être réassigné après la fin de l'exécution du constructeur."
+  },
+  {
+    "id": "java-q005",
+    "chapter": "1-1-encapsulation-immutabilite",
+    "difficulty": 2,
+    "q": "Dans la classe CompteBancaire, pourquoi la méthode definirSolde() est-elle déclarée protected ?",
+    "options": [
+      "Pour être accessible depuis n'importe quelle classe externe",
+      "Pour empêcher son utilisation dans toute l'application",
+      "Pour permettre aux sous-classes de modifier le solde de manière contrôlée sans le rendre public",
+      "Pour interdire l'héritage"
+    ],
+    "answer": 2,
+    "explain": "protected permet aux classes filles (CompteCourant, CompteEpargne) d'ajuster le solde selon leurs propres règles métiers sans exposer l'attribut solde en public."
+  },
+  {
+    "id": "java-q006",
+    "chapter": "1-1-encapsulation-immutabilite",
+    "difficulty": 3,
+    "q": "Quelle exception standard de la JVM doit être levée lorsqu'un argument passé à un constructeur viole une précondition métier ?",
+    "options": [
+      "NullPointerException",
+      "IllegalArgumentException",
+      "IllegalStateException",
+      "IndexOutOfBoundsException"
+    ],
+    "answer": 1,
+    "explain": "IllegalArgumentException indique qu'une méthode ou un constructeur a reçu un argument inapproprié ou invalide."
+  },
+  {
+    "id": "java-q007",
+    "chapter": "1-1-encapsulation-immutabilite",
+    "difficulty": 1,
+    "q": "Qu'est-ce qu'un objet immuable en Java ?",
+    "options": [
+      "Un objet sans aucune méthode",
+      "Un objet dont l'état ne peut plus être modifié après sa création",
+      "Un objet qui ne peut pas être sérialisé",
+      "Un objet alloué sur la pile"
+    ],
+    "answer": 1,
+    "explain": "Un objet immuable (comme String ou LocalDate) ne propose aucun mutateur (setter) ; tous ses champs sont figés dès la construction."
+  },
+  {
+    "id": "java-q008",
+    "chapter": "1-1-encapsulation-immutabilite",
+    "difficulty": 2,
+    "q": "Peut-on modifier la valeur d'une variable locale déclarée final ?",
+    "options": [
+      "Oui à tout moment",
+      "Non, une seule assignation est permise",
+      "Oui si elle est dans une boucle",
+      "Uniquement avec un cast"
+    ],
+    "answer": 1,
+    "explain": "Une variable locale final ne peut être assignée qu'une seule fois."
+  },
+  {
+    "id": "java-q009",
+    "chapter": "1-2-heritage-polymorphisme",
+    "difficulty": 1,
+    "q": "Peut-on instancier directement une classe déclarée abstract avec le mot-clé new ?",
+    "options": [
+      "Oui sans restriction",
+      "Non, le compilateur génère une erreur",
+      "Oui si elle a un constructeur public",
+      "Uniquement dans le même package"
+    ],
+    "answer": 1,
+    "explain": "Une classe abstraite ne peut jamais être instanciée directement. Elle sert de modèle de base pour des sous-classes concrètes."
+  },
+  {
+    "id": "java-q010",
+    "chapter": "1-2-heritage-polymorphisme",
+    "difficulty": 1,
+    "q": "Quel mot-clé est utilisé par une classe pour hériter d'une autre classe en Java ?",
+    "options": [
+      "implements",
+      "inherits",
+      "extends",
+      "instanceof"
+    ],
+    "answer": 2,
+    "explain": "En Java, l'héritage de classe se fait avec le mot-clé extends. implements est réservé aux interfaces."
+  },
+  {
+    "id": "java-q011",
+    "chapter": "1-2-heritage-polymorphisme",
+    "difficulty": 2,
+    "q": "Quel mécanisme permet à une méthode retirer() de s'exécuter différemment selon que l'objet réel est un CompteCourant ou un CompteEpargne ?",
+    "options": [
+      "La sérialisation",
+      "Le polymorphisme avec résolution dynamique des liaisons",
+      "L'encapsulation stricte",
+      "Le multithreading"
+    ],
+    "answer": 1,
+    "explain": "Le polymorphisme et la redéfinition (@Override) permettent à la JVM d'appeler à l'exécution la méthode propre au type réel de l'objet en mémoire."
+  },
+  {
+    "id": "java-q012",
+    "chapter": "1-2-heritage-polymorphisme",
+    "difficulty": 1,
+    "q": "Quelle annotation permet au compilateur de vérifier qu'une méthode redéfinit bien une méthode de sa superclasse ?",
+    "options": [
+      "@Overload",
+      "@Override",
+      "@Implement",
+      "@Inherited"
+    ],
+    "answer": 1,
+    "explain": "@Override signale l'intention de redéfinir une méthode et déclenche une erreur de compilation si la signature ne correspond pas exactement."
+  },
+  {
+    "id": "java-q013",
+    "chapter": "1-2-heritage-polymorphisme",
+    "difficulty": 2,
+    "q": "Dans CompteCourant avec un découvert max de 50 000 FCFA, quelle condition provoque une IllegalStateException lors d'un retrait ?",
+    "options": [
+      "montant > 50 000",
+      "getSolde() - montant < -50 000",
+      "getSolde() < 0",
+      "montant <= 0"
+    ],
+    "answer": 1,
+    "explain": "Le découvert autorise un solde négatif jusqu'à -50 000 FCFA. Si getSolde() - montant < -50_000, le découvert autorisé est franchi."
+  },
+  {
+    "id": "java-q014",
+    "chapter": "1-2-heritage-polymorphisme",
+    "difficulty": 2,
+    "q": "Quelle est la conséquence si une classe concrète hérite d'une classe abstraite sans implémenter toutes ses méthodes abstraites ?",
+    "options": [
+      "Le programme plante à l'exécution",
+      "Elle doit être elle-même déclarée abstract, sinon le compilateur refuse la compilation",
+      "Les méthodes manquantes renvoient null par défaut",
+      "Le compilateur génère un avertissement sans bloquer"
+    ],
+    "answer": 1,
+    "explain": "Une classe qui n'implémente pas toutes les méthodes abstraites de sa superclasse est obligatoirement abstraite."
+  },
+  {
+    "id": "java-q015",
+    "chapter": "1-2-heritage-polymorphisme",
+    "difficulty": 2,
+    "q": "Dans le constructeur d'une sous-classe, quelle instruction doit figurer obligatoirement à la première ligne ?",
+    "options": [
+      "this()",
+      "super(...) pour appeler le constructeur de la superclasse",
+      "init()",
+      "definirSolde()"
+    ],
+    "answer": 1,
+    "explain": "Le premier appel dans le constructeur d'une classe fille doit être super(...) ou this(...)."
+  },
+  {
+    "id": "java-q016",
+    "chapter": "1-2-heritage-polymorphisme",
+    "difficulty": 3,
+    "q": "Quel principe de conception de la POO est respecté lorsqu'on manipule des objets hétérogènes via leur type parent CompteBancaire ?",
+    "options": [
+      "Le principe de responsabilité unique",
+      "Le principe de substitution de Liskov (LSP)",
+      "Le principe d'inversion de contrôle uniquement",
+      "Le masquage de constructeur"
+    ],
+    "answer": 1,
+    "explain": "Le principe de Liskov stipule qu'une sous-classe doit pouvoir être substituée à sa classe de base sans altérer la cohérence du système."
+  },
+  {
+    "id": "java-q017",
+    "chapter": "1-3-gestion-exceptions-atomicite",
+    "difficulty": 1,
+    "q": "Quelle est la différence fondamentale entre throw et throws ?",
+    "options": [
+      "throw déclare une exception, throws la lance",
+      "throw lance une exception concrète, throws déclare les exceptions dans la signature",
+      "Les deux sont strictement équivalents",
+      "throws est utilisé dans un bloc catch"
+    ],
+    "answer": 1,
+    "explain": "throw est l'action de déclencher une instance d'exception dans le code. throws est la clause de déclaration dans l'en-tête de méthode."
+  },
+  {
+    "id": "java-q018",
+    "chapter": "1-3-gestion-exceptions-atomicite",
+    "difficulty": 2,
+    "q": "Quelle exception standard indique qu'une méthode est invoquée alors que l'état courant de l'objet ne le permet pas ?",
+    "options": [
+      "IllegalArgumentException",
+      "IllegalStateException",
+      "NullPointerException",
+      "SecurityException"
+    ],
+    "answer": 1,
+    "explain": "IllegalStateException signale que l'environnement ou l'état de l'objet est inapproprié pour l'opération demandée (ex: découvert dépassé)."
+  },
+  {
+    "id": "java-q019",
+    "chapter": "1-3-gestion-exceptions-atomicite",
+    "difficulty": 2,
+    "q": "En quoi consiste l'atomicité d'un virement bancaire entre deux comptes ?",
+    "options": [
+      "Le virement doit s'exécuter en moins d'une milliseconde",
+      "L'opération obéit au tout ou rien : si une étape échoue, les soldes initiaux des deux comptes sont restaurés",
+      "Le montant est converti automatiquement en devises",
+      "Le virement est journalisé dans un fichier texte"
+    ],
+    "answer": 1,
+    "explain": "L'atomicité garantit que l'opération se réalise intégralement ou pas du tout, restaurant les soldes initiaux en cas de problème."
+  },
+  {
+    "id": "java-q020",
+    "chapter": "1-3-gestion-exceptions-atomicite",
+    "difficulty": 3,
+    "q": "Comment la classe Banque assure-t-elle l'atomicité de la méthode transferer en mémoire ?",
+    "options": [
+      "En utilisant une base de données NoSQL",
+      "En mémorisant les soldes avant le transfert et en les restaurant dans un bloc catch (RuntimeException e)",
+      "En empêchant les retraits",
+      "En créant un nouveau thread"
+    ],
+    "answer": 1,
+    "explain": "La méthode mémorise ancienSoldeSource et ancienSoldeDestination, puis dans le catch(RuntimeException) réapplique ces soldes avec definirSolde()."
+  },
+  {
+    "id": "java-q021",
+    "chapter": "1-3-gestion-exceptions-atomicite",
+    "difficulty": 2,
+    "q": "Quel est le résultat d'un transfert de 30 000 FCFA d'un compte courant (-20 000 FCFA) vers un compte épargne (+20 000 FCFA) avec un découvert max de 50 000 FCFA ?",
+    "options": [
+      "Échec car le compte courant est déjà négatif",
+      "Le transfert réussit : le compte courant passe à -50 000 FCFA et le compte épargne à +50 000 FCFA",
+      "Échec avec dépassement de découvert",
+      "Le transfert est divisé par deux"
+    ],
+    "answer": 1,
+    "explain": "-20 000 - 30 000 = -50 000 FCFA, ce qui atteint exactement la limite sans la dépasser. Le transfert réussit."
+  },
+  {
+    "id": "java-q022",
+    "chapter": "1-3-gestion-exceptions-atomicite",
+    "difficulty": 1,
+    "q": "Les sous-classes de RuntimeException sont-elles des exceptions contrôlées (checked) ou non contrôlées (unchecked) ?",
+    "options": [
+      "Contrôlées (checked)",
+      "Non contrôlées (unchecked)",
+      "Des erreurs système irrécupérables (Error)",
+      "Des exceptions de compilation"
+    ],
+    "answer": 1,
+    "explain": "RuntimeException et ses sous-classes sont des exceptions non contrôlées (unchecked) : le compilateur n'impose ni try-catch ni throws."
+  },
+  {
+    "id": "java-q023",
+    "chapter": "1-3-gestion-exceptions-atomicite",
+    "difficulty": 2,
+    "q": "Que se passe-t-il si un virement tente de transférer de l'argent entre un compte et lui-même (numeroSource == numeroDestination) ?",
+    "options": [
+      "Le solde est doublé",
+      "La méthode lève une IllegalArgumentException pour interdire le virement sur soi-même",
+      "Rien ne se passe et aucune erreur n'est émise",
+      "Le compte est clôturé"
+    ],
+    "answer": 1,
+    "explain": "La règle de validation impose que les deux numéros de compte soient différents, levant une IllegalArgumentException."
+  },
+  {
+    "id": "java-q024",
+    "chapter": "2-1-chaines-stringbuilder",
+    "difficulty": 1,
+    "q": "Quelle solution est généralement la plus adaptée pour construire une chaîne dans une boucle de 10 000 itérations ?",
+    "options": [
+      "Remplacer String par StringBuilder et utiliser append()",
+      "Utiliser systématiquement String.intern()",
+      "Créer un nouveau thread à chaque itération",
+      "Remplacer la boucle par une récursion sans limite"
+    ],
+    "answer": 0,
+    "explain": "StringBuilder évite d'instancier des milliers d'objets String temporaires en modifiant son tableau de caractères interne via append()."
+  },
+  {
+    "id": "java-q025",
+    "chapter": "2-1-chaines-stringbuilder",
+    "difficulty": 1,
+    "q": "Que produit le code : String s1 = \"Java\"; String s2 = new String(\"Java\"); System.out.println(s1 == s2); ?",
+    "options": [
+      "true",
+      "false",
+      "null",
+      "Erreur de compilation"
+    ],
+    "answer": 1,
+    "explain": "false : l'opérateur == compare les adresses mémoires. s1 pointe vers le String Pool et s2 vers un nouvel objet alloué sur le tas (Heap)."
+  },
+  {
+    "id": "java-q026",
+    "chapter": "2-1-chaines-stringbuilder",
+    "difficulty": 2,
+    "q": "Quelle méthode faut-il employer pour comparer le contenu textuel de deux objets String en Java ?",
+    "options": [
+      "==",
+      "equals()",
+      "compareTo() uniquement",
+      "intern()"
+    ],
+    "answer": 1,
+    "explain": "equals() compare les séquences de caractères de deux chaînes, tandis que == compare leurs références mémoires."
+  },
+  {
+    "id": "java-q027",
+    "chapter": "2-1-chaines-stringbuilder",
+    "difficulty": 2,
+    "q": "Quel est le rôle de la méthode String.intern() ?",
+    "options": [
+      "Convertir la chaîne en majuscules",
+      "Renvoyer la référence canonique de la chaîne depuis le String Constant Pool",
+      "Vider la mémoire occupée par la chaîne",
+      "Sérialiser la chaîne"
+    ],
+    "answer": 1,
+    "explain": "intern() vérifie si la chaîne est présente dans le pool de constantes et en retourne la référence partagée."
+  },
+  {
+    "id": "java-q028",
+    "chapter": "2-1-chaines-stringbuilder",
+    "difficulty": 2,
+    "q": "Pourquoi la classe StringBuffer est-elle généralement moins rapide que StringBuilder ?",
+    "options": [
+      "Car elle utilise des nombres à virgule fixe",
+      "Car ses méthodes sont synchronized pour être thread-safe, ajoutant un surcoût de verrous",
+      "Car elle est dépréciée depuis Java 1.2",
+      "Car elle alloue de la mémoire sur disque"
+    ],
+    "answer": 1,
+    "explain": "StringBuffer est thread-safe avec des méthodes synchronisées, ce qui introduit un surcoût inutile en environnement mono-thread."
+  },
+  {
+    "id": "java-q029",
+    "chapter": "2-1-chaines-stringbuilder",
+    "difficulty": 2,
+    "q": "Quelle est la complexité algorithmique de la concaténation N fois avec String += dans une boucle ?",
+    "options": [
+      "O(1)",
+      "O(N)",
+      "O(N^2)",
+      "O(log N)"
+    ],
+    "answer": 2,
+    "explain": "La réallocation et la copie de tous les caractères accumulés à chaque itération engendrent une complexité quadratique en O(N^2)."
+  },
+  {
+    "id": "java-q030",
+    "chapter": "2-2-framework-collections",
+    "difficulty": 1,
+    "q": "Quelle interface du Collections Framework représente une collection sans doublons ?",
+    "options": [
+      "List",
+      "Map",
+      "Queue",
+      "Set"
+    ],
+    "answer": 3,
+    "explain": "L'interface Set modélise un ensemble au sens mathématique : elle interdit formellement les doublons d'éléments."
+  },
+  {
+    "id": "java-q031",
+    "chapter": "2-2-framework-collections",
+    "difficulty": 1,
+    "q": "Que renvoie la méthode set.add(\"Java\") si l'élément \"Java\" est déjà présent dans le Set ?",
+    "options": [
+      "Elle lève une DuplicateKeyException",
+      "Elle renvoie false sans modifier la collection",
+      "Elle remplace l'ancien élément et renvoie true",
+      "Elle efface le Set"
+    ],
+    "answer": 1,
+    "explain": "La méthode add() d'un Set renvoie simplement false si l'élément était déjà présent, sans lever d'exception."
+  },
+  {
+    "id": "java-q032",
+    "chapter": "2-2-framework-collections",
+    "difficulty": 2,
+    "q": "Quelle implémentation de List offre un accès par index en temps constant O(1) ?",
+    "options": [
+      "LinkedList",
+      "ArrayList",
+      "Vector uniquement",
+      "TreeList"
+    ],
+    "answer": 1,
+    "explain": "ArrayList est adossée à un tableau contigu en mémoire, permettant un accès indexé get(i) en O(1)."
+  },
+  {
+    "id": "java-q033",
+    "chapter": "2-2-framework-collections",
+    "difficulty": 2,
+    "q": "Quelle implémentation de Set conserve les éléments triés selon leur ordre naturel ou un Comparator ?",
+    "options": [
+      "HashSet",
+      "LinkedHashSet",
+      "TreeSet",
+      "EnumSet"
+    ],
+    "answer": 2,
+    "explain": "TreeSet s'appuie sur un arbre rouge-noir pour maintenir les éléments ordonnés en temps O(log N)."
+  },
+  {
+    "id": "java-q034",
+    "chapter": "2-2-framework-collections",
+    "difficulty": 2,
+    "q": "Dans l'interface Map<K, V>, quelle méthode permet de récupérer la valeur associée à une clé ?",
+    "options": [
+      "get(clé)",
+      "find(clé)",
+      "lookup(clé)",
+      "at(clé)"
+    ],
+    "answer": 0,
+    "explain": "La méthode map.get(cle) retourne la valeur associée ou null si la clé n'existe pas."
+  },
+  {
+    "id": "java-q035",
+    "chapter": "2-2-framework-collections",
+    "difficulty": 1,
+    "q": "L'interface Map hérite-t-elle directement de l'interface Collection ?",
+    "options": [
+      "Oui",
+      "Non, Map est une interface distincte dédiée aux paires clé-valeur",
+      "Uniquement pour HashMap",
+      "Uniquement en Java 8"
+    ],
+    "answer": 1,
+    "explain": "Map n'hérite pas de Collection car elle manipule des associations de paires clé/valeur, et non de simples éléments individuels."
+  },
+  {
+    "id": "java-q036",
+    "chapter": "2-3-design-patterns-singleton",
+    "difficulty": 1,
+    "q": "Que garantit le design pattern Singleton ?",
+    "options": [
+      "L'héritage unique",
+      "Une seule et unique instance d'une classe dans l'application",
+      "La sérialisation automatique",
+      "L'accès multithreadé sans verrou"
+    ],
+    "answer": 1,
+    "explain": "Le patron Singleton garantit qu'une classe ne peut être instanciée qu'une seule fois et fournit un point d'accès global."
+  },
+  {
+    "id": "java-q037",
+    "chapter": "2-3-design-patterns-singleton",
+    "difficulty": 2,
+    "q": "Comment empêche-t-on l'instanciation externe d'une classe Singleton ?",
+    "options": [
+      "En la déclarant abstract",
+      "En déclarant son constructeur avec la visibilité private",
+      "En supprimant son constructeur",
+      "En la déclarant final"
+    ],
+    "answer": 1,
+    "explain": "Un constructeur private interdit l'appel de new MonSingleton() depuis toute autre classe."
+  },
+  {
+    "id": "java-q038",
+    "chapter": "2-3-design-patterns-singleton",
+    "difficulty": 1,
+    "q": "En Java, pour quel objectif principal la classe Optional<T> est-elle utilisée ?",
+    "options": [
+      "Rendre une valeur obligatoire",
+      "Gérer les valeurs nulles et modéliser l'absence de valeur sans NullPointerException",
+      "Créer un objet générique",
+      "Empêcher la sérialisation"
+    ],
+    "answer": 1,
+    "explain": "Optional<T> contraint le développeur à gérer explicitement l'absence de valeur, évitant ainsi les NullPointerException."
+  },
+  {
+    "id": "java-q039",
+    "chapter": "2-3-design-patterns-singleton",
+    "difficulty": 2,
+    "q": "Quelle méthode d'Optional<T> permet de fournir une valeur de secours si l'Optional est vide ?",
+    "options": [
+      "orElse(valeurSecours)",
+      "getOrElse(valeurSecours)",
+      "defaultValue(valeurSecours)",
+      "catchNull(valeurSecours)"
+    ],
+    "answer": 0,
+    "explain": "opt.orElse(valeurSecours) renvoie la valeur encapsulée si elle est présente, ou valeurSecours si l'Optional est vide."
+  },
+  {
+    "id": "java-q040",
+    "chapter": "2-3-design-patterns-singleton",
+    "difficulty": 2,
+    "q": "Que fait l'instruction opt.ifPresent(System.out::println) ?",
+    "options": [
+      "Elle affiche null si vide",
+      "Elle exécute l'affichage uniquement si une valeur est présente",
+      "Elle lève une exception si vide",
+      "Elle vide l'Optional"
+    ],
+    "answer": 1,
+    "explain": "ifPresent(Consumer) exécute l'action spécifiée uniquement si l'Optional contient une valeur non nulle."
+  },
+  {
+    "id": "java-q041",
+    "chapter": "3-1-api-stream",
+    "difficulty": 1,
+    "q": "En Java, un flux de type Stream<String> permet :",
+    "options": [
+      "De lire un fichier texte",
+      "De traiter une collection de chaînes de manière déclarative et fonctionnelle",
+      "De créer un thread",
+      "De convertir un tableau en binaire"
+    ],
+    "answer": 1,
+    "explain": "Stream<String> permet d'appliquer des pipelines de transformations et de filtres sur des éléments de type chaîne."
+  },
+  {
+    "id": "java-q042",
+    "chapter": "3-1-api-stream",
+    "difficulty": 1,
+    "q": "Quelle méthode d'un Stream exécute une action sans retourner de résultat ?",
+    "options": [
+      "map()",
+      "collect()",
+      "forEach()",
+      "filter()"
+    ],
+    "answer": 2,
+    "explain": "forEach(Consumer<T>) est une opération terminale qui consomme chaque élément du flux sans retourner de valeur (void)."
+  },
+  {
+    "id": "java-q043",
+    "chapter": "3-1-api-stream",
+    "difficulty": 2,
+    "q": "Quelle est la nature des opérations intermédiaires comme filter() ou map() sur un Stream ?",
+    "options": [
+      "Elles sont exécutées immédiatement",
+      "Elles sont paresseuses (lazy) et ne s'exécutent qu'à l'appel d'une opération terminale",
+      "Elles ferment le flux",
+      "Elles écrivent sur le disque"
+    ],
+    "answer": 1,
+    "explain": "Les opérations intermédiaires sont paresseuses : elles construisent la description du pipeline sans traiter les données avant la terminaison."
+  },
+  {
+    "id": "java-q044",
+    "chapter": "3-1-api-stream",
+    "difficulty": 2,
+    "q": "Peut-on réutiliser un même objet Stream après avoir exécuté une opération terminale ?",
+    "options": [
+      "Oui indéfiniment",
+      "Non, un Stream consommé est fermé et une IllegalStateException est levée",
+      "Oui après un appel à reset()",
+      "Uniquement avec parallelStream()"
+    ],
+    "answer": 1,
+    "explain": "Un Stream ne peut être parcouru qu'une seule fois. Toute réutilisation après fermeture lève une IllegalStateException."
+  },
+  {
+    "id": "java-q045",
+    "chapter": "3-1-api-stream",
+    "difficulty": 2,
+    "q": "Quelle opération terminale permet d'agréger les éléments d'un Stream dans une List ?",
+    "options": [
+      "toList() ou collect(Collectors.toList())",
+      "mapToList()",
+      "pack()",
+      "terminate()"
+    ],
+    "answer": 0,
+    "explain": "collect(Collectors.toList()) ou stream.toList() (en Java 16+) rassemble le flux dans une List."
+  },
+  {
+    "id": "java-q046",
+    "chapter": "3-2-multithreading-threads",
+    "difficulty": 1,
+    "q": "Quel mot-clé / interface est couramment utilisé pour créer un thread en découplant la tâche de l'exécution ?",
+    "options": [
+      "thread",
+      "extends Runnable",
+      "implements Runnable",
+      "create Thread"
+    ],
+    "answer": 2,
+    "explain": "Implémenter l'interface Runnable (implements Runnable) permet de définir le code de la tâche sans monopoliser l'héritage unique."
+  },
+  {
+    "id": "java-q047",
+    "chapter": "3-2-multithreading-threads",
+    "difficulty": 1,
+    "q": "Quelle méthode est utilisée pour exécuter (démarrer) un thread en Java ?",
+    "options": [
+      "start()",
+      "run()",
+      "execute()",
+      "call()"
+    ],
+    "answer": 0,
+    "explain": "start() déclenche l'allocation des ressources système pour le nouveau thread et appelle sa méthode run()."
+  },
+  {
+    "id": "java-q048",
+    "chapter": "3-2-multithreading-threads",
+    "difficulty": 2,
+    "q": "Que se passe-t-il si l'on appelle directement maTache.run() au lieu de monThread.start() ?",
+    "options": [
+      "Le thread est démarré en arrière-plan",
+      "Le code s'exécute de façon synchrone dans le thread appelant actuel (aucun nouveau thread créé)",
+      "Une exception IllegalThreadStateException est levée",
+      "Le programme s'arrête immédiatement"
+    ],
+    "answer": 1,
+    "explain": "run() n'est qu'un appel de méthode classique synchrone. Seul start() provoque la création d'un thread concurrent."
+  },
+  {
+    "id": "java-q049",
+    "chapter": "3-2-multithreading-threads",
+    "difficulty": 2,
+    "q": "Dans quel état se trouve un thread qui vient d'être instancié avec new Thread(...) avant l'appel de start() ?",
+    "options": [
+      "RUNNABLE",
+      "NEW",
+      "WAITING",
+      "BLOCKED"
+    ],
+    "answer": 1,
+    "explain": "L'état initial d'un thread créé mais non démarré est Thread.State.NEW."
+  },
+  {
+    "id": "java-q050",
+    "chapter": "3-2-multithreading-threads",
+    "difficulty": 2,
+    "q": "Quelle méthode statique de Thread suspend temporairement l'exécution du thread courant pendant une durée donnée ?",
+    "options": [
+      "Thread.yield()",
+      "Thread.sleep(millis)",
+      "Thread.wait()",
+      "Thread.pause()"
+    ],
+    "answer": 1,
+    "explain": "Thread.sleep(duree) suspend le thread courant pendant le temps spécifié sans libérer les verrous synchronisés."
+  },
+  {
+    "id": "java-q051",
+    "chapter": "3-3-synchronisation-concurrence",
+    "difficulty": 1,
+    "q": "Quelle classe Java permet la synchronisation manuelle entre threads à l'aide de permis ?",
+    "options": [
+      "AtomicInteger",
+      "Semaphore",
+      "Timer",
+      "ThreadGroup"
+    ],
+    "answer": 1,
+    "explain": "Semaphore (java.util.concurrent) gère un nombre fixe de permis pour contrôler manuellement l'accès concurrent à une ressource."
+  },
+  {
+    "id": "java-q052",
+    "chapter": "3-3-synchronisation-concurrence",
+    "difficulty": 2,
+    "q": "Que fait la méthode acquire() d'un Semaphore lorsqu'aucun permis n'est disponible ?",
+    "options": [
+      "Elle renvoie false immédiatement",
+      "Elle lève une SemaphoreExhaustedException",
+      "Elle bloque le thread appelant jusqu'à ce qu'un permis soit libéré",
+      "Elle réinitialise le sémaphore"
+    ],
+    "answer": 2,
+    "explain": "acquire() bloque le thread en attente d'un permis libéré par un release()."
+  },
+  {
+    "id": "java-q053",
+    "chapter": "3-3-synchronisation-concurrence",
+    "difficulty": 2,
+    "q": "À quoi sert le mot-clé synchronized appliqué à une méthode d'instance ?",
+    "options": [
+      "À rendre la méthode plus rapide",
+      "À garantir qu'un seul thread à la fois peut exécuter cette méthode sur cette instance",
+      "À rendre les variables finales",
+      "À interdire l'héritage"
+    ],
+    "answer": 1,
+    "explain": "synchronized place un verrou moniteur sur l'instance (this), assurant l'exclusion mutuelle face aux accès concurrents."
+  },
+  {
+    "id": "java-q054",
+    "chapter": "3-3-synchronisation-concurrence",
+    "difficulty": 3,
+    "q": "Où doit-on placer l'appel à semaphore.release() pour garantir qu'un permis ne soit jamais perdu en cas d'exception ?",
+    "options": [
+      "Dans le bloc try",
+      "Dans le bloc finally",
+      "Dans le constructeur",
+      "Au début de la méthode run()"
+    ],
+    "answer": 1,
+    "explain": "Le bloc finally est toujours exécuté, même en cas d'exception inattendue, évitant ainsi toute fuite de permis."
+  },
+  {
+    "id": "java-q055",
+    "chapter": "4-1-jdbc-transactions",
+    "difficulty": 1,
+    "q": "En JDBC, quelle méthode permet d'exécuter une requête SQL de type SELECT ?",
+    "options": [
+      "executeUpdate()",
+      "executeQuery()",
+      "execute()",
+      "fetch()"
+    ],
+    "answer": 1,
+    "explain": "executeQuery() est spécialement conçue pour les requêtes SELECT et renvoie un ResultSet."
+  },
+  {
+    "id": "java-q056",
+    "chapter": "4-1-jdbc-transactions",
+    "difficulty": 2,
+    "q": "Quelle méthode JDBC utilise-t-on pour exécuter un INSERT, UPDATE ou DELETE ?",
+    "options": [
+      "executeQuery()",
+      "executeUpdate()",
+      "executeSelect()",
+      "applyDml()"
+    ],
+    "answer": 1,
+    "explain": "executeUpdate() exécute des ordres d'écriture DML et renvoie le nombre de lignes modifiées (int)."
+  },
+  {
+    "id": "java-q057",
+    "chapter": "4-1-jdbc-transactions",
+    "difficulty": 2,
+    "q": "Pour garantir l'atomicité d'un transfert bancaire entre deux comptes avec JDBC, quelle est la procédure adéquate ?",
+    "options": [
+      "Exécuter chaque requête avec autoCommit = true",
+      "Désactiver l'auto-commit (setAutoCommit(false)), exécuter les requêtes, appeler commit() si succès et rollback() en cas d'échec",
+      "Débiter le premier compte puis espérer que le second ne plante pas",
+      "Utiliser deux threads séparés"
+    ],
+    "answer": 1,
+    "explain": "La gestion transactionnelle explicite nécessite setAutoCommit(false), suivi de commit() en cas de succès et de rollback() dans le bloc catch."
+  },
+  {
+    "id": "java-q058",
+    "chapter": "4-1-jdbc-transactions",
+    "difficulty": 3,
+    "q": "Deux transactions s'exécutent. T1 lit un solde, T2 le modifie et valide, puis T1 relit le même solde. Quel niveau d'isolation JDBC empêche T1 de voir deux valeurs différentes ?",
+    "options": [
+      "TRANSACTION_READ_UNCOMMITTED",
+      "TRANSACTION_READ_COMMITTED",
+      "TRANSACTION_REPEATABLE_READ",
+      "TRANSACTION_NONE"
+    ],
+    "answer": 2,
+    "explain": "TRANSACTION_REPEATABLE_READ empêche les lectures non reproductibles (Non-Repeatable Reads). READ_COMMITTED permettrait à T1 de voir la modification validée par T2."
+  },
+  {
+    "id": "java-q059",
+    "chapter": "4-1-jdbc-transactions",
+    "difficulty": 2,
+    "q": "Quel est l'avantage majeur d'un PreparedStatement par rapport à un Statement simple ?",
+    "options": [
+      "Il n'utilise pas de mémoire vive",
+      "Il précompile la requête et protège contre les injections SQL",
+      "Il permet d'exécuter du code Java dans la base",
+      "Il désactive automatiquement les transactions"
+    ],
+    "answer": 1,
+    "explain": "PreparedStatement précompile le plan de requête, améliore les performances répétitives et neutralise les injections SQL grâce aux paramètres typés (?) ."
+  },
+  {
+    "id": "java-q060",
+    "chapter": "4-2-jpa-hibernate",
+    "difficulty": 2,
+    "q": "Lors de l'appel à em.merge(e) sur une entité e existante mais détachée, quelle affirmation est correcte ?",
+    "options": [
+      "merge(e) rattache directement l'objet original e à l'EntityManager",
+      "merge(e) retourne une instance gérée contenant l'état fusionné ; l'objet original e reste détaché",
+      "merge(e) supprime l'entité en base",
+      "merge(e) valide immédiatement la transaction"
+    ],
+    "answer": 1,
+    "explain": "merge(e) ne modifie pas le statut de l'instance originale e ; il retourne une nouvelle référence gérée dans le contexte de persistance."
+  },
+  {
+    "id": "java-q061",
+    "chapter": "4-2-jpa-hibernate",
+    "difficulty": 2,
+    "q": "Dans une relation @OneToMany(fetch = FetchType.LAZY) sur 100 départements dont on parcourt les employés, quel phénomène peut survenir ?",
+    "options": [
+      "Une seule requête SQL est garantie",
+      "Exactement deux requêtes sont exécutées",
+      "Le problème N+1 : une requête initiale pour les départements, puis 100 requêtes supplémentaires pour charger les employés de chaque département",
+      "Une exception LazyInitializationException immédiate"
+    ],
+    "answer": 2,
+    "explain": "C'est le problème N+1 classique : 1 requête pour la liste initiale, puis N requêtes déclenchées à la volée par le chargement paresseux."
+  },
+  {
+    "id": "java-q062",
+    "chapter": "4-2-jpa-hibernate",
+    "difficulty": 3,
+    "q": "Quelle clause JPQL permet de résoudre efficacement le problème N+1 lors du chargement d'entités liées ?",
+    "options": [
+      "JOIN LAZY",
+      "JOIN FETCH",
+      "FETCH ALL",
+      "MERGE JOIN"
+    ],
+    "answer": 1,
+    "explain": "JOIN FETCH force Hibernate à exécuter une jointure SQL pour ramener l'entité parente et ses collections en une seule requête."
+  },
+  {
+    "id": "java-q063",
+    "chapter": "4-2-jpa-hibernate",
+    "difficulty": 1,
+    "q": "Quel état caractérise une entité JPA qui possède un identifiant en base de données mais dont l'EntityManager a été fermé ?",
+    "options": [
+      "Transitoire (New)",
+      "Gérée (Managed)",
+      "Détachée (Detached)",
+      "Supprimée (Removed)"
+    ],
+    "answer": 2,
+    "explain": "Une entité est dite détachée (detached) dès lors que son contexte de persistance d'origine est fermé ou vidé."
+  },
+  {
+    "id": "java-q064",
+    "chapter": "4-3-serialisation-javafx",
+    "difficulty": 1,
+    "q": "En Java, à quoi sert le mot-clé transient appliqué à un attribut ?",
+    "options": [
+      "À rendre le champ immuable",
+      "À exclure le champ du processus de sérialisation",
+      "À marquer un champ temporaire sur la pile",
+      "À empêcher toute modification du champ"
+    ],
+    "answer": 1,
+    "explain": "transient indique à la JVM que le champ ne doit pas être inclus dans le flux binaire lors de la sérialisation Serializable."
+  },
+  {
+    "id": "java-q065",
+    "chapter": "4-3-serialisation-javafx",
+    "difficulty": 1,
+    "q": "En JavaFX, quelle classe représente la racine (Root Node) du graphe de scène d'une interface graphique ?",
+    "options": [
+      "Stage",
+      "Scene",
+      "Node",
+      "Parent"
+    ],
+    "answer": 3,
+    "explain": "Parent (héritant de Node) est la classe abstraite de base pour tous les nœuds racines pouvant contenir des nœuds enfants."
+  },
+  {
+    "id": "java-q066",
+    "chapter": "4-3-serialisation-javafx",
+    "difficulty": 1,
+    "q": "Dans une application JavaFX, quelle est l'extension standard des fichiers de définition déclarative des vues ?",
+    "options": [
+      ".java",
+      ".css",
+      ".fxml",
+      ".xml"
+    ],
+    "answer": 2,
+    "explain": ".fxml est le format XML standard de JavaFX pour décrire la hiérarchie visuelle des composants."
+  },
+  {
+    "id": "java-q067",
+    "chapter": "4-3-serialisation-javafx",
+    "difficulty": 2,
+    "q": "En JavaFX, que représente l'objet de type Stage ?",
+    "options": [
+      "Un bouton cliquable",
+      "La fenêtre principale de premier niveau gérée par le système d'exploitation",
+      "Un gestionnaire de mise en page",
+      "Un fichier de configuration CSS"
+    ],
+    "answer": 1,
+    "explain": "Stage représente la fenêtre native OS qui accueille la Scene."
+  },
+  {
+    "id": "java-q068",
+    "chapter": "a-etude-cas-bancaire",
+    "difficulty": 2,
+    "q": "Quelle instruction permet à la classe CompteCourant d'invoquer le constructeur de CompteBancaire ?",
+    "options": [
+      "super(numero, soldeInitial);",
+      "this(numero, soldeInitial);",
+      "CompteBancaire(numero, soldeInitial);",
+      "parent(numero, soldeInitial);"
+    ],
+    "answer": 0,
+    "explain": "super(...) est l'appel standard pour déléguer l'initialisation au constructeur de la classe parente."
+  },
+  {
+    "id": "java-q069",
+    "chapter": "a-etude-cas-bancaire",
+    "difficulty": 2,
+    "q": "Dans la classe Banque, quelle méthode vérifie si un numéro de compte existe déjà avant l'ajout ?",
+    "options": [
+      "Parcours de la collection avec equals() sur getNumero()",
+      "Test avec ==",
+      "Appel à containsKey() sur une ArrayList",
+      "Aucune vérification"
+    ],
+    "answer": 0,
+    "explain": "On itère sur les comptes existants et on compare les numéros avec .equals()."
+  },
+  {
+    "id": "java-q070",
+    "chapter": "a-etude-cas-bancaire",
+    "difficulty": 3,
+    "q": "Pourquoi la méthode transferer sauvegarde-t-elle les soldes avant d'exécuter source.retirer(montant) ?",
+    "options": [
+      "Pour calculer les intérêts bancaires",
+      "Pour pouvoir restaurer l'état initial si le dépôt ou une opération ultérieure lève une exception",
+      "Pour imprimer un reçu papier",
+      "Pour synchroniser avec la base de données"
+    ],
+    "answer": 1,
+    "explain": "La sauvegarde préalable des soldes est la clé de la restauration (rollback) garantissant l'atomicité de la transaction en mémoire."
+  },
+  {
+    "id": "java-q071",
+    "chapter": "b-epreuve-corrige-type",
+    "difficulty": 2,
+    "q": "Pourquoi la classe CompteBancaire est-elle déclarée abstraite selon le corrigé officiel de l'examen ?",
+    "options": [
+      "Pour obliger les sous-classes à définir leur propre implémentation de retirer() tout en partageant les attributs communs",
+      "Pour empêcher d'ajouter des méthodes concrètes",
+      "Pour accélérer la vitesse de calcul de la JVM",
+      "Pour autoriser le multithreading"
+    ],
+    "answer": 0,
+    "explain": "Une classe abstraite modélise un concept général incomplet en factorisant le code commun et en différant l'implémentation des méthodes spécifiques."
+  },
+  {
+    "id": "java-q072",
+    "chapter": "b-epreuve-corrige-type",
+    "difficulty": 2,
+    "q": "Quel est l'intérêt d'utiliser une collection List<CompteBancaire> plutôt que deux listes séparées List<CompteCourant> et List<CompteEpargne> ?",
+    "options": [
+      "Aucun intérêt",
+      "Permettre de manipuler tous les types de comptes de manière uniforme grâce au polymorphisme sans dupliquer le code de la banque",
+      "Obliger tous les comptes à avoir le même solde",
+      "Interdire les découverts"
+    ],
+    "answer": 1,
+    "explain": "La collection polymorphique traite uniformément n'importe quel sous-type de compte présent ou futur sans modifier la classe Banque."
+  }
+]

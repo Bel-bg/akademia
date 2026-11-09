@@ -1,0 +1,194 @@
+[
+  {
+    "id": "java-f001",
+    "front": "Visibilité des attributs en POO",
+    "back": "Toujours `private` pour garantir l'encapsulation. Les accès contrôlés se font via des getters et des setters ou méthodes métier.",
+    "tag": "POO"
+  },
+  {
+    "id": "java-f002",
+    "front": "Rôle du mot-clé `final` sur un attribut",
+    "back": "L'attribut ne peut être assigné qu'une seule fois (à la déclaration ou dans le constructeur) et ne peut plus jamais être réassigné.",
+    "tag": "POO"
+  },
+  {
+    "id": "java-f003",
+    "front": "Différence entre `isBlank()` et `isEmpty()`",
+    "back": "`isEmpty()` teste si `length() == 0`. `isBlank()` (Java 11+) teste si la chaîne est vide OU composée uniquement d'espaces blancs.",
+    "tag": "POO"
+  },
+  {
+    "id": "java-f004",
+    "front": "Pourquoi utiliser `Double.isFinite(d)` ?",
+    "back": "Pour rejeter `Double.NaN`, `+Infinity` et `-Infinity`. Attention : `Double.NaN <= 0` renvoie `false` !",
+    "tag": "POO"
+  },
+  {
+    "id": "java-f005",
+    "front": "Définition d'une classe `abstract`",
+    "back": "Classe non instanciable (`new` interdit) qui factorise du code commun et peut déclarer des méthodes abstraites sans corps.",
+    "tag": "POO"
+  },
+  {
+    "id": "java-f006",
+    "front": "Annotation `@Override`",
+    "back": "Vérifie à la compilation qu'une méthode redéfinit exactement une méthode de sa superclasse ou d'une interface.",
+    "tag": "POO"
+  },
+  {
+    "id": "java-f007",
+    "front": "Qu'est-ce que le Polymorphisme ?",
+    "back": "Capacité d'un objet à être manipulé via un type parent tout en exécutant le comportement propre à son type réel à l'exécution (liaison tardive).",
+    "tag": "POO"
+  },
+  {
+    "id": "java-f008",
+    "front": "Différence entre `throw` et `throws`",
+    "back": "`throw` lance concrètement une exception (`throw new Exc()`). `throws` déclare les exceptions dans la signature de méthode.",
+    "tag": "Exceptions"
+  },
+  {
+    "id": "java-f009",
+    "front": "Exception pour argument invalide",
+    "back": "`IllegalArgumentException` (sous-classe de `RuntimeException`).",
+    "tag": "Exceptions"
+  },
+  {
+    "id": "java-f010",
+    "front": "Exception pour état incohérent",
+    "back": "`IllegalStateException` (ex : découvert dépassé ou solde insuffisant).",
+    "tag": "Exceptions"
+  },
+  {
+    "id": "java-f011",
+    "front": "Qu'est-ce que l'Atomicité ?",
+    "back": "Règle du « tout ou rien » : soit toute l'opération réussit, soit en cas d'échec l'état initial est entièrement restauré (Rollback).",
+    "tag": "Exceptions"
+  },
+  {
+    "id": "java-f012",
+    "front": "Pourquoi `String` est inefficace dans les boucles ?",
+    "back": "`String` est immuable. Chaque concaténation `+=` instancie un nouvel objet et recopie tous les caractères (complexité en O(N^2)).",
+    "tag": "Chaînes"
+  },
+  {
+    "id": "java-f013",
+    "front": "Solution optimale pour concaténer en boucle",
+    "back": "Utiliser `StringBuilder` et sa méthode `.append()` (complexité linéaire en O(N)).",
+    "tag": "Chaînes"
+  },
+  {
+    "id": "java-f014",
+    "front": "`s1 == s2` vs `s1.equals(s2)` pour String",
+    "back": "`==` compare les références mémoires (adresses). `equals()` compare le contenu textuel des caractères.",
+    "tag": "Chaînes"
+  },
+  {
+    "id": "java-f015",
+    "front": "Qu'est-ce que le String Pool ?",
+    "back": "Zone mémoire partagée de la JVM stockant une copie unique de chaque littéral de chaîne pour optimiser l'espace.",
+    "tag": "Chaînes"
+  },
+  {
+    "id": "java-f016",
+    "front": "Collection sans doublons en Java",
+    "back": "L'interface `Set` (`HashSet`, `TreeSet`). La méthode `add()` renvoie `false` si l'élément existe déjà.",
+    "tag": "Collections"
+  },
+  {
+    "id": "java-f017",
+    "front": "`ArrayList` vs `LinkedList`",
+    "back": "`ArrayList` : accès indexé rapide en O(1). `LinkedList` : insertions rapides en O(1) avec nœud mais accès par index lent en O(N).",
+    "tag": "Collections"
+  },
+  {
+    "id": "java-f018",
+    "front": "Garantie du Design Pattern Singleton",
+    "back": "Garantit qu'une classe ne possède **qu'une seule instance** dans l'application, avec un constructeur `private` et un point d'accès statique.",
+    "tag": "Patterns"
+  },
+  {
+    "id": "java-f019",
+    "front": "Utilité de la classe `Optional<T>`",
+    "back": "Conteneur modélisant la présence ou l'absence d'une valeur pour éliminer les `NullPointerException`.",
+    "tag": "Patterns"
+  },
+  {
+    "id": "java-f020",
+    "front": "Rôle d'un `Stream<T>`",
+    "back": "Pipeline de traitement déclaratif et fonctionnel pour transformer, filtrer et agréger des collections de données.",
+    "tag": "Streams"
+  },
+  {
+    "id": "java-f021",
+    "front": "Opération terminale de Stream sans retour",
+    "back": "`forEach(Consumer<T>)` : consomme le flux et applique une action sans renvoyer de résultat (`void`).",
+    "tag": "Streams"
+  },
+  {
+    "id": "java-f022",
+    "front": "Différence entre `start()` et `run()` sur un Thread",
+    "back": "`start()` démarre un nouveau thread concurrent dans la JVM. `run()` n'est qu'un simple appel de méthode synchrone classique.",
+    "tag": "Concurrence"
+  },
+  {
+    "id": "java-f023",
+    "front": "Approche recommandée pour créer un Thread",
+    "back": "`implements Runnable` : découple la tâche de l'infrastructure d'exécution et préserve l'héritage unique.",
+    "tag": "Concurrence"
+  },
+  {
+    "id": "java-f024",
+    "front": "Rôle de la classe `Semaphore`",
+    "back": "Contrôle l'accès concurrent à une ressource partagée via un nombre de permis avec `acquire()` et `release()`.",
+    "tag": "Concurrence"
+  },
+  {
+    "id": "java-f025",
+    "front": "JDBC : `executeQuery()` vs `executeUpdate()`",
+    "back": "`executeQuery()` pour les requêtes `SELECT` (renvoie un `ResultSet`). `executeUpdate()` pour les `INSERT/UPDATE/DELETE` (renvoie un `int`).",
+    "tag": "JDBC/JPA"
+  },
+  {
+    "id": "java-f026",
+    "front": "Atomicité d'une transaction en JDBC",
+    "back": "`conn.setAutoCommit(false);` puis `conn.commit();` si succès et `conn.rollback();` dans le bloc `catch`.",
+    "tag": "JDBC/JPA"
+  },
+  {
+    "id": "java-f027",
+    "front": "Niveau d'isolation `TRANSACTION_REPEATABLE_READ`",
+    "back": "Empêche les lectures non reproductibles : une ligne relue dans la transaction garde la même valeur même si modifiée par T2.",
+    "tag": "JDBC/JPA"
+  },
+  {
+    "id": "java-f028",
+    "front": "Comportement de `em.merge(e)` en JPA",
+    "back": "Renvoie une **nouvelle instance gérée** (managed). L'objet original `e` passé en argument reste **détaché**.",
+    "tag": "JDBC/JPA"
+  },
+  {
+    "id": "java-f029",
+    "front": "Le problème N+1 en JPA",
+    "back": "Survient lors du parcours d'une relation `LAZY` : 1 requête initiale pour les parents, puis N requêtes pour charger les enfants. Solution : `JOIN FETCH`.",
+    "tag": "JDBC/JPA"
+  },
+  {
+    "id": "java-f030",
+    "front": "Rôle du mot-clé `transient`",
+    "back": "Exclut formellement un champ du processus de sérialisation (`Serializable`). Sa valeur est ignorée à l'écriture.",
+    "tag": "JavaFX"
+  },
+  {
+    "id": "java-f031",
+    "front": "Racine d'une interface JavaFX",
+    "back": "La classe `Parent` (hérite de `Node`), placée dans la `Scene`, elle-même placée dans le `Stage`.",
+    "tag": "JavaFX"
+  },
+  {
+    "id": "java-f032",
+    "front": "Fichier de définition des vues JavaFX",
+    "back": "Fichier au format XML portant l'extension `.fxml`.",
+    "tag": "JavaFX"
+  }
+]

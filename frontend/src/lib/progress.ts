@@ -13,12 +13,12 @@ export function normalizeFiliere(value: unknown): FiliereId | null {
 }
 
 export function themeForFiliere(filiere: FiliereId | null | undefined): BackendThemeId {
-  return filiere === 'AIP' ? 'violet' : 'corail';
+  return filiere === 'AIP' ? 'violet' : 'ciel';
 }
 
 export function defaultState(): UserState {
   return {
-    v: 1, filiere: null, theme: 'corail', xp: 0, streak: 0, bestStreak: 0, lastActive: null,
+    v: 1, filiere: null, theme: 'ciel', xp: 0, streak: 0, bestStreak: 0, lastActive: null,
     daily: { date: todayKey(), xp: 0 }, dailyGoal: XP.dailyGoal,
     chaptersRead: {}, attempts: [], badges: {}, review: {}, chapterStats: {}, examBest: {},
     counters: { quizzes: 0, perfectQuizzes: 0, blitzBest: 0, maxCombo: 0, cardsKnown: 0, exams: 0 },

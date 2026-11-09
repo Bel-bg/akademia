@@ -25,6 +25,7 @@ import { FILIERES, useTheme } from '@/state/Theme';
 import { Mascot } from '@/components/Mascot';
 import { FlameBadgeIcon, TrophyBadgeIcon } from '@/components/Decor';
 import { CustomAvatar } from '@/components/CustomAvatar';
+import { isStandalone, triggerInstallPrompt } from '@/components/InstallPwaModal';
 import { Empty, PageTitle, Spinner, Stat } from '@/components/ui';
 
 export default function ProfilePage() {
@@ -226,7 +227,7 @@ export default function ProfilePage() {
           <span
             className={cn(
               'inline-flex items-center gap-1 rounded-full px-3.5 py-1 text-xs font-extrabold text-white shadow-sm',
-              theme === 'corail' ? 'bg-[#8B5CF6]' : 'bg-brand',
+              theme === 'ciel' ? 'bg-[#8B5CF6]' : 'bg-brand',
             )}
           >
             <Star size={13} />
@@ -408,7 +409,16 @@ export default function ProfilePage() {
             </p>
           </div>
 
-          <div className="pt-3 border-t border-line/60">
+          <div className="pt-3 border-t border-line/60 space-y-2">
+            {!isStandalone() && (
+              <button
+                type="button"
+                onClick={triggerInstallPrompt}
+                className="btn btn-primary w-full"
+              >
+                <Sparkles size={16} /> Installer l'application sur mon téléphone
+              </button>
+            )}
             <button
               type="button"
               onClick={() => void signOut()}
