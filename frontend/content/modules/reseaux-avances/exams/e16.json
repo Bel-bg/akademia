@@ -1,0 +1,72 @@
+{
+ "n": 16,
+ "title": "Épreuve n° 16 · OSPF : anneau, panne, coût et DR",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : coût et choix de chemin",
+   "points": 10,
+   "intro": "Référence par défaut 100 Mb/s.",
+   "questions": [
+    {
+     "id": "e16p1q1",
+     "q": "Calculez le coût OSPF d'un lien FastEthernet (100 Mb/s), 10 Mb/s et Gigabit.",
+     "points": 3,
+     "a": "- 100/100 = 1 ; 100/10 = 10 ; 100/1000 → arrondi à 1. Le Gigabit a le même coût que le FastEthernet."
+    },
+    {
+     "id": "e16p1q2",
+     "q": "Quel problème et quelle correction ?",
+     "points": 2,
+     "a": "- OSPF ne distingue plus les liens rapides. Correction : `auto-cost reference-bandwidth 10000` (sur tous les routeurs)."
+    },
+    {
+     "id": "e16p1q3",
+     "q": "RB2 relié à RA2 par un lien direct (coût 1) et au chemin RB1 - R0 - RA1 - RA2 (4 liens de coût 1) : quel chemin vers NetA2 ? Et si le lien direct tombe ?",
+     "points": 3,
+     "a": "- Direct (coût 1 puis LAN). Après la panne, OSPF recalcule : RB2 → RB1 → R0 → RA1 → RA2."
+    },
+    {
+     "id": "e16p1q4",
+     "q": "Quelle serait la réaction d'un routage statique simple à cette panne ?",
+     "points": 2,
+     "a": "- Il conserverait la route cassée si l'interface reste active ; il faudrait une route flottante ou un suivi."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : DR, sortie Internet et sécurité",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e16p2q1",
+     "q": "Sur un segment Ethernet partagé, pourquoi élit-on un DR et un BDR ? Comment ?",
+     "points": 3,
+     "a": "- Pour limiter les échanges (les autres ne forment `Full` qu'avec DR/BDR). Élection : priorité la plus haute, puis Router ID le plus élevé."
+    },
+    {
+     "id": "e16p2q2",
+     "q": "Un routeur reste en 2-Way avec un voisin : anormal ?",
+     "points": 2,
+     "a": "- Non, normal entre deux routeurs ni DR ni BDR."
+    },
+    {
+     "id": "e16p2q3",
+     "q": "R0 porte la sortie Internet : comment l'annonce-t-il ?",
+     "points": 2.5,
+     "a": "```text\nip route 0.0.0.0 0.0.0.0 <interface/saut vers Internet>\nrouter ospf 10\n default-information originate\n```"
+    },
+    {
+     "id": "e16p2q4",
+     "q": "Citez deux mesures de sécurité OSPF.",
+     "points": 2.5,
+     "a": "- `passive-interface` sur les LAN ; authentification OSPF (MD5 ou SHA) ; limiter les redistributions ; filtrer l'ICMP/89 depuis l'extérieur."
+    }
+   ]
+  }
+ ]
+}

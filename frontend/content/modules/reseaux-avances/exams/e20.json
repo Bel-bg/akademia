@@ -1,0 +1,66 @@
+{
+ "n": 20,
+ "title": "Épreuve n° 20 · NAT et PAT",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : principes",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e20p1q1",
+     "q": "Pourquoi le NAT existe-t-il ? Quelles sont ses limites ?",
+     "points": 3,
+     "a": "- Les adresses privées ne sont pas routables ; le NAT les traduit en adresse publique et retarde l'épuisement d'IPv4. Limites : casse le bout en bout, complique certains protocoles (VoIP, IPsec), nécessite un état."
+    },
+    {
+     "id": "e20p1q2",
+     "q": "Distinguez NAT statique, dynamique et PAT.",
+     "points": 3,
+     "a": "- Statique : 1 privée ↔ 1 publique fixe (publier un serveur). Dynamique : pool d'adresses publiques. PAT/overload : toutes les privées partagent une publique, distinguées par le port source."
+    },
+    {
+     "id": "e20p1q3",
+     "q": "Comment le PAT distingue-t-il deux PC avec le même port source ?",
+     "points": 2,
+     "a": "- Le routeur attribue à chaque flux un port source public distinct et mémorise la correspondance dans sa table de traduction."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : configuration",
+   "points": 12,
+   "intro": "LAN 192.168.1.0/24 (g0/0), sortie g0/1 en 203.0.113.5/30, opérateur 203.0.113.6.",
+   "questions": [
+    {
+     "id": "e20p2q1",
+     "q": "Écrivez la configuration Cisco du PAT avec route par défaut.",
+     "points": 5,
+     "a": "```text\ninterface g0/0\n ip address 192.168.1.1 255.255.255.0\n ip nat inside\ninterface g0/1\n ip address 203.0.113.5 255.255.255.252\n ip nat outside\naccess-list 1 permit 192.168.1.0 0.0.0.255\nip nat inside source list 1 interface g0/1 overload\nip route 0.0.0.0 0.0.0.0 203.0.113.6\n```"
+    },
+    {
+     "id": "e20p2q2",
+     "q": "Quelles commandes vérifient le NAT ?",
+     "points": 2,
+     "a": "```text\nshow ip nat translations\nshow ip nat statistics\n```"
+    },
+    {
+     "id": "e20p2q3",
+     "q": "Publiez le serveur web 192.168.1.50 sur le port 80 de l'adresse publique.",
+     "points": 2.5,
+     "a": "```text\nip nat inside source static tcp 192.168.1.50 80 203.0.113.5 80\n```"
+    },
+    {
+     "id": "e20p2q4",
+     "q": "Faites de Linux une passerelle NAT vers eth0.",
+     "points": 2.5,
+     "a": "```bash\nsudo sysctl -w net.ipv4.ip_forward=1\nsudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\n```"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,80 @@
+{
+ "n": 1,
+ "title": "Épreuve n° 1 · Sujet réel : Réseaux avancés (ENEAM, 2 h)",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie A : adressage",
+   "points": 4,
+   "intro": "Question 1 : quel masque (décimal et /n) permet de mettre ensemble ces plages d'adresses IPv4 ? Question 2 : donnez les adresses de réseau et de diffusion. (La plage d) est lue « 1.0.0.0 - 1.0.7.255 » sur la photo du sujet ; le résultat est identique pour 10.0.0.0 - 10.0.7.255.)",
+   "questions": [
+    {
+     "id": "e01p1q1",
+     "q": "Q1.a) 192.168.0.0 - 192.168.63.255 · b) 10.0.0.0 - 10.3.255.255 · c) 192.168.0.0 - 192.168.0.63 · d) 1.0.0.0 - 1.0.7.255",
+     "points": 2,
+     "a": "```text\na) 64 x 256 = 16 384 = 2^14 adresses -> 14 bits hôte -> /18 = 255.255.192.0\nb) 4 x 65 536 = 2^18 adresses -> 18 bits hôte -> /14 = 255.252.0.0\nc) 64 adresses = 2^6 -> /26 = 255.255.255.192\nd) 8 x 256 = 2^11 adresses -> /21 = 255.255.248.0\n```\n- Méthode : taille de la plage → puissance de 2 → bits hôte → `/n`."
+    },
+    {
+     "id": "e01p1q2",
+     "q": "Q2. Adresses de réseau et de diffusion de : a) 172.30.33.45/12 · b) 192.168.1.165/25 · c) 10.0.0.1/20 · d) 10.0.38.1/23",
+     "points": 2,
+     "a": "```text\na) /12 : pas 16 (2e octet), 30 dans 16-31 -> réseau 172.16.0.0, diffusion 172.31.255.255\nb) /25 : pas 128, 165 dans 128-255 -> réseau 192.168.1.128, diffusion 192.168.1.255\nc) /20 : pas 16 (3e octet), 0 dans 0-15 -> réseau 10.0.0.0, diffusion 10.0.15.255\nd) /23 : pas 2 (3e octet), 38 -> réseau 10.0.38.0, diffusion 10.0.39.255\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie B : routage statique (schéma à 5 routeurs)",
+   "points": 8,
+   "intro": "Réseaux : NetA1 10.0.0.0/23 (RA1), NetA2 10.0.2.0/23 (RA2), NetB1 10.0.4.0/23 (RB1), NetB2 10.0.6.0/23 (RB2). Liaisons : 1.1.1.0/30 (RA1-R0), 1.1.1.4/30 (RB1-R0), 1.1.1.8/30 (RB2-RB1), 1.1.1.12/30 (RA2-RA1), 1.1.1.16/30 (RB2-RA2). Chaque routeur prend la dernière adresse utilisable de chaque réseau Net.",
+   "questions": [
+    {
+     "id": "e01p2q1",
+     "q": "Q3. Donnez la table de routage d'un PC de NetB2 (par exemple PC_B2-1 en 10.0.6.1/23).",
+     "points": 3,
+     "a": "```text\nDestination     Masque/préfixe     Passerelle     Interface\n10.0.6.0        /23 (255.255.254.0)  directe     eth0   (réseau connecté)\n0.0.0.0         /0                 10.0.7.254    eth0   (route par défaut)\n```\n- Passerelle = dernière adresse utilisable de 10.0.6.0/23, soit `10.0.7.254`.\n- Autres LAN : NetA1 → `10.0.1.254` ; NetA2 → `10.0.3.254` ; NetB1 → `10.0.5.254` (même forme pour leurs PC)."
+    },
+    {
+     "id": "e01p2q2",
+     "q": "Q4.a) Sans la liaison RB2-RA2, donnez la table de routage de RB2 et de RA2.",
+     "points": 2.5,
+     "a": "```text\nRB2 : C 10.0.6.0/23 (g0/0) ; C 1.1.1.8/30 (g1/0)\n      S 0.0.0.0/0 via 1.1.1.10   (tout passe par RB1)\n      (ou, en détaillé : 10.0.4.0/23, 1.1.1.4/30, 1.1.1.0/30, 10.0.0.0/23, 1.1.1.12/30, 10.0.2.0/23 via 1.1.1.10)\n\nRA2 : C 10.0.2.0/23 (g0/0) ; C 1.1.1.12/30 (g1/0)\n      S 0.0.0.0/0 via 1.1.1.14   (tout passe par RA1)\n```\n- RB2 et RA2 sont des routeurs d'extrémité de la chaîne : une route par défaut suffit."
+    },
+    {
+     "id": "e01p2q3",
+     "q": "Q4.b) Sans la liaison RB2-RA2, donnez la table de routage de RB1 et de RA1.",
+     "points": 2.5,
+     "a": "```text\nRB1 : C 10.0.4.0/23 ; C 1.1.1.8/30 ; C 1.1.1.4/30\n      S 10.0.6.0/23 via 1.1.1.9     (NetB2, derrière RB2)\n      S 1.1.1.0/30, 10.0.0.0/23, 1.1.1.12/30, 10.0.2.0/23 via 1.1.1.6   (R0)\n      (ou S 0.0.0.0/0 via 1.1.1.6)\n\nRA1 : C 10.0.0.0/23 ; C 1.1.1.0/30 ; C 1.1.1.12/30\n      S 10.0.2.0/23 via 1.1.1.13    (NetA2, derrière RA2)\n      S 1.1.1.4/30, 1.1.1.8/30, 10.0.4.0/23, 10.0.6.0/23 via 1.1.1.2   (R0)\n      (ou S 0.0.0.0/0 via 1.1.1.2)\n```"
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Partie C : routage dynamique, ports, conteneur",
+   "points": 8,
+   "intro": "Avec la liaison RB2-RA2 (1.1.1.16/30), RA2 g2/0 = 1.1.1.18/30 ; on utilise OSPF.",
+   "questions": [
+    {
+     "id": "e01p3q1",
+     "q": "Q5. Donnez les configurations (adresses IP et OSPF) nécessaires aux routeurs RB2, RA2, RA1 et RB1.",
+     "points": 4,
+     "a": "```text\n! RB2\ninterface g0/0\n ip address 10.0.7.254 255.255.254.0\n no shutdown\ninterface g1/0\n ip address 1.1.1.9 255.255.255.252\n no shutdown\ninterface g2/0\n ip address 1.1.1.17 255.255.255.252\n no shutdown\nrouter ospf 10\n passive-interface g0/0\n network 10.0.6.0 0.0.1.255 area 0\n network 1.1.1.8 0.0.0.3 area 0\n network 1.1.1.16 0.0.0.3 area 0\n\n! RA2\ninterface g0/0\n ip address 10.0.3.254 255.255.254.0\ninterface g1/0\n ip address 1.1.1.13 255.255.255.252\ninterface g2/0\n ip address 1.1.1.18 255.255.255.252\nrouter ospf 10\n passive-interface g0/0\n network 10.0.2.0 0.0.1.255 area 0\n network 1.1.1.12 0.0.0.3 area 0\n network 1.1.1.16 0.0.0.3 area 0\n\n! RA1 (g0/0 LAN 10.0.1.254/23, g1/0 1.1.1.1/30, g2/0 1.1.1.14/30)\nrouter ospf 10\n passive-interface g0/0\n network 10.0.0.0 0.0.1.255 area 0\n network 1.1.1.0 0.0.0.3 area 0\n network 1.1.1.12 0.0.0.3 area 0\n\n! RB1 (g0/0 LAN 10.0.5.254/23, g1/0 1.1.1.5/30, g2/0 1.1.1.10/30)\nrouter ospf 10\n passive-interface g0/0\n network 10.0.4.0 0.0.1.255 area 0\n network 1.1.1.4 0.0.0.3 area 0\n network 1.1.1.8 0.0.0.3 area 0\n```\n- Variante de l'annexe : `ip ospf 10 area 0` sur chaque interface + `redistribute connected subnets`.\n- Pour R0 : mêmes principes avec 1.1.1.0/30 et 1.1.1.4/30, plus `default-information originate` si R0 porte la sortie Internet."
+    },
+    {
+     "id": "e01p3q2",
+     "q": "Q6. Donnez les ports associés aux services : http, https, dhcp, ntp, snmp, ldaps.",
+     "points": 2,
+     "a": "- HTTP 80/TCP · HTTPS 443/TCP · DHCP 67 (serveur) et 68 (client)/UDP · NTP 123/UDP · SNMP 161/UDP (traps 162) · LDAPS 636/TCP."
+    },
+    {
+     "id": "e01p3q3",
+     "q": "Q7. Quelle commande lance un conteneur sur l'image `nginx:latest` avec le port 8080 associé au port par défaut ?",
+     "points": 2,
+     "a": "```bash\ndocker run -d -p 8080:80 nginx:latest\n```\n- `-p 8080:80` : port 8080 de l'hôte → port 80 (HTTP par défaut) du conteneur. Test : `curl http://localhost:8080`."
+    }
+   ]
+  }
+ ]
+}

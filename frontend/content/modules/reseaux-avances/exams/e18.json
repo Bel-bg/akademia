@@ -1,0 +1,78 @@
+{
+ "n": 18,
+ "title": "Épreuve n° 18 · VLAN et routage inter-VLAN",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : concepts",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e18p1q1",
+     "q": "Quel est l'intérêt d'un VLAN ?",
+     "points": 2,
+     "a": "- Réduit les domaines de diffusion, sépare les services, facilite la gestion sur une seule infrastructure, améliore la sécurité."
+    },
+    {
+     "id": "e18p1q2",
+     "q": "Différence entre port access et port trunk ; VLAN natif.",
+     "points": 3,
+     "a": "- Access : un seul VLAN, trames sans étiquette. Trunk : plusieurs VLAN avec étiquette 802.1Q. VLAN natif : VLAN dont les trames traversent le trunk sans étiquette (à changer du VLAN 1, identique aux deux bouts)."
+    },
+    {
+     "id": "e18p1q3",
+     "q": "Combien de VLAN au maximum et pourquoi ?",
+     "points": 1.5,
+     "a": "- Identifiant sur 12 bits : 4 094 VLAN utilisables (1 à 4094)."
+    },
+    {
+     "id": "e18p1q4",
+     "q": "Deux PC de VLAN différents sur le même switch communiquent-ils sans routeur ?",
+     "points": 1.5,
+     "a": "- Non : deux domaines de diffusion et deux réseaux IP ; il faut un équipement de couche 3."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : configuration",
+   "points": 12,
+   "intro": "VLAN 10 (enseignants, 192.168.10.0/24), VLAN 20 (élèves, 192.168.20.0/24), passerelles en .254.",
+   "questions": [
+    {
+     "id": "e18p2q1",
+     "q": "Créez les VLAN et placez f0/5 dans le VLAN 10 et f0/6 dans le VLAN 20.",
+     "points": 3,
+     "a": "```text\nvlan 10\n name enseignants\nvlan 20\n name eleves\ninterface f0/5\n switchport mode access\n switchport access vlan 10\ninterface f0/6\n switchport mode access\n switchport access vlan 20\n```"
+    },
+    {
+     "id": "e18p2q2",
+     "q": "Configurez le trunk f0/1 vers le routeur (VLAN natif 99, VLAN 10 et 20 autorisés).",
+     "points": 3,
+     "a": "```text\ninterface f0/1\n switchport mode trunk\n switchport trunk native vlan 99\n switchport trunk allowed vlan 10,20,99\n```"
+    },
+    {
+     "id": "e18p2q3",
+     "q": "Configurez le routeur en « router-on-a-stick ».",
+     "points": 3,
+     "a": "```text\ninterface g0/0\n no shutdown\ninterface g0/0.10\n encapsulation dot1Q 10\n ip address 192.168.10.254 255.255.255.0\ninterface g0/0.20\n encapsulation dot1Q 20\n ip address 192.168.20.254 255.255.255.0\n```"
+    },
+    {
+     "id": "e18p2q4",
+     "q": "Donnez l'alternative avec un commutateur de niveau 3.",
+     "points": 1.5,
+     "a": "```text\nip routing\ninterface vlan 10\n ip address 192.168.10.254 255.255.255.0\ninterface vlan 20\n ip address 192.168.20.254 255.255.255.0\n```"
+    },
+    {
+     "id": "e18p2q5",
+     "q": "Pourquoi STP est-il nécessaire avec des liens redondants ?",
+     "points": 1.5,
+     "a": "- Sans lui, les diffusions bouclent à l'infini en couche 2 (pas de TTL) : tempête de diffusion. STP bloque des ports pour obtenir un arbre sans boucle."
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,66 @@
+{
+ "n": 12,
+ "title": "Épreuve n° 12 · Routage statique : trois routeurs en ligne",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : conception",
+   "points": 12,
+   "intro": "LAN1 192.168.1.0/24 — R1 — 10.0.12.0/30 — R2 — 10.0.23.0/30 — R3 — LAN3 192.168.3.0/24. R1 : g0/0 192.168.1.1, g0/1 10.0.12.1. R2 : g0/0 10.0.12.2, g0/1 10.0.23.1. R3 : g0/0 10.0.23.2, g0/1 192.168.3.1.",
+   "questions": [
+    {
+     "id": "e12p1q1",
+     "q": "Donnez, pour chaque routeur, les réseaux directement connectés.",
+     "points": 3,
+     "a": "- R1 : 192.168.1.0/24, 10.0.12.0/30. R2 : 10.0.12.0/30, 10.0.23.0/30. R3 : 10.0.23.0/30, 192.168.3.0/24."
+    },
+    {
+     "id": "e12p1q2",
+     "q": "Écrivez les routes statiques complètes de R1, R2 et R3.",
+     "points": 5,
+     "a": "```text\nR1: ip route 10.0.23.0 255.255.255.252 10.0.12.2\n    ip route 192.168.3.0 255.255.255.0 10.0.12.2\nR2: ip route 192.168.1.0 255.255.255.0 10.0.12.1\n    ip route 192.168.3.0 255.255.255.0 10.0.23.2\nR3: ip route 10.0.12.0 255.255.255.252 10.0.23.1\n    ip route 192.168.1.0 255.255.255.0 10.0.23.1\n```"
+    },
+    {
+     "id": "e12p1q3",
+     "q": "Comment simplifier R1 et R3 ?",
+     "points": 2,
+     "a": "- Ce sont des routeurs d'extrémité : une seule route par défaut. R1 : `ip route 0.0.0.0 0.0.0.0 10.0.12.2` ; R3 : `ip route 0.0.0.0 0.0.0.0 10.0.23.1`."
+    },
+    {
+     "id": "e12p1q4",
+     "q": "Combien de routes statiques sur R2 si l'on ajoute un LAN2 192.168.2.0/24 sur R2 ? Sur R1 ?",
+     "points": 2,
+     "a": "- R2 : LAN2 est connecté, il lui faut LAN1 et LAN3 : **2 routes**. R1 : 5 réseaux − 2 connectés = **3 routes** (ou une route par défaut)."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : vérification",
+   "points": 8,
+   "intro": "Le ping PC1 → PC3 échoue.",
+   "questions": [
+    {
+     "id": "e12p2q1",
+     "q": "Donnez la démarche de dépannage dans l'ordre.",
+     "points": 3,
+     "a": "- Interfaces `up/up` et adresses (`show ip interface brief`) ; ping du voisin direct puis suivant ; `show ip route` sur chaque routeur, aller **et retour** ; traceroute ; masques, passerelles de PC, ACL."
+    },
+    {
+     "id": "e12p2q2",
+     "q": "Le ping réussit depuis R1 mais pas depuis PC1 : pourquoi, et quelle commande utiliser ?",
+     "points": 3,
+     "a": "- Depuis R1, la source est l'interface de sortie : R3 sait y répondre. Depuis PC1, la route de retour vers 192.168.1.0/24 manque peut-être. Utiliser `ping 192.168.3.30 source g0/0` (ping étendu)."
+    },
+    {
+     "id": "e12p2q3",
+     "q": "R2 contient une erreur : `ip route 192.168.3.0 255.255.255.0 10.0.23.1`. Laquelle ?",
+     "points": 2,
+     "a": "- Le saut suivant est sa **propre** adresse de l'autre côté du lien : il faut l'adresse du voisin R3, soit `10.0.23.2`."
+    }
+   ]
+  }
+ ]
+}

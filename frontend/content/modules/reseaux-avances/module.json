@@ -1,0 +1,212 @@
+{
+ "id": "reseaux-avances",
+ "title": "Réseaux avancés",
+ "subtitle": "Adressage, subnetting, routage, OSPF, VLAN, NAT · ENEAM",
+ "description": "Cours complet de réseaux : modèles OSI/TCP-IP, IPv4/IPv6, subnetting et VLSM, résumé de routes, routage statique et OSPF, VLAN, DHCP, DNS, NAT, ACL, Linux et Docker, avec exercices corrigés et 24 épreuves dont le sujet réel.",
+ "emoji": "🌐",
+ "color": "#1C7ED6",
+ "level": "Licence 3",
+ "estimatedHours": 8,
+ "parts": [
+  {
+   "id": "ch1",
+   "title": "Partie 1 · Fondations",
+   "chapters": [
+    "1-1-modeles-osi-tcpip",
+    "1-2-liaison-ethernet-arp",
+    "1-3-adressage-ipv4",
+    "1-4-ip-icmp",
+    "1-5-tcp-udp-ports"
+   ]
+  },
+  {
+   "id": "ch2",
+   "title": "Partie 2 · Subnetting",
+   "chapters": [
+    "2-1-subnetting",
+    "2-2-vlsm",
+    "2-3-resume-routes"
+   ]
+  },
+  {
+   "id": "ch3",
+   "title": "Partie 3 · Routage",
+   "chapters": [
+    "3-1-table-routage",
+    "3-2-routage-statique",
+    "3-3-routage-dynamique-ospf",
+    "3-4-ipv6"
+   ]
+  },
+  {
+   "id": "ch4",
+   "title": "Partie 4 · Services et réseaux d'entreprise",
+   "chapters": [
+    "4-1-vlan-commutation",
+    "4-2-dhcp-dns-nat",
+    "4-3-acl-securite",
+    "4-4-linux-docker-outils"
+   ]
+  },
+  {
+   "id": "ann",
+   "title": "Annexes",
+   "chapters": [
+    "a-etude-de-cas",
+    "b-methode-fiche"
+   ]
+  }
+ ],
+ "chapters": [
+  {
+   "id": "1-1-modeles-osi-tcpip",
+   "number": "1.1",
+   "title": "Modèles OSI et TCP/IP",
+   "summary": "Couches, encapsulation, équipements, domaines de diffusion.",
+   "minutes": 7,
+   "file": "1-1-modeles-osi-tcpip.md"
+  },
+  {
+   "id": "1-2-liaison-ethernet-arp",
+   "number": "1.2",
+   "title": "Ethernet, commutation et ARP",
+   "summary": "Adresses MAC, trame, table du switch, ARP, attaques.",
+   "minutes": 6,
+   "file": "1-2-liaison-ethernet-arp.md"
+  },
+  {
+   "id": "1-3-adressage-ipv4",
+   "number": "1.3",
+   "title": "Adressage IPv4 et masques",
+   "summary": "Binaire, CIDR, ET logique, adresses privées et spéciales.",
+   "minutes": 8,
+   "file": "1-3-adressage-ipv4.md"
+  },
+  {
+   "id": "1-4-ip-icmp",
+   "number": "1.4",
+   "title": "IP, ICMP, TTL et fragmentation",
+   "summary": "En-tête IP, MTU, fragmentation, ping, traceroute.",
+   "minutes": 6,
+   "file": "1-4-ip-icmp.md"
+  },
+  {
+   "id": "1-5-tcp-udp-ports",
+   "number": "1.5",
+   "title": "TCP, UDP et ports",
+   "summary": "Poignée de main, comparaison, ports usuels, ss et nc.",
+   "minutes": 7,
+   "file": "1-5-tcp-udp-ports.md"
+  },
+  {
+   "id": "2-1-subnetting",
+   "number": "2.1",
+   "title": "Subnetting",
+   "summary": "Méthode en 5 étapes, sous-réseaux et hôtes, saut de bloc.",
+   "minutes": 7,
+   "file": "2-1-subnetting.md"
+  },
+  {
+   "id": "2-2-vlsm",
+   "number": "2.2",
+   "title": "VLSM",
+   "summary": "Masques variables, plan d'adressage, alignement.",
+   "minutes": 6,
+   "file": "2-2-vlsm.md"
+  },
+  {
+   "id": "2-3-resume-routes",
+   "number": "2.3",
+   "title": "Résumé de routes",
+   "summary": "Préfixe commun, plage vers masque, trous noirs.",
+   "minutes": 6,
+   "file": "2-3-resume-routes.md"
+  },
+  {
+   "id": "3-1-table-routage",
+   "number": "3.1",
+   "title": "Table de routage",
+   "summary": "Préfixe le plus long, AD, métrique, lecture Cisco et Linux.",
+   "minutes": 9,
+   "file": "3-1-table-routage.md"
+  },
+  {
+   "id": "3-2-routage-statique",
+   "number": "3.2",
+   "title": "Routage statique",
+   "summary": "ip route, défaut, flottante, Null0, méthode en 6 étapes.",
+   "minutes": 9,
+   "file": "3-2-routage-statique.md"
+  },
+  {
+   "id": "3-3-routage-dynamique-ospf",
+   "number": "3.3",
+   "title": "Routage dynamique et OSPF",
+   "summary": "RIP, OSPF, wildcard, passive-interface, vérification.",
+   "minutes": 8,
+   "file": "3-3-routage-dynamique-ospf.md"
+  },
+  {
+   "id": "3-4-ipv6",
+   "number": "3.4",
+   "title": "IPv6",
+   "summary": "Compression, types, NDP, SLAAC, routes IPv6.",
+   "minutes": 6,
+   "file": "3-4-ipv6.md"
+  },
+  {
+   "id": "4-1-vlan-commutation",
+   "number": "4.1",
+   "title": "VLAN et commutation",
+   "summary": "Access/trunk, 802.1Q, inter-VLAN, STP, 3 couches.",
+   "minutes": 7,
+   "file": "4-1-vlan-commutation.md"
+  },
+  {
+   "id": "4-2-dhcp-dns-nat",
+   "number": "4.2",
+   "title": "DHCP, DNS et NAT",
+   "summary": "DORA, relais, enregistrements, PAT.",
+   "minutes": 6,
+   "file": "4-2-dhcp-dns-nat.md"
+  },
+  {
+   "id": "4-3-acl-securite",
+   "number": "4.3",
+   "title": "ACL et sécurité",
+   "summary": "ACL standard et étendue, ufw, durcissement.",
+   "minutes": 7,
+   "file": "4-3-acl-securite.md"
+  },
+  {
+   "id": "4-4-linux-docker-outils",
+   "number": "4.4",
+   "title": "Linux réseau, Docker et outils",
+   "summary": "ip, netplan, docker -p, tcpdump, Wireshark.",
+   "minutes": 7,
+   "file": "4-4-linux-docker-outils.md"
+  },
+  {
+   "id": "a-etude-de-cas",
+   "number": "A",
+   "title": "Étude de cas : 5 routeurs",
+   "summary": "Sujet type examen corrigé, statique puis OSPF.",
+   "minutes": 8,
+   "file": "a-etude-de-cas.md"
+  },
+  {
+   "id": "b-methode-fiche",
+   "number": "B",
+   "title": "Méthode d'examen et aide-mémoire",
+   "summary": "Réflexes, fiche de calcul, erreurs fréquentes.",
+   "minutes": 7,
+   "file": "b-methode-fiche.md"
+  }
+ ],
+ "features": {
+  "quiz": true,
+  "blitz": true,
+  "exams": true,
+  "flashcards": true
+ }
+}

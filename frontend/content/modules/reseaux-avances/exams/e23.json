@@ -1,0 +1,80 @@
+{
+ "n": 23,
+ "title": "Épreuve n° 23 · Examen blanc A (2 h)",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : adressage",
+   "points": 6,
+   "intro": "Sans calculatrice.",
+   "questions": [
+    {
+     "id": "e23p1q1",
+     "q": "Quel masque (décimal et /n) regroupe : a) 172.16.0.0 - 172.16.15.255 ; b) 192.168.32.0 - 192.168.63.255 ; c) 200.1.1.0 - 200.1.1.127 ; d) 10.64.0.0 - 10.127.255.255 ?",
+     "points": 3,
+     "a": "- a) 16 × 256 = 2^12 → /20 = 255.255.240.0.\n- b) 32 × 256 = 2^13 → /19 = 255.255.224.0.\n- c) 128 = 2^7 → /25 = 255.255.255.128.\n- d) 64 × 65 536 = 2^22 → /10 = 255.192.0.0."
+    },
+    {
+     "id": "e23p1q2",
+     "q": "Réseau et diffusion de : 192.168.77.200/27 ; 172.19.200.9/13 ; 10.20.30.40/18 ; 100.64.130.1/21.",
+     "points": 3,
+     "a": "```text\n192.168.77.200/27 -> 192.168.77.192  /  192.168.77.223\n172.19.200.9/13   -> 172.16.0.0       /  172.23.255.255\n10.20.30.40/18    -> 10.20.0.0        /  10.20.63.255\n100.64.130.1/21   -> 100.64.128.0     /  100.64.135.255\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : routage",
+   "points": 8,
+   "intro": "R1 (LAN 192.168.1.0/24, g0/0 .1 ; lien 10.0.0.0/30 g0/1 .1) — R2 (lien 10.0.0.0/30 g0/0 .2 ; LAN 192.168.2.0/24 g0/1 .1 ; lien 10.0.1.0/30 g0/2 .1) — R3 (lien 10.0.1.0/30 g0/0 .2 ; LAN 192.168.3.0/24 g0/1 .1).",
+   "questions": [
+    {
+     "id": "e23p2q1",
+     "q": "Donnez les tables de routage statique de R1, R2, R3 (C/S, saut suivant).",
+     "points": 4,
+     "a": "```text\nR1: C 192.168.1.0/24, 10.0.0.0/30 ; S 10.0.1.0/30, 192.168.2.0/24, 192.168.3.0/24 via 10.0.0.2 (ou défaut)\nR2: C 10.0.0.0/30, 192.168.2.0/24, 10.0.1.0/30 ; S 192.168.1.0/24 via 10.0.0.1 ; S 192.168.3.0/24 via 10.0.1.2\nR3: C 10.0.1.0/30, 192.168.3.0/24 ; S 10.0.0.0/30, 192.168.1.0/24, 192.168.2.0/24 via 10.0.1.1 (ou défaut)\n```"
+    },
+    {
+     "id": "e23p2q2",
+     "q": "Écrivez la configuration OSPF (processus 1, zone 0) de R2 avec les LAN en passive.",
+     "points": 3,
+     "a": "```text\nrouter ospf 1\n passive-interface g0/1\n network 10.0.0.0 0.0.0.3 area 0\n network 10.0.1.0 0.0.0.3 area 0\n network 192.168.2.0 0.0.0.255 area 0\n```"
+    },
+    {
+     "id": "e23p2q3",
+     "q": "PC1 (192.168.1.10) ping PC3 (192.168.3.30) échoue : trois vérifications.",
+     "points": 1,
+     "a": "- Route de retour sur R3 ; routes aller sur R1 et R2 ; passerelle de PC3. `show ip route`, ping étendu."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : services et conteneurs",
+   "points": 6,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e23p3q1",
+     "q": "Ports de : SSH, DNS, SMTP, Syslog, RDP, PostgreSQL.",
+     "points": 2,
+     "a": "- 22 · 53 · 25 · 514 · 3389 · 5432."
+    },
+    {
+     "id": "e23p3q2",
+     "q": "Quelle commande lance httpd:2.4 en publiant le port 9090 de l'hôte vers le 80 du conteneur ?",
+     "points": 2,
+     "a": "```bash\ndocker run -d -p 9090:80 httpd:2.4\n```"
+    },
+    {
+     "id": "e23p3q3",
+     "q": "Décrivez la poignée de main TCP et le rôle du TTL.",
+     "points": 2,
+     "a": "- SYN, SYN+ACK, ACK. Le TTL est décrémenté par chaque routeur et évite les boucles infinies (ICMP Time Exceeded à 0)."
+    }
+   ]
+  }
+ ]
+}

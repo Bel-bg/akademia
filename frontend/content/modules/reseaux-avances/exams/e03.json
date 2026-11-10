@@ -1,0 +1,84 @@
+{
+ "n": 3,
+ "title": "Épreuve n° 3 · Réseau, diffusion et plages d'hôtes",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : calculs",
+   "points": 12,
+   "intro": "Donnez réseau, diffusion et plage utilisable.",
+   "questions": [
+    {
+     "id": "e03p1q1",
+     "q": "192.168.0.30/27",
+     "points": 2,
+     "a": "```text\n/27 : pas 32, 30 dans 0-31 -> réseau 192.168.0.0, diffusion 192.168.0.31, plage .1 à .30\n```"
+    },
+    {
+     "id": "e03p1q2",
+     "q": "10.0.0.168/25",
+     "points": 2,
+     "a": "```text\n/25 : pas 128, 168 dans 128-255 -> réseau 10.0.0.128, diffusion 10.0.0.255, plage .129 à .254\n```"
+    },
+    {
+     "id": "e03p1q3",
+     "q": "192.168.6.6/29",
+     "points": 2,
+     "a": "```text\n/29 : pas 8, 6 dans 0-7 -> réseau 192.168.6.0, diffusion 192.168.6.7, plage .1 à .6\n```"
+    },
+    {
+     "id": "e03p1q4",
+     "q": "10.0.1.1/23",
+     "points": 2,
+     "a": "```text\n/23 : pas 2 (3e octet), 1 dans 0-1 -> réseau 10.0.0.0, diffusion 10.0.1.255, plage 10.0.0.1 à 10.0.1.254\n```"
+    },
+    {
+     "id": "e03p1q5",
+     "q": "192.168.8.9/22",
+     "points": 2,
+     "a": "```text\n/22 : pas 4 (3e octet), 8 est multiple de 4 -> réseau 192.168.8.0, diffusion 192.168.11.255\n```"
+    },
+    {
+     "id": "e03p1q6",
+     "q": "10.0.0.2/12",
+     "points": 2,
+     "a": "```text\n/12 : pas 16 (2e octet), 0 dans 0-15 -> réseau 10.0.0.0, diffusion 10.15.255.255\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : analyse",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e03p2q1",
+     "q": "192.168.1.200/24 et 192.168.2.7/24 communiquent-elles directement ?",
+     "points": 1.5,
+     "a": "- Non : réseaux 192.168.1.0/24 et 192.168.2.0/24 différents ; il faut un routeur."
+    },
+    {
+     "id": "e03p2q2",
+     "q": "Un PC en 192.168.4.130/26 a pour passerelle 192.168.4.100. Est-ce valide ?",
+     "points": 2,
+     "a": "- /26 : pas 64, 130 dans 128-191 → réseau 192.168.4.128/26. La passerelle 192.168.4.100 est dans 64-127 : **non valide**. Elle doit être entre .129 et .190."
+    },
+    {
+     "id": "e03p2q3",
+     "q": "Quelles adresses sont privées : 172.15.0.1, 172.16.5.9, 172.32.0.1, 192.169.1.1, 10.200.1.1 ?",
+     "points": 2,
+     "a": "- Privées : **172.16.5.9** (172.16.0.0/12) et **10.200.1.1** (10.0.0.0/8). Les autres sont publiques."
+    },
+    {
+     "id": "e03p2q4",
+     "q": "Donnez le rôle de 127.0.0.1, 169.254.0.0/16, 255.255.255.255, 0.0.0.0.",
+     "points": 2.5,
+     "a": "- 127.0.0.1 : bouclage (la machine elle-même).\n- 169.254.0.0/16 : APIPA (pas de réponse DHCP).\n- 255.255.255.255 : diffusion limitée au réseau local.\n- 0.0.0.0 : adresse inconnue ; `0.0.0.0/0` : route par défaut."
+    }
+   ]
+  }
+ ]
+}

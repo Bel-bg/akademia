@@ -1,0 +1,60 @@
+{
+ "n": 6,
+ "title": "Épreuve n° 6 · VLSM : entreprise à trois sites",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : plan",
+   "points": 12,
+   "intro": "Bloc 172.16.8.0/22. Siège : 300 hôtes ; Agence 1 : 100 ; Agence 2 : 50 ; Agence 3 : 20 ; trois liaisons de 2 adresses.",
+   "questions": [
+    {
+     "id": "e06p1q1",
+     "q": "Donnez le masque de chaque besoin.",
+     "points": 3,
+     "a": "```text\nSiège 300 -> 2^9 - 2 = 510 -> /23\nAgence 1 100 -> /25   Agence 2 50 -> /26   Agence 3 20 -> /27   Liaisons -> /30\n```"
+    },
+    {
+     "id": "e06p1q2",
+     "q": "Donnez le plan complet (réseau/masque, plage, diffusion).",
+     "points": 7,
+     "a": "```text\n/22 = 172.16.8.0 à 172.16.11.255\nSiège    172.16.8.0/23     172.16.8.1   - 172.16.9.254   diff 172.16.9.255\nAgence 1 172.16.10.0/25    .10.1 - .10.126  diff .10.127\nAgence 2 172.16.10.128/26  .10.129 - .10.190 diff .10.191\nAgence 3 172.16.10.192/27  .10.193 - .10.222 diff .10.223\nL1 172.16.10.224/30  L2 172.16.10.228/30  L3 172.16.10.232/30\n```"
+    },
+    {
+     "id": "e06p1q3",
+     "q": "Quelle place reste-t-il ?",
+     "points": 2,
+     "a": "- De 172.16.10.236 à 172.16.11.255 : 20 adresses (172.16.10.236 à .255) plus tout 172.16.11.0/24 (256) = **276 adresses**."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : résumé et contrôle",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e06p2q1",
+     "q": "Quelle route résumée annonce-t-on vers l'extérieur pour ce plan ?",
+     "points": 3,
+     "a": "- `172.16.8.0/22` (172.16.8.0 à 172.16.11.255) : un seul préfixe couvre tout le plan, y compris l'espace libre."
+    },
+    {
+     "id": "e06p2q2",
+     "q": "Vérifiez l'absence de chevauchement.",
+     "points": 2.5,
+     "a": "- Fins/débuts (3e et 4e octets) : 8.0-9.255 ; 10.0-10.127 ; 10.128-10.191 ; 10.192-10.223 ; 10.224-10.227 ; 10.228-10.231 ; 10.232-10.235 : strictement croissants, aucun recouvrement."
+    },
+    {
+     "id": "e06p2q3",
+     "q": "Écrivez la route statique résumée du siège vers l'agence 1 si le réseau de l'agence 1 est 172.16.10.0/25 via 10.9.9.2.",
+     "points": 2.5,
+     "a": "```text\nip route 172.16.10.0 255.255.255.128 10.9.9.2\n```\n- Masque décimal `255.255.255.128` pour un /25."
+    }
+   ]
+  }
+ ]
+}

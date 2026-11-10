@@ -1,0 +1,72 @@
+{
+ "n": 22,
+ "title": "Épreuve n° 22 · Linux réseau et Docker",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : Linux",
+   "points": 10,
+   "intro": "Écrivez les commandes.",
+   "questions": [
+    {
+     "id": "e22p1q1",
+     "q": "Affichez adresses, routes, voisins et ports en écoute.",
+     "points": 2,
+     "a": "```bash\nip -br a\nip r\nip neigh\nsudo ss -tulnp\n```"
+    },
+    {
+     "id": "e22p1q2",
+     "q": "Ajoutez 10.0.5.254/23 à eth1, activez l'interface et ajoutez la route par défaut via 10.0.4.1.",
+     "points": 2.5,
+     "a": "```bash\nsudo ip addr add 10.0.5.254/23 dev eth1\nsudo ip link set eth1 up\nsudo ip route add default via 10.0.4.1\n```"
+    },
+    {
+     "id": "e22p1q3",
+     "q": "Rendez la configuration permanente avec netplan.",
+     "points": 2.5,
+     "a": "```yaml\nnetwork:\n  version: 2\n  ethernets:\n    eth1:\n      addresses: [10.0.5.254/23]\n      routes:\n        - to: default\n          via: 10.0.4.1\n```\n- Puis `sudo netplan try` et `sudo netplan apply`."
+    },
+    {
+     "id": "e22p1q4",
+     "q": "Transformez cette machine en routeur et capturez uniquement le DNS.",
+     "points": 3,
+     "a": "```bash\nsudo sysctl -w net.ipv4.ip_forward=1\nsudo tcpdump -i eth0 -n port 53\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : Docker",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e22p2q1",
+     "q": "Lancez nginx:latest nommé web, port 8080 de l'hôte vers le port 80 du conteneur.",
+     "points": 2.5,
+     "a": "```bash\ndocker run -d --name web -p 8080:80 nginx:latest\n```"
+    },
+    {
+     "id": "e22p2q2",
+     "q": "Que signifie `0.0.0.0:8080->80/tcp` ?",
+     "points": 2,
+     "a": "- Le port TCP 8080 de l'hôte, sur toutes les interfaces, est redirigé vers le port 80 du conteneur."
+    },
+    {
+     "id": "e22p2q3",
+     "q": "Publiez PostgreSQL (5432) seulement en local sur le port 5433.",
+     "points": 2.5,
+     "a": "```bash\ndocker run -d -p 127.0.0.1:5433:5432 -e POSTGRES_PASSWORD=secret postgres:16\n```"
+    },
+    {
+     "id": "e22p2q4",
+     "q": "Pourquoi un port publié par Docker reste-t-il accessible malgré `ufw deny` ?",
+     "points": 3,
+     "a": "- Docker ajoute ses propres règles NAT/FORWARD dans iptables, appliquées avant celles d'ufw. Solutions : publier sur 127.0.0.1, filtrer dans la chaîne DOCKER-USER."
+    }
+   ]
+  }
+ ]
+}

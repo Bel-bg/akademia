@@ -1,0 +1,3418 @@
+[
+ {
+  "id": "rx-q001",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 1,
+  "q": "Quelle couche OSI gère l'adressage logique (IP) et le routage ?",
+  "options": [
+   "La couche 4 (Transport)",
+   "La couche 7 (Application)",
+   "La couche 2 (Liaison)",
+   "La couche 3 (Réseau)"
+  ],
+  "answer": 3,
+  "explain": "IP est un protocole de couche réseau ; le routeur travaille à ce niveau."
+ },
+ {
+  "id": "rx-q002",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 1,
+  "q": "Quelle est l'unité de données de la couche 2 ?",
+  "options": [
+   "Le bit",
+   "Le paquet",
+   "Le segment",
+   "La trame"
+  ],
+  "answer": 3,
+  "explain": "Couche 2 : trame ; couche 3 : paquet ; couche 4 : segment (TCP) ou datagramme (UDP)."
+ },
+ {
+  "id": "rx-q003",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 1,
+  "q": "À quelle couche travaille un commutateur (switch) classique ?",
+  "options": [
+   "Couche 1",
+   "Couche 2",
+   "Couche 3",
+   "Couche 4"
+  ],
+  "answer": 1,
+  "explain": "Il décide selon les adresses MAC."
+ },
+ {
+  "id": "rx-q004",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 1,
+  "q": "Combien de couches compte le modèle OSI ?",
+  "options": [
+   "5",
+   "4",
+   "7",
+   "6"
+  ],
+  "answer": 2,
+  "explain": "TCP/IP en compte 4, OSI 7."
+ },
+ {
+  "id": "rx-q005",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 2,
+  "q": "Que fait l'encapsulation ?",
+  "options": [
+   "Chaque couche ajoute son en-tête aux données",
+   "Elle chiffre les données",
+   "Elle compresse les paquets",
+   "Chaque couche supprime son en-tête"
+  ],
+  "answer": 0,
+  "explain": "À la réception, c'est la désencapsulation qui retire les en-têtes."
+ },
+ {
+  "id": "rx-q006",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 2,
+  "q": "Pendant un trajet à travers plusieurs routeurs, qu'est-ce qui ne change pas ?",
+  "options": [
+   "La somme de contrôle de l'en-tête IP",
+   "Les adresses MAC",
+   "Le TTL",
+   "Les adresses IP source et destination"
+  ],
+  "answer": 3,
+  "explain": "Les MAC changent à chaque saut, le TTL diminue, la somme est recalculée ; les IP restent (hors NAT)."
+ },
+ {
+  "id": "rx-q007",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 2,
+  "q": "Quel équipement sépare les domaines de diffusion ?",
+  "options": [
+   "Un répéteur",
+   "Un hub",
+   "Un routeur",
+   "Un switch sans VLAN"
+  ],
+  "answer": 2,
+  "explain": "Un routeur ne transmet pas les diffusions ; un VLAN les sépare aussi."
+ },
+ {
+  "id": "rx-q008",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 2,
+  "q": "Quelles couches OSI correspondent à la couche Application de TCP/IP ?",
+  "options": [
+   "1 et 2",
+   "5, 6 et 7",
+   "Seulement 7",
+   "3 et 4"
+  ],
+  "answer": 1,
+  "explain": "TCP/IP regroupe session, présentation et application."
+ },
+ {
+  "id": "rx-q009",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 3,
+  "q": "Combien de domaines de collision et de diffusion pour 4 PC sur un switch non segmenté ?",
+  "options": [
+   "4 collisions, 1 diffusion",
+   "1 collision, 1 diffusion",
+   "4 collisions, 4 diffusions",
+   "1 collision, 4 diffusions"
+  ],
+  "answer": 0,
+  "explain": "Chaque port de switch est un domaine de collision ; sans VLAN, un seul domaine de diffusion."
+ },
+ {
+  "id": "rx-q010",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 1,
+  "q": "Combien de bits comporte une adresse MAC ?",
+  "options": [
+   "128",
+   "32",
+   "48",
+   "64"
+  ],
+  "answer": 2,
+  "explain": "6 octets, écrits en hexadécimal."
+ },
+ {
+  "id": "rx-q011",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 1,
+  "q": "Quelle est l'adresse MAC de diffusion ?",
+  "options": [
+   "AA:AA:AA:AA:AA:AA",
+   "FF:FF:FF:FF:FF:FF",
+   "00:00:00:00:00:00",
+   "FF:FF:00:00:00:00"
+  ],
+  "answer": 1,
+  "explain": "Tous les bits à 1."
+ },
+ {
+  "id": "rx-q012",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 1,
+  "q": "Quel protocole associe une adresse IP à une adresse MAC ?",
+  "options": [
+   "ARP",
+   "DNS",
+   "DHCP",
+   "ICMP"
+  ],
+  "answer": 0,
+  "explain": "ARP : requête en diffusion, réponse en unicast."
+ },
+ {
+  "id": "rx-q013",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 2,
+  "q": "Quel EtherType correspond à IPv4 ?",
+  "options": [
+   "0x0806",
+   "0x86DD",
+   "0x8100",
+   "0x0800"
+  ],
+  "answer": 3,
+  "explain": "ARP : 0x0806 ; IPv6 : 0x86DD ; VLAN 802.1Q : 0x8100."
+ },
+ {
+  "id": "rx-q014",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 2,
+  "q": "Comment un switch apprend-il où se trouve une machine ?",
+  "options": [
+   "Il lit l'adresse MAC source des trames reçues",
+   "Il consulte la table de routage",
+   "Il lit l'adresse MAC destination",
+   "Il interroge le DHCP"
+  ],
+  "answer": 0,
+  "explain": "La source est associée au port d'arrivée."
+ },
+ {
+  "id": "rx-q015",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 2,
+  "q": "Un switch reçoit une trame dont la MAC destination est inconnue : que fait-il ?",
+  "options": [
+   "Il la transmet au routeur",
+   "Il la renvoie à l'émetteur",
+   "Il la jette",
+   "Il l'envoie sur tous les ports sauf celui d'arrivée"
+  ],
+  "answer": 3,
+  "explain": "C'est l'inondation (flooding)."
+ },
+ {
+  "id": "rx-q016",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 2,
+  "q": "Un PC veut joindre 8.8.8.8 hors de son réseau : quelle adresse résout-il avec ARP ?",
+  "options": [
+   "Celle de 8.8.8.8",
+   "Celle de sa passerelle",
+   "Celle du serveur DNS",
+   "Celle du switch"
+  ],
+  "answer": 1,
+  "explain": "La trame est envoyée au routeur, qui fera suivre le paquet."
+ },
+ {
+  "id": "rx-q017",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 3,
+  "q": "Quelle attaque consiste à envoyer de fausses réponses ARP ?",
+  "options": [
+   "DHCP starvation",
+   "ARP spoofing (empoisonnement)",
+   "VLAN hopping",
+   "MAC flooding"
+  ],
+  "answer": 1,
+  "explain": "Elle permet une attaque de l'homme du milieu ; DAI la contre."
+ },
+ {
+  "id": "rx-q018",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 1,
+  "q": "Quelle est la valeur décimale de 11000000 ?",
+  "options": [
+   "240",
+   "128",
+   "224",
+   "192"
+  ],
+  "answer": 3,
+  "explain": "128 + 64 = 192."
+ },
+ {
+  "id": "rx-q019",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 1,
+  "q": "Que représente 255.255.255.0 en notation CIDR ?",
+  "options": [
+   "/16",
+   "/32",
+   "/8",
+   "/24"
+  ],
+  "answer": 3,
+  "explain": "24 bits à 1."
+ },
+ {
+  "id": "rx-q020",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 1,
+  "q": "Quelle plage est privée ?",
+  "options": [
+   "192.169.0.0 à 192.169.255.255",
+   "172.32.0.0 à 172.47.255.255",
+   "172.16.0.0 à 172.31.255.255",
+   "172.0.0.0 à 172.15.255.255"
+  ],
+  "answer": 2,
+  "explain": "RFC 1918 : 10/8, 172.16/12, 192.168/16."
+ },
+ {
+  "id": "rx-q021",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 1,
+  "q": "Combien d'hôtes utilisables dans un /24 ?",
+  "options": [
+   "256",
+   "254",
+   "252",
+   "255"
+  ],
+  "answer": 1,
+  "explain": "2^8 − 2 : réseau et diffusion exclus."
+ },
+ {
+  "id": "rx-q022",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Quel est le masque d'un /20 ?",
+  "options": [
+   "255.255.248.0",
+   "255.255.255.240",
+   "255.255.224.0",
+   "255.255.240.0"
+  ],
+  "answer": 3,
+  "explain": "20 = 8 + 8 + 4 : 4 bits à 1 → 240."
+ },
+ {
+  "id": "rx-q023",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Adresse réseau de 192.168.10.45/26 ?",
+  "options": [
+   "192.168.10.0",
+   "192.168.10.64",
+   "192.168.10.45",
+   "192.168.10.32"
+  ],
+  "answer": 0,
+  "explain": "/26 : blocs de 64 ; 45 est dans 0-63."
+ },
+ {
+  "id": "rx-q024",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Diffusion de 192.168.10.45/26 ?",
+  "options": [
+   "192.168.10.255",
+   "192.168.10.62",
+   "192.168.10.64",
+   "192.168.10.63"
+  ],
+  "answer": 3,
+  "explain": "Dernière adresse du bloc 0-63."
+ },
+ {
+  "id": "rx-q025",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Que signifie une adresse en 169.254.x.x sur un PC ?",
+  "options": [
+   "L'adresse est publique",
+   "Le PC est sur Internet",
+   "Le PC est le serveur DHCP",
+   "Aucun serveur DHCP n'a répondu"
+  ],
+  "answer": 3,
+  "explain": "C'est l'APIPA."
+ },
+ {
+  "id": "rx-q026",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Quel bloc est réservé au bouclage (loopback) ?",
+  "options": [
+   "127.0.0.0/8",
+   "10.0.0.0/8",
+   "224.0.0.0/4",
+   "169.254.0.0/16"
+  ],
+  "answer": 0,
+  "explain": "127.0.0.1 désigne la machine elle-même."
+ },
+ {
+  "id": "rx-q027",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 3,
+  "q": "Réseau de 172.30.33.45/12 ?",
+  "options": [
+   "172.16.0.0",
+   "172.30.32.0",
+   "172.30.0.0",
+   "172.0.0.0"
+  ],
+  "answer": 0,
+  "explain": "/12 : blocs de 16 dans le 2e octet ; 30 est dans 16-31."
+ },
+ {
+  "id": "rx-q028",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 3,
+  "q": "Diffusion de 10.0.38.1/23 ?",
+  "options": [
+   "10.0.39.255",
+   "10.0.255.255",
+   "10.0.37.255",
+   "10.0.38.255"
+  ],
+  "answer": 0,
+  "explain": "/23 : blocs de 2 ; 38-39."
+ },
+ {
+  "id": "rx-q029",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 1,
+  "q": "Quelle est la taille minimale d'un en-tête IPv4 ?",
+  "options": [
+   "20 octets",
+   "40 octets",
+   "64 octets",
+   "8 octets"
+  ],
+  "answer": 0,
+  "explain": "IHL = 5 mots de 4 octets."
+ },
+ {
+  "id": "rx-q030",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 1,
+  "q": "Quel protocole transporte les messages de ping ?",
+  "options": [
+   "ARP",
+   "ICMP",
+   "UDP",
+   "TCP"
+  ],
+  "answer": 1,
+  "explain": "Echo Request et Echo Reply (types 8 et 0)."
+ },
+ {
+  "id": "rx-q031",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 2,
+  "q": "Que fait un routeur quand le TTL arrive à 0 ?",
+  "options": [
+   "Il jette le paquet et envoie un ICMP Time Exceeded",
+   "Il le transmet quand même",
+   "Il le renvoie à la source",
+   "Il le met en file d'attente"
+  ],
+  "answer": 0,
+  "explain": "Cela évite les boucles infinies."
+ },
+ {
+  "id": "rx-q032",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 2,
+  "q": "Sur quel principe repose traceroute ?",
+  "options": [
+   "Des pings en diffusion",
+   "Des requêtes DNS",
+   "Des paquets de TTL croissant provoquent des ICMP Time Exceeded",
+   "Des requêtes ARP successives"
+  ],
+  "answer": 2,
+  "explain": "Chaque routeur révèle son adresse."
+ },
+ {
+  "id": "rx-q033",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 2,
+  "q": "Où se fait le réassemblage d'un datagramme fragmenté ?",
+  "options": [
+   "Sur le switch",
+   "Sur le premier routeur",
+   "À la destination finale",
+   "Sur chaque routeur"
+  ],
+  "answer": 2,
+  "explain": "Les routeurs intermédiaires ne réassemblent pas."
+ },
+ {
+  "id": "rx-q034",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 2,
+  "q": "Quelle est la valeur du champ Protocole pour TCP ?",
+  "options": [
+   "6",
+   "89",
+   "1",
+   "17"
+  ],
+  "answer": 0,
+  "explain": "ICMP 1, TCP 6, UDP 17, OSPF 89."
+ },
+ {
+  "id": "rx-q035",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 3,
+  "q": "MTU 700, en-tête 20 : taille de données maximale du 1er fragment ?",
+  "options": [
+   "680",
+   "672",
+   "696",
+   "700"
+  ],
+  "answer": 0,
+  "explain": "700 − 20 = 680, déjà multiple de 8."
+ },
+ {
+  "id": "rx-q036",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 3,
+  "q": "Un ping renvoie « TTL expired in transit » : cause probable ?",
+  "options": [
+   "Route de retour manquante",
+   "Boucle de routage",
+   "Port fermé",
+   "Câble débranché"
+  ],
+  "answer": 1,
+  "explain": "Le paquet circule jusqu'à épuisement du TTL."
+ },
+ {
+  "id": "rx-q037",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 1,
+  "q": "Quel port utilise HTTPS ?",
+  "options": [
+   "443",
+   "80",
+   "22",
+   "8080"
+  ],
+  "answer": 0,
+  "explain": "HTTPS : 443 ; HTTP (non chiffré) : 80."
+ },
+ {
+  "id": "rx-q038",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 1,
+  "q": "Quel port utilise SSH ?",
+  "options": [
+   "25",
+   "22",
+   "23",
+   "21"
+  ],
+  "answer": 1,
+  "explain": "Telnet 23, FTP 21, SMTP 25."
+ },
+ {
+  "id": "rx-q039",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 1,
+  "q": "Quels ports utilise DHCP ?",
+  "options": [
+   "53 et 54",
+   "67 (serveur) et 68 (client)",
+   "80 et 443",
+   "161 et 162"
+  ],
+  "answer": 1,
+  "explain": "Le serveur écoute sur UDP 67, le client sur UDP 68."
+ },
+ {
+  "id": "rx-q040",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Quel port et quel transport pour NTP ?",
+  "options": [
+   "161, UDP",
+   "123, UDP",
+   "389, TCP",
+   "123, TCP"
+  ],
+  "answer": 1,
+  "explain": "NTP synchronise l'heure sur UDP 123."
+ },
+ {
+  "id": "rx-q041",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Quel port pour SNMP (requêtes) ?",
+  "options": [
+   "162 uniquement",
+   "389",
+   "161",
+   "25"
+  ],
+  "answer": 2,
+  "explain": "162 est utilisé pour les traps."
+ },
+ {
+  "id": "rx-q042",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Quel port pour LDAPS ?",
+  "options": [
+   "636",
+   "389",
+   "443",
+   "993"
+  ],
+  "answer": 0,
+  "explain": "LDAPS (chiffré) : 636 ; LDAP en clair : 389."
+ },
+ {
+  "id": "rx-q043",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Combien d'échanges compte la poignée de main TCP ?",
+  "options": [
+   "3",
+   "4",
+   "5",
+   "2"
+  ],
+  "answer": 0,
+  "explain": "SYN, SYN+ACK, ACK."
+ },
+ {
+  "id": "rx-q044",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Pourquoi DNS utilise-t-il surtout UDP ?",
+  "options": [
+   "Requête et réponse tiennent dans un datagramme, sans connexion",
+   "Pour le chiffrement",
+   "TCP est interdit",
+   "UDP est plus sûr"
+  ],
+  "answer": 0,
+  "explain": "TCP est utilisé pour les transferts de zone."
+ },
+ {
+  "id": "rx-q045",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 3,
+  "q": "Quelle commande liste les ports TCP en écoute avec les processus ?",
+  "options": [
+   "`sudo ss -tlnp`",
+   "`ip a`",
+   "`dig -x`",
+   "`ping -t`"
+  ],
+  "answer": 0,
+  "explain": "-t TCP, -l écoute, -n numérique, -p processus."
+ },
+ {
+  "id": "rx-q046",
+  "chapter": "2-1-subnetting",
+  "difficulty": 1,
+  "q": "Combien de sous-réseaux obtient-on en empruntant 3 bits ?",
+  "options": [
+   "3",
+   "16",
+   "8",
+   "6"
+  ],
+  "answer": 2,
+  "explain": "Chaque bit emprunté double le nombre : 2^3 = 8."
+ },
+ {
+  "id": "rx-q047",
+  "chapter": "2-1-subnetting",
+  "difficulty": 2,
+  "q": "Quel masque pour 4 sous-réseaux dans un /24 ?",
+  "options": [
+   "/27",
+   "/25",
+   "/28",
+   "/26"
+  ],
+  "answer": 3,
+  "explain": "2 bits empruntés."
+ },
+ {
+  "id": "rx-q048",
+  "chapter": "2-1-subnetting",
+  "difficulty": 2,
+  "q": "Quel masque pour au moins 50 hôtes ?",
+  "options": [
+   "/27",
+   "/25",
+   "/26",
+   "/24"
+  ],
+  "answer": 2,
+  "explain": "2^6 − 2 = 62."
+ },
+ {
+  "id": "rx-q049",
+  "chapter": "2-1-subnetting",
+  "difficulty": 2,
+  "q": "Quel est le pas d'un /27 dans le dernier octet ?",
+  "options": [
+   "16",
+   "64",
+   "32",
+   "27"
+  ],
+  "answer": 2,
+  "explain": "256 − 224 = 32."
+ },
+ {
+  "id": "rx-q050",
+  "chapter": "2-1-subnetting",
+  "difficulty": 2,
+  "q": "Hôtes utilisables dans un /22 ?",
+  "options": [
+   "510",
+   "2 046",
+   "1 024",
+   "1 022"
+  ],
+  "answer": 3,
+  "explain": "10 bits hôte : 2^10 − 2 = 1 022."
+ },
+ {
+  "id": "rx-q051",
+  "chapter": "2-1-subnetting",
+  "difficulty": 3,
+  "q": "172.16.0.0/16 découpé en au moins 50 sous-réseaux donne quel masque ?",
+  "options": [
+   "/22",
+   "/21",
+   "/24",
+   "/23"
+  ],
+  "answer": 0,
+  "explain": "2^6 = 64 ≥ 50 : 16 + 6 = 22."
+ },
+ {
+  "id": "rx-q052",
+  "chapter": "2-1-subnetting",
+  "difficulty": 3,
+  "q": "Dans 192.168.20.0/24, 5 services de 25 postes : quel masque ?",
+  "options": [
+   "/26",
+   "/28",
+   "/27",
+   "/25"
+  ],
+  "answer": 2,
+  "explain": "25 + passerelle = 26 ≤ 30."
+ },
+ {
+  "id": "rx-q053",
+  "chapter": "2-2-vlsm",
+  "difficulty": 1,
+  "q": "Que signifie VLSM ?",
+  "options": [
+   "Protocole de routage",
+   "Masques de longueur variable",
+   "Réseau local virtuel",
+   "Masque statique"
+  ],
+  "answer": 1,
+  "explain": "Chaque sous-réseau reçoit le masque adapté."
+ },
+ {
+  "id": "rx-q054",
+  "chapter": "2-2-vlsm",
+  "difficulty": 2,
+  "q": "Quel masque pour une liaison entre deux routeurs ?",
+  "options": [
+   "/30",
+   "/28",
+   "/16",
+   "/24"
+  ],
+  "answer": 0,
+  "explain": "2 adresses utilisables."
+ },
+ {
+  "id": "rx-q055",
+  "chapter": "2-2-vlsm",
+  "difficulty": 2,
+  "q": "Dans quel ordre attribuer les blocs en VLSM ?",
+  "options": [
+   "Au hasard",
+   "Dans l'ordre alphabétique",
+   "Du plus grand au plus petit",
+   "Du plus petit au plus grand"
+  ],
+  "answer": 2,
+  "explain": "Les gros blocs doivent être alignés."
+ },
+ {
+  "id": "rx-q056",
+  "chapter": "2-2-vlsm",
+  "difficulty": 3,
+  "q": "Dans 192.168.100.0/24, où commence le bloc de 50 hôtes placé après un /25 en .0 ?",
+  "options": [
+   "192.168.100.128/26",
+   "192.168.100.130/26",
+   "192.168.100.127/26",
+   "192.168.100.64/26"
+  ],
+  "answer": 0,
+  "explain": "Le /25 occupe 0-127 ; le /26 suivant commence à 128."
+ },
+ {
+  "id": "rx-q057",
+  "chapter": "2-2-vlsm",
+  "difficulty": 3,
+  "q": "Les blocs 192.168.1.0/25 et 192.168.1.64/26 coexistent-ils ?",
+  "options": [
+   "Oui si les masques diffèrent",
+   "Non, chevauchement",
+   "Oui",
+   "Oui avec VLSM"
+  ],
+  "answer": 1,
+  "explain": "0-127 contient 64-127."
+ },
+ {
+  "id": "rx-q058",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 2,
+  "q": "Résumé de 192.168.0.0/24 à 192.168.3.0/24 ?",
+  "options": [
+   "192.168.0.0/23",
+   "192.168.0.0/24",
+   "192.168.0.0/21",
+   "192.168.0.0/22"
+  ],
+  "answer": 3,
+  "explain": "4 réseaux contigus alignés."
+ },
+ {
+  "id": "rx-q059",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 2,
+  "q": "Quel masque couvre 192.168.0.0 - 192.168.63.255 ?",
+  "options": [
+   "/18",
+   "/16",
+   "/20",
+   "/19"
+  ],
+  "answer": 0,
+  "explain": "64 × 256 = 2^14."
+ },
+ {
+  "id": "rx-q060",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 3,
+  "q": "Quel masque couvre 10.0.0.0 - 10.3.255.255 ?",
+  "options": [
+   "/12",
+   "/15",
+   "/14",
+   "/16"
+  ],
+  "answer": 2,
+  "explain": "2^18 adresses."
+ },
+ {
+  "id": "rx-q061",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 3,
+  "q": "Résumé de 10.0.0.0/23, 10.0.2.0/23, 10.0.4.0/23, 10.0.6.0/23 ?",
+  "options": [
+   "10.0.0.0/20",
+   "10.0.0.0/22",
+   "10.0.0.0/23",
+   "10.0.0.0/21"
+  ],
+  "answer": 3,
+  "explain": "4 × 512 = 2048 = 2^11."
+ },
+ {
+  "id": "rx-q062",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 3,
+  "q": "Pourquoi ajouter une route Null0 avec un résumé ?",
+  "options": [
+   "Remplacer la route par défaut",
+   "Éviter boucles et trous noirs pour les adresses inexistantes",
+   "Chiffrer le trafic",
+   "Accélérer le routage"
+  ],
+  "answer": 1,
+  "explain": "Les routes plus spécifiques restent prioritaires."
+ },
+ {
+  "id": "rx-q063",
+  "chapter": "3-1-table-routage",
+  "difficulty": 1,
+  "q": "Quelle est la distance administrative d'une route statique ?",
+  "options": [
+   "110",
+   "120",
+   "0",
+   "1"
+  ],
+  "answer": 3,
+  "explain": "Connecté : 0 ; statique : 1 ; OSPF : 110 ; RIP : 120."
+ },
+ {
+  "id": "rx-q064",
+  "chapter": "3-1-table-routage",
+  "difficulty": 1,
+  "q": "Que signifie le code C dans show ip route ?",
+  "options": [
+   "Route par défaut",
+   "Route statique",
+   "Route OSPF",
+   "Réseau directement connecté"
+  ],
+  "answer": 3,
+  "explain": "S = statique, O = OSPF."
+ },
+ {
+  "id": "rx-q065",
+  "chapter": "3-1-table-routage",
+  "difficulty": 2,
+  "q": "Quel critère est examiné en premier pour choisir une route ?",
+  "options": [
+   "L'ordre de configuration",
+   "Le préfixe le plus long",
+   "La métrique",
+   "La distance administrative"
+  ],
+  "answer": 1,
+  "explain": "Puis AD, puis métrique."
+ },
+ {
+  "id": "rx-q066",
+  "chapter": "3-1-table-routage",
+  "difficulty": 2,
+  "q": "Quelle est l'AD d'OSPF ?",
+  "options": [
+   "120",
+   "90",
+   "110",
+   "170"
+  ],
+  "answer": 2,
+  "explain": "EIGRP 90, RIP 120."
+ },
+ {
+  "id": "rx-q067",
+  "chapter": "3-1-table-routage",
+  "difficulty": 2,
+  "q": "Routes : 10.0.0.0/8 via A, 10.1.0.0/16 via B, 0.0.0.0/0 via C. Où part 10.1.5.5 ?",
+  "options": [
+   "Il est jeté",
+   "Via B",
+   "Via C",
+   "Via A"
+  ],
+  "answer": 1,
+  "explain": "Le /16 est plus spécifique que le /8."
+ },
+ {
+  "id": "rx-q068",
+  "chapter": "3-1-table-routage",
+  "difficulty": 2,
+  "q": "Que signifie [110/20] dans une ligne de la table ?",
+  "options": [
+   "Métrique 110, AD 20",
+   "Port 110, coût 20",
+   "AD 110, métrique 20",
+   "Deux routes"
+  ],
+  "answer": 2,
+  "explain": "Format [AD/métrique]."
+ },
+ {
+  "id": "rx-q069",
+  "chapter": "3-1-table-routage",
+  "difficulty": 2,
+  "q": "Pourquoi un réseau connecté peut-il manquer dans la table ?",
+  "options": [
+   "Le DNS est en panne",
+   "Interface en shutdown ou sans adresse IP",
+   "Il manque une route par défaut",
+   "L'ACL le bloque"
+  ],
+  "answer": 1,
+  "explain": "Une route C n'existe que si l'interface est up/up avec une IP."
+ },
+ {
+  "id": "rx-q070",
+  "chapter": "3-1-table-routage",
+  "difficulty": 3,
+  "q": "Un ping échoue alors que l'aller est routé : cause fréquente ?",
+  "options": [
+   "L'adresse est privée",
+   "Le TTL est trop grand",
+   "Le masque est trop long",
+   "La route de retour manque"
+  ],
+  "answer": 3,
+  "explain": "Le retour doit aussi être routé."
+ },
+ {
+  "id": "rx-q071",
+  "chapter": "3-1-table-routage",
+  "difficulty": 3,
+  "q": "Quelle commande Linux montre la route que le noyau utilisera pour une IP ?",
+  "options": [
+   "`ip neigh IP`",
+   "`ss IP`",
+   "`route -a IP`",
+   "`ip route get IP`"
+  ],
+  "answer": 3,
+  "explain": "Elle indique saut suivant et interface."
+ },
+ {
+  "id": "rx-q072",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 1,
+  "q": "Quelle commande Cisco crée une route par défaut via 1.1.1.5 ?",
+  "options": [
+   "`ip default 1.1.1.5`",
+   "`route default 1.1.1.5`",
+   "`ip route 0.0.0.0 0.0.0.0 1.1.1.5`",
+   "`ip gateway 1.1.1.5`"
+  ],
+  "answer": 2,
+  "explain": "Réseau 0.0.0.0 et masque 0.0.0.0."
+ },
+ {
+  "id": "rx-q073",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 2,
+  "q": "Qu'est-ce qu'une route flottante ?",
+  "options": [
+   "Une route statique de secours à AD élevée",
+   "Une route sans masque",
+   "Une route vers 0.0.0.0",
+   "Une route apprise par OSPF"
+  ],
+  "answer": 0,
+  "explain": "Elle n'est installée que si la principale disparaît."
+ },
+ {
+  "id": "rx-q074",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 2,
+  "q": "Combien de routes statiques minimum pour un routeur d'extrémité (stub) ?",
+  "options": [
+   "Une par réseau du monde",
+   "Aucune",
+   "Une route par défaut",
+   "Une par interface"
+  ],
+  "answer": 2,
+  "explain": "Tout passe par l'unique sortie."
+ },
+ {
+  "id": "rx-q075",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 2,
+  "q": "Que signifie ip route X M g1/0 sur Ethernet ?",
+  "options": [
+   "La route est plus rapide",
+   "Le routeur fera un ARP pour chaque destination",
+   "La route est flottante",
+   "La route est résumée"
+  ],
+  "answer": 1,
+  "explain": "Préférer le saut suivant."
+ },
+ {
+  "id": "rx-q076",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 2,
+  "q": "Le saut suivant d'une route statique doit être :",
+  "options": [
+   "Une adresse quelconque",
+   "L'adresse du routeur voisin sur un réseau connecté",
+   "L'adresse de diffusion",
+   "Sa propre adresse"
+  ],
+  "answer": 1,
+  "explain": "Il doit être joignable directement."
+ },
+ {
+  "id": "rx-q077",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 3,
+  "q": "Pour 4 réseaux 10.0.x.0/23 (x = 0, 2, 4, 6) via 1.1.1.14, quelle route résumée ?",
+  "options": [
+   "`ip route 10.0.0.0 255.255.240.0 1.1.1.14`",
+   "`ip route 10.0.0.0 255.255.254.0 1.1.1.14`",
+   "`ip route 10.0.0.0 255.255.248.0 1.1.1.14`",
+   "`ip route 10.0.0.0 255.255.252.0 1.1.1.14`"
+  ],
+  "answer": 2,
+  "explain": "/21 = 255.255.248.0."
+ },
+ {
+  "id": "rx-q078",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 3,
+  "q": "Quelle commande permet de tester le retour depuis un routeur ?",
+  "options": [
+   "Un ping étendu avec la source du LAN",
+   "`traceroute` sans option",
+   "`ping` sans option",
+   "`show ip route`"
+  ],
+  "answer": 0,
+  "explain": "La source par défaut masque les routes de retour manquantes."
+ },
+ {
+  "id": "rx-q079",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 3,
+  "q": "Comment Linux fait-il suivre les paquets entre interfaces ?",
+  "options": [
+   "`net.ipv4.ip_forward=1`",
+   "`ufw routing on`",
+   "`net.ipv4.tcp_forward=1`",
+   "`ip route forward`"
+  ],
+  "answer": 0,
+  "explain": "Via sysctl, de façon permanente dans /etc/sysctl.d/."
+ },
+ {
+  "id": "rx-q080",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 1,
+  "q": "Quel protocole de routage est à état de lien ?",
+  "options": [
+   "RIP",
+   "ARP",
+   "OSPF",
+   "IGRP"
+  ],
+  "answer": 2,
+  "explain": "RIP est à vecteur de distance."
+ },
+ {
+  "id": "rx-q081",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 2,
+  "q": "Quel est le masque générique de 255.255.254.0 ?",
+  "options": [
+   "255.255.1.0",
+   "0.0.1.255",
+   "0.0.3.255",
+   "0.0.0.255"
+  ],
+  "answer": 1,
+  "explain": "255 − chaque octet."
+ },
+ {
+  "id": "rx-q082",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 2,
+  "q": "Rôle de passive-interface ?",
+  "options": [
+   "Désactive l'interface",
+   "Bloque OSPF",
+   "Ajoute une route statique",
+   "N'envoie plus de Hello mais annonce le réseau"
+  ],
+  "answer": 3,
+  "explain": "Utile sur les LAN utilisateurs."
+ },
+ {
+  "id": "rx-q083",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 2,
+  "q": "Quelle zone sert de backbone en OSPF ?",
+  "options": [
+   "La zone 1",
+   "Il n'y en a pas",
+   "La zone 255",
+   "La zone 0"
+  ],
+  "answer": 3,
+  "explain": "Toutes les zones se relient à la zone 0."
+ },
+ {
+  "id": "rx-q084",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 2,
+  "q": "Quel numéro de protocole IP porte OSPF ?",
+  "options": [
+   "179",
+   "89",
+   "6",
+   "17"
+  ],
+  "answer": 1,
+  "explain": "BGP utilise TCP 179."
+ },
+ {
+  "id": "rx-q085",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 2,
+  "q": "Hello et Dead par défaut sur Ethernet ?",
+  "options": [
+   "5 s et 15 s",
+   "10 s et 40 s",
+   "30 s et 180 s",
+   "60 s et 240 s"
+  ],
+  "answer": 1,
+  "explain": "Temporisateurs à faire correspondre entre voisins."
+ },
+ {
+  "id": "rx-q086",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 3,
+  "q": "Pourquoi redistribute connected a-t-il besoin du mot subnets ?",
+  "options": [
+   "Pour chiffrer",
+   "Sinon seuls les réseaux classful sont redistribués",
+   "Pour activer le DR",
+   "Pour changer la zone"
+  ],
+  "answer": 1,
+  "explain": "Il faut `redistribute connected subnets`."
+ },
+ {
+  "id": "rx-q087",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 3,
+  "q": "Deux routeurs OSPF ne deviennent pas voisins : quelle cause est possible ?",
+  "options": [
+   "Zones différentes ou Hello/Dead différents",
+   "Numéros de processus différents",
+   "Modèles différents",
+   "Noms différents"
+  ],
+  "answer": 0,
+  "explain": "Le numéro de processus est local."
+ },
+ {
+  "id": "rx-q088",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 3,
+  "q": "Quel coût OSPF pour un lien Gigabit avec la référence par défaut ?",
+  "options": [
+   "10",
+   "0",
+   "1",
+   "100"
+  ],
+  "answer": 2,
+  "explain": "100 Mb/s ÷ 1000 arrondi à 1."
+ },
+ {
+  "id": "rx-q089",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 3,
+  "q": "Quel protocole relie des systèmes autonomes ?",
+  "options": [
+   "BGP",
+   "EIGRP",
+   "OSPF",
+   "RIP"
+  ],
+  "answer": 0,
+  "explain": "BGP utilise TCP 179."
+ },
+ {
+  "id": "rx-q090",
+  "chapter": "3-4-ipv6",
+  "difficulty": 1,
+  "q": "Combien de bits compte une adresse IPv6 ?",
+  "options": [
+   "32",
+   "128",
+   "64",
+   "256"
+  ],
+  "answer": 1,
+  "explain": "8 groupes de 16 bits."
+ },
+ {
+  "id": "rx-q091",
+  "chapter": "3-4-ipv6",
+  "difficulty": 2,
+  "q": "Que représente fe80::/10 ?",
+  "options": [
+   "Le multicast",
+   "Les adresses lien-local",
+   "Le loopback",
+   "L'unique locale"
+  ],
+  "answer": 1,
+  "explain": "Valables seulement sur le lien."
+ },
+ {
+  "id": "rx-q092",
+  "chapter": "3-4-ipv6",
+  "difficulty": 2,
+  "q": "Compression de 2001:0db8:0000:0000:0008:0800:200C:417a ?",
+  "options": [
+   "2001:db8:0:0:8:800:200c:417a:",
+   "2001:db8::8:800:200c:417a",
+   "2001:db8::8::800:200c:417a",
+   "2001:db8:8:800:200c:417a"
+  ],
+  "answer": 1,
+  "explain": "Un seul `::` pour la plus longue suite de zéros."
+ },
+ {
+  "id": "rx-q093",
+  "chapter": "3-4-ipv6",
+  "difficulty": 2,
+  "q": "Quel protocole remplace ARP en IPv6 ?",
+  "options": [
+   "NDP (ICMPv6)",
+   "ARPv6",
+   "DHCPv6",
+   "RARP"
+  ],
+  "answer": 0,
+  "explain": "Messages NS, NA, RS, RA."
+ },
+ {
+  "id": "rx-q094",
+  "chapter": "3-4-ipv6",
+  "difficulty": 3,
+  "q": "Quelle commande Cisco active le routage IPv6 ?",
+  "options": [
+   "`ipv6 unicast-routing`",
+   "`ipv6 route on`",
+   "`ipv6 enable`",
+   "`ip routing ipv6`"
+  ],
+  "answer": 0,
+  "explain": "Sans elle, le routeur n'achemine pas l'IPv6."
+ },
+ {
+  "id": "rx-q095",
+  "chapter": "3-4-ipv6",
+  "difficulty": 3,
+  "q": "Quelle est l'adresse loopback IPv6 ?",
+  "options": [
+   "::1",
+   "::",
+   "ff02::1",
+   "fe80::1"
+  ],
+  "answer": 0,
+  "explain": ":: est l'adresse non spécifiée."
+ },
+ {
+  "id": "rx-q096",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 1,
+  "q": "Combien de VLAN utilisables au maximum ?",
+  "options": [
+   "4 096",
+   "4 094",
+   "256",
+   "1 024"
+  ],
+  "answer": 1,
+  "explain": "Identifiant sur 12 bits, 0 et 4095 réservés."
+ },
+ {
+  "id": "rx-q097",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 2,
+  "q": "Quel type de port transporte plusieurs VLAN ?",
+  "options": [
+   "Access",
+   "Routé",
+   "Loopback",
+   "Trunk"
+  ],
+  "answer": 3,
+  "explain": "Avec étiquette 802.1Q."
+ },
+ {
+  "id": "rx-q098",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 2,
+  "q": "Que contient un VLAN en général ?",
+  "options": [
+   "Aucune adresse",
+   "Un routeur",
+   "Plusieurs sous-réseaux",
+   "Un sous-réseau IP et un domaine de diffusion"
+  ],
+  "answer": 3,
+  "explain": "Un VLAN = un réseau IP."
+ },
+ {
+  "id": "rx-q099",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 2,
+  "q": "Comment relier deux VLAN ?",
+  "options": [
+   "Par un hub",
+   "Par un trunk seul",
+   "Par un câble croisé",
+   "Par un équipement de couche 3"
+  ],
+  "answer": 3,
+  "explain": "Routeur ou commutateur L3."
+ },
+ {
+  "id": "rx-q100",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 3,
+  "q": "Quelle commande définit l'encapsulation d'une sous-interface pour le VLAN 10 ?",
+  "options": [
+   "`vlan 10 trunk`",
+   "`encapsulation dot1Q 10`",
+   "`switchport access vlan 10`",
+   "`ip vlan 10`"
+  ],
+  "answer": 1,
+  "explain": "Router-on-a-stick."
+ },
+ {
+  "id": "rx-q101",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 3,
+  "q": "Quel protocole évite les boucles de couche 2 ?",
+  "options": [
+   "OSPF",
+   "DHCP",
+   "ARP",
+   "STP"
+  ],
+  "answer": 3,
+  "explain": "Il bloque des ports redondants."
+ },
+ {
+  "id": "rx-q102",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 1,
+  "q": "Dans quel ordre se déroule le dialogue DHCP ?",
+  "options": [
+   "Discover, Offer, Request, Ack",
+   "Request, Offer, Ack, Discover",
+   "Discover, Request, Offer, Ack",
+   "Offer, Discover, Ack, Request"
+  ],
+  "answer": 0,
+  "explain": "DORA : Discover, Offer, Request, Ack."
+ },
+ {
+  "id": "rx-q103",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 2,
+  "q": "Que fait un relais DHCP ?",
+  "options": [
+   "Transmet les diffusions DHCP vers un serveur distant",
+   "Chiffre les baux",
+   "Attribue des adresses lui-même",
+   "Remplace le DNS"
+  ],
+  "answer": 0,
+  "explain": "Commande `ip helper-address`."
+ },
+ {
+  "id": "rx-q104",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 2,
+  "q": "Quel enregistrement DNS désigne le serveur de messagerie ?",
+  "options": [
+   "CNAME",
+   "A",
+   "MX",
+   "PTR"
+  ],
+  "answer": 2,
+  "explain": "A : IPv4 ; PTR : inverse."
+ },
+ {
+  "id": "rx-q105",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 2,
+  "q": "ping 8.8.8.8 marche mais pas ping google.com : cause probable ?",
+  "options": [
+   "Le DNS",
+   "Le câble",
+   "La passerelle",
+   "Le masque"
+  ],
+  "answer": 0,
+  "explain": "La résolution des noms échoue."
+ },
+ {
+  "id": "rx-q106",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 2,
+  "q": "Quel type de NAT partage une adresse publique entre tous les postes ?",
+  "options": [
+   "PAT (overload)",
+   "NAT statique",
+   "NAT dynamique",
+   "Aucun"
+  ],
+  "answer": 0,
+  "explain": "Distingue les flux par le port source."
+ },
+ {
+  "id": "rx-q107",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 3,
+  "q": "Sur Cisco, comment indiquer le côté interne du NAT ?",
+  "options": [
+   "`ip nat local`",
+   "`nat private`",
+   "`nat in`",
+   "`ip nat inside`"
+  ],
+  "answer": 3,
+  "explain": "Et `ip nat outside` côté Internet."
+ },
+ {
+  "id": "rx-q108",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 3,
+  "q": "Quelle commande Linux fait du NAT sortant par eth0 ?",
+  "options": [
+   "`iptables -A INPUT -j NAT`",
+   "`iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE`",
+   "`ip nat eth0`",
+   "`ufw nat eth0`"
+  ],
+  "answer": 1,
+  "explain": "Avec ip_forward activé."
+ },
+ {
+  "id": "rx-q109",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 2,
+  "q": "Que fait la dernière ligne implicite d'une ACL Cisco ?",
+  "options": [
+   "Un permit any",
+   "Un deny any",
+   "Rien",
+   "Un log"
+  ],
+  "answer": 1,
+  "explain": "Tout ce qui n'est pas autorisé est refusé."
+ },
+ {
+  "id": "rx-q110",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 2,
+  "q": "Où place-t-on une ACL étendue ?",
+  "options": [
+   "Près de la destination",
+   "Sur le cœur du réseau",
+   "Près de la source",
+   "Sur chaque switch"
+  ],
+  "answer": 2,
+  "explain": "Pour éliminer tôt le trafic indésirable."
+ },
+ {
+  "id": "rx-q111",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 2,
+  "q": "Quel masque générique pour 192.168.1.0/24 ?",
+  "options": [
+   "255.255.255.0",
+   "255.0.0.0",
+   "0.0.0.0",
+   "0.0.0.255"
+  ],
+  "answer": 3,
+  "explain": "Bit à 0 = doit correspondre."
+ },
+ {
+  "id": "rx-q112",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 3,
+  "q": "permit ip any any puis deny tcp any any eq 23 : le Telnet est-il bloqué ?",
+  "options": [
+   "Seulement la nuit",
+   "Seulement en sortie",
+   "Non, la première règle s'applique",
+   "Oui"
+  ],
+  "answer": 2,
+  "explain": "Première correspondance gagnante."
+ },
+ {
+  "id": "rx-q113",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 3,
+  "q": "Quel pare-feu est « à états » ?",
+  "options": [
+   "Celui qui filtre chaque paquet isolément",
+   "Celui qui mémorise les connexions établies",
+   "Celui sans règles",
+   "Celui sans interface"
+  ],
+  "answer": 1,
+  "explain": "Les réponses sont autorisées automatiquement."
+ },
+ {
+  "id": "rx-q114",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 1,
+  "q": "Quelle commande publie le port 80 d'un conteneur nginx sur le port 8080 de l'hôte ?",
+  "options": [
+   "`docker run -p 80:8080 nginx:latest`",
+   "`docker run -d -p 8080:80 nginx:latest`",
+   "`docker run -d -P 8080 nginx`",
+   "`docker publish 8080 80`"
+  ],
+  "answer": 1,
+  "explain": "Format hôte:conteneur."
+ },
+ {
+  "id": "rx-q115",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 2,
+  "q": "Que signifie 0.0.0.0:8080->80/tcp ?",
+  "options": [
+   "80 de l'hôte vers 8080",
+   "8080 sur toutes les interfaces de l'hôte vers le 80 du conteneur",
+   "Seulement en local",
+   "Port fermé"
+  ],
+  "answer": 1,
+  "explain": "Format de docker ps."
+ },
+ {
+  "id": "rx-q116",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 2,
+  "q": "Que fait -p 127.0.0.1:3307:3306 ?",
+  "options": [
+   "Publie sur Internet",
+   "Publie le port seulement en local",
+   "Ferme le port",
+   "Crée un volume"
+  ],
+  "answer": 1,
+  "explain": "L'adresse précise l'interface d'écoute."
+ },
+ {
+  "id": "rx-q117",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 2,
+  "q": "Quelle commande ajoute 192.168.1.50/24 à eth0 ?",
+  "options": [
+   "`ifup 192.168.1.50`",
+   "`ip route add 192.168.1.50/24`",
+   "`ip addr add 192.168.1.50/24 dev eth0`",
+   "`ip link set 192.168.1.50`"
+  ],
+  "answer": 2,
+  "explain": "Non permanent : netplan pour la persistance."
+ },
+ {
+  "id": "rx-q118",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 2,
+  "q": "Quel outil capture le trafic en ligne de commande ?",
+  "options": [
+   "nmap",
+   "tcpdump",
+   "dig",
+   "iperf3"
+  ],
+  "answer": 1,
+  "explain": "Wireshark l'analyse graphiquement."
+ },
+ {
+  "id": "rx-q119",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 3,
+  "q": "Pourquoi un port publié par Docker reste-t-il ouvert malgré ufw deny ?",
+  "options": [
+   "ufw ne fonctionne pas",
+   "Docker ajoute ses règles NAT avant celles d'ufw",
+   "Le conteneur est root",
+   "Le port est UDP"
+  ],
+  "answer": 1,
+  "explain": "Utiliser 127.0.0.1 ou DOCKER-USER."
+ },
+ {
+  "id": "rx-q120",
+  "chapter": "a-etude-de-cas",
+  "difficulty": 2,
+  "q": "Passerelle (dernière adresse utilisable) de 10.0.2.0/23 ?",
+  "options": [
+   "10.0.3.255",
+   "10.0.2.254",
+   "10.0.3.254",
+   "10.0.2.255"
+  ],
+  "answer": 2,
+  "explain": "Le bloc va de 10.0.2.0 à 10.0.3.255."
+ },
+ {
+  "id": "rx-q121",
+  "chapter": "a-etude-de-cas",
+  "difficulty": 2,
+  "q": "Adresses utilisables de 1.1.1.12/30 ?",
+  "options": [
+   "1.1.1.14 et 1.1.1.15",
+   "1.1.1.12 et 1.1.1.13",
+   "1.1.1.13 et 1.1.1.15",
+   "1.1.1.13 et 1.1.1.14"
+  ],
+  "answer": 3,
+  "explain": "Réseau .12, diffusion .15."
+ },
+ {
+  "id": "rx-q122",
+  "chapter": "a-etude-de-cas",
+  "difficulty": 3,
+  "q": "Sans liaison RB2-RA2, quelle route suffit à RB2 ?",
+  "options": [
+   "Une route par réseau vers R0",
+   "Une route par défaut vers RB1",
+   "Aucune",
+   "Une route vers RA2"
+  ],
+  "answer": 1,
+  "explain": "RB2 est une extrémité de chaîne."
+ },
+ {
+  "id": "rx-q123",
+  "chapter": "a-etude-de-cas",
+  "difficulty": 3,
+  "q": "Que se passe-t-il en OSPF quand la liaison RB2-RA2 tombe ?",
+  "options": [
+   "OSPF recalcule et passe par RB1, R0, RA1",
+   "Le réseau est coupé",
+   "Rien",
+   "OSPF s'arrête"
+  ],
+  "answer": 0,
+  "explain": "Convergence automatique."
+ },
+ {
+  "id": "rx-q124",
+  "chapter": "b-methode-fiche",
+  "difficulty": 1,
+  "q": "Quelle est la première chose à faire en examen ?",
+  "options": [
+   "Lire tout le sujet",
+   "Écrire les commandes",
+   "Commencer par la dernière question",
+   "Rédiger la conclusion"
+  ],
+  "answer": 0,
+  "explain": "Repérer les questions rapides."
+ },
+ {
+  "id": "rx-q125",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Pour Cisco ip route, comment écrire un /23 ?",
+  "options": [
+   "/23",
+   "254.0",
+   "255.255.254.0",
+   "0.0.1.255"
+  ],
+  "answer": 2,
+  "explain": "Masque décimal pour ip route ; wildcard pour OSPF et ACL."
+ },
+ {
+  "id": "rx-q126",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Quel est l'ordre de décision : préfixe, AD, métrique ?",
+  "options": [
+   "Métrique, AD, préfixe",
+   "AD, métrique, préfixe",
+   "Préfixe, puis AD, puis métrique",
+   "AD, préfixe, métrique"
+  ],
+  "answer": 2,
+  "explain": "Préfixe le plus long d'abord."
+ },
+ {
+  "id": "rx-q127",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Quel réflexe évite d'oublier le retour ?",
+  "options": [
+   "Ajouter une ACL",
+   "Redémarrer",
+   "Vérifier chaque réseau dans les deux sens",
+   "Utiliser OSPF"
+  ],
+  "answer": 2,
+  "explain": "Aller et retour doivent être routés."
+ },
+ {
+  "id": "rx-q128",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 1,
+  "q": "Quelle couche OSI fournit les ports ?",
+  "options": [
+   "La couche 4 (Transport)",
+   "La couche 3 (Réseau)",
+   "La couche 2 (Liaison)",
+   "La couche 5 (Session)"
+  ],
+  "answer": 0,
+  "explain": "Les numéros de port identifient le programme destinataire, rôle de la couche transport."
+ },
+ {
+  "id": "rx-q129",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 1,
+  "q": "Combien de couches compte le modèle TCP/IP ?",
+  "options": [
+   "4",
+   "3",
+   "5",
+   "7"
+  ],
+  "answer": 0,
+  "explain": "Application, Transport, Internet, Accès réseau."
+ },
+ {
+  "id": "rx-q130",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 1,
+  "q": "Quel équipement travaille en couche 3 ?",
+  "options": [
+   "Le hub",
+   "Le switch classique",
+   "Le routeur",
+   "Le répéteur"
+  ],
+  "answer": 2,
+  "explain": "Le routeur décide selon l'adresse IP."
+ },
+ {
+  "id": "rx-q131",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 2,
+  "q": "Un « switch de niveau 3 » est :",
+  "options": [
+   "Un hub amélioré",
+   "Un commutateur capable aussi de router",
+   "Un pare-feu",
+   "Un câble"
+  ],
+  "answer": 1,
+  "explain": "Il combine commutation couche 2 et routage couche 3 (SVI)."
+ },
+ {
+  "id": "rx-q132",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 2,
+  "q": "Quelle est l'unité de données de la couche 1 ?",
+  "options": [
+   "La trame",
+   "Le segment",
+   "Le paquet",
+   "Le bit"
+  ],
+  "answer": 3,
+  "explain": "La couche physique transmet des bits."
+ },
+ {
+  "id": "rx-q133",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 2,
+  "q": "Qui publie les RFC ?",
+  "options": [
+   "L'ISO",
+   "L'IETF",
+   "Cisco",
+   "L'ICANN"
+  ],
+  "answer": 1,
+  "explain": "Ce sont des documents numérotés de l'IETF, par exemple RFC 791 pour IP."
+ },
+ {
+  "id": "rx-q134",
+  "chapter": "1-1-modeles-osi-tcpip",
+  "difficulty": 3,
+  "q": "Une trame traverse 2 routeurs entre deux PC : combien de trames différentes sont fabriquées ?",
+  "options": [
+   "2",
+   "4",
+   "1",
+   "3"
+  ],
+  "answer": 3,
+  "explain": "Une par lien : PC-R1, R1-R2, R2-PC."
+ },
+ {
+  "id": "rx-q135",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 1,
+  "q": "Quel équipement apprend les adresses MAC pour commuter ?",
+  "options": [
+   "Le modem",
+   "Le routeur",
+   "Le switch",
+   "Le répéteur"
+  ],
+  "answer": 2,
+  "explain": "Il tient une table adresses MAC / ports."
+ },
+ {
+  "id": "rx-q136",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 1,
+  "q": "Quelle commande Linux affiche la table des voisins (ARP) ?",
+  "options": [
+   "`ss -t`",
+   "`dig`",
+   "`ip neigh`",
+   "`ip route`"
+  ],
+  "answer": 2,
+  "explain": "`arp -a` fonctionne aussi."
+ },
+ {
+  "id": "rx-q137",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 2,
+  "q": "À quoi sert le FCS d'une trame Ethernet ?",
+  "options": [
+   "Chiffrer les données",
+   "Détecter les erreurs",
+   "Donner l'adresse IP",
+   "Choisir la route"
+  ],
+  "answer": 1,
+  "explain": "Une trame dont le FCS est faux est jetée."
+ },
+ {
+  "id": "rx-q138",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 2,
+  "q": "Quel est le MTU habituel d'Ethernet ?",
+  "options": [
+   "9000 octets",
+   "1500 octets",
+   "65535 octets",
+   "576 octets"
+  ],
+  "answer": 1,
+  "explain": "C'est la charge utile maximale d'une trame standard."
+ },
+ {
+  "id": "rx-q139",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 2,
+  "q": "Que contient l'OUI d'une adresse MAC ?",
+  "options": [
+   "Le VLAN",
+   "L'adresse IP",
+   "Le numéro du port",
+   "L'identifiant du constructeur"
+  ],
+  "answer": 3,
+  "explain": "Ce sont les 3 premiers octets."
+ },
+ {
+  "id": "rx-q140",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 3,
+  "q": "Quelle contre-mesure bloque l'usurpation ARP sur un switch ?",
+  "options": [
+   "VTP",
+   "Port mirroring",
+   "STP",
+   "Dynamic ARP Inspection"
+  ],
+  "answer": 3,
+  "explain": "DAI vérifie les réponses ARP à l'aide du DHCP snooping."
+ },
+ {
+  "id": "rx-q141",
+  "chapter": "1-2-liaison-ethernet-arp",
+  "difficulty": 3,
+  "q": "Combien de domaines de diffusion crée un switch sans VLAN avec 24 ports ?",
+  "options": [
+   "1",
+   "12",
+   "24",
+   "2"
+  ],
+  "answer": 0,
+  "explain": "Seul un routeur ou un VLAN divise la diffusion."
+ },
+ {
+  "id": "rx-q142",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 1,
+  "q": "Combien de bits compte une adresse IPv4 ?",
+  "options": [
+   "32",
+   "128",
+   "16",
+   "48"
+  ],
+  "answer": 0,
+  "explain": "4 octets de 8 bits."
+ },
+ {
+  "id": "rx-q143",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 1,
+  "q": "Que vaut le masque /16 ?",
+  "options": [
+   "255.255.0.0",
+   "255.255.128.0",
+   "255.255.255.0",
+   "255.0.0.0"
+  ],
+  "answer": 0,
+  "explain": "16 bits à 1 = deux octets pleins."
+ },
+ {
+  "id": "rx-q144",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 1,
+  "q": "Quelle adresse est réservée au bouclage ?",
+  "options": [
+   "127.0.0.1",
+   "10.0.0.1",
+   "192.168.0.1",
+   "169.254.0.1"
+  ],
+  "answer": 0,
+  "explain": "Elle désigne la machine elle-même."
+ },
+ {
+  "id": "rx-q145",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Hôtes utilisables dans un /27 ?",
+  "options": [
+   "62",
+   "32",
+   "30",
+   "28"
+  ],
+  "answer": 2,
+  "explain": "5 bits hôte : 2^5 − 2 = 30 adresses utilisables."
+ },
+ {
+  "id": "rx-q146",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Quelle est la première adresse utilisable de 192.168.10.64/26 ?",
+  "options": [
+   "192.168.10.66",
+   "192.168.10.64",
+   "192.168.10.65",
+   "192.168.10.1"
+  ],
+  "answer": 2,
+  "explain": "La première adresse du bloc est l'adresse réseau."
+ },
+ {
+  "id": "rx-q147",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Quelle est la diffusion de 172.16.5.9/20 ?",
+  "options": [
+   "172.16.255.255",
+   "172.16.16.255",
+   "172.16.15.255",
+   "172.16.5.255"
+  ],
+  "answer": 2,
+  "explain": "/20 : blocs de 16 dans le 3e octet ; 5 est dans 0-15."
+ },
+ {
+  "id": "rx-q148",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 2,
+  "q": "Quel masque pour 510 hôtes utilisables ?",
+  "options": [
+   "/22",
+   "/25",
+   "/23",
+   "/24"
+  ],
+  "answer": 2,
+  "explain": "2^9 − 2 = 510."
+ },
+ {
+  "id": "rx-q149",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 3,
+  "q": "192.168.1.130/25 : quelle est l'adresse réseau ?",
+  "options": [
+   "192.168.1.0",
+   "192.168.1.192",
+   "192.168.1.128",
+   "192.168.1.130"
+  ],
+  "answer": 2,
+  "explain": "/25 : blocs de 128 ; 130 est dans 128-255."
+ },
+ {
+  "id": "rx-q150",
+  "chapter": "1-3-adressage-ipv4",
+  "difficulty": 3,
+  "q": "Quel bloc couvre 100.64.0.0 à 100.127.255.255 ?",
+  "options": [
+   "100.64.0.0/12",
+   "100.64.0.0/10",
+   "100.64.0.0/16",
+   "100.64.0.0/8"
+  ],
+  "answer": 1,
+  "explain": "2^22 adresses : espace partagé CGNAT."
+ },
+ {
+  "id": "rx-q151",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 1,
+  "q": "Quel message ICMP répond à un ping ?",
+  "options": [
+   "Time Exceeded",
+   "Redirect",
+   "Source Quench",
+   "Echo Reply"
+  ],
+  "answer": 3,
+  "explain": "Echo Request (type 8) puis Echo Reply (type 0)."
+ },
+ {
+  "id": "rx-q152",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 1,
+  "q": "Quel est le TTL typique d'un système Linux ?",
+  "options": [
+   "128",
+   "64",
+   "1",
+   "32"
+  ],
+  "answer": 1,
+  "explain": "Windows : 128 ; beaucoup de routeurs : 255."
+ },
+ {
+  "id": "rx-q153",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 2,
+  "q": "Quel drapeau interdit la fragmentation ?",
+  "options": [
+   "SYN",
+   "FIN",
+   "MF",
+   "DF"
+  ],
+  "answer": 3,
+  "explain": "Don't Fragment ; MF signale d'autres fragments."
+ },
+ {
+  "id": "rx-q154",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 2,
+  "q": "Un paquet trop grand avec DF = 1 : que renvoie le routeur ?",
+  "options": [
+   "ICMP Time Exceeded",
+   "Rien",
+   "Un RST TCP",
+   "ICMP Destination Unreachable, fragmentation nécessaire"
+  ],
+  "answer": 3,
+  "explain": "Type 3 code 4."
+ },
+ {
+  "id": "rx-q155",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 2,
+  "q": "Quel est le décalage du 2e fragment si le 1er porte 680 octets ?",
+  "options": [
+   "85",
+   "68",
+   "680",
+   "8"
+  ],
+  "answer": 0,
+  "explain": "Le décalage est en blocs de 8 octets : 680 / 8."
+ },
+ {
+  "id": "rx-q156",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 3,
+  "q": "Quel champ de l'en-tête IPv6 remplace le TTL ?",
+  "options": [
+   "Hop Limit",
+   "Flow Label",
+   "Traffic Class",
+   "Next Header"
+  ],
+  "answer": 0,
+  "explain": "Next Header remplace Protocole."
+ },
+ {
+  "id": "rx-q157",
+  "chapter": "1-4-ip-icmp",
+  "difficulty": 3,
+  "q": "Quel outil combine traceroute et ping en continu ?",
+  "options": [
+   "dig",
+   "mtr",
+   "nmap",
+   "nc"
+  ],
+  "answer": 1,
+  "explain": "Il affiche les pertes par saut."
+ },
+ {
+  "id": "rx-q158",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 1,
+  "q": "Quel protocole de transport est orienté connexion ?",
+  "options": [
+   "ARP",
+   "UDP",
+   "TCP",
+   "ICMP"
+  ],
+  "answer": 2,
+  "explain": "UDP n'établit aucune connexion."
+ },
+ {
+  "id": "rx-q159",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 1,
+  "q": "Quel port pour DNS ?",
+  "options": [
+   "67",
+   "53",
+   "25",
+   "80"
+  ],
+  "answer": 1,
+  "explain": "UDP pour les requêtes, TCP pour les transferts de zone."
+ },
+ {
+  "id": "rx-q160",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Quel est le port de SMTP ?",
+  "options": [
+   "25",
+   "110",
+   "143",
+   "587 uniquement"
+  ],
+  "answer": 0,
+  "explain": "587 sert à la soumission authentifiée."
+ },
+ {
+  "id": "rx-q161",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Quel est le port de MySQL ?",
+  "options": [
+   "3306",
+   "27017",
+   "5432",
+   "1433"
+  ],
+  "answer": 0,
+  "explain": "PostgreSQL : 5432."
+ },
+ {
+  "id": "rx-q162",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Combien d'octets fait l'en-tête UDP ?",
+  "options": [
+   "12",
+   "4",
+   "8",
+   "20"
+  ],
+  "answer": 2,
+  "explain": "Quatre champs de 16 bits."
+ },
+ {
+  "id": "rx-q163",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 2,
+  "q": "Quel état affiche `ss` pour un serveur qui attend des connexions ?",
+  "options": [
+   "LISTEN",
+   "ESTABLISHED",
+   "SYN-SENT",
+   "TIME-WAIT"
+  ],
+  "answer": 0,
+  "explain": "Le serveur écoute sur son port."
+ },
+ {
+  "id": "rx-q164",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 3,
+  "q": "Un port TCP fermé répond par :",
+  "options": [
+   "Un SYN",
+   "Un ICMP echo",
+   "Rien",
+   "Un RST"
+  ],
+  "answer": 3,
+  "explain": "Un port filtré, lui, ne répond pas."
+ },
+ {
+  "id": "rx-q165",
+  "chapter": "1-5-tcp-udp-ports",
+  "difficulty": 3,
+  "q": "Quel port pour RDP ?",
+  "options": [
+   "445",
+   "3389",
+   "3306",
+   "5900"
+  ],
+  "answer": 1,
+  "explain": "Bureau à distance Windows."
+ },
+ {
+  "id": "rx-q166",
+  "chapter": "2-1-subnetting",
+  "difficulty": 1,
+  "q": "Que fait-on pour créer des sous-réseaux ?",
+  "options": [
+   "On change l'adresse réseau",
+   "On supprime la passerelle",
+   "On ajoute des octets",
+   "On emprunte des bits à la partie hôte"
+  ],
+  "answer": 3,
+  "explain": "Ces bits rejoignent la partie réseau."
+ },
+ {
+  "id": "rx-q167",
+  "chapter": "2-1-subnetting",
+  "difficulty": 1,
+  "q": "Combien de sous-réseaux avec 4 bits empruntés ?",
+  "options": [
+   "4",
+   "8",
+   "32",
+   "16"
+  ],
+  "answer": 3,
+  "explain": "Chaque bit emprunté double le nombre : 2^4 = 16."
+ },
+ {
+  "id": "rx-q168",
+  "chapter": "2-1-subnetting",
+  "difficulty": 2,
+  "q": "Pas d'un /26 dans le dernier octet ?",
+  "options": [
+   "26",
+   "128",
+   "64",
+   "32"
+  ],
+  "answer": 2,
+  "explain": "Pas = 256 − 192 = 64 dans le dernier octet."
+ },
+ {
+  "id": "rx-q169",
+  "chapter": "2-1-subnetting",
+  "difficulty": 2,
+  "q": "Masque pour 8 sous-réseaux dans un /24 ?",
+  "options": [
+   "/25",
+   "/27",
+   "/28",
+   "/26"
+  ],
+  "answer": 1,
+  "explain": "3 bits empruntés : 2^3 = 8 sous-réseaux."
+ },
+ {
+  "id": "rx-q170",
+  "chapter": "2-1-subnetting",
+  "difficulty": 2,
+  "q": "Réseau de 192.168.0.30/27 ?",
+  "options": [
+   "192.168.0.32",
+   "192.168.0.30",
+   "192.168.0.16",
+   "192.168.0.0"
+  ],
+  "answer": 3,
+  "explain": "/27 : blocs de 32 ; 30 est dans 0-31."
+ },
+ {
+  "id": "rx-q171",
+  "chapter": "2-1-subnetting",
+  "difficulty": 3,
+  "q": "Hôtes par sous-réseau en passant 172.20.0.0/16 en /21 ?",
+  "options": [
+   "1 022",
+   "2 048",
+   "4 094",
+   "2 046"
+  ],
+  "answer": 3,
+  "explain": "11 bits hôte : 2^11 − 2."
+ },
+ {
+  "id": "rx-q172",
+  "chapter": "2-1-subnetting",
+  "difficulty": 3,
+  "q": "Une passerelle 192.168.4.100 est-elle valide pour 192.168.4.130/26 ?",
+  "options": [
+   "Oui",
+   "Seulement en VLAN",
+   "Oui si masque /24",
+   "Non, elle est hors du sous-réseau"
+  ],
+  "answer": 3,
+  "explain": "Le sous-réseau est 192.168.4.128/26."
+ },
+ {
+  "id": "rx-q173",
+  "chapter": "2-2-vlsm",
+  "difficulty": 1,
+  "q": "Pourquoi utiliser le VLSM ?",
+  "options": [
+   "Réduire le gaspillage d'adresses",
+   "Remplacer le NAT",
+   "Chiffrer le trafic",
+   "Accélérer le DNS"
+  ],
+  "answer": 0,
+  "explain": "Chaque sous-réseau reçoit la taille juste nécessaire."
+ },
+ {
+  "id": "rx-q174",
+  "chapter": "2-2-vlsm",
+  "difficulty": 2,
+  "q": "Combien de /30 dans un /24 ?",
+  "options": [
+   "16",
+   "32",
+   "64",
+   "128"
+  ],
+  "answer": 2,
+  "explain": "Un /30 fait 4 adresses : 256 / 4 = 64."
+ },
+ {
+  "id": "rx-q175",
+  "chapter": "2-2-vlsm",
+  "difficulty": 2,
+  "q": "Masque minimal pour 50 hôtes ?",
+  "options": [
+   "/26",
+   "/28",
+   "/27",
+   "/25"
+  ],
+  "answer": 0,
+  "explain": "2^6 − 2 = 62."
+ },
+ {
+  "id": "rx-q176",
+  "chapter": "2-2-vlsm",
+  "difficulty": 2,
+  "q": "Masque minimal pour 100 hôtes ?",
+  "options": [
+   "/27",
+   "/25",
+   "/26",
+   "/24"
+  ],
+  "answer": 1,
+  "explain": "2^7 − 2 = 126."
+ },
+ {
+  "id": "rx-q177",
+  "chapter": "2-2-vlsm",
+  "difficulty": 3,
+  "q": "Dans un plan VLSM, où commence un /27 après un /25 en .0 et un /26 en .128 ?",
+  "options": [
+   "192.168.100.191",
+   "192.168.100.160",
+   "192.168.100.192 (pour un bloc 192.168.100.0/24)",
+   "192.168.100.200"
+  ],
+  "answer": 2,
+  "explain": "Le /26 finit en .191 ; le /27 aligné commence en .192."
+ },
+ {
+  "id": "rx-q178",
+  "chapter": "2-2-vlsm",
+  "difficulty": 3,
+  "q": "Pourquoi un bloc /26 ne peut-il pas commencer à .32 ?",
+  "options": [
+   "Le masque l'interdit",
+   "Il doit commencer à un multiple de 64",
+   "Il est réservé",
+   "Il doit finir en .255"
+  ],
+  "answer": 1,
+  "explain": "L'adresse réseau a tous ses bits hôte à 0."
+ },
+ {
+  "id": "rx-q179",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 1,
+  "q": "Que fait un résumé de routes ?",
+  "options": [
+   "Remplace plusieurs routes contiguës par une seule",
+   "Duplique les routes",
+   "Supprime la route par défaut",
+   "Chiffre les routes"
+  ],
+  "answer": 0,
+  "explain": "Les tables sont plus petites."
+ },
+ {
+  "id": "rx-q180",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 2,
+  "q": "Résumé de 172.16.16.0/24 à 172.16.19.0/24 ?",
+  "options": [
+   "172.16.16.0/22",
+   "172.16.0.0/16",
+   "172.16.16.0/24",
+   "172.16.16.0/23"
+  ],
+  "answer": 0,
+  "explain": "4 réseaux alignés : 6 bits communs."
+ },
+ {
+  "id": "rx-q181",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 2,
+  "q": "Quel masque couvre 192.168.0.0 - 192.168.0.63 ?",
+  "options": [
+   "/27",
+   "/24",
+   "/26",
+   "/25"
+  ],
+  "answer": 2,
+  "explain": "64 adresses = 2^6."
+ },
+ {
+  "id": "rx-q182",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 2,
+  "q": "Résumé de 10.8.0.0/16 à 10.15.0.0/16 ?",
+  "options": [
+   "10.8.0.0/14",
+   "10.8.0.0/13",
+   "10.0.0.0/8",
+   "10.8.0.0/12"
+  ],
+  "answer": 1,
+  "explain": "8 blocs alignés : 8 + 5 = 13."
+ },
+ {
+  "id": "rx-q183",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 3,
+  "q": "Quel masque couvre 1.0.0.0 - 1.0.7.255 ?",
+  "options": [
+   "/16",
+   "/21",
+   "/22",
+   "/20"
+  ],
+  "answer": 1,
+  "explain": "8 × 256 = 2^11."
+ },
+ {
+  "id": "rx-q184",
+  "chapter": "2-3-resume-routes",
+  "difficulty": 3,
+  "q": "Peut-on résumer parfaitement 192.168.5.0/24 à 192.168.8.0/24 ?",
+  "options": [
+   "Non, 5 n'est pas aligné sur 4",
+   "Oui en /23",
+   "Oui en /21",
+   "Oui en /22"
+  ],
+  "answer": 0,
+  "explain": "Il faut un nombre de réseaux en puissance de 2 et un premier réseau aligné."
+ },
+ {
+  "id": "rx-q185",
+  "chapter": "3-1-table-routage",
+  "difficulty": 1,
+  "q": "Que fait un routeur d'un paquet sans route correspondante ?",
+  "options": [
+   "Il l'envoie au switch",
+   "Il le garde",
+   "Il le jette et renvoie un ICMP Destination Unreachable",
+   "Il le diffuse"
+  ],
+  "answer": 2,
+  "explain": "Sans route par défaut, le paquet est perdu."
+ },
+ {
+  "id": "rx-q186",
+  "chapter": "3-1-table-routage",
+  "difficulty": 1,
+  "q": "Quelle commande affiche la table de routage Cisco ?",
+  "options": [
+   "`display table`",
+   "`show routes`",
+   "`show ip route`",
+   "`ip route print`"
+  ],
+  "answer": 2,
+  "explain": "Linux : `ip route`."
+ },
+ {
+  "id": "rx-q187",
+  "chapter": "3-1-table-routage",
+  "difficulty": 2,
+  "q": "À préfixe égal, quelle route l'emporte ?",
+  "options": [
+   "Celle de plus faible distance administrative",
+   "Celle de plus forte AD",
+   "La plus ancienne",
+   "La plus récente"
+  ],
+  "answer": 0,
+  "explain": "Puis, à AD égale, la métrique."
+ },
+ {
+  "id": "rx-q188",
+  "chapter": "3-1-table-routage",
+  "difficulty": 2,
+  "q": "Que signifie le code L ?",
+  "options": [
+   "Adresse locale de l'interface (/32)",
+   "Route OSPF",
+   "Lien down",
+   "Route par défaut"
+  ],
+  "answer": 0,
+  "explain": "Il est créé avec l'adresse IP de l'interface."
+ },
+ {
+  "id": "rx-q189",
+  "chapter": "3-1-table-routage",
+  "difficulty": 2,
+  "q": "Quelle AD pour une interface connectée ?",
+  "options": [
+   "0",
+   "1",
+   "110",
+   "255"
+  ],
+  "answer": 0,
+  "explain": "C'est la source la plus fiable."
+ },
+ {
+  "id": "rx-q190",
+  "chapter": "3-1-table-routage",
+  "difficulty": 3,
+  "q": "Deux routes de même préfixe, même AD, même métrique : résultat ?",
+  "options": [
+   "Erreur",
+   "Équilibrage de charge",
+   "La première seule",
+   "Aucune installée"
+  ],
+  "answer": 1,
+  "explain": "Les deux routes sont installées."
+ },
+ {
+  "id": "rx-q191",
+  "chapter": "3-1-table-routage",
+  "difficulty": 3,
+  "q": "Dans `S* 0.0.0.0/0 [1/0] via 1.1.1.5`, que signifie l'étoile ?",
+  "options": [
+   "Candidate à la route par défaut",
+   "Route inactive",
+   "Route résumée",
+   "Route flottante"
+  ],
+  "answer": 0,
+  "explain": "Elle alimente la « gateway of last resort »."
+ },
+ {
+  "id": "rx-q192",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 1,
+  "q": "Le routage statique convient surtout :",
+  "options": [
+   "Aux réseaux qui changent sans cesse",
+   "Aux petits réseaux et réseaux d'extrémité",
+   "Au Wi-Fi",
+   "Aux grands opérateurs"
+  ],
+  "answer": 1,
+  "explain": "Il ne s'adapte pas automatiquement aux pannes."
+ },
+ {
+  "id": "rx-q193",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 1,
+  "q": "Quelle est la distance administrative par défaut d'une route flottante ?",
+  "options": [
+   "Toujours 0",
+   "Toujours 1",
+   "Toujours 255",
+   "Celle qu'on choisit, supérieure à la route principale"
+  ],
+  "answer": 3,
+  "explain": "Par exemple 200."
+ },
+ {
+  "id": "rx-q194",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 2,
+  "q": "Quel est le masque de `ip route` pour un /23 ?",
+  "options": [
+   "/23",
+   "0.0.1.255",
+   "255.255.255.0",
+   "255.255.254.0"
+  ],
+  "answer": 3,
+  "explain": "Cisco `ip route` utilise le masque décimal."
+ },
+ {
+  "id": "rx-q195",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 2,
+  "q": "Que fait `ip route ... Null0` ?",
+  "options": [
+   "Jette les paquets",
+   "Crée un tunnel",
+   "Active OSPF",
+   "Redirige vers Internet"
+  ],
+  "answer": 0,
+  "explain": "Interface « poubelle »."
+ },
+ {
+  "id": "rx-q196",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 2,
+  "q": "Pour N réseaux et un routeur connecté à k d'entre eux, combien de routes statiques ?",
+  "options": [
+   "N + k",
+   "N − k",
+   "k",
+   "N"
+  ],
+  "answer": 1,
+  "explain": "Un routeur doit apprendre tous les réseaux non connectés."
+ },
+ {
+  "id": "rx-q197",
+  "chapter": "3-2-routage-statique",
+  "difficulty": 3,
+  "q": "Pourquoi une route par saut suivant ne disparaît-elle pas si la panne est plus loin ?",
+  "options": [
+   "Elle est en cache",
+   "Elle ne dépend que de l'interface de sortie locale",
+   "Elle est résumée",
+   "Elle est chiffrée"
+  ],
+  "answer": 1,
+  "explain": "Pour détecter la panne distante, on utilise un suivi (IP SLA, track)."
+ },
+ {
+  "id": "rx-q198",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 1,
+  "q": "OSPF est un protocole :",
+  "options": [
+   "À vecteur de distance",
+   "EGP",
+   "IGP à état de lien",
+   "Statique"
+  ],
+  "answer": 2,
+  "explain": "Il s'utilise à l'intérieur d'un système autonome."
+ },
+ {
+  "id": "rx-q199",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 1,
+  "q": "Quelle est la limite de sauts de RIP ?",
+  "options": [
+   "15",
+   "10",
+   "30",
+   "255"
+  ],
+  "answer": 0,
+  "explain": "16 signifie inaccessible."
+ },
+ {
+  "id": "rx-q200",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 2,
+  "q": "Quel multicast OSPF vise tous les routeurs ?",
+  "options": [
+   "224.0.0.10",
+   "224.0.0.1",
+   "224.0.0.9",
+   "224.0.0.5"
+  ],
+  "answer": 3,
+  "explain": "224.0.0.6 pour DR/BDR ; 224.0.0.9 pour RIPv2."
+ },
+ {
+  "id": "rx-q201",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 2,
+  "q": "Que désigne le Router ID ?",
+  "options": [
+   "Un identifiant unique du routeur sous forme d'adresse IPv4",
+   "Le coût",
+   "Le numéro de processus",
+   "Le numéro de zone"
+  ],
+  "answer": 0,
+  "explain": "Configuré, sinon plus haute loopback, sinon plus haute interface."
+ },
+ {
+  "id": "rx-q202",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 2,
+  "q": "Que signifie `network 10.0.4.0 0.0.1.255 area 0` ?",
+  "options": [
+   "Active OSPF sur les interfaces dans 10.0.4.0/23, zone 0",
+   "Active OSPF sur 10.0.4.0/24",
+   "Crée la zone 1",
+   "Crée une route statique"
+  ],
+  "answer": 0,
+  "explain": "0.0.1.255 est le wildcard d'un /23."
+ },
+ {
+  "id": "rx-q203",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 3,
+  "q": "État d'un voisinage OSPF complet ?",
+  "options": [
+   "DOWN",
+   "INIT",
+   "FULL",
+   "2-WAY"
+  ],
+  "answer": 2,
+  "explain": "EXSTART, EXCHANGE, LOADING le précèdent."
+ },
+ {
+  "id": "rx-q204",
+  "chapter": "3-3-routage-dynamique-ospf",
+  "difficulty": 3,
+  "q": "Quel rôle de la LSDB ?",
+  "options": [
+   "Gérer le NAT",
+   "Contenir la carte des liens de la zone",
+   "Contenir les mots de passe",
+   "Stocker le DNS"
+  ],
+  "answer": 1,
+  "explain": "Elle est identique pour tous les routeurs d'une zone."
+ },
+ {
+  "id": "rx-q205",
+  "chapter": "3-4-ipv6",
+  "difficulty": 1,
+  "q": "Combien de groupes de 16 bits dans une adresse IPv6 ?",
+  "options": [
+   "6",
+   "4",
+   "16",
+   "8"
+  ],
+  "answer": 3,
+  "explain": "8 × 16 = 128 bits."
+ },
+ {
+  "id": "rx-q206",
+  "chapter": "3-4-ipv6",
+  "difficulty": 2,
+  "q": "Combien de fois peut-on utiliser `::` ?",
+  "options": [
+   "Illimité",
+   "Deux fois",
+   "Une seule fois",
+   "Trois fois"
+  ],
+  "answer": 2,
+  "explain": "Sinon l'adresse est ambiguë."
+ },
+ {
+  "id": "rx-q207",
+  "chapter": "3-4-ipv6",
+  "difficulty": 2,
+  "q": "Quel préfixe pour les adresses globales ?",
+  "options": [
+   "fe80::/10",
+   "fc00::/7",
+   "2000::/3",
+   "ff00::/8"
+  ],
+  "answer": 2,
+  "explain": "Ce sont les adresses routables sur Internet."
+ },
+ {
+  "id": "rx-q208",
+  "chapter": "3-4-ipv6",
+  "difficulty": 2,
+  "q": "Quelle est la taille habituelle d'un préfixe de LAN IPv6 ?",
+  "options": [
+   "/64",
+   "/96",
+   "/128",
+   "/48"
+  ],
+  "answer": 0,
+  "explain": "64 bits de réseau, 64 bits d'identifiant."
+ },
+ {
+  "id": "rx-q209",
+  "chapter": "3-4-ipv6",
+  "difficulty": 3,
+  "q": "Quel mécanisme crée une adresse sans serveur DHCP ?",
+  "options": [
+   "NAT64",
+   "SLAAC",
+   "DORA",
+   "PAT"
+  ],
+  "answer": 1,
+  "explain": "Le préfixe vient des Router Advertisement."
+ },
+ {
+  "id": "rx-q210",
+  "chapter": "3-4-ipv6",
+  "difficulty": 3,
+  "q": "Quel multicast vise tous les routeurs du lien ?",
+  "options": [
+   "fe80::2",
+   "ff02::1",
+   "ff05::2",
+   "ff02::2"
+  ],
+  "answer": 3,
+  "explain": "ff02::1 : tous les nœuds."
+ },
+ {
+  "id": "rx-q211",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 1,
+  "q": "Que sépare un VLAN ?",
+  "options": [
+   "Les adresses MAC",
+   "Les ports TCP",
+   "Les collisions",
+   "Les domaines de diffusion"
+  ],
+  "answer": 3,
+  "explain": "Un VLAN forme un domaine de diffusion."
+ },
+ {
+  "id": "rx-q212",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 2,
+  "q": "Quelle norme définit les VLAN ?",
+  "options": [
+   "IEEE 802.1Q",
+   "IEEE 802.1X",
+   "IEEE 802.11",
+   "IEEE 802.3"
+  ],
+  "answer": 0,
+  "explain": "Elle insère une étiquette de 4 octets."
+ },
+ {
+  "id": "rx-q213",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 2,
+  "q": "Quelle commande place un port dans le VLAN 10 ?",
+  "options": [
+   "`access vlan 10`",
+   "`switchport access vlan 10`",
+   "`vlan 10 port`",
+   "`switchport trunk vlan 10`"
+  ],
+  "answer": 1,
+  "explain": "Après `switchport mode access`."
+ },
+ {
+  "id": "rx-q214",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 2,
+  "q": "Pourquoi changer le VLAN natif ?",
+  "options": [
+   "Pour accélérer le trunk",
+   "Pour activer STP",
+   "Pour avoir plus de VLAN",
+   "Pour limiter les attaques de type VLAN hopping"
+  ],
+  "answer": 3,
+  "explain": "Il doit être identique aux deux bouts du trunk."
+ },
+ {
+  "id": "rx-q215",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 3,
+  "q": "Quel équipement fait le routage dans un « router-on-a-stick » ?",
+  "options": [
+   "Le hub",
+   "Le modem",
+   "Un routeur à sous-interfaces sur un trunk",
+   "Le switch d'accès"
+  ],
+  "answer": 2,
+  "explain": "Chaque sous-interface est la passerelle d'un VLAN."
+ },
+ {
+  "id": "rx-q216",
+  "chapter": "4-1-vlan-commutation",
+  "difficulty": 3,
+  "q": "Quelle architecture comporte cœur, distribution, accès ?",
+  "options": [
+   "Le modèle client-serveur",
+   "Le modèle TCP/IP",
+   "Le modèle OSI",
+   "Le modèle hiérarchique à 3 couches"
+  ],
+  "answer": 3,
+  "explain": "Dans les petits sites, cœur et distribution sont fusionnés."
+ },
+ {
+  "id": "rx-q217",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 1,
+  "q": "Quel protocole attribue automatiquement les adresses IP ?",
+  "options": [
+   "DHCP",
+   "NTP",
+   "DNS",
+   "ARP"
+  ],
+  "answer": 0,
+  "explain": "Il fournit aussi passerelle et DNS."
+ },
+ {
+  "id": "rx-q218",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 1,
+  "q": "Quel enregistrement DNS associe un nom à une adresse IPv4 ?",
+  "options": [
+   "A",
+   "MX",
+   "NS",
+   "PTR"
+  ],
+  "answer": 0,
+  "explain": "AAAA pour IPv6."
+ },
+ {
+  "id": "rx-q219",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 2,
+  "q": "Quelle commande Cisco réserve des adresses dans un pool DHCP ?",
+  "options": [
+   "`ip dhcp excluded-address`",
+   "`ip dhcp reserve`",
+   "`ip dhcp static`",
+   "`ip dhcp deny`"
+  ],
+  "answer": 0,
+  "explain": "On exclut passerelle et serveurs."
+ },
+ {
+  "id": "rx-q220",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 2,
+  "q": "Que traduit le PAT ?",
+  "options": [
+   "Noms en adresses",
+   "Adresses privées en une adresse publique, avec des ports distincts",
+   "IPv4 en IPv6",
+   "MAC en IP"
+  ],
+  "answer": 1,
+  "explain": "Il mémorise les flux dans une table de traduction."
+ },
+ {
+  "id": "rx-q221",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 2,
+  "q": "Quel outil interroge le DNS sous Linux ?",
+  "options": [
+   "`dig`",
+   "`ip`",
+   "`tcpdump`",
+   "`ss`"
+  ],
+  "answer": 0,
+  "explain": "Aussi `nslookup`."
+ },
+ {
+  "id": "rx-q222",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 3,
+  "q": "Pourquoi un relais DHCP est-il nécessaire entre deux réseaux ?",
+  "options": [
+   "Les diffusions ne traversent pas les routeurs",
+   "Les baux expirent",
+   "Les MAC changent",
+   "Le DHCP est en TCP"
+  ],
+  "answer": 0,
+  "explain": "Le relais transforme la diffusion en unicast vers le serveur."
+ },
+ {
+  "id": "rx-q223",
+  "chapter": "4-2-dhcp-dns-nat",
+  "difficulty": 3,
+  "q": "Quel type de NAT publie un serveur interne en permanence ?",
+  "options": [
+   "PAT",
+   "NAT dynamique",
+   "NAT64",
+   "NAT statique"
+  ],
+  "answer": 3,
+  "explain": "Une adresse privée est liée à une publique fixe."
+ },
+ {
+  "id": "rx-q224",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 1,
+  "q": "Une ACL est appliquée avec :",
+  "options": [
+   "`access-class on`",
+   "`ip access-group`",
+   "`ip access-list apply`",
+   "`ip filter`"
+  ],
+  "answer": 1,
+  "explain": "Avec le sens `in` ou `out`."
+ },
+ {
+  "id": "rx-q225",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 2,
+  "q": "Quelle ACL filtre sur la source seulement ?",
+  "options": [
+   "Dynamique",
+   "Étendue",
+   "Nommée uniquement",
+   "Standard"
+  ],
+  "answer": 3,
+  "explain": "Numéros 1-99."
+ },
+ {
+  "id": "rx-q226",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 2,
+  "q": "Que fait `deny ip any any log` en fin d'ACL ?",
+  "options": [
+   "Refuse et journalise le reste",
+   "Autorise tout",
+   "Active NAT",
+   "Supprime l'ACL"
+  ],
+  "answer": 0,
+  "explain": "Il rend explicite le deny implicite."
+ },
+ {
+  "id": "rx-q227",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 2,
+  "q": "Quel avantage d'une ACL nommée ?",
+  "options": [
+   "On peut insérer et supprimer des lignes",
+   "Elle chiffre",
+   "Elle est plus rapide",
+   "Elle filtre en couche 2"
+  ],
+  "answer": 0,
+  "explain": "On utilise les numéros de séquence."
+ },
+ {
+  "id": "rx-q228",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 3,
+  "q": "Quelle commande ufw autorise SSH ?",
+  "options": [
+   "`ufw open ssh tcp`",
+   "`ufw allow 22/tcp`",
+   "`ufw permit 22`",
+   "`ufw ssh on`"
+  ],
+  "answer": 1,
+  "explain": "Avant `ufw enable`."
+ },
+ {
+  "id": "rx-q229",
+  "chapter": "4-3-acl-securite",
+  "difficulty": 3,
+  "q": "Pourquoi remplacer Telnet par SSH ?",
+  "options": [
+   "SSH est plus lent",
+   "SSH est en UDP",
+   "Telnet n'existe plus",
+   "Telnet transmet les mots de passe en clair"
+  ],
+  "answer": 3,
+  "explain": "SSH chiffre la session."
+ },
+ {
+  "id": "rx-q230",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 1,
+  "q": "Quelle commande Linux liste les adresses ?",
+  "options": [
+   "`ss -t`",
+   "`ls -l`",
+   "`ip -br a`",
+   "`ip route`"
+  ],
+  "answer": 2,
+  "explain": "Version concise."
+ },
+ {
+  "id": "rx-q231",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 1,
+  "q": "Quelle option publie un port dans Docker ?",
+  "options": [
+   "`-e`",
+   "`-p`",
+   "`--net`",
+   "`-v`"
+  ],
+  "answer": 1,
+  "explain": "Format hôte:conteneur."
+ },
+ {
+  "id": "rx-q232",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 2,
+  "q": "Quel outil teste si un port TCP répond ?",
+  "options": [
+   "`nc -zv hôte port`",
+   "`ping -p`",
+   "`ip a`",
+   "`dig`"
+  ],
+  "answer": 0,
+  "explain": "-z sonde sans envoyer de données."
+ },
+ {
+  "id": "rx-q233",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 2,
+  "q": "Où rend-on une configuration IP permanente sur Ubuntu ?",
+  "options": [
+   "/etc/passwd",
+   "/proc",
+   "Netplan",
+   "/etc/hosts"
+  ],
+  "answer": 2,
+  "explain": "Fichiers YAML dans /etc/netplan/."
+ },
+ {
+  "id": "rx-q234",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 2,
+  "q": "Quel réseau Docker est utilisé par défaut ?",
+  "options": [
+   "host",
+   "overlay",
+   "none",
+   "bridge"
+  ],
+  "answer": 3,
+  "explain": "Typiquement 172.17.0.0/16."
+ },
+ {
+  "id": "rx-q235",
+  "chapter": "4-4-linux-docker-outils",
+  "difficulty": 3,
+  "q": "Quelle commande lance un laboratoire sans VM ?",
+  "options": [
+   "`docker rm`",
+   "`ss -s`",
+   "`ufw reset`",
+   "`ip netns add`"
+  ],
+  "answer": 3,
+  "explain": "Les espaces de noms isolent le réseau."
+ },
+ {
+  "id": "rx-q236",
+  "chapter": "a-etude-de-cas",
+  "difficulty": 2,
+  "q": "Quelle est la diffusion de 1.1.1.16/30 ?",
+  "options": [
+   "1.1.1.19",
+   "1.1.1.18",
+   "1.1.1.20",
+   "1.1.1.17"
+  ],
+  "answer": 0,
+  "explain": "Le bloc 16-19 : utilisables .17 et .18."
+ },
+ {
+  "id": "rx-q237",
+  "chapter": "a-etude-de-cas",
+  "difficulty": 2,
+  "q": "Dans le cas d'étude, quelle route résume NetA1 à NetB2 ?",
+  "options": [
+   "10.0.0.0/20",
+   "10.0.0.0/23",
+   "10.0.0.0/21",
+   "10.0.0.0/22"
+  ],
+  "answer": 2,
+  "explain": "Quatre /23 contigus alignés."
+ },
+ {
+  "id": "rx-q238",
+  "chapter": "a-etude-de-cas",
+  "difficulty": 3,
+  "q": "RB1 : quel saut suivant vers NetB2 sans la liaison RB2-RA2 ?",
+  "options": [
+   "1.1.1.17",
+   "1.1.1.9",
+   "1.1.1.6",
+   "1.1.1.10"
+  ],
+  "answer": 1,
+  "explain": "1.1.1.9 est l'adresse de RB2 sur le lien commun."
+ },
+ {
+  "id": "rx-q239",
+  "chapter": "a-etude-de-cas",
+  "difficulty": 3,
+  "q": "Quelle commande annonce la route par défaut de R0 dans OSPF ?",
+  "options": [
+   "`passive-interface`",
+   "`redistribute static`",
+   "`default-information originate`",
+   "`ip ospf default`"
+  ],
+  "answer": 2,
+  "explain": "Avec une route statique par défaut existante."
+ },
+ {
+  "id": "rx-q240",
+  "chapter": "b-methode-fiche",
+  "difficulty": 1,
+  "q": "Quel est le premier réflexe pour tout calcul d'adresse ?",
+  "options": [
+   "Prendre une calculatrice",
+   "Commencer par la diffusion",
+   "Poser les blocs en colonne",
+   "Deviner"
+  ],
+  "answer": 2,
+  "explain": "On lit la réponse dans la liste des blocs."
+ },
+ {
+  "id": "rx-q241",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Quelle erreur invalide un plan d'adressage ?",
+  "options": [
+   "Donner l'adresse de réseau à une machine",
+   "Documenter",
+   "Utiliser un /30",
+   "Garder de la marge"
+  ],
+  "answer": 0,
+  "explain": "La première et la dernière adresse du bloc sont réservées."
+ },
+ {
+  "id": "rx-q242",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Wildcard ou masque pour OSPF et ACL ?",
+  "options": [
+   "/n",
+   "Wildcard",
+   "Masque décimal",
+   "Aucun des deux"
+  ],
+  "answer": 1,
+  "explain": "Les routes statiques Cisco utilisent le masque décimal."
+ },
+ {
+  "id": "rx-q243",
+  "chapter": "b-methode-fiche",
+  "difficulty": 2,
+  "q": "Pour tester le retour depuis un routeur, on utilise :",
+  "options": [
+   "Un ping étendu avec la source du LAN",
+   "Un ping simple",
+   "Un traceroute simple",
+   "Un show run"
+  ],
+  "answer": 0,
+  "explain": "La source par défaut masque un retour manquant."
+ },
+ {
+  "id": "rx-q244",
+  "chapter": "b-methode-fiche",
+  "difficulty": 3,
+  "q": "Un résumé de routes exact exige :",
+  "options": [
+   "Un masque /24",
+   "Un nombre de réseaux en puissance de 2 et un premier réseau aligné",
+   "Des réseaux dispersés",
+   "Une route par défaut"
+  ],
+  "answer": 1,
+  "explain": "Sinon le résumé couvre des adresses étrangères."
+ }
+]

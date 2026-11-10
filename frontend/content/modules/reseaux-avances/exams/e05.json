@@ -1,0 +1,72 @@
+{
+ "n": 5,
+ "title": "Épreuve n° 5 · VLSM : la banque",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : plan VLSM",
+   "points": 14,
+   "intro": "Bloc 192.168.100.0/24. Besoins : A 100 hôtes, B 50 hôtes, C 25 hôtes, D 10 hôtes, deux liaisons point à point L1 et L2.",
+   "questions": [
+    {
+     "id": "e05p1q1",
+     "q": "Donnez le masque minimal de chaque besoin.",
+     "points": 3,
+     "a": "```text\nA 100 -> /25 (126)   B 50 -> /26 (62)   C 25 -> /27 (30)   D 10 -> /28 (14)   L1, L2 -> /30 (2)\n```"
+    },
+    {
+     "id": "e05p1q2",
+     "q": "Dans quel ordre attribuer les blocs ? Pourquoi ?",
+     "points": 2,
+     "a": "- Du plus grand au plus petit : A, B, C, D, L1, L2. Un gros bloc doit être aligné sur un multiple de sa taille ; commencer par les petits fragmenterait l'espace."
+    },
+    {
+     "id": "e05p1q3",
+     "q": "Donnez le tableau complet : réseau/masque, plage utilisable, diffusion.",
+     "points": 6,
+     "a": "```text\nA  192.168.100.0/25    .1   - .126   diff .127\nB  192.168.100.128/26  .129 - .190   diff .191\nC  192.168.100.192/27  .193 - .222   diff .223\nD  192.168.100.224/28  .225 - .238   diff .239\nL1 192.168.100.240/30  .241 - .242   diff .243\nL2 192.168.100.244/30  .245 - .246   diff .247\n```"
+    },
+    {
+     "id": "e05p1q4",
+     "q": "Quel est le bloc libre restant ?",
+     "points": 1.5,
+     "a": "- À partir de `192.168.100.248` jusqu'à .255 : 8 adresses (un /29). Vérification : 128 + 64 + 32 + 16 + 4 + 4 = 248."
+    },
+    {
+     "id": "e05p1q5",
+     "q": "La passerelle de chaque LAN est la dernière adresse utilisable. Donnez-les.",
+     "points": 1.5,
+     "a": "- A : 192.168.100.126 · B : 192.168.100.190 · C : 192.168.100.222 · D : 192.168.100.238."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : questions de méthode",
+   "points": 6,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e05p2q1",
+     "q": "Pourquoi un /30 pour une liaison entre routeurs ?",
+     "points": 2,
+     "a": "- Deux adresses utilisables suffisent (les deux routeurs) : aucun gaspillage. Un /24 en perdrait 252. Un /31 (RFC 3021) est aussi possible."
+    },
+    {
+     "id": "e05p2q2",
+     "q": "Pourquoi le VLSM exige-t-il un protocole de routage qui transporte le masque ?",
+     "points": 2,
+     "a": "- Les sous-réseaux ont des masques différents : le protocole doit annoncer chaque préfixe avec son masque (OSPF, RIPv2, EIGRP, BGP). RIPv1, « classful », ne convient pas."
+    },
+    {
+     "id": "e05p2q3",
+     "q": "Les sous-réseaux 192.168.1.0/25 et 192.168.1.64/26 peuvent-ils coexister ?",
+     "points": 2,
+     "a": "- Non : 0-127 contient 64-127 (chevauchement). Chaque bloc doit être disjoint et aligné."
+    }
+   ]
+  }
+ ]
+}
