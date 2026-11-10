@@ -1,0 +1,648 @@
+{
+ "id": "routage-statique",
+ "order": 2,
+ "title": "Le routage statique sans erreur",
+ "tagline": "Next-hop, route par défaut, résumée et flottante : écris les bonnes routes dans les bons sens.",
+ "emoji": "🗺️",
+ "color": "#F59E0B",
+ "level": "Intermédiaire",
+ "minutes": 60,
+ "pitch": [
+  "Bonjour ! Aujourd'hui : **« Le routage statique sans erreur »** 🗺️.",
+  "Dans tous les TP et sujets de réseau, on te demande d'écrire des routes à la main… et le même scénario se répète : un ping qui échoue parce qu'on a oublié **la route retour**, un mauvais masque, un next-hop faux.",
+  "Je t'explique d'abord **comment pense un routeur** (table de routage, plus long préfixe, distance administrative). Ensuite tu écris toi-même les commandes Cisco, tu apprends route par défaut, résumée et de secours, puis une **méthode de dépannage** infaillible. Final : un défi à 3 routeurs.",
+  "Chaque leçon est interactive, avec indices et corrections."
+ ],
+ "benefits": [
+  "Comprendre comment un routeur choisit une route (plus long préfixe, AD)",
+  "Écrire sans erreur les routes aller ET retour",
+  "Utiliser route par défaut, route résumée et route flottante de secours",
+  "Dépanner un « ping qui ne passe pas » avec une méthode en 6 temps"
+ ],
+ "lessons": [
+  {
+   "id": "decision",
+   "title": "Comment un routeur décide",
+   "emoji": "🧭",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Le routage statique, c'est *dire toi-même* au routeur où envoyer chaque paquet. Mais avant d'écrire la moindre commande, il faut comprendre **comment un routeur réfléchit**. C'est simple, promis."
+    },
+    {
+     "type": "say",
+     "text": "Un routeur a une **table de routage**. Quand un paquet arrive, il regarde l'**adresse de destination**, cherche dans sa table la route qui correspond, et envoie le paquet vers le **prochain saut** (*next hop*). S'il ne trouve rien : le paquet est **jeté** (et il renvoie un ICMP « destination injoignable »)."
+    },
+    {
+     "type": "code",
+     "sql": "R1# show ip route\n\nC    192.168.1.0/24 is directly connected, GigabitEthernet0/0\nL    192.168.1.1/32 is directly connected, GigabitEthernet0/0\nC    10.0.0.0/30 is directly connected, Serial0/0/0\nL    10.0.0.1/32 is directly connected, Serial0/0/0\nS    192.168.2.0/24 [1/0] via 10.0.0.2",
+     "lang": "Réseau",
+     "title": "Une table de routage"
+    },
+    {
+     "type": "say",
+     "text": "Les lettres à gauche indiquent **l'origine** de la route : **C** = réseau directement connecté, **L** = adresse locale de l'interface, **S** = route **statique** (écrite à la main), **O** = OSPF, **S\\*** = route statique par défaut."
+    },
+    {
+     "type": "choice",
+     "q": "Que signifie la lettre `C` dans une table de routage ?",
+     "options": [
+      "Route configurée manuellement",
+      "Réseau directement connecté à une interface",
+      "Route apprise par OSPF"
+     ],
+     "answer": 1,
+     "explain": "`C` = *Connected* : le routeur est branché directement sur ce réseau. `S` = statique."
+    },
+    {
+     "type": "say",
+     "text": "Dans `[1/0]`, le premier chiffre est la **distance administrative** (AD) : la *confiance* qu'on accorde à la source de la route (plus c'est bas, mieux c'est). Le second est la **métrique**."
+    },
+    {
+     "type": "code",
+     "sql": "Connecté          : 0\nStatique          : 1\nEIGRP             : 90\nOSPF              : 110\nRIP               : 120",
+     "lang": "Réseau",
+     "title": "Distances administratives à connaître"
+    },
+    {
+     "type": "choice",
+     "q": "Si le routeur connaît la même destination par OSPF et par une route statique, laquelle utilise-t-il ?",
+     "options": [
+      "OSPF (110)",
+      "La statique (AD = 1)",
+      "Les deux en alternance"
+     ],
+     "answer": 1,
+     "explain": "Il choisit la source avec la **plus petite AD** : statique (1) bat OSPF (110)."
+    },
+    {
+     "type": "say",
+     "text": "Dernière règle, **fondamentale** : le **plus long préfixe** (*longest prefix match*). Si plusieurs routes conviennent, le routeur choisit la plus **précise** (celle au masque le plus long)."
+    },
+    {
+     "type": "code",
+     "sql": "10.0.0.0/8      via A\n10.1.0.0/16     via B\n10.1.2.0/24     via C\n\nPaquet pour 10.1.2.50 → C  (/24 est la plus précise)\nPaquet pour 10.1.9.9  → B  (/16)\nPaquet pour 10.8.8.8  → A  (/8)",
+     "lang": "Réseau",
+     "title": "Le plus long préfixe"
+    },
+    {
+     "type": "exercise",
+     "q": "Avec les routes ci-dessus, par quelle route (A, B ou C) part un paquet destiné à **10.1.9.9** ?",
+     "hints": [
+      "10.1.9.9 est dans 10.0.0.0/8 ET dans 10.1.0.0/16.",
+      "Choisis la plus précise des deux."
+     ],
+     "accept": [
+      "b",
+      "route b"
+     ],
+     "solution": "B",
+     "explain": "Deux routes conviennent (/8 et /16). Le `/16` est plus long → **B**. Le /24 ne contient pas 10.1.9.9.",
+     "placeholder": "Écris ta réponse ou ta commande ici…"
+    },
+    {
+     "type": "choice",
+     "q": "Un paquet arrive pour `172.20.0.5` et aucune route (ni route par défaut) ne correspond. Que fait le routeur ?",
+     "options": [
+      "Il le garde en attente",
+      "Il le jette et renvoie un ICMP injoignable",
+      "Il le diffuse partout"
+     ],
+     "answer": 1,
+     "explain": "Sans route correspondante, le paquet est **abandonné**. C'est la cause de nombreux « ping qui ne passe pas »."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Un routeur ne connaît **que** ses réseaux connectés par défaut. Pour joindre un réseau lointain, il lui faut une route : apprise par un protocole **dynamique**, ou écrite **à la main** (statique). Place à la pratique !"
+    }
+   ]
+  },
+  {
+   "id": "ecrire",
+   "title": "Écrire une route statique",
+   "emoji": "⌨️",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voici notre petit réseau de travail pour les leçons : deux routeurs, chacun avec un LAN, reliés par une liaison /30."
+    },
+    {
+     "type": "code",
+     "sql": "LAN A                                                   LAN B\n192.168.1.0/24                                      192.168.2.0/24\n     |                                                     |\n   G0/0 .1          S0/0/0 .1        S0/0/0 .2          G0/0 .1\n    [ R1 ]=========== 10.0.0.0/30 ===========[ R2 ]",
+     "lang": "Réseau",
+     "title": "Topologie"
+    },
+    {
+     "type": "code",
+     "sql": "LAN A : 192.168.1.0/24\nLAN B : 192.168.2.0/24\nLiaison R1 — R2 : 10.0.0.0/30\n   R1 S0/0/0 = 10.0.0.1     R2 S0/0/0 = 10.0.0.2",
+     "lang": "Réseau",
+     "title": "Plan d'adressage"
+    },
+    {
+     "type": "say",
+     "text": "Problème : **R1 ne connaît pas LAN B**. Un PC du LAN A qui envoie un paquet vers 192.168.2.10 → R1 n'a aucune route → le paquet est jeté. Il faut lui apprendre où est LAN B."
+    },
+    {
+     "type": "say",
+     "text": "La commande Cisco (en mode configuration globale) :"
+    },
+    {
+     "type": "code",
+     "sql": "ip route <réseau-destination> <masque> <next-hop>",
+     "lang": "Cisco IOS",
+     "title": "Syntaxe"
+    },
+    {
+     "type": "say",
+     "text": "Pour R1 : « pour atteindre 192.168.2.0/24, passe par 10.0.0.2 (l'adresse de R2 sur la liaison) » :"
+    },
+    {
+     "type": "code",
+     "sql": "R1(config)# ip route 192.168.2.0 255.255.255.0 10.0.0.2",
+     "lang": "Cisco IOS",
+     "title": "Route sur R1"
+    },
+    {
+     "type": "choice",
+     "q": "Dans cette commande, `10.0.0.2` est…",
+     "options": [
+      "Le réseau de destination",
+      "L'adresse du routeur voisin à atteindre (next hop)",
+      "Le masque"
+     ],
+     "answer": 1,
+     "explain": "Le **next hop** est l'adresse IP, *du côté du voisin*, vers laquelle R1 envoie les paquets."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la commande de la route sur **R1** pour atteindre **LAN B** (192.168.2.0/24) via R2.",
+     "hints": [
+      "ip route <réseau> <masque> <next-hop>",
+      "Le next-hop est l'adresse de R2 sur la liaison : 10.0.0.2"
+     ],
+     "accept": [],
+     "solution": "ip route 192.168.2.0 255.255.255.0 10.0.0.2",
+     "explain": "Réseau + masque de **destination**, puis l'IP du voisin. Le masque est au format décimal (255.255.255.0), pas /24.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Le piège n°1 du routage statique** : la route **retour**. Un ping aller-retour nécessite que R2 sache aussi renvoyer la réponse vers LAN A. Sans elle, le paquet arrive… mais la réponse est perdue."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la commande de la route sur **R2** pour atteindre **LAN A** (192.168.1.0/24) via R1.",
+     "hints": [
+      "Le next-hop est maintenant l'adresse de R1 : 10.0.0.1.",
+      "ip route 192.168.1.0 255.255.255.0 ..."
+     ],
+     "accept": [],
+     "solution": "ip route 192.168.1.0 255.255.255.0 10.0.0.1",
+     "explain": "Chaque routeur a besoin d'une route vers **les réseaux qu'il ne connaît pas**. Ici R2 doit connaître LAN A, via R1 (10.0.0.1).",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "choice",
+     "q": "PC-A (LAN A) ping PC-B (LAN B). R1 a sa route vers LAN B, mais R2 n'a **pas** de route vers LAN A. Résultat ?",
+     "options": [
+      "Le ping réussit",
+      "Le ping échoue : la réponse ne revient pas",
+      "Le ping échoue : R1 jette le paquet"
+     ],
+     "answer": 1,
+     "explain": "Le paquet aller arrive à PC-B, mais la **réponse** est jetée par R2 (aucune route vers 192.168.1.0/24). On parle de routage **asymétrique** cassé."
+    },
+    {
+     "type": "say",
+     "text": "Pour vérifier, deux commandes à connaître : `show ip route` (affiche la table) et `ping` (teste la connectivité). Une route statique apparaît avec la lettre **S** :"
+    },
+    {
+     "type": "code",
+     "sql": "R1# show ip route static\nS    192.168.2.0/24 [1/0] via 10.0.0.2",
+     "lang": "Cisco IOS",
+     "title": "Vérification"
+    },
+    {
+     "type": "choice",
+     "q": "Que représente `[1/0]` dans `S 192.168.2.0/24 [1/0] via 10.0.0.2` ?",
+     "options": [
+      "Port 1, VLAN 0",
+      "Distance administrative 1, métrique 0",
+      "1 saut, 0 perte"
+     ],
+     "answer": 1,
+     "explain": "AD = 1 (route statique), métrique = 0."
+    },
+    {
+     "type": "say",
+     "text": "**Sous Linux**, l'idée est la même, avec une autre syntaxe (utile pour le chapitre « Linux réseau ») :"
+    },
+    {
+     "type": "code",
+     "sql": "sudo ip route add 192.168.2.0/24 via 10.0.0.2\nip route show",
+     "lang": "Linux",
+     "title": "Équivalent Linux"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Une route statique = **réseau destination + masque + next-hop**, et toujours penser au **retour**. Prochaine leçon : faut-il donner un **next-hop** ou une **interface de sortie** ?"
+    }
+   ]
+  },
+  {
+   "id": "nexthop",
+   "title": "Next-hop ou interface de sortie ?",
+   "emoji": "🔀",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Il existe **trois façons** d'écrire une route statique. Selon le type de liaison, certaines sont de bonnes idées, d'autres moins."
+    },
+    {
+     "type": "code",
+     "sql": "1) Next-hop seulement  : ip route 192.168.2.0 255.255.255.0 10.0.0.2\n2) Interface seulement  : ip route 192.168.2.0 255.255.255.0 Serial0/0/0\n3) Les deux             : ip route 192.168.2.0 255.255.255.0 Serial0/0/0 10.0.0.2",
+     "lang": "Cisco IOS",
+     "title": "Les trois formes"
+    },
+    {
+     "type": "say",
+     "text": "**Next-hop (1)** : le routeur doit faire une **recherche récursive** : il cherche d'abord comment atteindre `10.0.0.2` (réseau connecté, OK), puis envoie. Simple et fiable, c'est la forme **recommandée sur Ethernet**."
+    },
+    {
+     "type": "say",
+     "text": "**Interface seule (2)** : « envoie tout ce qui va vers LAN B par cette interface ». Sur une liaison **point à point** (série), ça marche bien : il n'y a qu'un voisin possible. Mais sur un réseau **Ethernet** multi-accès, le routeur ne sait pas à qui adresser la trame : il va faire une requête **ARP pour chaque destination** (lourd, parfois en échec)."
+    },
+    {
+     "type": "choice",
+     "q": "Sur un lien **Ethernet** entre deux routeurs, quelle forme est recommandée ?",
+     "options": [
+      "Interface de sortie seule",
+      "Next-hop (ou les deux à la fois)",
+      "Aucune des deux"
+     ],
+     "answer": 1,
+     "explain": "Sur Ethernet, il faut un **next-hop** : le routeur sait quelle adresse résoudre par ARP. L'interface seule force une résolution ARP par destination."
+    },
+    {
+     "type": "say",
+     "text": "**Les deux (3)** : la route est dite **entièrement spécifiée**. Le routeur a l'interface *et* l'IP du voisin : aucune recherche récursive, aucune ambiguïté. Idéal sur Ethernet."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la route sur **R1** vers LAN B avec **l'interface de sortie seule** (Serial0/0/0).",
+     "hints": [
+      "Remplace le next-hop par le nom de l'interface.",
+      "ip route 192.168.2.0 255.255.255.0 ..."
+     ],
+     "accept": [
+      "ip route 192.168.2.0 255.255.255.0 s0/0/0",
+      "ip route 192.168.2.0 255.255.255.0 serial 0/0/0"
+     ],
+     "solution": "ip route 192.168.2.0 255.255.255.0 Serial0/0/0",
+     "explain": "Sur une liaison point à point, l'interface de sortie suffit.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "choice",
+     "q": "Une route avec next-hop `10.0.0.9` est configurée, mais **aucune interface** de R1 n'est dans le réseau 10.0.0.8/30. Que se passe-t-il ?",
+     "options": [
+      "La route s'installe et marche",
+      "La route n'est pas installée dans la table : le next-hop n'est pas joignable",
+      "La route est installée avec AD 255"
+     ],
+     "answer": 1,
+     "explain": "Le next-hop doit être **joignable via un réseau connecté** (ou une autre route). Sinon la route n'apparaît pas dans `show ip route` : c'est une erreur classique."
+    },
+    {
+     "type": "say",
+     "text": "🔎 **Réflexe de dépannage** : si ta route statique « n'apparaît pas » dans `show ip route`, vérifie d'abord que le **next-hop est dans un réseau connecté et que l'interface est *up/up***."
+    },
+    {
+     "type": "choice",
+     "q": "L'interface Serial0/0/0 de R1 est *down*. La route statique `ip route 192.168.2.0 255.255.255.0 Serial0/0/0` est…",
+     "options": [
+      "Toujours dans la table",
+      "Retirée de la table de routage",
+      "Convertie en route dynamique"
+     ],
+     "answer": 1,
+     "explain": "Une route vers une interface *down* est **retirée** de la table (et revient quand l'interface remonte)."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Retiens : **Ethernet → next-hop** (ou les deux), **point à point → interface** possible. Et un next-hop doit toujours être **joignable**."
+    }
+   ]
+  },
+  {
+   "id": "defaut",
+   "title": "Route par défaut, résumé et secours",
+   "emoji": "🛟",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Écrire une route par réseau, c'est long. Heureusement il existe des **raccourcis** : la route par défaut, la route résumée et la route flottante de secours."
+    },
+    {
+     "type": "say",
+     "text": "**La route par défaut** (*gateway of last resort*) : « pour tout ce que je ne connais pas, envoie par ici ». On l'écrit avec le réseau `0.0.0.0` et le masque `0.0.0.0` (ça correspond à **n'importe quelle adresse**, avec le préfixe le plus court possible : /0)."
+    },
+    {
+     "type": "code",
+     "sql": "R1(config)# ip route 0.0.0.0 0.0.0.0 10.0.0.2",
+     "lang": "Cisco IOS",
+     "title": "Route par défaut"
+    },
+    {
+     "type": "code",
+     "sql": "S*   0.0.0.0/0 [1/0] via 10.0.0.2",
+     "lang": "Cisco IOS",
+     "title": "Dans la table : S* = candidate par défaut"
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la route **par défaut** sur R1 via le next-hop 10.0.0.2.",
+     "hints": [
+      "Réseau 0.0.0.0, masque 0.0.0.0.",
+      "ip route 0.0.0.0 0.0.0.0 ..."
+     ],
+     "accept": [],
+     "solution": "ip route 0.0.0.0 0.0.0.0 10.0.0.2",
+     "explain": "Cette seule ligne remplace des dizaines de routes pour un routeur « stub » (une seule sortie vers le reste du monde).",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi la route par défaut ne gêne-t-elle pas les autres routes ?",
+     "options": [
+      "Parce qu'elle a une AD plus grande",
+      "À cause du plus long préfixe : /0 est la moins précise, donc utilisée en dernier",
+      "Parce qu'elle est ignorée par Cisco"
+     ],
+     "answer": 1,
+     "explain": "Le **plus long préfixe** gagne : toutes les routes plus précises passent avant le /0."
+    },
+    {
+     "type": "say",
+     "text": "Une route par défaut est parfaite pour un **réseau stub** : un site avec **une seule sortie**. Au lieu de lister tous les réseaux distants, un seul `ip route 0.0.0.0 0.0.0.0` suffit."
+    },
+    {
+     "type": "say",
+     "text": "**La route résumée.** Imagine que R2 gère quatre LAN : 192.168.4.0/24, 5.0, 6.0 et 7.0. Au lieu de 4 routes sur R1, on en écrit **une seule** : `192.168.4.0/22` (on résume)."
+    },
+    {
+     "type": "code",
+     "sql": "192.168.4.0/24 ┐\n192.168.5.0/24 ├→ 192.168.4.0/22  (masque 255.255.252.0)\n192.168.6.0/24 │\n192.168.7.0/24 ┘\n\nR1(config)# ip route 192.168.4.0 255.255.252.0 10.0.0.2",
+     "lang": "Réseau",
+     "title": "Résumer 4 réseaux en 1"
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la **route résumée** sur R1 (via 10.0.0.2) qui couvre 192.168.4.0/24 à 192.168.7.0/24.",
+     "hints": [
+      "Résumé = 192.168.4.0/22.",
+      "/22 → masque 255.255.252.0"
+     ],
+     "accept": [],
+     "solution": "ip route 192.168.4.0 255.255.252.0 10.0.0.2",
+     "explain": "4 réseaux /24 contigus (4, 5, 6, 7) → 2 bits → **/22** = `255.255.252.0`.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "say",
+     "text": "**La route flottante** (*floating static route*) : une route de **secours**. On lui donne une **distance administrative plus grande** que la route principale. Tant que la principale fonctionne, la flottante reste invisible ; si elle tombe, la flottante prend le relais."
+    },
+    {
+     "type": "code",
+     "sql": "ip route 0.0.0.0 0.0.0.0 10.0.0.2         ! principale (AD 1)\nip route 0.0.0.0 0.0.0.0 10.0.1.2 5       ! secours   (AD 5)",
+     "lang": "Cisco IOS",
+     "title": "Route principale et route flottante"
+    },
+    {
+     "type": "choice",
+     "q": "Dans la commande de secours, que représente le `5` final ?",
+     "options": [
+      "Le nombre de sauts",
+      "La distance administrative de la route (5 > 1)",
+      "Le numéro d'interface"
+     ],
+     "answer": 1,
+     "explain": "Le dernier nombre fixe la **distance administrative**. Plus grande que celle de la route principale (1), la route de secours n'est utilisée qu'en cas de panne."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la route par défaut de **secours** via 10.0.1.2 avec une AD de **10**.",
+     "hints": [
+      "Ajoute l'AD à la fin de la commande.",
+      "ip route 0.0.0.0 0.0.0.0 10.0.1.2 ..."
+     ],
+     "accept": [],
+     "solution": "ip route 0.0.0.0 0.0.0.0 10.0.1.2 10",
+     "explain": "La route principale (AD 1) est préférée ; celle-ci (AD 10) ne s'active que si la première disparaît.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Trois outils : **par défaut** (le reste du monde), **résumée** (plusieurs réseaux en un), **flottante** (secours via une AD plus haute)."
+    }
+   ]
+  },
+  {
+   "id": "depannage",
+   "title": "Les erreurs classiques et le dépannage",
+   "emoji": "🔧",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Dans 90 % des cas, une route statique qui « ne marche pas » vient d'une des **cinq erreurs** suivantes. Apprends à les reconnaître : tu gagneras un temps fou en TP comme à l'examen."
+    },
+    {
+     "type": "say",
+     "text": "**Erreur n°1 — La route retour oubliée.** On configure R1 → LAN B, mais pas R2 → LAN A. Le ping aller arrive, la réponse est perdue. *Symptôme :* ping qui échoue (« . . . . . ») alors que tout semble bien configuré."
+    },
+    {
+     "type": "say",
+     "text": "**Erreur n°2 — Mauvais masque.** `ip route 192.168.2.0 255.255.0.0 10.0.0.2` ne désigne plus le même réseau : le masque change la portée de la route (et peut capturer d'autres réseaux)."
+    },
+    {
+     "type": "say",
+     "text": "**Erreur n°3 — Mauvais next-hop.** On écrit `10.0.0.1` (sa propre adresse !) au lieu de `10.0.0.2`, ou l'adresse d'un équipement qui n'est pas le voisin direct."
+    },
+    {
+     "type": "choice",
+     "q": "Sur R1 (S0/0/0 = 10.0.0.1), la route `ip route 192.168.2.0 255.255.255.0 10.0.0.1` est…",
+     "options": [
+      "Correcte",
+      "Fausse : le next-hop est sa propre adresse",
+      "Correcte mais lente"
+     ],
+     "answer": 1,
+     "explain": "Le next-hop doit être l'adresse du **voisin** (10.0.0.2), pas la sienne."
+    },
+    {
+     "type": "say",
+     "text": "**Erreur n°4 — Réseau mal écrit.** On écrit l'adresse d'un *hôte* au lieu de l'adresse du *réseau* : `ip route 192.168.2.10 255.255.255.0 10.0.0.2`. Le réseau est `192.168.2.0` (adresse réseau, bits hôtes à 0). IOS répond alors « %Inconsistent address and mask » et peut ne pas installer la route comme prévu : écris toujours l'adresse **du réseau**."
+    },
+    {
+     "type": "say",
+     "text": "**Erreur n°5 — Interface éteinte.** Une interface administrativement *down* ou un câble débranché retirent la route de la table."
+    },
+    {
+     "type": "code",
+     "sql": "R1# show ip interface brief\nInterface         IP-Address   Status                Protocol\nGigabitEthernet0/0 192.168.1.1  up                    up\nSerial0/0/0       10.0.0.1     administratively down down",
+     "lang": "Cisco IOS",
+     "title": "Un statut à vérifier"
+    },
+    {
+     "type": "choice",
+     "q": "`administratively down` signifie…",
+     "options": [
+      "Le câble est coupé",
+      "L'interface a été éteinte par `shutdown`",
+      "Le routeur est en panne"
+     ],
+     "answer": 1,
+     "explain": "Il faut faire `no shutdown` sur l'interface. (Un câble débranché donnerait plutôt `down/down`.)"
+    },
+    {
+     "type": "say",
+     "text": "Voici la **méthode de dépannage** à dérouler dans l'ordre. C'est du **bottom-up** : on vérifie du plus bas (physique) au plus haut."
+    },
+    {
+     "type": "code",
+     "sql": "1. show ip interface brief   → interfaces up/up ? bonnes IP ?\n2. ping le voisin direct       → la liaison fonctionne ?\n3. show ip route              → la route est-elle présente (S) ?\n4. ping le réseau distant      → l'aller marche ?\n5. Vérifier la route RETOUR     → sur l'autre routeur !\n6. traceroute                  → où le paquet s'arrête-t-il ?",
+     "lang": "Réseau",
+     "title": "Méthode en 6 temps"
+    },
+    {
+     "type": "choice",
+     "q": "Le ping vers le **voisin direct** (10.0.0.2) échoue depuis R1. Où chercher en premier ?",
+     "options": [
+      "La route statique vers LAN B",
+      "L'interface / le câble / l'adressage de la liaison",
+      "Le DNS"
+     ],
+     "answer": 1,
+     "explain": "Si même le voisin direct ne répond pas, le problème est **avant** le routage : interface down, mauvais masque sur la liaison, câble…"
+    },
+    {
+     "type": "choice",
+     "q": "`traceroute 192.168.2.10` s'arrête après R1 (R1 répond, rien après). Que suspecter ?",
+     "options": [
+      "R1 n'a pas de route vers LAN B",
+      "Il manque une route chez R2 ou R2 est injoignable",
+      "Le DNS est cassé"
+     ],
+     "answer": 1,
+     "explain": "R1 transmet le paquet mais le saut suivant ne répond pas : il manque une route (aller ou **retour**) du côté de R2, ou R2 est injoignable."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche **uniquement** les routes statiques de la table de routage ? (Cisco)",
+     "hints": [
+      "Le mot qui indique le type de route…",
+      "show ip route ..."
+     ],
+     "accept": [],
+     "solution": "show ip route static",
+     "explain": "`show ip route static` filtre sur les routes `S`. Bien pratique sur une grosse table.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 **Les 5 erreurs** : route retour oubliée, mauvais masque, mauvais next-hop, mauvaise adresse réseau, interface éteinte. Et la méthode : **bottom-up**, en pingant d'abord le voisin."
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : 3 routeurs",
+   "emoji": "🏆",
+   "minutes": 12,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Défi final ! Voici un réseau à **trois routeurs en ligne**. Pas de protocole dynamique : tout en statique. À toi de configurer ce qu'il faut."
+    },
+    {
+     "type": "code",
+     "sql": "LAN1 192.168.1.0/24 — R1 ═ 10.0.12.0/30 ═ R2 ═ 10.0.23.0/30 ═ R3 — LAN3 192.168.3.0/24\n\nLiaison R1–R2 (10.0.12.0/30) : R1 = 10.0.12.1   R2 = 10.0.12.2\nLiaison R2–R3 (10.0.23.0/30) : R2 = 10.0.23.1   R3 = 10.0.23.2",
+     "lang": "Réseau",
+     "title": "Topologie du défi"
+    },
+    {
+     "type": "say",
+     "text": "Objectif : que LAN1 et LAN3 puissent communiquer dans les deux sens. Réfléchis routeur par routeur : **quels réseaux ne connaît-il pas ?**"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/5** — Route sur **R1** pour atteindre LAN3 (192.168.3.0/24).",
+     "hints": [
+      "R1 envoie vers R2 : next-hop = 10.0.12.2.",
+      "ip route 192.168.3.0 255.255.255.0 ..."
+     ],
+     "accept": [],
+     "solution": "ip route 192.168.3.0 255.255.255.0 10.0.12.2",
+     "explain": "R1 n'est connecté qu'à R2 : tout ce qui part vers LAN3 passe par **10.0.12.2**.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/5** — Route sur **R3** pour atteindre LAN1 (192.168.1.0/24).",
+     "hints": [
+      "R3 est branché sur R2 (10.0.23.1).",
+      "ip route 192.168.1.0 255.255.255.0 ..."
+     ],
+     "accept": [],
+     "solution": "ip route 192.168.1.0 255.255.255.0 10.0.23.1",
+     "explain": "C'est la route **retour** : sans elle, LAN3 ne peut pas répondre à LAN1.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/5** — Route sur **R2** pour atteindre LAN3 (192.168.3.0/24).",
+     "hints": [
+      "Le saut suivant vers LAN3 est R3.",
+      "Next-hop = adresse de R3 sur la liaison R2–R3."
+     ],
+     "accept": [],
+     "solution": "ip route 192.168.3.0 255.255.255.0 10.0.23.2",
+     "explain": "R2 voit déjà les deux liaisons (connectées), mais pas LAN1 ni LAN3 : il lui faut **deux** routes.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "choice",
+     "q": "**Défi 4/5** — Combien de routes statiques **minimum** faut-il au total (3 routeurs) pour que LAN1 et LAN3 communiquent dans les deux sens ?",
+     "options": [
+      "2",
+      "4",
+      "6"
+     ],
+     "answer": 1,
+     "explain": "R1 : 1 (vers LAN3) · R2 : 2 (vers LAN1 et LAN3) · R3 : 1 (vers LAN1) = **4 routes**."
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 5/5 (boss)** — R1 et R3 sont des **stubs** (une seule sortie). Écris la **route par défaut** sur R1 qui remplacerait la route vers LAN3.",
+     "hints": [
+      "Route par défaut = 0.0.0.0 0.0.0.0.",
+      "Next-hop = R2 : 10.0.12.2."
+     ],
+     "accept": [],
+     "solution": "ip route 0.0.0.0 0.0.0.0 10.0.12.2",
+     "explain": "Sur un routeur stub, une route par défaut est plus simple et robuste : tout ce qui est inconnu part vers R2.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu sais comment décide un routeur, écrire des routes statiques (next-hop, interface), utiliser route par défaut, résumée et flottante, et dépanner méthodiquement. Prochaine étape naturelle : **OSPF**, pour que les routeurs apprennent tout seuls ces routes."
+    }
+   ]
+  }
+ ]
+}

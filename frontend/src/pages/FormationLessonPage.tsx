@@ -177,7 +177,7 @@ function StepView({ s, showAvatar, color, result, onResult }: {
   if (s.type === 'code') {
     return (
       <div className="bubble-in ml-[3.4rem] space-y-1.5">
-        <CodeBlock title={s.title} sql={s.sql} />
+        <CodeBlock title={s.title ?? s.lang} sql={s.sql} />
         {s.note && <p className="px-1 text-xs font-bold text-muted">{s.note}</p>}
       </div>
     );
@@ -224,7 +224,7 @@ function ExerciseView({ s, color, result, onResult }: { s: Extract<FormationStep
     const t = tries + 1;
     setTries(t);
     if (accepted.has(normalizeSql(text))) { onResult({ ok: true, tries: t, text }); fireConfetti(false); return; }
-    setMsg(t >= 2 ? 'Pas encore. Prends un indice, ou regarde la solution si tu bloques.' : 'Presque ? Relis l’énoncé, vérifie les virgules, les noms et les parenthèses.');
+    setMsg(t >= 2 ? 'Pas encore. Prends un indice, ou regarde la solution si tu bloques.' : 'Presque ? Relis l’énoncé, vérifie chaque détail (ponctuation, noms, valeurs).');
     if (hints < s.hints.length && t >= 1) setHints((h) => Math.max(h, 1));
   };
   const giveUp = () => onResult({ ok: false, tries: Math.max(tries, 1), text });
@@ -240,7 +240,7 @@ function ExerciseView({ s, color, result, onResult }: { s: Extract<FormationStep
           <>
             <textarea
               value={text} onChange={(e) => setText(e.target.value)} rows={4} spellCheck={false} autoCapitalize="off" autoCorrect="off"
-              placeholder="Écris ta requête SQL ici…"
+              placeholder={s.placeholder ?? 'Écris ta requête SQL ici…'}
               onKeyDown={(e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') check(); }}
               className="w-full resize-y rounded-2xl border-2 border-line bg-[#141B2D] p-3 font-mono text-[13px] text-slate-100 outline-none transition focus:border-brand"
             />

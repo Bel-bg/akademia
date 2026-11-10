@@ -1,0 +1,816 @@
+{
+ "id": "subnetting",
+ "order": 1,
+ "title": "Subnetting sans douleur",
+ "tagline": "Réseau, broadcast, plage d'hôtes, découpage : la méthode du pas pour tout calculer de tête.",
+ "emoji": "🧮",
+ "color": "#0EA5E9",
+ "level": "Débutant → solide",
+ "minutes": 60,
+ "pitch": [
+  "Salut ! Je te présente **« Subnetting sans douleur »** 🧮.",
+  "Le subnetting tombe **à chaque examen de réseau**… et beaucoup d'étudiants perdent des points sur des calculs de binaire interminables.",
+  "Je t'apprends **une seule méthode** — la méthode du pas — qui permet de trouver réseau, broadcast et plage d'hôtes en quelques secondes. Chaque notion est suivie d'exercices où tu calcules toi-même, avec des indices et des corrections détaillées.",
+  "À la fin, tu sauras aussi découper un réseau et choisir le bon masque selon le nombre de machines."
+ ],
+ "benefits": [
+  "Calculer réseau, broadcast et plage utilisable en moins d'une minute",
+  "Comprendre le masque et le ET logique, sans apprendre par cœur",
+  "Découper un réseau et choisir le bon préfixe selon les besoins",
+  "Éviter les pièges classiques d'examen (−2 adresses, passerelle oubliée)"
+ ],
+ "lessons": [
+  {
+   "id": "masque",
+   "title": "Le masque, enfin expliqué",
+   "emoji": "🎭",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Le subnetting a la réputation d'être un cauchemar de calculs. Promis : avec **une seule méthode**, tu vas le faire de tête. On commence par le plus important : le **masque**."
+    },
+    {
+     "type": "say",
+     "text": "Une adresse IPv4, c'est **32 bits** découpés en 4 octets de 8 bits : `192.168.1.77`. Mais une adresse seule ne dit pas **à quel réseau** elle appartient. C'est le masque qui trace la frontière."
+    },
+    {
+     "type": "say",
+     "text": "Dans l'adresse, il y a deux parties : les bits de **réseau** (le « quartier ») et les bits d'**hôte** (le « numéro de la maison »). Le masque est une suite de **1** (partie réseau) puis de **0** (partie hôte)."
+    },
+    {
+     "type": "code",
+     "sql": "Adresse      : 192.168.1.77  = 11000000.10101000.00000001.01001101\nMasque /26   : 255.255.255.192 = 11111111.11111111.11111111.11000000\n                                 |-------- 26 bits réseau -------|6 hôte",
+     "lang": "Réseau",
+     "title": "Le masque /26 en binaire"
+    },
+    {
+     "type": "say",
+     "text": "`/26` signifie simplement « **les 26 premiers bits sont à 1** ». C'est la notation **CIDR**. Et le masque décimal s'obtient en convertissant chaque octet : `11000000` = 128 + 64 = **192**."
+    },
+    {
+     "type": "choice",
+     "q": "Que signifie `/24` ?",
+     "options": [
+      "24 hôtes dans le réseau",
+      "Les 24 premiers bits sont la partie réseau",
+      "Le réseau a 24 sous-réseaux"
+     ],
+     "answer": 1,
+     "explain": "Le nombre après le `/` est le **nombre de bits à 1** dans le masque, donc la longueur de la partie réseau. `/24` = `255.255.255.0`."
+    },
+    {
+     "type": "say",
+     "text": "Voici le tableau à connaître par cœur pour le **dernier octet** (c'est 90 % des exercices). Les valeurs possibles d'un octet de masque sont toujours : **0, 128, 192, 224, 240, 248, 252, 254, 255**."
+    },
+    {
+     "type": "code",
+     "sql": "Préfixe | Masque dernier octet | Bits hôtes | Hôtes utilisables\n  /24   |   0   |  8 | 254\n  /25   | 128   |  7 | 126\n  /26   | 192   |  6 |  62\n  /27   | 224   |  5 |  30\n  /28   | 240   |  4 |  14\n  /29   | 248   |  3 |   6\n  /30   | 252   |  2 |   2",
+     "lang": "Réseau",
+     "title": "Tableau de référence"
+    },
+    {
+     "type": "say",
+     "text": "Remarque la logique : à chaque bit de masque ajouté, le **nombre d'hôtes est divisé par 2** (126 → 62 → 30 → 14…). Pour retrouver le masque : 128, puis 128+64=192, puis 192+32=224, puis 224+16=240, etc."
+    },
+    {
+     "type": "choice",
+     "q": "Quel est le masque décimal de `/27` ?",
+     "options": [
+      "255.255.255.192",
+      "255.255.255.224",
+      "255.255.255.240"
+     ],
+     "answer": 1,
+     "explain": "/27 = 3 bits à 1 dans le dernier octet : 128 + 64 + 32 = **224**."
+    },
+    {
+     "type": "exercise",
+     "q": "Donne le masque décimal complet de **/26**.",
+     "hints": [
+      "26 = 8 + 8 + 8 + 2.",
+      "Dans le dernier octet : 128 + 64 = ?"
+     ],
+     "accept": [],
+     "solution": "255.255.255.192",
+     "explain": "Trois octets pleins (255) + un octet avec 2 bits à 1 : 128 + 64 = 192.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Donne le **préfixe** (écris `/` suivi du nombre) du masque **255.255.255.240**.",
+     "hints": [
+      "240 = 128 + 64 + 32 + 16 → combien de bits à 1 ?",
+      "24 + le nombre de bits de l'octet."
+     ],
+     "accept": [
+      "28"
+     ],
+     "solution": "/28",
+     "explain": "240 = 4 bits à 1 → 24 + 4 = **/28**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "**Comment compter les hôtes ?** Avec `h` bits d'hôte, on a `2^h` adresses. Mais **deux sont réservées** : la première (l'**adresse du réseau**, tous les bits hôtes à 0) et la dernière (le **broadcast**, tous les bits hôtes à 1)."
+    },
+    {
+     "type": "code",
+     "sql": "hôtes utilisables = 2^h − 2\n\nExemple /27 : h = 32 − 27 = 5  →  2^5 − 2 = 32 − 2 = 30",
+     "lang": "Réseau",
+     "title": "La formule à retenir"
+    },
+    {
+     "type": "choice",
+     "q": "Combien d'hôtes utilisables dans un `/29` ?",
+     "options": [
+      "8",
+      "6",
+      "4"
+     ],
+     "answer": 1,
+     "explain": "/29 → h = 3 bits → 2³ = 8 adresses, moins 2 réservées = **6**."
+    },
+    {
+     "type": "exercise",
+     "q": "Combien d'hôtes utilisables dans un réseau **/28** ?",
+     "hints": [
+      "h = 32 − 28 = 4 bits d'hôte.",
+      "2^4 − 2"
+     ],
+     "accept": [],
+     "solution": "14",
+     "explain": "2⁴ = 16 adresses − 2 = **14**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Et quand le masque dépasse l'octet ? Même logique, mais sur un autre octet : `/20` = 8 + 8 + 4 → `255.255.240.0`. Les 4 premiers bits du 3ᵉ octet sont à 1 : 128+64+32+16 = 240."
+    },
+    {
+     "type": "exercise",
+     "q": "Donne le masque décimal de **/20**.",
+     "hints": [
+      "20 = 8 + 8 + 4 : le 3ᵉ octet a 4 bits à 1.",
+      "Le 4ᵉ octet vaut 0."
+     ],
+     "accept": [],
+     "solution": "255.255.240.0",
+     "explain": "Deux octets pleins, puis 4 bits à 1 (240), puis 0 : `255.255.240.0`.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Combien d'hôtes utilisables dans un réseau **/22** ?",
+     "hints": [
+      "h = 32 − 22 = 10.",
+      "2^10 = 1024."
+     ],
+     "accept": [
+      "1 022"
+     ],
+     "solution": "1022",
+     "explain": "2¹⁰ − 2 = 1024 − 2 = **1022**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu sais lire un masque, le convertir, et compter les hôtes. Dans la leçon suivante, je te donne **la méthode du pas** : le raccourci qui fait trouver un réseau en 10 secondes."
+    }
+   ]
+  },
+  {
+   "id": "pas",
+   "title": "La méthode du pas",
+   "emoji": "👣",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voici **LA** technique qui change tout. On l'appelle la **méthode du pas** (ou *taille de bloc*). Elle remplace tous les calculs binaires."
+    },
+    {
+     "type": "say",
+     "text": "Principe : dans l'octet « intéressant » (le premier où le masque n'est ni 255 ni 0), les sous-réseaux se suivent **par blocs réguliers**. La taille d'un bloc, c'est le **pas** :"
+    },
+    {
+     "type": "code",
+     "sql": "pas = 256 − valeur de l'octet du masque\n\nExemple /26 → masque 192 → pas = 256 − 192 = 64\n  Les réseaux commencent à : 0, 64, 128, 192",
+     "lang": "Réseau",
+     "title": "La formule du pas"
+    },
+    {
+     "type": "choice",
+     "q": "Quel est le pas pour le masque `255.255.255.224` ?",
+     "options": [
+      "32",
+      "64",
+      "16"
+     ],
+     "answer": 0,
+     "explain": "256 − 224 = **32**. Les sous-réseaux commencent à 0, 32, 64, 96, 128, 160, 192, 224."
+    },
+    {
+     "type": "say",
+     "text": "Une fois le pas connu, trouver le réseau d'une adresse devient un jeu : **le réseau est le plus grand multiple du pas inférieur ou égal à l'octet de l'adresse**. Le **broadcast** est juste *avant* le réseau suivant."
+    },
+    {
+     "type": "code",
+     "sql": "Adresse : 192.168.1.77 /26\n  Pas = 64 → multiples : 0, 64, 128, 192\n  77 est entre 64 et 127 → réseau = 192.168.1.64\n  Réseau suivant = .128 → broadcast = 128 − 1 = .127\n  Plage utilisable : .65 → .126",
+     "lang": "Réseau",
+     "title": "Exemple pas à pas"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle est l'**adresse réseau** de `192.168.1.77/26` ?",
+     "hints": [
+      "Pas = 256 − 192 = 64.",
+      "Le plus grand multiple de 64 inférieur ou égal à 77."
+     ],
+     "accept": [],
+     "solution": "192.168.1.64",
+     "explain": "Multiples de 64 : 0, 64, 128… 77 est dans [64 ; 127] → réseau **192.168.1.64**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle est l'**adresse de broadcast** de `192.168.1.77/26` ?",
+     "hints": [
+      "Le réseau suivant commence à .128.",
+      "Broadcast = réseau suivant − 1."
+     ],
+     "accept": [],
+     "solution": "192.168.1.127",
+     "explain": "Le réseau suivant est .128, donc le broadcast est **.127**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "À toi de dérouler la méthode complète sur un autre exemple. Rappel : réseau → broadcast → première et dernière adresse utilisables (réseau + 1, broadcast − 1)."
+    },
+    {
+     "type": "exercise",
+     "q": "`10.0.0.200/27` — donne l'**adresse réseau**.",
+     "hints": [
+      "Masque /27 → 224 → pas = 32.",
+      "Multiples de 32 : …, 160, 192, 224. Lequel encadre 200 ?"
+     ],
+     "accept": [],
+     "solution": "10.0.0.192",
+     "explain": "200 est dans [192 ; 223] : réseau **10.0.0.192**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "`10.0.0.200/27` — donne l'**adresse de broadcast**.",
+     "hints": [
+      "Prochain réseau : 10.0.0.224.",
+      "224 − 1"
+     ],
+     "accept": [],
+     "solution": "10.0.0.223",
+     "explain": "Broadcast = 224 − 1 = **10.0.0.223**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "`172.16.5.130/25` — donne la **première adresse utilisable**.",
+     "hints": [
+      "/25 → pas = 128 → réseau 172.16.5.128.",
+      "Première utilisable = réseau + 1."
+     ],
+     "accept": [],
+     "solution": "172.16.5.129",
+     "explain": "Réseau .128 → première utilisable **.129** (dernière : .254, broadcast : .255).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Maintenant, le cas qui effraie : quand le **masque coupe sur un autre octet** que le dernier. Même méthode, mais on l'applique à l'octet concerné, et les octets d'après valent **0** (réseau) ou **255** (broadcast)."
+    },
+    {
+     "type": "code",
+     "sql": "Adresse : 172.16.45.9 /20  → masque 255.255.240.0\n  Octet intéressant : le 3ᵉ (240) → pas = 256 − 240 = 16\n  Multiples de 16 : 0, 16, 32, 48…  → 45 est entre 32 et 47\n  Réseau    = 172.16.32.0\n  Broadcast = 172.16.47.255   (47 = 48 − 1, puis 255 pour le dernier octet)",
+     "lang": "Réseau",
+     "title": "Quand le pas s'applique au 3ᵉ octet"
+    },
+    {
+     "type": "choice",
+     "q": "Pour `172.16.45.9/20`, quel est le réseau ?",
+     "options": [
+      "172.16.45.0",
+      "172.16.32.0",
+      "172.16.40.0"
+     ],
+     "answer": 1,
+     "explain": "Pas = 16 sur le 3ᵉ octet : le multiple de 16 juste en dessous de 45 est 32. Le dernier octet passe à 0."
+    },
+    {
+     "type": "exercise",
+     "q": "`172.16.45.9/20` — donne l'**adresse de broadcast**.",
+     "hints": [
+      "Le réseau suivant : 172.16.48.0.",
+      "Avant 48.0 → 47.255."
+     ],
+     "accept": [],
+     "solution": "172.16.47.255",
+     "explain": "Dernier octet à 255 et 3ᵉ octet = 48 − 1 = 47 : **172.16.47.255**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "`10.20.30.40/21` — donne l'**adresse réseau**.",
+     "hints": [
+      "/21 = 8 + 8 + 5 → 3ᵉ octet : masque 248 → pas = 8.",
+      "Multiples de 8 autour de 30 : 24, 32."
+     ],
+     "accept": [],
+     "solution": "10.20.24.0",
+     "explain": "Pas = 256 − 248 = 8 ; 30 est dans [24 ; 31] → réseau **10.20.24.0** (broadcast 10.20.31.255).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Récap de la méthode : **1)** masque → octet intéressant ; **2)** pas = 256 − masque ; **3)** réseau = multiple du pas ; **4)** broadcast = réseau suivant − 1 ; **5)** plage = +1 … −1. La suite : le **ET logique** pour comprendre *pourquoi* ça marche."
+    }
+   ]
+  },
+  {
+   "id": "et-logique",
+   "title": "Le ET logique et « même réseau ? »",
+   "emoji": "🧠",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Pourquoi la méthode du pas marche-t-elle ? Parce qu'un routeur ou un PC calcule le réseau avec un **ET logique** (AND) bit à bit entre l'adresse et le masque."
+    },
+    {
+     "type": "code",
+     "sql": "1 ET 1 = 1\n1 ET 0 = 0\n0 ET 1 = 0\n0 ET 0 = 0",
+     "lang": "Réseau",
+     "title": "Table du ET"
+    },
+    {
+     "type": "say",
+     "text": "Avec le masque, la partie réseau (bits à 1) est **recopiée**, et la partie hôte (bits à 0) est **mise à zéro**. Regarde sur le dernier octet de `192.168.1.77/26` :"
+    },
+    {
+     "type": "code",
+     "sql": "   77  = 01001101\n  192  = 11000000\n  ----------------\nET   =   01000000 = 64      → réseau 192.168.1.64",
+     "lang": "Réseau",
+     "title": "ET logique sur le dernier octet"
+    },
+    {
+     "type": "choice",
+     "q": "Le ET logique avec un masque met à zéro…",
+     "options": [
+      "Les bits réseau",
+      "Les bits hôte",
+      "Tous les bits"
+     ],
+     "answer": 1,
+     "explain": "Les bits du masque à 0 effacent les bits d'hôte ; ceux à 1 conservent la partie réseau."
+    },
+    {
+     "type": "exercise",
+     "q": "Calcule `77 ET 192` (le résultat décimal).",
+     "hints": [
+      "77 = 01001101 et 192 = 11000000.",
+      "Ne garde que les bits à 1 des deux côtés."
+     ],
+     "accept": [],
+     "solution": "64",
+     "explain": "01001101 ET 11000000 = 01000000 = **64**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "**Application n°1 : deux machines sont-elles dans le même réseau ?** Calcule le réseau de chacune avec **le même masque** ; si les deux résultats sont identiques, elles se parlent directement. Sinon, il faut un **routeur**."
+    },
+    {
+     "type": "code",
+     "sql": "PC1 : 192.168.1.10 /27 → réseau 192.168.1.0   (plage 0–31)\nPC2 : 192.168.1.40 /27 → réseau 192.168.1.32  (plage 32–63)\n→ réseaux différents : il faut un routeur !",
+     "lang": "Réseau",
+     "title": "Même masque, réseaux différents"
+    },
+    {
+     "type": "choice",
+     "q": "Deux hôtes `192.168.4.200/26` et `192.168.4.230/26` sont-ils dans le même réseau ?",
+     "options": [
+      "Oui, réseau 192.168.4.192",
+      "Non, 200 et 230 sont différents",
+      "Oui, réseau 192.168.4.128"
+     ],
+     "answer": 0,
+     "explain": "Pas = 64 : 200 et 230 sont tous deux dans [192 ; 255] → même réseau **192.168.4.192/26**."
+    },
+    {
+     "type": "choice",
+     "q": "`192.168.1.10/27` et `192.168.1.40/27` : même réseau ?",
+     "options": [
+      "Oui",
+      "Non : .0/27 et .32/27",
+      "Impossible à dire"
+     ],
+     "answer": 1,
+     "explain": "Pas = 32 : 10 est dans [0 ; 31], 40 dans [32 ; 63]. Réseaux différents."
+    },
+    {
+     "type": "say",
+     "text": "**Application n°2 : repérer une adresse d'hôte invalide.** Une adresse ne peut pas être celle du réseau ni celle du broadcast. Exemple : `192.168.1.63/26` est le **broadcast** du réseau .0/26 → on ne peut pas l'attribuer à une machine."
+    },
+    {
+     "type": "choice",
+     "q": "L'adresse `192.168.1.64/26` peut-elle être attribuée à un PC ?",
+     "options": [
+      "Oui",
+      "Non : c'est l'adresse du réseau 192.168.1.64/26",
+      "Non : c'est un broadcast"
+     ],
+     "answer": 1,
+     "explain": "Pas = 64 : 192.168.1.64 est un multiple du pas, donc **l'adresse du réseau**. Aucune machine ne peut la porter."
+    },
+    {
+     "type": "choice",
+     "q": "Et `192.168.1.127/26` ?",
+     "options": [
+      "Oui, c'est l'avant-dernière",
+      "Non : c'est le broadcast du réseau .64/26",
+      "Non : c'est l'adresse réseau"
+     ],
+     "answer": 1,
+     "explain": "Le réseau suivant est .128, donc .127 est le broadcast."
+    },
+    {
+     "type": "exercise",
+     "q": "`10.10.10.37/29` — donne l'**adresse réseau**.",
+     "hints": [
+      "/29 → masque 248 → pas = 8.",
+      "Multiple de 8 juste en dessous de 37."
+     ],
+     "accept": [],
+     "solution": "10.10.10.32",
+     "explain": "Multiples de 8 : …, 32, 40 → réseau **10.10.10.32** (broadcast .39, hôtes .33 à .38).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu comprends maintenant le **mécanisme** derrière la méthode du pas. Place à la partie « construction » : **découper** un réseau en sous-réseaux."
+    }
+   ]
+  },
+  {
+   "id": "decouper",
+   "title": "Découper en sous-réseaux",
+   "emoji": "✂️",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Jusqu'ici on *analysait* une adresse. Maintenant on **construit** : on part d'un grand réseau et on le **découpe** en plusieurs sous-réseaux (un par service, par salle, par agence…)."
+    },
+    {
+     "type": "say",
+     "text": "L'idée : on **emprunte des bits** à la partie hôte pour en faire des bits de réseau. Chaque bit emprunté **double** le nombre de sous-réseaux et **divise par 2** la taille de chacun."
+    },
+    {
+     "type": "code",
+     "sql": "n bits empruntés → 2^n sous-réseaux\n\n192.168.10.0/24  +1 bit  → 2 sous-réseaux  (/25)\n192.168.10.0/24  +2 bits → 4 sous-réseaux  (/26)\n192.168.10.0/24  +3 bits → 8 sous-réseaux  (/27)",
+     "lang": "Réseau",
+     "title": "Emprunter des bits"
+    },
+    {
+     "type": "choice",
+     "q": "Combien de bits faut-il emprunter pour obtenir au moins 4 sous-réseaux ?",
+     "options": [
+      "1",
+      "2",
+      "4"
+     ],
+     "answer": 1,
+     "explain": "2² = 4. Avec 1 bit on n'a que 2 sous-réseaux."
+    },
+    {
+     "type": "exercise",
+     "q": "Combien de bits faut-il emprunter pour obtenir **au moins 6** sous-réseaux ?",
+     "hints": [
+      "2^2 = 4 (pas assez).",
+      "2^3 = ?"
+     ],
+     "accept": [],
+     "solution": "3",
+     "explain": "2³ = 8 ≥ 6 (2² = 4 ne suffit pas). On prend **3 bits**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Déroulons un exemple complet : découper `192.168.10.0/24` en **4 sous-réseaux** égaux."
+    },
+    {
+     "type": "code",
+     "sql": "1) 4 sous-réseaux → 2 bits empruntés → nouveau préfixe /24 + 2 = /26\n2) Masque /26 → 255.255.255.192 → pas = 64\n3) Les sous-réseaux avancent de 64 en 64 :\n\n   192.168.10.0/26     (hôtes .1   → .62 , broadcast .63)\n   192.168.10.64/26    (hôtes .65  → .126, broadcast .127)\n   192.168.10.128/26   (hôtes .129 → .190, broadcast .191)\n   192.168.10.192/26   (hôtes .193 → .254, broadcast .255)",
+     "lang": "Réseau",
+     "title": "Découper /24 en 4"
+    },
+    {
+     "type": "exercise",
+     "q": "On découpe `192.168.10.0/24` en 4 sous-réseaux. Donne l'adresse du **3ᵉ sous-réseau** (avec son préfixe, ex. `x.x.x.x/n`).",
+     "hints": [
+      "Les 4 réseaux : .0, .64, .128, .192.",
+      "Le 3ᵉ = celui qui commence à 128."
+     ],
+     "accept": [],
+     "solution": "192.168.10.128/26",
+     "explain": "Les sous-réseaux sont .0, .64, **.128**, .192 (tous en /26).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "On découpe `192.168.10.0/24` en **8** sous-réseaux. Donne le **préfixe** de chaque sous-réseau (ex. `/26`).",
+     "hints": [
+      "8 = 2^3 → 3 bits empruntés.",
+      "24 + 3 = ?"
+     ],
+     "accept": [
+      "27"
+     ],
+     "solution": "/27",
+     "explain": "3 bits empruntés : /24 + 3 = **/27**, pas = 32 (réseaux .0, .32, .64, .96, .128, .160, .192, .224).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Avec ces 8 sous-réseaux /27, donne l'adresse du **2ᵉ sous-réseau** (avec préfixe).",
+     "hints": [
+      "Pas = 32.",
+      "1er = .0 → 2ᵉ = ?"
+     ],
+     "accept": [],
+     "solution": "192.168.10.32/27",
+     "explain": "Le 1er est .0/27, le 2ᵉ est **.32/27**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Et pour un réseau plus grand, ou quand le découpage touche l'**avant-dernier octet** ? Même méthode ! Exemple : `172.16.0.0/16` en **8** sous-réseaux."
+    },
+    {
+     "type": "code",
+     "sql": "1) 8 sous-réseaux → 3 bits → /16 + 3 = /19\n2) Masque /19 → 255.255.224.0 → l'octet intéressant est le 3ᵉ\n3) pas = 256 − 224 = 32 (sur le 3ᵉ octet)\n\n   172.16.0.0/19\n   172.16.32.0/19\n   172.16.64.0/19\n   172.16.96.0/19\n   172.16.128.0/19\n   172.16.160.0/19\n   172.16.192.0/19\n   172.16.224.0/19",
+     "lang": "Réseau",
+     "title": "Découper un /16 en 8"
+    },
+    {
+     "type": "exercise",
+     "q": "On découpe `172.16.0.0/16` en 8 sous-réseaux /19. Quelle est l'adresse du **4ᵉ** sous-réseau (avec préfixe) ?",
+     "hints": [
+      "Pas = 32 sur le 3ᵉ octet : 0, 32, 64, 96…",
+      "Le 4ᵉ est le quatrième de la liste."
+     ],
+     "accept": [],
+     "solution": "172.16.96.0/19",
+     "explain": "Liste : 0, 32, 64, **96**… → **172.16.96.0/19**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "choice",
+     "q": "Quand on découpe, chaque sous-réseau a-t-il plus ou moins d'hôtes que le réseau d'origine ?",
+     "options": [
+      "Plus",
+      "Moins : on a pris des bits d'hôte pour faire du réseau",
+      "Autant"
+     ],
+     "answer": 1,
+     "explain": "On échange des bits d'hôte contre des bits de réseau : plus de sous-réseaux, mais **chacun plus petit**."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu sais découper en parts égales. Mais dans la vraie vie, les besoins sont **inégaux** : un service de 100 PC, un autre de 20… Ça, c'est le VLSM (autre formation). Avant, apprenons à **choisir le bon masque selon un besoin d'hôtes**."
+    }
+   ]
+  },
+  {
+   "id": "besoin",
+   "title": "Choisir le bon masque",
+   "emoji": "🎯",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Question classique d'examen : « L'agence compte **50 machines**. Quel masque choisir ? » On raisonne à l'envers : à partir des **hôtes nécessaires**, on cherche le nombre de bits d'hôte."
+    },
+    {
+     "type": "code",
+     "sql": "1) Trouver h : le plus petit h tel que 2^h − 2 ≥ besoin\n2) Préfixe = 32 − h\n\nExemple : 50 machines\n  2^5 − 2 = 30  → trop petit\n  2^6 − 2 = 62  → OK  (h = 6)\n  préfixe = 32 − 6 = /26",
+     "lang": "Réseau",
+     "title": "Méthode"
+    },
+    {
+     "type": "choice",
+     "q": "Pour **50 machines**, quel préfixe choisir ?",
+     "options": [
+      "/27",
+      "/26",
+      "/25"
+     ],
+     "answer": 1,
+     "explain": "/27 n'offre que 30 hôtes ; /26 en offre 62 ≥ 50. /25 marcherait mais gaspille (126 hôtes)."
+    },
+    {
+     "type": "say",
+     "text": "On choisit toujours **le plus petit réseau qui convient** (le préfixe le plus long) pour ne pas gaspiller d'adresses."
+    },
+    {
+     "type": "exercise",
+     "q": "Quel préfixe pour **100 machines** (ex. `/24`) ?",
+     "hints": [
+      "2^6 − 2 = 62 : insuffisant.",
+      "2^7 − 2 = 126 → h = 7."
+     ],
+     "accept": [
+      "25"
+     ],
+     "solution": "/25",
+     "explain": "h = 7 → 32 − 7 = **/25** (126 hôtes).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Quel préfixe pour **500 machines** ?",
+     "hints": [
+      "2^8 − 2 = 254 : trop petit.",
+      "2^9 − 2 = 510 → h = 9."
+     ],
+     "accept": [
+      "23"
+     ],
+     "solution": "/23",
+     "explain": "h = 9 → 32 − 9 = **/23** (510 hôtes).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Quel préfixe pour une liaison **point à point** entre deux routeurs (2 adresses) ?",
+     "hints": [
+      "Il faut 2 hôtes utilisables.",
+      "2^2 − 2 = 2 → h = 2."
+     ],
+     "accept": [
+      "30"
+     ],
+     "solution": "/30",
+     "explain": "h = 2 → **/30**. C'est le préfixe classique des liaisons entre routeurs.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Piège n°1 : oublier les 2 adresses réservées.** Pour 30 machines pile, `/27` convient (30 hôtes). Pour **31** machines, il faut passer à `/26`. Un seul de plus change tout !"
+    },
+    {
+     "type": "choice",
+     "q": "Pour **30 machines**, quel préfixe minimal ?",
+     "options": [
+      "/28",
+      "/27",
+      "/26"
+     ],
+     "answer": 1,
+     "explain": "2^5 − 2 = **30** exactement → /27. Pour 31 machines, ce serait /26."
+    },
+    {
+     "type": "choice",
+     "q": "Pour **31 machines**, quel préfixe minimal ?",
+     "options": [
+      "/27",
+      "/26",
+      "/25"
+     ],
+     "answer": 1,
+     "explain": "/27 n'offre que 30 hôtes → il faut /26 (62)."
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Piège n°2 : penser aux équipements réseau.** Une passerelle (le routeur) consomme aussi une adresse du sous-réseau. Si l'énoncé dit « 30 PC + 1 routeur », il y a **31** adresses à fournir."
+    },
+    {
+     "type": "choice",
+     "q": "Un sous-réseau doit contenir 29 PC et 2 routeurs (31 adresses). Quel préfixe ?",
+     "options": [
+      "/27",
+      "/26",
+      "/28"
+     ],
+     "answer": 1,
+     "explain": "31 adresses > 30 hôtes d'un /27. Il faut **/26**."
+    },
+    {
+     "type": "exercise",
+     "q": "Combien d'adresses **inutilisables** y a-t-il dans tout réseau ? (réponse en chiffre)",
+     "hints": [
+      "Une pour le réseau, une pour le broadcast.",
+      "La formule 2^h − 2."
+     ],
+     "accept": [],
+     "solution": "2",
+     "explain": "L'adresse du réseau et celle de broadcast : **2**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu sais aller dans les deux sens : *masque → hôtes* et *hôtes → masque*. Dernière étape : un **défi final** qui mélange tout."
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : subnetting complet",
+   "emoji": "🏆",
+   "minutes": 12,
+   "steps": [
+    {
+     "type": "say",
+     "text": "On passe au **défi final**. Cinq situations d'examen, de difficulté croissante. Utilise la méthode du pas ; je suis là si tu bloques."
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/6** — `192.168.50.200/28` : donne l'**adresse réseau**.",
+     "hints": [
+      "/28 → masque 240 → pas = 16.",
+      "Multiples de 16 : …, 176, 192, 208."
+     ],
+     "accept": [],
+     "solution": "192.168.50.192",
+     "explain": "200 est dans [192 ; 207] → **192.168.50.192**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/6** — Même adresse `192.168.50.200/28` : donne l'**adresse de broadcast**.",
+     "hints": [
+      "Prochain réseau : 192.168.50.208.",
+      "208 − 1."
+     ],
+     "accept": [],
+     "solution": "192.168.50.207",
+     "explain": "Broadcast **192.168.50.207** (hôtes .193 → .206, soit 14).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/6** — `172.31.130.77/18` : donne l'**adresse réseau**.",
+     "hints": [
+      "/18 = 8 + 8 + 2 → 3ᵉ octet, masque 192 → pas = 64.",
+      "Multiples de 64 : 0, 64, 128, 192."
+     ],
+     "accept": [
+      "172.31.128.0/18"
+     ],
+     "solution": "172.31.128.0",
+     "explain": "130 est dans [128 ; 191] → réseau **172.31.128.0** (broadcast 172.31.191.255).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 4/6** — Quel est le masque décimal d'un réseau qui doit contenir **2000 hôtes** (le plus petit possible) ?",
+     "hints": [
+      "2^10 − 2 = 1022 : trop petit.",
+      "2^11 − 2 = 2046 → h = 11 → préfixe /21."
+     ],
+     "accept": [],
+     "solution": "255.255.248.0",
+     "explain": "h = 11 → /21 → 8 + 8 + 5 bits → `255.255.248.0` (2046 hôtes).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 5/6** — On découpe `10.0.0.0/8` en sous-réseaux **/10**. Combien de sous-réseaux obtient-on ?",
+     "hints": [
+      "Bits empruntés : 10 − 8 = 2.",
+      "2^2"
+     ],
+     "accept": [],
+     "solution": "4",
+     "explain": "2 bits empruntés → 2² = **4** sous-réseaux : 10.0.0.0/10, 10.64.0.0/10, 10.128.0.0/10, 10.192.0.0/10.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 6/6 (boss)** — `10.20.30.40/21` : donne l'**adresse de broadcast**.",
+     "hints": [
+      "Réseau = 10.20.24.0 (pas = 8 sur le 3ᵉ octet).",
+      "Réseau suivant : 10.20.32.0."
+     ],
+     "accept": [],
+     "solution": "10.20.31.255",
+     "explain": "Réseau 10.20.24.0 → suivant 10.20.32.0 → broadcast **10.20.31.255**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu maîtrises le subnetting : lire un masque, la méthode du pas, le ET logique, le découpage et le choix du masque. Tu peux maintenant attaquer le **VLSM** (sous-réseaux de tailles différentes) avec ces bases solides."
+    }
+   ]
+  }
+ ]
+}
