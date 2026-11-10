@@ -1,0 +1,78 @@
+{
+ "n": 7,
+ "title": "Épreuve n° 7 · Résumé de routes",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : résumer",
+   "points": 12,
+   "intro": "Donnez la route résumée la plus précise possible.",
+   "questions": [
+    {
+     "id": "e07p1q1",
+     "q": "192.168.0.0/24, 192.168.1.0/24, 192.168.2.0/24, 192.168.3.0/24",
+     "points": 2,
+     "a": "- Octet 0-3 : 6 bits communs → 16 + 6 = 22 → **192.168.0.0/22**."
+    },
+    {
+     "id": "e07p1q2",
+     "q": "10.0.0.0/23, 10.0.2.0/23, 10.0.4.0/23, 10.0.6.0/23",
+     "points": 2,
+     "a": "- Octet 0, 2, 4, 6 : 5 bits communs → 16 + 5 = 21 → **10.0.0.0/21** (10.0.0.0 à 10.0.7.255)."
+    },
+    {
+     "id": "e07p1q3",
+     "q": "172.16.16.0/24 à 172.16.19.0/24",
+     "points": 2,
+     "a": "- 16 à 19 : 6 bits communs → **172.16.16.0/22**."
+    },
+    {
+     "id": "e07p1q4",
+     "q": "10.8.0.0/16 à 10.15.0.0/16",
+     "points": 2,
+     "a": "- 2e octet 8 à 15 : 5 bits communs → 8 + 5 = **/13** : 10.8.0.0/13 (255.248.0.0)."
+    },
+    {
+     "id": "e07p1q5",
+     "q": "192.168.4.0/24 à 192.168.7.0/24 puis 192.168.5.0/24 à 192.168.8.0/24",
+     "points": 4,
+     "a": "- 4 à 7 : alignés → **192.168.4.0/22**.\n- 5 à 8 : le premier n'est pas aligné sur 4 ; un seul résumé couvrant serait 192.168.0.0/20 (trop large). On garde : 192.168.5.0/24, 192.168.6.0/23, 192.168.8.0/24."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : plages et masques",
+   "points": 8,
+   "intro": "Quel masque regroupe chaque plage ?",
+   "questions": [
+    {
+     "id": "e07p2q1",
+     "q": "192.168.0.0 - 192.168.63.255",
+     "points": 2,
+     "a": "- 64 × 256 = 2^14 → **/18** = 255.255.192.0."
+    },
+    {
+     "id": "e07p2q2",
+     "q": "10.0.0.0 - 10.3.255.255",
+     "points": 2,
+     "a": "- 4 × 65 536 = 2^18 → **/14** = 255.252.0.0."
+    },
+    {
+     "id": "e07p2q3",
+     "q": "Pourquoi ajouter une route Null0 avec une route résumée ? Donnez la commande.",
+     "points": 2,
+     "a": "```text\nip route 10.0.0.0 255.255.248.0 Null0\n```\n- Pour jeter les paquets destinés à des adresses du résumé qui n'existent pas (évite boucles et trous noirs) ; les routes plus spécifiques continuent de l'emporter."
+    },
+    {
+     "id": "e07p2q4",
+     "q": "Donnez deux conditions pour un résumé exact.",
+     "points": 2,
+     "a": "- Le nombre de réseaux est une **puissance de 2**, et le premier réseau est **aligné** sur la taille du bloc résumé ; les réseaux sont **contigus**."
+    }
+   ]
+  }
+ ]
+}

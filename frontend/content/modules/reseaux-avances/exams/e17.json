@@ -1,0 +1,78 @@
+{
+ "n": 17,
+ "title": "Épreuve n° 17 · IPv6",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : écriture et types",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e17p1q1",
+     "q": "Compressez : 2001:0db8:0000:0000:0008:0800:200C:417a ; ff01:0000:0000:0000:0000:0000:0000:0101 ; 0000:0000:0000:0000:0000:0000:0000:0001.",
+     "points": 3,
+     "a": "- `2001:db8::8:800:200c:417a` ; `ff01::101` ; `::1`."
+    },
+    {
+     "id": "e17p1q2",
+     "q": "Écrivez sans compression : fe80::1 et 2001:0:bebe::face:c001.",
+     "points": 2,
+     "a": "- `fe80:0000:0000:0000:0000:0000:0000:0001` ; `2001:0000:bebe:0000:0000:0000:face:c001`."
+    },
+    {
+     "id": "e17p1q3",
+     "q": "Identifiez : fe80::a00:27ff:fe4e:66a1, 2a00:1450::1, fd12:3456::1, ff02::2, ::1.",
+     "points": 3,
+     "a": "- Lien-local ; global unicast (2000::/3) ; unique locale (fc00::/7) ; multicast « tous les routeurs du lien » ; loopback."
+    },
+    {
+     "id": "e17p1q4",
+     "q": "Pourquoi fe80::4cd:ffa1::1 est-elle invalide ?",
+     "points": 2,
+     "a": "- Deux `::` : on ne sait pas combien de groupes nuls chacun remplace. Le `::` n'apparaît qu'une fois."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : fonctionnement et configuration",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e17p2q1",
+     "q": "Donnez la taille d'une adresse IPv6, de l'en-tête, et les équivalents de TTL et Protocole.",
+     "points": 2,
+     "a": "- 128 bits ; en-tête de 40 octets (taille fixe) ; Hop Limit remplace le TTL ; Next Header remplace Protocole."
+    },
+    {
+     "id": "e17p2q2",
+     "q": "Quel protocole remplace ARP et quels messages ?",
+     "points": 2,
+     "a": "- NDP (ICMPv6) : NS et NA (voisins), RS et RA (routeurs)."
+    },
+    {
+     "id": "e17p2q3",
+     "q": "Comment un hôte obtient-il une adresse globale (3 méthodes) ?",
+     "points": 2,
+     "a": "- Manuelle ; SLAAC (préfixe annoncé par RA, suffixe EUI-64 ou aléatoire) ; DHCPv6."
+    },
+    {
+     "id": "e17p2q4",
+     "q": "Configurez un routeur Cisco : g0/0 en 2001:db8:acad:1::1/64, route vers 2001:db8:acad:3::/64 via 2001:db8:acad:12::2 et route par défaut.",
+     "points": 3,
+     "a": "```text\nipv6 unicast-routing\ninterface g0/0\n ipv6 address 2001:db8:acad:1::1/64\n no shutdown\nipv6 route 2001:db8:acad:3::/64 2001:db8:acad:12::2\nipv6 route ::/0 2001:db8:acad:12::2\n```"
+    },
+    {
+     "id": "e17p2q5",
+     "q": "Citez deux mécanismes de coexistence IPv4/IPv6.",
+     "points": 1,
+     "a": "- Double pile ; tunnels (6to4, 6rd...) ; NAT64/DNS64."
+    }
+   ]
+  }
+ ]
+}

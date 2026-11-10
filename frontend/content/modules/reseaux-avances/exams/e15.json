@@ -1,0 +1,72 @@
+{
+ "n": 15,
+ "title": "Épreuve n° 15 · OSPF : configuration",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : notions",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e15p1q1",
+     "q": "Donnez le masque générique de 255.255.254.0, 255.255.255.252, 255.255.248.0.",
+     "points": 2,
+     "a": "- 0.0.1.255 ; 0.0.0.3 ; 0.0.7.255 (255 moins chaque octet)."
+    },
+    {
+     "id": "e15p1q2",
+     "q": "AD, protocole IP, multicasts et temporisateurs par défaut d'OSPF.",
+     "points": 3,
+     "a": "- AD 110 ; protocole IP 89 ; multicast 224.0.0.5 (tous) et 224.0.0.6 (DR/BDR) ; Hello 10 s, Dead 40 s sur Ethernet."
+    },
+    {
+     "id": "e15p1q3",
+     "q": "Comparez vecteur de distance et état de lien.",
+     "points": 3,
+     "a": "- Vecteur de distance : chacun connaît ce que disent les voisins, convergence lente, risques de boucles (RIP). État de lien : carte complète de la zone, calcul SPF, convergence rapide, plus de ressources (OSPF)."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : configurer",
+   "points": 12,
+   "intro": "R1 : LAN 10.1.0.0/24 (g0/0), lien R1-R2 172.16.0.0/30 (g0/1). R2 : lien R1-R2 (g0/1), LAN 10.2.0.0/24 (g0/0), lien R2-R3 172.16.0.4/30 (g0/2). R3 : lien R2-R3 (g0/2), LAN 10.3.0.0/24 (g0/0).",
+   "questions": [
+    {
+     "id": "e15p2q1",
+     "q": "Écrivez la configuration OSPF de R1 (processus 1, zone 0) avec les LAN en passive.",
+     "points": 3,
+     "a": "```text\nrouter ospf 1\n passive-interface g0/0\n network 10.1.0.0 0.0.0.255 area 0\n network 172.16.0.0 0.0.0.3 area 0\n```"
+    },
+    {
+     "id": "e15p2q2",
+     "q": "Écrivez la configuration OSPF de R2 avec l'autre méthode (commande sur interface).",
+     "points": 3,
+     "a": "```text\nrouter ospf 1\n passive-interface g0/0\ninterface g0/0\n ip ospf 1 area 0\ninterface g0/1\n ip ospf 1 area 0\ninterface g0/2\n ip ospf 1 area 0\n```"
+    },
+    {
+     "id": "e15p2q3",
+     "q": "Quelles commandes vérifient les voisins et les routes OSPF ?",
+     "points": 2,
+     "a": "```text\nshow ip ospf neighbor\nshow ip route ospf\nshow ip protocols\n```"
+    },
+    {
+     "id": "e15p2q4",
+     "q": "Deux routeurs ne deviennent pas voisins : donnez quatre causes.",
+     "points": 2,
+     "a": "- Sous-réseaux/masques différents sur le lien ; zones différentes ; temporisateurs Hello/Dead différents ; interface passive sur le lien ; authentification différente ; ACL qui bloque le protocole 89."
+    },
+    {
+     "id": "e15p2q5",
+     "q": "À quoi sert `redistribute connected subnets` ? Pourquoi `subnets` ?",
+     "points": 2,
+     "a": "- Injecter dans OSPF les réseaux connectés non couverts par `network`/`ip ospf`. Sans `subnets`, seuls les réseaux « classful » sont redistribués."
+    }
+   ]
+  }
+ ]
+}

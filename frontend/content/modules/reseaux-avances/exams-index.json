@@ -1,0 +1,194 @@
+[
+ {
+  "n": 1,
+  "title": "Épreuve n° 1 · Sujet réel : Réseaux avancés (ENEAM, 2 h)",
+  "scenario": "Épreuve de Réseaux avancés, partie A",
+  "cas": "Masques, réseau/diffusion, tables de routage, OSPF, ports, Docker",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 2,
+  "title": "Épreuve n° 2 · Binaire, octets et masques",
+  "scenario": "Fondations de l'adressage IPv4",
+  "cas": "décimal/binaire, masques, notation CIDR, ET logique",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 3,
+  "title": "Épreuve n° 3 · Réseau, diffusion et plages d'hôtes",
+  "scenario": "Calculs d'adresses CIDR",
+  "cas": "réseau/diffusion, plage, même réseau, adresses privées",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 4,
+  "title": "Épreuve n° 4 · Subnetting par nombre de sous-réseaux et d'hôtes",
+  "scenario": "Découpage de blocs",
+  "cas": "emprunt de bits, pas, nombre d'hôtes, fenêtre de solutions",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 5,
+  "title": "Épreuve n° 5 · VLSM : la banque",
+  "scenario": "Plan d'adressage d'une banque",
+  "cas": "VLSM, tri par taille, alignement, liaisons /30",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 6,
+  "title": "Épreuve n° 6 · VLSM : entreprise à trois sites",
+  "scenario": "Plan d'adressage multi-sites",
+  "cas": "VLSM sur /22, vérification, résumé par site",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 7,
+  "title": "Épreuve n° 7 · Résumé de routes",
+  "scenario": "Agrégation de réseaux",
+  "cas": "plus long préfixe commun, plage → masque, trous noirs",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 8,
+  "title": "Épreuve n° 8 · OSI, TCP/IP, Ethernet et ARP",
+  "scenario": "Fondations des protocoles",
+  "cas": "couches, encapsulation, MAC, switch, ARP",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 9,
+  "title": "Épreuve n° 9 · IP, ICMP, TTL et fragmentation",
+  "scenario": "Analyse de paquets",
+  "cas": "en-tête IP, TTL, MTU, fragmentation, ping, traceroute",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 10,
+  "title": "Épreuve n° 10 · TCP, UDP et ports",
+  "scenario": "Transport et services",
+  "cas": "ports usuels, poignée de main, comparaison TCP/UDP, ss, nc",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 11,
+  "title": "Épreuve n° 11 · Table de routage et choix de la route",
+  "scenario": "Lecture de tables",
+  "cas": "longest prefix match, AD, métrique, codes C/S/O/L",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 12,
+  "title": "Épreuve n° 12 · Routage statique : trois routeurs en ligne",
+  "scenario": "Réseau LAN1 - R1 - R2 - R3 - LAN3",
+  "cas": "tables, commandes ip route, retour, vérification",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 13,
+  "title": "Épreuve n° 13 · Routes par défaut, flottantes et résumées",
+  "scenario": "Site relié à Internet par deux opérateurs",
+  "cas": "route par défaut, flottante, résumé, Null0, équilibrage",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 14,
+  "title": "Épreuve n° 14 · Dépannage du routage",
+  "scenario": "Cinq pannes à diagnostiquer",
+  "cas": "méthode, symptômes ICMP, causes classiques, commandes",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 15,
+  "title": "Épreuve n° 15 · OSPF : configuration",
+  "scenario": "Trois routeurs en zone 0",
+  "cas": "wildcard, network, passive-interface, redistribute, vérification",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 16,
+  "title": "Épreuve n° 16 · OSPF : anneau, panne, coût et DR",
+  "scenario": "Réseau en anneau avec secours automatique",
+  "cas": "coût, convergence, DR/BDR, route par défaut, comparaison statique",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 17,
+  "title": "Épreuve n° 17 · IPv6",
+  "scenario": "Adressage et configuration IPv6",
+  "cas": "compression, types d'adresses, NDP, routes IPv6, double pile",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 18,
+  "title": "Épreuve n° 18 · VLAN et routage inter-VLAN",
+  "scenario": "Réseau d'une école",
+  "cas": "VLAN, access/trunk, natif, router-on-a-stick, SVI, STP",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 19,
+  "title": "Épreuve n° 19 · DHCP et DNS",
+  "scenario": "Services d'infrastructure",
+  "cas": "DORA, pool, relais, enregistrements DNS, dig",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 20,
+  "title": "Épreuve n° 20 · NAT et PAT",
+  "scenario": "Partage d'une adresse publique",
+  "cas": "NAT statique, dynamique, PAT, configuration Cisco et Linux",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 21,
+  "title": "Épreuve n° 21 · ACL et sécurité réseau",
+  "scenario": "Filtrage d'une PME",
+  "cas": "ACL standard/étendue, wildcard, placement, ufw, durcissement",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 22,
+  "title": "Épreuve n° 22 · Linux réseau et Docker",
+  "scenario": "Administration d'un serveur d'application",
+  "cas": "ip, netplan, ip_forward, ss, tcpdump, docker -p",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 23,
+  "title": "Épreuve n° 23 · Examen blanc A (2 h)",
+  "scenario": "Synthèse : adressage, routage, services",
+  "cas": "plages, réseaux, tables de routage, OSPF, ports, Docker",
+  "durationMinutes": 120,
+  "points": 20
+ },
+ {
+  "n": 24,
+  "title": "Épreuve n° 24 · Examen blanc B (2 h)",
+  "scenario": "Synthèse : VLSM, VLAN, NAT, ACL, résumé",
+  "cas": "plan VLSM, inter-VLAN, PAT, ACL, résumé de routes",
+  "durationMinutes": 120,
+  "points": 20
+ }
+]

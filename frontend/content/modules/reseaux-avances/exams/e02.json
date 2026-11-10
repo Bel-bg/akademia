@@ -1,0 +1,66 @@
+{
+ "n": 2,
+ "title": "Épreuve n° 2 · Binaire, octets et masques",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : conversions",
+   "points": 8,
+   "intro": "Sans calculatrice.",
+   "questions": [
+    {
+     "id": "e02p1q1",
+     "q": "Convertissez en binaire : 172, 203, 45, 255, 10.",
+     "points": 3,
+     "a": "```text\n172 = 10101100   203 = 11001011   45 = 00101101   255 = 11111111   10 = 00001010\n```\n- Méthode des soustractions avec les poids 128, 64, 32, 16, 8, 4, 2, 1."
+    },
+    {
+     "id": "e02p1q2",
+     "q": "Convertissez en décimal : 11000000, 10101000, 01100100, 11111100.",
+     "points": 3,
+     "a": "```text\n11000000 = 192   10101000 = 168   01100100 = 100   11111100 = 252\n```"
+    },
+    {
+     "id": "e02p1q3",
+     "q": "Quelles sont les 9 valeurs possibles d'un octet de masque ?",
+     "points": 2,
+     "a": "- 0, 128, 192, 224, 240, 248, 252, 254, 255 (on ajoute à chaque fois la moitié du poids précédent)."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : masques et CIDR",
+   "points": 12,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e02p2q1",
+     "q": "Écrivez en notation décimale : /8, /12, /18, /21, /26, /30.",
+     "points": 3,
+     "a": "```text\n/8  = 255.0.0.0         /12 = 255.240.0.0       /18 = 255.255.192.0\n/21 = 255.255.248.0     /26 = 255.255.255.192   /30 = 255.255.255.252\n```"
+    },
+    {
+     "id": "e02p2q2",
+     "q": "Écrivez en notation /n : 255.255.254.0, 255.255.255.224, 255.254.0.0, 255.255.240.0.",
+     "points": 3,
+     "a": "```text\n255.255.254.0 = /23   255.255.255.224 = /27   255.254.0.0 = /15   255.255.240.0 = /20\n```"
+    },
+    {
+     "id": "e02p2q3",
+     "q": "Faites le ET logique entre 192.168.10.45 et 255.255.255.192. Donnez le réseau et la diffusion.",
+     "points": 3,
+     "a": "```text\n192.168.10.45 = 11000000.10101000.00001010.00101101\n/26           = 11111111.11111111.11111111.11000000\nET            = 11000000.10101000.00001010.00000000 -> réseau 192.168.10.0\nDiffusion : bits hôte à 1 -> 00111111 = 63 -> 192.168.10.63\n```"
+    },
+    {
+     "id": "e02p2q4",
+     "q": "Combien d'hôtes utilisables pour /27, /22, /30 ? Pourquoi « − 2 » ?",
+     "points": 3,
+     "a": "- /27 : 2^5 − 2 = 30 ; /22 : 2^10 − 2 = 1 022 ; /30 : 2^2 − 2 = 2.\n- On retire l'adresse du **réseau** (hôte à 0) et l'adresse de **diffusion** (hôte à 1)."
+    }
+   ]
+  }
+ ]
+}

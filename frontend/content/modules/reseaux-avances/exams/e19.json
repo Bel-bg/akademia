@@ -1,0 +1,72 @@
+{
+ "n": 19,
+ "title": "Épreuve n° 19 · DHCP et DNS",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : DHCP",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e19p1q1",
+     "q": "Décrivez le dialogue DHCP, les ports et les types de messages (diffusion ou non).",
+     "points": 3,
+     "a": "- DISCOVER (diffusion), OFFER, REQUEST (diffusion), ACK ; UDP 67 côté serveur et 68 côté client."
+    },
+    {
+     "id": "e19p1q2",
+     "q": "Un PC affiche 169.254.12.3 : cause et vérifications.",
+     "points": 2,
+     "a": "- Aucune réponse DHCP (APIPA). Vérifier lien, VLAN, serveur DHCP, relais."
+    },
+    {
+     "id": "e19p1q3",
+     "q": "Écrivez un pool DHCP Cisco pour 192.168.10.0/24, passerelle .254, DNS 1.1.1.1, en excluant .1 à .20.",
+     "points": 3,
+     "a": "```text\nip dhcp excluded-address 192.168.10.1 192.168.10.20\nip dhcp excluded-address 192.168.10.254\nip dhcp pool LAN10\n network 192.168.10.0 255.255.255.0\n default-router 192.168.10.254\n dns-server 1.1.1.1\n```"
+    },
+    {
+     "id": "e19p1q4",
+     "q": "Le serveur DHCP est dans un autre réseau : que configurer et où ?",
+     "points": 2,
+     "a": "- Un relais : `ip helper-address @serveur` sur l'interface du routeur côté LAN, car les diffusions ne traversent pas un routeur."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : DNS",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e19p2q1",
+     "q": "Donnez le rôle des enregistrements A, AAAA, CNAME, MX, NS, PTR, TXT.",
+     "points": 3,
+     "a": "- A : IPv4 ; AAAA : IPv6 ; CNAME : alias ; MX : messagerie ; NS : serveurs de noms ; PTR : résolution inverse ; TXT : texte (SPF...)."
+    },
+    {
+     "id": "e19p2q2",
+     "q": "Décrivez la résolution de www.eneam.bj par un poste.",
+     "points": 3,
+     "a": "- Résolveur local (cache) → racine → serveur du TLD `.bj` → serveur faisant autorité pour `eneam.bj` ; la réponse est mise en cache pendant le TTL."
+    },
+    {
+     "id": "e19p2q3",
+     "q": "`ping 8.8.8.8` marche, `ping google.com` non : quelle panne et quelles commandes ?",
+     "points": 2,
+     "a": "- DNS. `cat /etc/resolv.conf` ou `resolvectl status`, puis `dig @8.8.8.8 google.com`."
+    },
+    {
+     "id": "e19p2q4",
+     "q": "Quelles commandes pour une requête MX et une résolution inverse ?",
+     "points": 2,
+     "a": "```bash\ndig eneam.bj MX\ndig -x 192.0.2.10\n```"
+    }
+   ]
+  }
+ ]
+}

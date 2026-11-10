@@ -1,0 +1,86 @@
+{
+ "n": 9,
+ "title": "Épreuve n° 9 · IP, ICMP, TTL et fragmentation",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : en-tête et TTL",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e09p1q1",
+     "q": "Taille minimale de l'en-tête IPv4 et valeur d'IHL correspondante. Valeurs du champ Protocole pour ICMP, TCP, UDP.",
+     "points": 2.5,
+     "a": "- 20 octets, IHL = 5 (en mots de 4 octets).\n- ICMP 1, TCP 6, UDP 17."
+    },
+    {
+     "id": "e09p1q2",
+     "q": "Un paquet arrive avec TTL = 1 sur un routeur : que se passe-t-il ?",
+     "points": 2,
+     "a": "- Le TTL tombe à 0 : le routeur jette le paquet et renvoie un ICMP Time Exceeded (type 11) à la source."
+    },
+    {
+     "id": "e09p1q3",
+     "q": "Comment fonctionne traceroute ?",
+     "points": 2,
+     "a": "- Il envoie des paquets avec TTL 1, 2, 3… ; chaque routeur qui reçoit un TTL épuisé renvoie un Time Exceeded avec son adresse, ce qui révèle chaque saut."
+    },
+    {
+     "id": "e09p1q4",
+     "q": "Pourquoi le TTL existe-t-il ?",
+     "points": 1.5,
+     "a": "- Éviter qu'un paquet tourne indéfiniment dans une boucle de routage."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : fragmentation",
+   "points": 7,
+   "intro": "MTU = 700 octets, en-tête IP de 20 octets.",
+   "questions": [
+    {
+     "id": "e09p2q1",
+     "q": "Un datagramme de 1 300 octets de données traverse le lien : donnez les fragments (taille de données, MF, décalage).",
+     "points": 4,
+     "a": "```text\nCharge max par fragment = 700 - 20 = 680 (multiple de 8)\nFragment 1 : 680 octets, MF = 1, décalage 0\nFragment 2 : 620 octets, MF = 0, décalage 680 / 8 = 85\n```"
+    },
+    {
+     "id": "e09p2q2",
+     "q": "Où se fait le réassemblage ?",
+     "points": 1.5,
+     "a": "- Uniquement à la destination finale, jamais sur les routeurs intermédiaires."
+    },
+    {
+     "id": "e09p2q3",
+     "q": "Que se passe-t-il si le drapeau DF = 1 et que le paquet dépasse le MTU ?",
+     "points": 1.5,
+     "a": "- Le routeur le jette et renvoie un ICMP Destination Unreachable, code 4 (fragmentation nécessaire)."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Partie 3 : lire un ping",
+   "points": 5,
+   "intro": "Interprétez.",
+   "questions": [
+    {
+     "id": "e09p3q1",
+     "q": "« Destination host unreachable » venant d'un routeur intermédiaire : que déduire ? Et « Request timed out » ?",
+     "points": 2.5,
+     "a": "- « Unreachable » : ce routeur n'a pas de route (ou ARP sans réponse) vers la destination.\n- « Timed out » : aucune réponse ; route de retour manquante, filtrage ICMP ou machine éteinte."
+    },
+    {
+     "id": "e09p3q2",
+     "q": "Un ping échoue mais le serveur est en marche : citez deux causes possibles et un test alternatif.",
+     "points": 2.5,
+     "a": "- Pare-feu qui bloque l'ICMP ; route de retour absente.\n- Test alternatif : `nc -zv hôte 443` ou `curl -I` sur le port du service."
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "n": 11,
+ "title": "Épreuve n° 11 · Table de routage et choix de la route",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : choix de la route",
+   "points": 10,
+   "intro": "Table : 10.0.0.0/8 via A ; 10.1.0.0/16 via B ; 10.1.2.0/24 via C ; 0.0.0.0/0 via D.",
+   "questions": [
+    {
+     "id": "e11p1q1",
+     "q": "Quelle route pour 10.1.2.5, 10.1.9.9, 10.9.9.9, 8.8.8.8 ?",
+     "points": 3,
+     "a": "- 10.1.2.5 → /24 via C ; 10.1.9.9 → /16 via B ; 10.9.9.9 → /8 via A ; 8.8.8.8 → défaut via D."
+    },
+    {
+     "id": "e11p1q2",
+     "q": "Quel est l'ordre de décision d'un routeur entre plusieurs routes ?",
+     "points": 3,
+     "a": "1. Préfixe le plus long. 2. Distance administrative la plus basse. 3. Métrique la plus basse (sinon équilibrage de charge)."
+    },
+    {
+     "id": "e11p1q3",
+     "q": "Donnez les distances administratives : connecté, statique, eBGP, EIGRP, OSPF, RIP.",
+     "points": 2,
+     "a": "- 0, 1, 20, 90, 110, 120."
+    },
+    {
+     "id": "e11p1q4",
+     "q": "Une route statique et une route OSPF existent pour 10.5.0.0/16 : laquelle est installée ? Et si OSPF annonce 10.5.0.0/24 ?",
+     "points": 2,
+     "a": "- Même préfixe : la statique (AD 1) gagne. Pour 10.5.0.7, la route OSPF /24 est plus spécifique et l'emporte pour ce trafic."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : lire une table",
+   "points": 10,
+   "intro": "Extrait : C 10.0.0.0/23 g0/0 ; L 10.0.1.254/32 g0/0 ; S 10.0.4.0/23 [1/0] via 1.1.1.5 ; O 10.0.2.0/23 [110/20] via 1.1.1.13, g1/0 ; S* 0.0.0.0/0 [1/0] via 1.1.1.5.",
+   "questions": [
+    {
+     "id": "e11p2q1",
+     "q": "Expliquez chaque code : C, L, S, O, S*.",
+     "points": 3,
+     "a": "- C : réseau directement connecté. L : adresse locale de l'interface (/32). S : route statique. O : apprise par OSPF. S* : statique candidate à la route par défaut."
+    },
+    {
+     "id": "e11p2q2",
+     "q": "Que signifient [1/0] et [110/20] ?",
+     "points": 2,
+     "a": "- [distance administrative / métrique] : statique AD 1 métrique 0 ; OSPF AD 110 coût 20."
+    },
+    {
+     "id": "e11p2q3",
+     "q": "Par où part un paquet pour 10.0.2.9 ? pour 172.16.0.1 ?",
+     "points": 2,
+     "a": "- 10.0.2.9 : OSPF via 1.1.1.13 (g1/0). 172.16.0.1 : route par défaut via 1.1.1.5."
+    },
+    {
+     "id": "e11p2q4",
+     "q": "Un réseau connecté n'apparaît pas dans la table : deux causes.",
+     "points": 2,
+     "a": "- Interface en shutdown (ou lien down) ; absence d'adresse IP."
+    },
+    {
+     "id": "e11p2q5",
+     "q": "Donnez les commandes Linux pour afficher la table, ajouter 172.16.0.0/16 via 10.0.0.2 et connaître la route utilisée pour 8.8.8.8.",
+     "points": 1,
+     "a": "```bash\nip route\nsudo ip route add 172.16.0.0/16 via 10.0.0.2\nip route get 8.8.8.8\n```"
+    }
+   ]
+  }
+ ]
+}

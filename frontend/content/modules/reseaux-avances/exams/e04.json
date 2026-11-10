@@ -1,0 +1,66 @@
+{
+ "n": 4,
+ "title": "Épreuve n° 4 · Subnetting par nombre de sous-réseaux et d'hôtes",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : découper",
+   "points": 12,
+   "intro": "Appliquez la méthode en 5 étapes.",
+   "questions": [
+    {
+     "id": "e04p1q1",
+     "q": "Découpez 192.168.10.0/24 en 4 sous-réseaux : masque, pas, plage de chacun.",
+     "points": 3,
+     "a": "```text\n2^s >= 4 -> s = 2 -> /26 (255.255.255.192), pas 64, 62 hôtes\n192.168.10.0/26   (.1-.62,   diff .63)\n192.168.10.64/26  (.65-.126, diff .127)\n192.168.10.128/26 (.129-.190, diff .191)\n192.168.10.192/26 (.193-.254, diff .255)\n```"
+    },
+    {
+     "id": "e04p1q2",
+     "q": "Découpez 172.16.0.0/16 en au moins 50 sous-réseaux : masque, hôtes par sous-réseau, 3 premiers sous-réseaux.",
+     "points": 3,
+     "a": "```text\n2^6 = 64 >= 50 -> /22 (255.255.252.0), pas 4 dans le 3e octet\nHôtes : 2^10 - 2 = 1 022\n172.16.0.0/22, 172.16.4.0/22, 172.16.8.0/22\n```"
+    },
+    {
+     "id": "e04p1q3",
+     "q": "5 services de 25 postes dans 192.168.20.0/24 : quel masque ? Quels sous-réseaux ?",
+     "points": 3,
+     "a": "```text\n25 postes + 1 passerelle = 26 -> 2^5 - 2 = 30 >= 26 -> /27\n192.168.20.0/27, .32/27, .64/27, .96/27, .128/27   (restent .160, .192, .224)\n```"
+    },
+    {
+     "id": "e04p1q4",
+     "q": "À partir de 10.0.0.0/8, on veut 1 000 sous-réseaux : masque, hôtes par sous-réseau.",
+     "points": 3,
+     "a": "```text\n2^10 = 1 024 >= 1 000 -> /18 (255.255.192.0), pas 64 dans le 3e octet\nHôtes : 2^14 - 2 = 16 382\nSous-réseaux : 10.0.0.0/18, 10.0.64.0/18, 10.0.128.0/18, 10.0.192.0/18, 10.1.0.0/18...\n```"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : choisir le masque",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e04p2q1",
+     "q": "Quel masque pour 100 hôtes ? 500 hôtes ? 2 000 hôtes ?",
+     "points": 3,
+     "a": "```text\n100  -> 2^7 - 2 = 126  -> /25\n500  -> 2^9 - 2 = 510  -> /23\n2000 -> 2^11 - 2 = 2046 -> /21\n```"
+    },
+    {
+     "id": "e04p2q2",
+     "q": "Une société veut 6 sous-réseaux d'au plus 20 hôtes avec 10.10.0.0/24. Est-ce possible ?",
+     "points": 3,
+     "a": "- 6 sous-réseaux → s = 3 ; 20 hôtes → h = 5 (30 hôtes) ; s + h = 8 = 32 − 24 : **possible**, masque **/27**.\n- Sous-réseaux : .0, .32, .64, .96, .128, .160 (puis .192, .224 libres)."
+    },
+    {
+     "id": "e04p2q3",
+     "q": "Pour 172.20.0.0/16 passé en /21 : combien de sous-réseaux et d'hôtes ?",
+     "points": 2,
+     "a": "- 5 bits empruntés : 2^5 = **32 sous-réseaux**. 11 bits hôte : 2^11 − 2 = **2 046 hôtes**. Pas : 8 dans le 3e octet."
+    }
+   ]
+  }
+ ]
+}

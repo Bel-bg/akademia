@@ -1,0 +1,86 @@
+{
+ "n": 24,
+ "title": "Épreuve n° 24 · Examen blanc B (2 h)",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Exercice 1 : plan VLSM",
+   "points": 8,
+   "intro": "Bloc 10.20.0.0/22. Besoins : 400 hôtes, 200 hôtes, 100 hôtes, 50 hôtes et 2 liaisons point à point.",
+   "questions": [
+    {
+     "id": "e24p1q1",
+     "q": "Donnez le masque de chaque besoin.",
+     "points": 2,
+     "a": "- 400 → /23 (510) ; 200 → /24 (254) ; 100 → /25 (126) ; 50 → /26 (62) ; liaisons → /30."
+    },
+    {
+     "id": "e24p1q2",
+     "q": "Donnez le plan complet (réseau/masque, plage utilisable, diffusion).",
+     "points": 4,
+     "a": "```text\n400  10.20.0.0/23     10.20.0.1  - 10.20.1.254   diff 10.20.1.255\n200  10.20.2.0/24     10.20.2.1  - 10.20.2.254   diff 10.20.2.255\n100  10.20.3.0/25     10.20.3.1  - 10.20.3.126   diff 10.20.3.127\n50   10.20.3.128/26   10.20.3.129 - 10.20.3.190  diff 10.20.3.191\nL1   10.20.3.192/30   .193 - .194  diff .195\nL2   10.20.3.196/30   .197 - .198  diff .199\n```"
+    },
+    {
+     "id": "e24p1q3",
+     "q": "Quelle route résumée et quel espace libre ?",
+     "points": 2,
+     "a": "- Résumé : 10.20.0.0/22. Libre : 10.20.3.200 à 10.20.3.255 (56 adresses)."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Exercice 2 : VLAN et sortie Internet",
+   "points": 7,
+   "intro": "VLAN 10 (192.168.10.0/24) et VLAN 20 (192.168.20.0/24), routeur g0/0 vers le switch, g0/1 vers Internet en 203.0.113.5/30 (opérateur .6).",
+   "questions": [
+    {
+     "id": "e24p2q1",
+     "q": "Configurez le routage inter-VLAN et le trunk côté routeur.",
+     "points": 3,
+     "a": "```text\ninterface g0/0\n no shutdown\ninterface g0/0.10\n encapsulation dot1Q 10\n ip address 192.168.10.254 255.255.255.0\n ip nat inside\ninterface g0/0.20\n encapsulation dot1Q 20\n ip address 192.168.20.254 255.255.255.0\n ip nat inside\n```"
+    },
+    {
+     "id": "e24p2q2",
+     "q": "Configurez le PAT et la route par défaut.",
+     "points": 3,
+     "a": "```text\ninterface g0/1\n ip address 203.0.113.5 255.255.255.252\n ip nat outside\naccess-list 1 permit 192.168.10.0 0.0.0.255\naccess-list 1 permit 192.168.20.0 0.0.0.255\nip nat inside source list 1 interface g0/1 overload\nip route 0.0.0.0 0.0.0.0 203.0.113.6\n```"
+    },
+    {
+     "id": "e24p2q3",
+     "q": "Quelle commande vérifie les traductions ?",
+     "points": 1,
+     "a": "- `show ip nat translations`."
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "title": "Exercice 3 : ACL et résumé",
+   "points": 5,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e24p3q1",
+     "q": "Écrivez une ACL qui interdit au VLAN 20 de joindre le VLAN 10 mais autorise le reste, et dites où l'appliquer.",
+     "points": 2.5,
+     "a": "```text\nip access-list extended V20-TO-V10\n deny ip 192.168.20.0 0.0.0.255 192.168.10.0 0.0.0.255\n permit ip any any\ninterface g0/0.20\n ip access-group V20-TO-V10 in\n```\n- Sur la sous-interface du VLAN 20, en entrée (près de la source)."
+    },
+    {
+     "id": "e24p3q2",
+     "q": "Résumez en une route : 172.16.32.0/24 à 172.16.47.0/24.",
+     "points": 1.5,
+     "a": "- 32 à 47 = 16 réseaux, premier aligné sur 16 : 4 bits hôte supplémentaires → 24 − 4 = **/20** : `172.16.32.0/20`."
+    },
+    {
+     "id": "e24p3q3",
+     "q": "Citez une conséquence d'un `deny` implicite oublié dans une ACL qui ne contient que des `deny`.",
+     "points": 1,
+     "a": "- Elle bloque tout le trafic ; il faut terminer par un `permit ip any any`."
+    }
+   ]
+  }
+ ]
+}

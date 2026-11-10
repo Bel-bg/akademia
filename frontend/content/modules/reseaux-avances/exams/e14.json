@@ -1,0 +1,72 @@
+{
+ "n": 14,
+ "title": "Épreuve n° 14 · Dépannage du routage",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : diagnostic",
+   "points": 12,
+   "intro": "Pour chaque cas, donnez la cause la plus probable et la commande de vérification.",
+   "questions": [
+    {
+     "id": "e14p1q1",
+     "q": "Un PC joint sa passerelle mais pas Internet, alors que d'autres PC y arrivent.",
+     "points": 2.5,
+     "a": "- Passerelle/masque de ce PC, ou DNS erroné : `ip a`, `ip r`, `ping 8.8.8.8` puis `ping google.com`."
+    },
+    {
+     "id": "e14p1q2",
+     "q": "`ping` renvoie « TTL expired in transit ».",
+     "points": 2.5,
+     "a": "- Boucle de routage (A pointe vers B, B vers A). `traceroute` montre l'alternance ; corriger les routes, `show ip route`."
+    },
+    {
+     "id": "e14p1q3",
+     "q": "`ping` répond « Destination host unreachable » depuis le routeur R2.",
+     "points": 2.5,
+     "a": "- R2 n'a pas de route vers la destination (ou ARP sans réponse sur le dernier saut) : `show ip route`, `show ip arp`."
+    },
+    {
+     "id": "e14p1q4",
+     "q": "`ping` « Request timed out » alors que l'aller est correct.",
+     "points": 2.5,
+     "a": "- Route de retour manquante, ou filtrage ICMP : `show ip route` au retour, `show access-lists`."
+    },
+    {
+     "id": "e14p1q5",
+     "q": "Un routeur n'affiche pas le réseau d'une de ses interfaces.",
+     "points": 2,
+     "a": "- Interface en shutdown ou sans IP : `show ip interface brief`, `no shutdown`."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : méthode et outils",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e14p2q1",
+     "q": "Décrivez la méthode de diagnostic « couche par couche » avec une commande par étape.",
+     "points": 4,
+     "a": "- Lien : `ip link` / `show interfaces`. IP : `ip -br a`. Passerelle : `ping 192.168.1.1`. Internet par IP : `ping 8.8.8.8`. DNS : `dig`. Service : `nc -zv hôte port`, `curl -v`."
+    },
+    {
+     "id": "e14p2q2",
+     "q": "Pourquoi le ping étendu est-il précieux ?",
+     "points": 2,
+     "a": "- Il permet de choisir l'adresse source (celle du LAN) et révèle les routes de retour manquantes que le ping par défaut masque."
+    },
+    {
+     "id": "e14p2q3",
+     "q": "Citez trois erreurs fréquentes de saisie de route statique.",
+     "points": 2,
+     "a": "- Mauvais masque ; saut suivant = sa propre adresse ; réseau absent côté retour ; oubli de `no shutdown`."
+    }
+   ]
+  }
+ ]
+}

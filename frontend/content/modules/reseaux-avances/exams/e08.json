@@ -1,0 +1,72 @@
+{
+ "n": 8,
+ "title": "Épreuve n° 8 · OSI, TCP/IP, Ethernet et ARP",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : modèles",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e08p1q1",
+     "q": "Citez les 7 couches OSI de la 7 à la 1 et un protocole ou équipement pour les couches 2, 3, 4.",
+     "points": 3,
+     "a": "- 7 Application, 6 Présentation, 5 Session, 4 Transport, 3 Réseau, 2 Liaison, 1 Physique.\n- Couche 2 : Ethernet, switch. Couche 3 : IP, routeur. Couche 4 : TCP/UDP."
+    },
+    {
+     "id": "e08p1q2",
+     "q": "Donnez l'unité de données de chaque couche (2, 3, 4) et décrivez l'encapsulation d'une requête HTTP.",
+     "points": 3,
+     "a": "- Trame (2), paquet (3), segment TCP/datagramme UDP (4).\n- Données HTTP → en-tête TCP (ports) → en-tête IP (adresses) → en-tête Ethernet (MAC du prochain saut) + FCS → bits."
+    },
+    {
+     "id": "e08p1q3",
+     "q": "Qu'est-ce qui change et qu'est-ce qui ne change pas pendant un trajet à travers 2 routeurs ?",
+     "points": 2,
+     "a": "- Les adresses MAC changent à chaque saut (3 trames). Les adresses IP source/destination restent identiques (hors NAT) ; le TTL diminue de 1 à chaque routeur."
+    },
+    {
+     "id": "e08p1q4",
+     "q": "Quel équipement sépare les domaines de collision ? de diffusion ?",
+     "points": 2,
+     "a": "- Un switch/pont (collision, un par port) ; un routeur ou un VLAN (diffusion)."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : Ethernet et ARP",
+   "points": 10,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e08p2q1",
+     "q": "Taille et format d'une adresse MAC ; adresse de diffusion ; valeurs EtherType IPv4, ARP, IPv6.",
+     "points": 3,
+     "a": "- 48 bits, 6 octets en hexadécimal. Diffusion : FF:FF:FF:FF:FF:FF.\n- EtherType : 0x0800 IPv4, 0x0806 ARP, 0x86DD IPv6."
+    },
+    {
+     "id": "e08p2q2",
+     "q": "Décrivez le fonctionnement d'ARP quand A (192.168.1.10) veut joindre B (192.168.1.20).",
+     "points": 3,
+     "a": "- A diffuse une requête (« qui a 192.168.1.20 ? »), B répond en unicast avec sa MAC, A enregistre dans son cache ARP puis envoie la trame."
+    },
+    {
+     "id": "e08p2q3",
+     "q": "A (192.168.1.10/24, passerelle 192.168.1.1) veut joindre 8.8.8.8 : quelle adresse A résout-il par ARP ?",
+     "points": 2,
+     "a": "- Celle de sa **passerelle** 192.168.1.1 : la destination est hors réseau, la trame part vers la MAC du routeur."
+    },
+    {
+     "id": "e08p2q4",
+     "q": "Comment un switch apprend-il et que fait-il d'une trame à destination inconnue ?",
+     "points": 2,
+     "a": "- Il lit la MAC **source** et note le port d'arrivée ; pour une destination inconnue (ou une diffusion), il **inonde** tous les ports sauf celui d'arrivée."
+    }
+   ]
+  }
+ ]
+}

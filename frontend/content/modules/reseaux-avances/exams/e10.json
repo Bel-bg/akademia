@@ -1,0 +1,72 @@
+{
+ "n": 10,
+ "title": "Épreuve n° 10 · TCP, UDP et ports",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : ports",
+   "points": 8,
+   "intro": "Donnez le port et le transport.",
+   "questions": [
+    {
+     "id": "e10p1q1",
+     "q": "FTP, SSH, Telnet, SMTP, DNS, DHCP.",
+     "points": 3,
+     "a": "- FTP 20/21 TCP · SSH 22 TCP · Telnet 23 TCP · SMTP 25 TCP · DNS 53 UDP (et TCP) · DHCP 67/68 UDP."
+    },
+    {
+     "id": "e10p1q2",
+     "q": "HTTP, HTTPS, NTP, SNMP, LDAP, LDAPS.",
+     "points": 3,
+     "a": "- HTTP 80 TCP · HTTPS 443 TCP · NTP 123 UDP · SNMP 161 UDP (traps 162) · LDAP 389 TCP · LDAPS 636 TCP."
+    },
+    {
+     "id": "e10p1q3",
+     "q": "Quelles sont les trois plages de ports ?",
+     "points": 2,
+     "a": "- 0-1023 bien connus ; 1024-49151 enregistrés ; 49152-65535 dynamiques/éphémères."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : TCP et UDP",
+   "points": 12,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e10p2q1",
+     "q": "Décrivez la poignée de main TCP avec x = 100 et y = 500.",
+     "points": 3,
+     "a": "- Client → serveur : SYN, seq = 100.\n- Serveur → client : SYN+ACK, seq = 500, ack = 101.\n- Client → serveur : ACK, ack = 501."
+    },
+    {
+     "id": "e10p2q2",
+     "q": "Donnez quatre différences entre TCP et UDP.",
+     "points": 3,
+     "a": "- TCP : connexion, fiable (accusés, ordre, retransmission), en-tête 20 octets, contrôle de flux et de congestion.\n- UDP : sans connexion, non fiable, en-tête 8 octets, aucun contrôle."
+    },
+    {
+     "id": "e10p2q3",
+     "q": "Pourquoi DNS utilise-t-il UDP ? Quand bascule-t-il sur TCP ?",
+     "points": 2,
+     "a": "- Une question et une réponse courtes : UDP évite le coût d'une connexion. TCP pour les transferts de zone et les réponses volumineuses."
+    },
+    {
+     "id": "e10p2q4",
+     "q": "Quelles commandes listent les ports TCP en écoute et testent le port 443 de 10.0.0.5 ?",
+     "points": 2,
+     "a": "```bash\nsudo ss -tlnp\nnc -zv 10.0.0.5 443\n```"
+    },
+    {
+     "id": "e10p2q5",
+     "q": "Quelle différence entre un port fermé et un port filtré ?",
+     "points": 2,
+     "a": "- Fermé : la machine répond RST (ou ICMP port unreachable en UDP). Filtré : aucune réponse, un pare-feu élimine les paquets."
+    }
+   ]
+  }
+ ]
+}

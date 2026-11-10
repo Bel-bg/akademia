@@ -1,0 +1,72 @@
+{
+ "n": 21,
+ "title": "Épreuve n° 21 · ACL et sécurité réseau",
+ "durationMinutes": 120,
+ "points": 20,
+ "parts": [
+  {
+   "id": "p1",
+   "title": "Partie 1 : ACL Cisco",
+   "points": 12,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e21p1q1",
+     "q": "Donnez les 5 règles de fonctionnement d'une ACL.",
+     "points": 3,
+     "a": "- Lecture de haut en bas, première correspondance gagne ; `deny any` implicite final ; inactive tant qu'elle n'est pas appliquée à une interface ; filtre le trafic en transit, pas celui du routeur ; sens `in` ou `out`."
+    },
+    {
+     "id": "e21p1q2",
+     "q": "Masque générique de 192.168.4.0/22 et de 10.0.4.0/23.",
+     "points": 2,
+     "a": "- `0.0.3.255` et `0.0.1.255`."
+    },
+    {
+     "id": "e21p1q3",
+     "q": "Écrivez une ACL qui interdit à 10.0.1.0/24 le web (port 80) vers le serveur 10.0.9.5 mais autorise le reste ; où l'appliquer ?",
+     "points": 3,
+     "a": "```text\nip access-list extended NO-WEB\n deny tcp 10.0.1.0 0.0.0.255 host 10.0.9.5 eq 80\n permit ip any any\ninterface g0/0\n ip access-group NO-WEB in\n```\n- Près de la source (ACL étendue), en `in` sur l'interface du LAN 10.0.1.0/24."
+    },
+    {
+     "id": "e21p1q4",
+     "q": "Que fait `permit ip any any` suivi de `deny tcp any any eq 23` ?",
+     "points": 2,
+     "a": "- Le Telnet reste autorisé : la première règle correspond à tout. Il faut placer le `deny` avant le `permit`."
+    },
+    {
+     "id": "e21p1q5",
+     "q": "Où place-t-on une ACL standard ? Pourquoi ?",
+     "points": 2,
+     "a": "- Près de la destination : elle ne filtre que sur la source, la placer près de la source bloquerait cette source pour tous les services."
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Partie 2 : pare-feu Linux et durcissement",
+   "points": 8,
+   "intro": "Répondez avec précision.",
+   "questions": [
+    {
+     "id": "e21p2q1",
+     "q": "Écrivez les règles ufw d'un serveur web (HTTP/HTTPS partout, SSH depuis 192.168.10.0/24 seulement).",
+     "points": 3,
+     "a": "```bash\nsudo ufw default deny incoming\nsudo ufw allow 80/tcp\nsudo ufw allow 443/tcp\nsudo ufw allow from 192.168.10.0/24 to any port 22 proto tcp\nsudo ufw enable\n```"
+    },
+    {
+     "id": "e21p2q2",
+     "q": "Pare-feu sans état ou à états : différence.",
+     "points": 2,
+     "a": "- Sans état : chaque paquet est examiné isolément (il faut autoriser le retour). À états : mémorise les connexions et laisse passer automatiquement les réponses."
+    },
+    {
+     "id": "e21p2q3",
+     "q": "Citez quatre mesures de durcissement de la couche 2 et une de la couche d'accès distant.",
+     "points": 3,
+     "a": "- Port security, DHCP snooping, Dynamic ARP Inspection, ports inutilisés en shutdown/VLAN poubelle, VLAN natif changé, DTP désactivé.\n- Accès distant : SSH au lieu de Telnet, avec `transport input ssh`."
+    }
+   ]
+  }
+ ]
+}
