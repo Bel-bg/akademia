@@ -12,6 +12,7 @@ const contentService = require('./services/contentService');
 const progressService = require('./services/progressService');
 const progressionService = require('./services/progressionService');
 const pushService = require('./services/pushService');
+const adminService = require('./services/adminService');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -42,6 +43,26 @@ app.get('/api/theme', (req, res) => {
     defaultTheme: progressionService.DEFAULT_THEME,
     filieres: Object.values(progressionService.FILIERES),
   });
+});
+
+// ==================== ADMINISTRATION & MONITORING FRONTEND ====================
+app.get('/api/admin/stats', async (_req, res, next) => {
+  try {
+    const stats = await adminService.getAdminStats();
+    res.json(stats);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/admin', async (_req, res, next) => {
+  try {
+    const stats = await adminService.getAdminStats();
+    const html = adminService.renderAdminHtml(stats);
+    res.type('text/html; charset=utf-8').send(html);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // ==================== AUTHENTIFICATION EMAIL / MOT DE PASSE ====================
