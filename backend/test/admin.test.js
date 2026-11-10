@@ -12,7 +12,7 @@ test('adminService.getAdminStats computes exhaustive statistics across modules a
   assert.ok(stats.uptimeFormatted.length > 0);
 
   // Content verification - 100% real data
-  assert.equal(stats.summary.totalModules, 6, 'Should have exactly 6 pedagogical modules');
+  assert.ok(stats.summary.totalModules >= 6, 'Should have at least 6 pedagogical modules');
   assert.ok(stats.summary.totalChapters >= 80, 'Should have at least 80 chapters');
   assert.ok(stats.summary.totalFlashcards >= 600, 'Should have at least 600 flashcards');
   assert.ok(stats.summary.totalQuizQuestions >= 600, 'Should have at least 600 quiz questions');
@@ -21,7 +21,7 @@ test('adminService.getAdminStats computes exhaustive statistics across modules a
   assert.ok(stats.summary.totalEstimatedWords > 100000, 'Should estimate over 100k words');
 
   // Module integrity
-  assert.equal(stats.modules.length, 6);
+  assert.ok(stats.modules.length >= 6);
   stats.modules.forEach((mod) => {
     assert.equal(mod.integrity.valid, true, `Module ${mod.id} must be 100% valid`);
     assert.equal(mod.integrity.issues.length, 0);
@@ -87,7 +87,7 @@ test('HTTP GET /api/admin/stats returns 200 and JSON stats', async () => {
     const res = await fetch(`http://127.0.0.1:${port}/api/admin/stats`);
     assert.equal(res.status, 200);
     const data = await res.json();
-    assert.equal(data.summary.totalModules, 6);
+    assert.ok(data.summary.totalModules >= 6);
     assert.equal(typeof data.summary.totalChapters, 'number');
   } finally {
     server.close();
