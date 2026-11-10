@@ -11,6 +11,8 @@ import Dashboard from '@/pages/Dashboard';
 import ExamPage from '@/pages/ExamPage';
 import ExamsPage from '@/pages/ExamsPage';
 import FeedPage from '@/pages/FeedPage';
+import FormationLessonPage from '@/pages/FormationLessonPage';
+import FormationPage from '@/pages/FormationPage';
 import FlashcardsPage from '@/pages/FlashcardsPage';
 import LeaderboardPage from '@/pages/LeaderboardPage';
 import MessagesPage from '@/pages/MessagesPage';
@@ -45,6 +47,8 @@ export default function App() {
         <Route path="m/:moduleId/eclair" element={<BlitzPage />} />
         <Route path="m/:moduleId/epreuves" element={<ExamsPage />} />
         <Route path="m/:moduleId/epreuves/:n" element={<ExamPage />} />
+        <Route path="m/:moduleId/formation/:fid" element={<FormationPage />} />
+        <Route path="m/:moduleId/formation/:fid/:lessonId" element={<FormationLessonPage />} />
         <Route path="m/:moduleId/cartes" element={<FlashcardsPage />} />
         <Route path="resultats" element={<ResultsPage />} />
         <Route path="succes" element={<BadgesPage />} />

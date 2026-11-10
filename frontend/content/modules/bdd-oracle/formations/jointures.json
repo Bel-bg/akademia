@@ -1,0 +1,630 @@
+{
+ "id": "jointures",
+ "order": 2,
+ "title": "Résoudre l'énigme des jointures",
+ "tagline": "INNER, LEFT, FULL, anti-jointure, auto-jointure : comprendre une bonne fois pour toutes comment relier des tables.",
+ "emoji": "🧩",
+ "color": "#7C3AED",
+ "level": "Intermédiaire",
+ "minutes": 50,
+ "pitch": [
+  "Bonjour ! Je te propose **« Résoudre l'énigme des jointures »** 🧩.",
+  "Les jointures sont **le** point qui fait trébucher beaucoup d'étudiants : on connaît les mots (INNER, LEFT…), mais on ne sait pas vraiment *pourquoi* une ligne apparaît ou disparaît.",
+  "Ici, on part de la seule idée qui compte — recoller des tables grâce à une clé — et on construit pas à pas, avec des tableaux de résultats que tu peux suivre ligne par ligne. Tu vas aussi résoudre une **enquête finale** à 3 questions.",
+  "Chaque leçon est courte, interactive, et tu écris toi-même les requêtes. Je t'aide avec des indices si tu bloques."
+ ],
+ "benefits": [
+  "Comprendre vraiment INNER, LEFT, RIGHT, FULL et CROSS JOIN",
+  "Savoir trouver « ceux qui n'ont jamais… » grâce à l'anti-jointure",
+  "Éviter les pièges : ON vs WHERE, COUNT(*), colonnes ambiguës",
+  "Réussir les requêtes multi-tables des sujets d'examen"
+ ],
+ "lessons": [
+  {
+   "id": "pourquoi",
+   "title": "Pourquoi joindre des tables ?",
+   "emoji": "🧩",
+   "minutes": 8,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Bienvenue détective 🕵️ ! Les jointures ont la réputation d'être une énigme. Spoiler : **il n'y a qu'une seule idée**, et on va la comprendre ensemble."
+    },
+    {
+     "type": "say",
+     "text": "Une base de données bien conçue **ne répète jamais** les informations. Le nom et la ville d'Awa sont stockés **une seule fois**, dans CLIENTS. Ses commandes, elles, sont dans COMMANDES…"
+    },
+    {
+     "type": "code",
+     "sql": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000",
+     "title": "Deux tables, un lien"
+    },
+    {
+     "type": "say",
+     "text": "Comment sait-on que la commande 101 appartient à Awa ? Grâce à la colonne **`CLIENT_ID`** : elle contient l'**ID** d'un client. C'est une **clé étrangère** (*foreign key*). Et `CLIENTS.ID` est la **clé primaire** (valeur unique pour chaque client)."
+    },
+    {
+     "type": "choice",
+     "q": "Dans COMMANDES, que représente la valeur 1 de CLIENT_ID pour la commande 101 ?",
+     "options": [
+      "Le montant",
+      "L'identifiant du client Awa (clé étrangère)",
+      "Le numéro de la commande"
+     ],
+     "answer": 1,
+     "explain": "`CLIENT_ID` pointe vers `CLIENTS.ID`. C'est ce lien que la jointure va exploiter."
+    },
+    {
+     "type": "say",
+     "text": "Une **jointure** (JOIN), c'est simplement dire à Oracle : « **recolle les lignes des deux tables quand ces deux colonnes sont égales** »."
+    },
+    {
+     "type": "say",
+     "text": "Voyons ce qui se passe **sans** dire comment recoller. Si tu écris deux tables dans le `FROM` sans condition :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, cmd.id, cmd.montant\nFROM   clients c, commandes cmd;",
+     "title": "⚠️ Produit cartésien",
+     "note": "5 clients × 5 commandes = 25 lignes… dont la plupart sont absurdes (Awa avec la commande de Yao !)."
+    },
+    {
+     "type": "choice",
+     "q": "Combien de lignes retourne un produit cartésien de 5 clients et 5 commandes ?",
+     "options": [
+      "5",
+      "10",
+      "25"
+     ],
+     "answer": 2,
+     "explain": "Chaque ligne de la 1re table est combinée avec **toutes** celles de la 2e : 5 × 5 = 25."
+    },
+    {
+     "type": "say",
+     "text": "Le produit cartésien est **presque toujours une erreur** : il oublie la condition de liaison. La jointure, c'est justement **ajouter cette condition** pour ne garder que les paires cohérentes."
+    },
+    {
+     "type": "say",
+     "text": "Petit vocabulaire utile : on donne souvent un **alias de table** (`clients c`, `commandes cmd`) pour écrire `c.nom` au lieu de `clients.nom`. C'est plus court, et indispensable si une colonne a le même nom dans les deux tables."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, cmd.id\nFROM   clients c, commandes cmd\nWHERE  c.id = cmd.client_id;",
+     "title": "Ancienne syntaxe (avec WHERE) : correcte, mais on préfère JOIN … ON"
+    },
+    {
+     "type": "say",
+     "text": "Cette écriture marche encore (tu la verras dans de vieux sujets d'examen), mais la syntaxe moderne `JOIN … ON` sépare **la liaison** (`ON`) du **filtre** (`WHERE`). C'est celle qu'on va apprendre."
+    },
+    {
+     "type": "exercise",
+     "q": "Complète mentalement : quelle condition relie CLIENTS (alias `c`) à COMMANDES (alias `cmd`) ? Écris-la sous la forme `SELECT c.nom, cmd.id FROM clients c, commandes cmd WHERE …`.",
+     "hints": [
+      "Clé primaire = clé étrangère.",
+      "WHERE c.id = cmd.client_id"
+     ],
+     "accept": [
+      "SELECT c.nom, cmd.id FROM clients c, commandes cmd WHERE cmd.client_id = c.id;"
+     ],
+     "solution": "SELECT c.nom, cmd.id FROM clients c, commandes cmd WHERE c.id = cmd.client_id;",
+     "explain": "La condition de jointure égale la **clé primaire** d'une table à la **clé étrangère** de l'autre.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "🏁 L'idée à retenir : **jointure = recoller deux tables via PK = FK**. Dans la prochaine leçon, on l'écrit proprement avec `INNER JOIN`."
+    }
+   ]
+  },
+  {
+   "id": "inner",
+   "title": "INNER JOIN : les correspondances",
+   "emoji": "🔗",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "`INNER JOIN` (ou simplement `JOIN`) ne garde que les lignes qui **ont une correspondance des deux côtés**. C'est la jointure par défaut."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, cmd.id, cmd.montant\nFROM   clients c\nINNER JOIN commandes cmd ON cmd.client_id = c.id;",
+     "title": "Syntaxe moderne"
+    },
+    {
+     "type": "code",
+     "sql": "NOM    | ID  | MONTANT\nAwa    | 101 | 23000\nAwa    | 102 | 85000\nKoffi  | 103 |  8000\nSènami | 104 |  3500\nYao    | 105 | 15000",
+     "title": "Résultat : 5 lignes",
+     "note": "Ibrahim a disparu : il n'a aucune commande, donc aucune correspondance."
+    },
+    {
+     "type": "say",
+     "text": "Remarque que **Awa apparaît deux fois** : elle a deux commandes. La jointure produit **une ligne par paire correspondante**."
+    },
+    {
+     "type": "choice",
+     "q": "Ibrahim (client 5) n'a pas de commande. Dans un INNER JOIN CLIENTS/COMMANDES, que devient-il ?",
+     "options": [
+      "Il apparaît avec des valeurs NULL",
+      "Il n'apparaît pas",
+      "Il provoque une erreur"
+     ],
+     "answer": 1,
+     "explain": "INNER JOIN supprime toutes les lignes sans correspondance, des deux côtés."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **nom du client** et le **montant** de chaque commande (jointure clients/commandes).",
+     "hints": [
+      "JOIN commandes cmd ON ... = ...",
+      "ON cmd.client_id = c.id"
+     ],
+     "accept": [
+      "SELECT c.nom, cmd.montant FROM clients c JOIN commandes cmd ON c.id = cmd.client_id;"
+     ],
+     "solution": "SELECT c.nom, cmd.montant FROM clients c INNER JOIN commandes cmd ON cmd.client_id = c.id;",
+     "explain": "5 lignes. L'ordre `c.id = cmd.client_id` ou `cmd.client_id = c.id` est indifférent.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Tu peux ensuite **filtrer** le résultat de la jointure avec un `WHERE`, comme d'habitude."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, cmd.montant\nFROM   clients c\nJOIN   commandes cmd ON cmd.client_id = c.id\nWHERE  cmd.montant > 10000;"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des clients et le montant de leurs commandes **supérieures à 10000**.",
+     "hints": [
+      "JOIN d'abord, WHERE ensuite.",
+      "WHERE cmd.montant > 10000"
+     ],
+     "accept": [
+      "SELECT c.nom, cmd.montant FROM clients c JOIN commandes cmd ON c.id = cmd.client_id WHERE cmd.montant > 10000;"
+     ],
+     "solution": "SELECT c.nom, cmd.montant FROM clients c JOIN commandes cmd ON cmd.client_id = c.id WHERE cmd.montant > 10000;",
+     "explain": "Awa (23 000 et 85 000) et Yao (15 000).",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Autre cas : les produits et leurs catégories. Cette fois la clé étrangère est `PRODUITS.CATEGORIE_ID`."
+    },
+    {
+     "type": "code",
+     "sql": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)\n\nCATEGORIES\nID | LIBELLE\n 1 | Périphériques\n 2 | Affichage\n 3 | Connectique\n 4 | Audio",
+     "title": "PRODUITS et CATEGORIES"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **nom du produit** et le **libellé de sa catégorie**.",
+     "hints": [
+      "Alias p pour produits, cat pour categories.",
+      "ON cat.id = p.categorie_id"
+     ],
+     "accept": [
+      "SELECT p.nom, cat.libelle FROM produits p INNER JOIN categories cat ON p.categorie_id = cat.id;"
+     ],
+     "solution": "SELECT p.nom, cat.libelle FROM produits p JOIN categories cat ON cat.id = p.categorie_id;",
+     "explain": "4 lignes seulement : le **Casque** (catégorie NULL) est absent, comme la catégorie **Audio** (aucun produit). On verra comment les récupérer.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)\n\nCATEGORIES\nID | LIBELLE\n 1 | Périphériques\n 2 | Affichage\n 3 | Connectique\n 4 | Audio"
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi le Casque n'apparaît pas dans le résultat ?",
+     "options": [
+      "Son prix est trop élevé",
+      "Sa CATEGORIE_ID est NULL : aucune catégorie ne correspond",
+      "Il est mal orthographié"
+     ],
+     "answer": 1,
+     "explain": "NULL n'est égal à rien, pas même à lui-même : aucune ligne de CATEGORIES ne correspond."
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Colonne ambiguë** : `ID` existe dans les deux tables. Si tu écris `SELECT id FROM …` sans préfixer, Oracle répond **ORA-00918 : column ambiguously defined**. Toujours préfixer avec l'alias (`p.id`, `cat.id`)."
+    },
+    {
+     "type": "choice",
+     "q": "Quelle erreur obtient-on avec `SELECT id FROM produits p JOIN categories c ON c.id = p.categorie_id;` ?",
+     "options": [
+      "ORA-00942 : table inexistante",
+      "ORA-00918 : colonne définie de façon ambiguë",
+      "Aucune erreur"
+     ],
+     "answer": 1,
+     "explain": "Les deux tables ont une colonne `ID` : il faut préciser `p.id` ou `c.id`."
+    },
+    {
+     "type": "say",
+     "text": "🏁 INNER JOIN = intersection. Mais dans la vraie vie, on veut souvent **aussi** les lignes sans correspondance : ceux qui n'ont rien commandé, les produits sans catégorie… C'est le rôle des **jointures externes**."
+    }
+   ]
+  },
+  {
+   "id": "left",
+   "title": "LEFT/RIGHT JOIN et anti-jointure",
+   "emoji": "⬅️",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voici la question qui fait basculer du niveau débutant au niveau pro : **« Quels clients n'ont jamais commandé ? »**. Un INNER JOIN ne peut pas répondre : il efface justement ces clients."
+    },
+    {
+     "type": "say",
+     "text": "La solution : `LEFT JOIN`. Il garde **toutes les lignes de la table de gauche** (celle avant le mot JOIN), et complète avec les correspondances de droite — ou des **NULL** s'il n'y en a pas."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, cmd.id, cmd.montant\nFROM   clients c\nLEFT JOIN commandes cmd ON cmd.client_id = c.id;"
+    },
+    {
+     "type": "code",
+     "sql": "NOM     | ID   | MONTANT\nAwa     | 101  | 23000\nAwa     | 102  | 85000\nKoffi   | 103  |  8000\nSènami  | 104  |  3500\nYao     | 105  | 15000\nIbrahim | NULL | NULL",
+     "title": "6 lignes : Ibrahim est de retour !",
+     "note": "Ses colonnes issues de COMMANDES sont à NULL."
+    },
+    {
+     "type": "choice",
+     "q": "Dans `A LEFT JOIN B`, quelle table est intégralement conservée ?",
+     "options": [
+      "A (à gauche)",
+      "B (à droite)",
+      "Les deux"
+     ],
+     "answer": 0,
+     "explain": "`LEFT` désigne la table située **à gauche** du mot JOIN, donc A."
+    },
+    {
+     "type": "say",
+     "text": "Et `RIGHT JOIN` ? C'est le **miroir** : il conserve toute la table de droite. `A LEFT JOIN B` donne le même résultat que `B RIGHT JOIN A`. Dans la pratique, on utilise presque toujours LEFT (plus naturel à lire)."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche **tous** les produits avec le libellé de leur catégorie (NULL si aucune), avec un `LEFT JOIN`.",
+     "hints": [
+      "Les produits sont la table de gauche.",
+      "produits p LEFT JOIN categories cat ON ..."
+     ],
+     "accept": [
+      "SELECT p.nom, cat.libelle FROM produits p LEFT OUTER JOIN categories cat ON p.categorie_id = cat.id;"
+     ],
+     "solution": "SELECT p.nom, cat.libelle FROM produits p LEFT JOIN categories cat ON cat.id = p.categorie_id;",
+     "explain": "5 lignes : le Casque est présent, avec `libelle` à NULL.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)\n\nCATEGORIES\nID | LIBELLE\n 1 | Périphériques\n 2 | Affichage\n 3 | Connectique\n 4 | Audio"
+    },
+    {
+     "type": "say",
+     "text": "Maintenant le **tour de magie** : l'**anti-jointure**. Puisque les lignes sans correspondance ont des NULL, il suffit de **filtrer sur ces NULL** pour isoler celles-là !"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom\nFROM   clients c\nLEFT JOIN commandes cmd ON cmd.client_id = c.id\nWHERE  cmd.id IS NULL;",
+     "title": "Les clients sans commande",
+     "note": "→ Ibrahim"
+    },
+    {
+     "type": "say",
+     "text": "On teste une colonne qui **ne peut jamais être NULL** quand la correspondance existe (la clé primaire `cmd.id` est idéale). Si elle est NULL, c'est qu'aucune ligne n'a été trouvée à droite."
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi teste-t-on `cmd.id IS NULL` plutôt que `cmd.montant IS NULL` ?",
+     "options": [
+      "La clé primaire n'est jamais NULL quand une correspondance existe, donc c'est un test fiable",
+      "Parce que montant n'existe pas",
+      "Il n'y a aucune différence"
+     ],
+     "answer": 0,
+     "explain": "Un montant peut être NULL même pour une vraie commande ; la clé primaire, elle, est toujours renseignée. Le test est donc sans ambiguïté."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des **clients qui n'ont jamais commandé**, avec un LEFT JOIN et un test de NULL.",
+     "hints": [
+      "LEFT JOIN puis WHERE ... IS NULL.",
+      "WHERE cmd.id IS NULL"
+     ],
+     "accept": [],
+     "solution": "SELECT c.nom FROM clients c LEFT JOIN commandes cmd ON cmd.client_id = c.id WHERE cmd.id IS NULL;",
+     "explain": "Ibrahim. Cette technique s'appelle l'**anti-jointure** et sert tout le temps (clients inactifs, produits jamais vendus…).",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des **produits qui n'ont aucune catégorie**, avec la même technique.",
+     "hints": [
+      "Même schéma que l'exercice précédent.",
+      "WHERE cat.id IS NULL"
+     ],
+     "accept": [
+      "SELECT p.nom FROM produits p LEFT JOIN categories cat ON p.categorie_id = cat.id WHERE cat.id IS NULL;",
+      "SELECT nom FROM produits WHERE categorie_id IS NULL;"
+     ],
+     "solution": "SELECT p.nom FROM produits p LEFT JOIN categories cat ON cat.id = p.categorie_id WHERE cat.id IS NULL;",
+     "explain": "Le Casque. (Ici on aurait aussi pu écrire directement `WHERE categorie_id IS NULL` — plus simple — mais l'anti-jointure fonctionne quand la clé existe sans correspondance, ex. une catégorie supprimée.)",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)\n\nCATEGORIES\nID | LIBELLE\n 1 | Périphériques\n 2 | Affichage\n 3 | Connectique\n 4 | Audio"
+    },
+    {
+     "type": "say",
+     "text": "Dernier point crucial : **où placer un filtre sur la table de droite** ? Regarde ces deux requêtes qui semblent proches :"
+    },
+    {
+     "type": "code",
+     "sql": "-- A : filtre dans ON → on garde TOUS les clients\nSELECT c.nom, cmd.montant\nFROM   clients c\nLEFT JOIN commandes cmd\n       ON cmd.client_id = c.id AND cmd.montant > 10000;\n\n-- B : filtre dans WHERE → les clients sans grosse commande disparaissent\nSELECT c.nom, cmd.montant\nFROM   clients c\nLEFT JOIN commandes cmd ON cmd.client_id = c.id\nWHERE  cmd.montant > 10000;",
+     "title": "ON ou WHERE ?",
+     "note": "A retourne 6 lignes : les 5 clients (Awa deux fois), avec NULL quand aucune commande ne dépasse 10 000. B ne retourne que 3 lignes (Awa ×2, Yao) : il se comporte comme un INNER JOIN."
+    },
+    {
+     "type": "choice",
+     "q": "Dans un LEFT JOIN, un filtre sur la table de droite placé dans le WHERE…",
+     "options": [
+      "ne change rien",
+      "annule l'effet du LEFT JOIN (les lignes NULL sont éliminées)",
+      "provoque une erreur"
+     ],
+     "answer": 1,
+     "explain": "Le `WHERE` s'applique **après** la jointure : les lignes complétées par des NULL échouent à `montant > 10000` et sont supprimées. Pour garder tous les clients, mets le filtre dans le `ON`."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `LEFT JOIN` garde la gauche, `RIGHT` garde la droite, `WHERE col_droite IS NULL` isole les orphelins, et **les filtres sur la table optionnelle vont dans le ON**."
+    }
+   ]
+  },
+  {
+   "id": "full-cross",
+   "title": "FULL, CROSS et auto-jointure",
+   "emoji": "🌀",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Il reste trois variantes dans notre boîte à outils. Aucune n'est difficile maintenant que tu as l'idée de base."
+    },
+    {
+     "type": "say",
+     "text": "**`FULL JOIN`** : garde **tout des deux côtés**. Les lignes sans correspondance (à gauche *ou* à droite) sont complétées avec des NULL."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT p.nom AS produit, cat.libelle AS categorie\nFROM   produits p\nFULL JOIN categories cat ON cat.id = p.categorie_id;"
+    },
+    {
+     "type": "code",
+     "sql": "PRODUIT    | CATEGORIE\nClavier    | Périphériques\nSouris     | Périphériques\nÉcran      | Affichage\nCâble HDMI | Connectique\nCasque     | NULL            ← produit sans catégorie\nNULL       | Audio           ← catégorie sans produit",
+     "title": "6 lignes : 4 correspondances + 2 orphelins"
+    },
+    {
+     "type": "choice",
+     "q": "Dans ce FULL JOIN, la catégorie « Audio » apparaît avec…",
+     "options": [
+      "un produit à NULL",
+      "une erreur",
+      "un produit au hasard"
+     ],
+     "answer": 0,
+     "explain": "Elle n'a aucune correspondance dans PRODUITS : ses colonnes de produit sont à NULL."
+    },
+    {
+     "type": "say",
+     "text": "**`CROSS JOIN`** : le produit cartésien **voulu**, sans condition. Utile pour générer toutes les combinaisons (taille × couleur, jour × créneau…)."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, cat.libelle\nFROM   clients c\nCROSS JOIN categories cat;",
+     "title": "5 clients × 4 catégories = 20 lignes"
+    },
+    {
+     "type": "choice",
+     "q": "Combien de lignes pour `CROSS JOIN` entre 5 clients et 4 catégories ?",
+     "options": [
+      "9",
+      "20",
+      "4"
+     ],
+     "answer": 1,
+     "explain": "5 × 4 = 20 combinaisons."
+    },
+    {
+     "type": "say",
+     "text": "Troisième cas, fascinant : l'**auto-jointure** (*self join*). Une table se joint **à elle-même**, comme si elle était deux tables. Cas typique : une hiérarchie. Dans EMPLOYES, `CHEF_ID` pointe vers l'`ID` d'un autre employé."
+    },
+    {
+     "type": "code",
+     "sql": "EMPLOYES\nID | NOM     | CHEF_ID\n 1 | Fatou   | (NULL)\n 2 | Gilbert | 1\n 3 | Hélène  | 1\n 4 | Idriss  | 2"
+    },
+    {
+     "type": "say",
+     "text": "Pour afficher chaque employé avec le nom de son chef, on utilise **deux alias de la même table** : `e` pour l'employé, `chef` pour son supérieur."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT e.nom AS employe, chef.nom AS chef\nFROM   employes e\nJOIN   employes chef ON chef.id = e.chef_id;"
+    },
+    {
+     "type": "code",
+     "sql": "EMPLOYE | CHEF\nGilbert | Fatou\nHélène  | Fatou\nIdriss  | Gilbert",
+     "title": "3 lignes : Fatou (la patronne) n'a pas de chef → absente"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche chaque employé avec le nom de son chef, **y compris Fatou** (dont le chef est NULL). Colonnes : `e.nom`, `chef.nom`.",
+     "hints": [
+      "Pour garder Fatou, il faut une jointure externe.",
+      "employes e LEFT JOIN employes chef ON chef.id = e.chef_id"
+     ],
+     "accept": [
+      "SELECT e.nom, chef.nom FROM employes e LEFT JOIN employes chef ON e.chef_id = chef.id;"
+     ],
+     "solution": "SELECT e.nom, chef.nom FROM employes e LEFT JOIN employes chef ON chef.id = e.chef_id;",
+     "explain": "4 lignes ; Fatou apparaît avec un chef NULL.",
+     "table": "EMPLOYES\nID | NOM     | CHEF_ID\n 1 | Fatou   | (NULL)\n 2 | Gilbert | 1\n 3 | Hélène  | 1\n 4 | Idriss  | 2"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des employés qui **dirigent quelqu'un** (qui sont le chef d'au moins une personne), sans doublon.",
+     "hints": [
+      "Joins e (le subordonné) à chef.",
+      "DISTINCT car Fatou dirige deux personnes."
+     ],
+     "accept": [
+      "SELECT DISTINCT chef.nom FROM employes chef JOIN employes e ON e.chef_id = chef.id;",
+      "SELECT DISTINCT chef.nom FROM employes e INNER JOIN employes chef ON e.chef_id = chef.id;"
+     ],
+     "solution": "SELECT DISTINCT chef.nom FROM employes e JOIN employes chef ON chef.id = e.chef_id;",
+     "explain": "Fatou et Gilbert. Sans `DISTINCT`, Fatou apparaîtrait deux fois (une ligne par subordonné).",
+     "table": "EMPLOYES\nID | NOM     | CHEF_ID\n 1 | Fatou   | (NULL)\n 2 | Gilbert | 1\n 3 | Hélène  | 1\n 4 | Idriss  | 2"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Carte mentale : `FULL` = tout des deux côtés, `CROSS` = toutes les combinaisons, **auto-jointure** = même table avec deux alias."
+    }
+   ]
+  },
+  {
+   "id": "multi",
+   "title": "Jointures multiples et enquête finale",
+   "emoji": "🕵️",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Dans les sujets d'examen, on joint souvent **3 ou 4 tables d'un coup**. La méthode est la même : on enchaîne les `JOIN … ON`, **une jointure par clé étrangère**."
+    },
+    {
+     "type": "say",
+     "text": "Méthode en 4 temps ✍️ : **1)** repère la table qui contient ce qu'on cherche ; **2)** suis les clés étrangères pour atteindre les autres tables ; **3)** écris un `JOIN … ON` par clé ; **4)** termine par `WHERE`, `GROUP BY`, `HAVING`, `ORDER BY`."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, cmd.id, cmd.montant\nFROM   clients c\nJOIN   commandes cmd ON cmd.client_id = c.id\nWHERE  c.ville = 'Cotonou';",
+     "title": "Rappel : jointure + filtre"
+    },
+    {
+     "type": "say",
+     "text": "Combinons maintenant **jointure + agrégat** : « le montant total dépensé par chaque client ». Les agrégats se calculent **après** la jointure."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, SUM(cmd.montant) AS total\nFROM   clients c\nJOIN   commandes cmd ON cmd.client_id = c.id\nGROUP BY c.nom;",
+     "title": "Total par client",
+     "note": "Awa 108000 · Koffi 8000 · Sènami 3500 · Yao 15000"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche chaque **client** (nom) avec le **nombre** de ses commandes, **uniquement pour ceux qui en ont**.",
+     "hints": [
+      "JOIN puis GROUP BY c.nom.",
+      "COUNT(cmd.id)"
+     ],
+     "accept": [
+      "SELECT c.nom, COUNT(*) FROM clients c JOIN commandes cmd ON cmd.client_id = c.id GROUP BY c.nom;"
+     ],
+     "solution": "SELECT c.nom, COUNT(cmd.id) FROM clients c JOIN commandes cmd ON cmd.client_id = c.id GROUP BY c.nom;",
+     "explain": "Awa 2, Koffi 1, Sènami 1, Yao 1.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Piège subtil ⚠️ : si tu veux **aussi les clients à 0 commande**, il faut un `LEFT JOIN` — et surtout compter une colonne de la **table de droite**, pas `COUNT(*)` !"
+    },
+    {
+     "type": "code",
+     "sql": "-- ❌ Ibrahim affiche 1 (COUNT(*) compte la ligne NULL)\nSELECT c.nom, COUNT(*)\nFROM clients c LEFT JOIN commandes cmd ON cmd.client_id = c.id\nGROUP BY c.nom;\n\n-- ✅ Ibrahim affiche 0 (COUNT(col) ignore les NULL)\nSELECT c.nom, COUNT(cmd.id)\nFROM clients c LEFT JOIN commandes cmd ON cmd.client_id = c.id\nGROUP BY c.nom;",
+     "title": "COUNT(*) vs COUNT(colonne)"
+    },
+    {
+     "type": "choice",
+     "q": "Avec un LEFT JOIN, pour qu'un client sans commande affiche 0, on utilise…",
+     "options": [
+      "COUNT(*)",
+      "COUNT(cmd.id)",
+      "SUM(1)"
+     ],
+     "answer": 1,
+     "explain": "`COUNT(*)` compte la ligne complétée par des NULL (donc 1). `COUNT(cmd.id)` ne compte que les vraies commandes."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche **tous** les clients avec leur nombre de commandes (0 pour Ibrahim).",
+     "hints": [
+      "LEFT JOIN + COUNT sur une colonne de commandes.",
+      "COUNT(cmd.id)"
+     ],
+     "accept": [
+      "SELECT c.nom, COUNT(cmd.id) AS nb FROM clients c LEFT JOIN commandes cmd ON c.id = cmd.client_id GROUP BY c.nom;"
+     ],
+     "solution": "SELECT c.nom, COUNT(cmd.id) FROM clients c LEFT JOIN commandes cmd ON cmd.client_id = c.id GROUP BY c.nom;",
+     "explain": "5 lignes ; Ibrahim vaut 0.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Avec **trois tables ou plus**, on enchaîne simplement un `JOIN … ON` par clé étrangère, comme des maillons de chaîne :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT c.nom, cmd.id, p.nom\nFROM   clients c\nJOIN   commandes cmd ON cmd.client_id = c.id\nJOIN   lignes l      ON l.commande_id = cmd.id\nJOIN   produits p    ON p.id = l.produit_id;",
+     "title": "Schéma type à 4 tables (avec une table d'association LIGNES)",
+     "note": "Chaque JOIN s'appuie sur une table déjà présente dans la requête."
+    },
+    {
+     "type": "say",
+     "text": "Voici le fil rouge d'une **enquête** pour finir 🕵️. On cherche à répondre à des questions de plus en plus riches. Chacune combine ce que tu as appris."
+    },
+    {
+     "type": "exercise",
+     "q": "**Enquête 1/3** — Affiche le **nom des clients de Cotonou** et le **total** de leurs commandes (clients ayant commandé), triés du plus grand total au plus petit.",
+     "hints": [
+      "JOIN, puis WHERE sur la ville, GROUP BY, ORDER BY.",
+      "ORDER BY total DESC"
+     ],
+     "accept": [
+      "SELECT c.nom, SUM(cmd.montant) AS total FROM clients c JOIN commandes cmd ON c.id = cmd.client_id WHERE c.ville = 'Cotonou' GROUP BY c.nom ORDER BY SUM(cmd.montant) DESC;",
+      "SELECT c.nom, SUM(cmd.montant) AS total FROM clients c JOIN commandes cmd ON cmd.client_id = c.id WHERE c.ville = 'Cotonou' GROUP BY c.nom ORDER BY 2 DESC;"
+     ],
+     "solution": "SELECT c.nom, SUM(cmd.montant) AS total FROM clients c JOIN commandes cmd ON cmd.client_id = c.id WHERE c.ville = 'Cotonou' GROUP BY c.nom ORDER BY total DESC;",
+     "explain": "Awa 108 000 puis Sènami 3 500.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "exercise",
+     "q": "**Enquête 2/3** — Affiche les **villes** dont le total des commandes dépasse **20000** (colonnes `ville`, total).",
+     "hints": [
+      "GROUP BY c.ville.",
+      "HAVING SUM(cmd.montant) > 20000"
+     ],
+     "accept": [
+      "SELECT c.ville, SUM(cmd.montant) AS total FROM clients c JOIN commandes cmd ON c.id = cmd.client_id GROUP BY c.ville HAVING SUM(cmd.montant) > 20000;"
+     ],
+     "solution": "SELECT c.ville, SUM(cmd.montant) FROM clients c JOIN commandes cmd ON cmd.client_id = c.id GROUP BY c.ville HAVING SUM(cmd.montant) > 20000;",
+     "explain": "Cotonou : 111 500 (Awa + Sènami). Parakou : 15 000 ; Porto-Novo : 8 000 → exclues.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "exercise",
+     "q": "**Enquête 3/3 (finale)** — Affiche le **nom des clients qui n'ont jamais commandé**, ainsi que ceux dont le **total est inférieur à 5000**, avec un LEFT JOIN, `GROUP BY` et `HAVING NVL(SUM(cmd.montant), 0) < 5000`. Colonne : `c.nom` seule.",
+     "hints": [
+      "LEFT JOIN + GROUP BY c.nom.",
+      "Le HAVING est déjà donné dans l'énoncé."
+     ],
+     "accept": [
+      "SELECT c.nom FROM clients c LEFT JOIN commandes cmd ON c.id = cmd.client_id GROUP BY c.nom HAVING NVL(SUM(cmd.montant), 0) < 5000;",
+      "SELECT c.nom FROM clients c LEFT JOIN commandes cmd ON cmd.client_id = c.id GROUP BY c.nom HAVING COALESCE(SUM(cmd.montant), 0) < 5000;"
+     ],
+     "solution": "SELECT c.nom FROM clients c LEFT JOIN commandes cmd ON cmd.client_id = c.id GROUP BY c.nom HAVING NVL(SUM(cmd.montant), 0) < 5000;",
+     "explain": "Sènami (3 500) et Ibrahim (SUM = NULL → NVL → 0). **NVL** est indispensable : sans lui, `NULL < 5000` est inconnu et Ibrahim disparaîtrait.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "🔍 **Énigme résolue !** Tu sais maintenant : INNER, LEFT/RIGHT, FULL, CROSS, auto-jointure, jointures multiples, anti-jointure, et les pièges (ON vs WHERE, COUNT(*), colonne ambiguë). Bravo, détective !"
+    }
+   ]
+  }
+ ]
+}

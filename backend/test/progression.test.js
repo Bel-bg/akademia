@@ -215,3 +215,23 @@ test('user account and progress persist across signout, session refresh, and sig
     }
   }
 });
+
+test('formation lessons reward XP once and the last lesson completes the formation', () => {
+  const formation = content.getFormations('bdd-oracle')[0];
+  assert.ok(formation && formation.lessons.length > 1);
+  let state = progression.defaultState();
+  let total = 0;
+  for (const lesson of formation.lessons) {
+    const result = progression.applyAction(state, { type: 'formation-lesson', moduleId: 'bdd-oracle', formationId: formation.id, lessonId: lesson.id }, content);
+    assert.ok(result.summary.xp >= 20);
+    total += result.summary.xp;
+    state = result.state;
+  }
+  assert.equal(state.counters.formations, 1);
+  assert.ok(state.badges['formation-1']);
+  const again = progression.applyAction(state, { type: 'formation-lesson', moduleId: 'bdd-oracle', formationId: formation.id, lessonId: formation.lessons[0].id }, content);
+  assert.equal(again.summary, null);
+  assert.equal(again.state.xp, state.xp);
+  assert.throws(() => progression.applyAction(state, { type: 'formation-lesson', moduleId: 'bdd-oracle', formationId: formation.id, lessonId: 'faux' }, content));
+  assert.ok(total > 0);
+});

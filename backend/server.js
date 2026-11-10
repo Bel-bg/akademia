@@ -169,6 +169,10 @@ app.get('/api/modules/:moduleId/cards', (req, res) => {
   res.json(contentService.getCards(req.params.moduleId));
 });
 
+app.get('/api/modules/:moduleId/formations', (req, res) => {
+  res.json(contentService.getFormations(req.params.moduleId));
+});
+
 app.get('/api/modules/:moduleId/exams-index', (req, res) => {
   res.json(contentService.getExamIndex(req.params.moduleId));
 });

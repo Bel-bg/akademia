@@ -30,6 +30,8 @@ function themeForFiliere(filiere) {
 
 const XP = {
   chapterRead: 25,
+  formationLesson: 20,
+  formationDone: 60,
   perfectQuiz: 30,
   goodQuiz: 15,
   badge: 20,
@@ -71,12 +73,13 @@ function defaultState() {
     daily: { date: todayKey(), xp: 0 },
     dailyGoal: XP.dailyGoal,
     chaptersRead: {},
+    formations: {},
     attempts: [],
     badges: {},
     review: {},
     chapterStats: {},
     examBest: {},
-    counters: { quizzes: 0, perfectQuizzes: 0, blitzBest: 0, maxCombo: 0, cardsKnown: 0, exams: 0 },
+    counters: { quizzes: 0, perfectQuizzes: 0, blitzBest: 0, maxCombo: 0, cardsKnown: 0, exams: 0, formations: 0 },
   };
 }
 
@@ -88,7 +91,7 @@ function normalizeState(raw) {
   state.theme = themeForFiliere(state.filiere);
   state.daily = { ...base.daily, ...(raw.daily || {}) };
   state.counters = { ...base.counters, ...(raw.counters || {}) };
-  for (const key of ['chaptersRead', 'attempts', 'badges', 'review', 'chapterStats', 'examBest']) {
+  for (const key of ['chaptersRead', 'formations', 'attempts', 'badges', 'review', 'chapterStats', 'examBest']) {
     if (!raw[key] || typeof raw[key] !== 'object') state[key] = base[key];
   }
   if (!Array.isArray(state.attempts)) state.attempts = [];
@@ -106,7 +109,7 @@ function badgeIds(state, modules) {
     ['combo-20', state.counters.maxCombo >= 20], ['blitz-10', state.counters.blitzBest >= 10], ['blitz-20', state.counters.blitzBest >= 20],
     ['exam-1', state.counters.exams >= 1], ['exam-5', state.counters.exams >= 5], ['exam-14', bestExamRatio >= 0.7],
     ['exam-16', bestExamRatio >= 0.8], ['cards-50', state.counters.cardsKnown >= 50], ['streak-3', state.bestStreak >= 3],
-    ['streak-7', state.bestStreak >= 7], ['streak-30', state.bestStreak >= 30], ['level-5', levelFromXp(state.xp) >= 5],
+    ['streak-7', state.bestStreak >= 7], ['streak-30', state.bestStreak >= 30], ['formation-1', (state.counters.formations || 0) >= 1], ['formation-3', (state.counters.formations || 0) >= 3], ['level-5', levelFromXp(state.xp) >= 5],
     ['level-10', levelFromXp(state.xp) >= 10], ['level-20', levelFromXp(state.xp) >= 20],
   ];
   return candidates.filter(([id, earned]) => earned && !state.badges[id]).map(([id]) => id);
@@ -182,6 +185,27 @@ function applyChapterRead(state, modules, moduleId, chapterId, content) {
   if (read.includes(chapterId)) return { state, summary: null };
   const next = { ...state, chaptersRead: { ...state.chaptersRead, [moduleId]: [...read, chapterId] } };
   return finish(next, modules, { score: 1, max: 1 }, [{ label: 'Chapitre terminé', xp: XP.chapterRead }], XP.chapterRead);
+}
+
+function applyFormationLesson(state, modules, input, content) {
+  requireModule(input.moduleId, content);
+  const formation = content.getFormations(input.moduleId).find((item) => item.id === input.formationId);
+  if (!formation) throw new Error('Formation invalide');
+  if (!formation.lessons.some((lesson) => lesson.id === input.lessonId)) throw new Error('Leçon invalide');
+  const key = `${input.moduleId}:${input.formationId}`;
+  const done = (state.formations || {})[key] || [];
+  if (done.includes(input.lessonId)) return { state, summary: null };
+  const nextDone = [...done, input.lessonId];
+  const finished = formation.lessons.every((lesson) => nextDone.includes(lesson.id));
+  const lines = [{ label: 'Leçon terminée', xp: XP.formationLesson }];
+  let gain = XP.formationLesson;
+  if (finished) { lines.push({ label: `Formation « ${formation.title} » terminée`, xp: XP.formationDone }); gain += XP.formationDone; }
+  const next = {
+    ...state,
+    formations: { ...(state.formations || {}), [key]: nextDone },
+    counters: { ...state.counters, formations: (state.counters.formations || 0) + (finished ? 1 : 0) },
+  };
+  return finish(next, modules, { score: nextDone.length, max: formation.lessons.length }, lines, gain);
 }
 
 function applyQuiz(state, modules, input, content) {
@@ -309,6 +333,7 @@ function applyAction(rawState, input, content) {
   if (!input || typeof input !== 'object') throw new Error('Action invalide');
   if (input.type === 'set-filiere') return applySetFiliere(state, input.filiere);
   if (input.type === 'chapter-read') return applyChapterRead(state, modules, input.moduleId, input.chapterId, content);
+  if (input.type === 'formation-lesson') return applyFormationLesson(state, modules, input, content);
   if (input.type === 'quiz') return applyQuiz(state, modules, input, content);
   if (input.type === 'exam') return applyExam(state, modules, input, content);
   if (input.type === 'cards') return applyCards(state, modules, input, content);

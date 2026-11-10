@@ -1,0 +1,976 @@
+{
+ "id": "select",
+ "order": 1,
+ "title": "Tout savoir sur le SELECT",
+ "tagline": "De ton premier SELECT jusqu'aux sous-requêtes : l'instruction reine du SQL, sans zone d'ombre.",
+ "emoji": "🔍",
+ "color": "#2563EB",
+ "level": "Débutant → solide",
+ "minutes": 55,
+ "pitch": [
+  "Salut ! Moi c'est Nimbo ☁️. Je vais te présenter **« Tout savoir sur le SELECT »**.",
+  "Le `SELECT` est l'instruction la plus utilisée en SQL — et pourtant, beaucoup d'étudiants la connaissent « à peu près ». Résultat : requêtes qui marchent par chance, erreurs ORA-00979, NULL qui piègent…",
+  "Dans cette formation, je te prends par la main : 6 leçons courtes, des explications claires, et **des exercices à chaque étape** où tu écris toi-même tes requêtes. Je te donne des indices si tu bloques, et je corrige avec toi.",
+  "À la fin, tu liras n'importe quelle requête sans hésiter, et tu écriras les tiennes avec méthode."
+ ],
+ "benefits": [
+  "Comprendre l'ordre d'exécution réel d'une requête",
+  "Maîtriser WHERE, ORDER BY, GROUP BY et HAVING sans erreur",
+  "Éviter les pièges classiques : NULL, NOT IN, ROWNUM",
+  "Exercices guidés avec indices et corrections détaillées"
+ ],
+ "lessons": [
+  {
+   "id": "projection",
+   "title": "Ton premier SELECT",
+   "emoji": "🔍",
+   "minutes": 8,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️, et je serai ton coach pendant toute cette formation. Ici, on ne survole pas : on **comprend** chaque mot de `SELECT`."
+    },
+    {
+     "type": "say",
+     "text": "Imagine une table comme un grand tableau Excel. `SELECT`, c'est le geste qui consiste à **choisir quelles colonnes tu veux voir**. Rien d'autre. Il ne modifie jamais les données."
+    },
+    {
+     "type": "say",
+     "text": "Voici la table qu'on va utiliser dans toute la formation. Garde-la en tête 👇"
+    },
+    {
+     "type": "code",
+     "sql": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)",
+     "title": "Table CLIENTS"
+    },
+    {
+     "type": "say",
+     "text": "La forme minimale d'une requête tient en **deux mots-clés** : `SELECT` (quoi ?) et `FROM` (dans quelle table ?)."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, ville\nFROM   clients;",
+     "title": "Deux colonnes seulement",
+     "note": "Résultat : 5 lignes, avec les colonnes NOM et VILLE dans cet ordre."
+    },
+    {
+     "type": "say",
+     "text": "L'ordre des colonnes dans le résultat est **celui que tu écris** après `SELECT`, pas celui de la table."
+    },
+    {
+     "type": "choice",
+     "q": "Que fait `SELECT nom FROM clients;` ?",
+     "options": [
+      "Supprime la colonne NOM",
+      "Affiche la colonne NOM de tous les clients",
+      "Affiche uniquement le premier client"
+     ],
+     "answer": 1,
+     "explain": "`SELECT` ne fait que lire. Sans `WHERE`, **toutes les lignes** sont renvoyées, mais seulement la colonne demandée."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **nom** et l'**email** de tous les clients (dans cet ordre).",
+     "hints": [
+      "Tu as besoin de deux colonnes séparées par une virgule.",
+      "Le schéma est : SELECT col1, col2 FROM table;"
+     ],
+     "accept": [],
+     "solution": "SELECT nom, email FROM clients;",
+     "explain": "On liste les colonnes séparées par des virgules, **sans virgule après la dernière**.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Pour **tout** afficher, il existe l'étoile `*` :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT * FROM clients;"
+    },
+    {
+     "type": "say",
+     "text": "Pratique pour explorer 👀. Mais dans un vrai programme, on **liste les colonnes** : plus clair, plus rapide, et ça ne casse pas si quelqu'un ajoute une colonne à la table."
+    },
+    {
+     "type": "say",
+     "text": "Maintenant, un petit pouvoir : tu peux **renommer** une colonne dans le résultat avec un *alias* (mot `AS`, facultatif). Ça ne change pas la table, seulement l'affichage."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom AS client, ville AS localite\nFROM   clients;"
+    },
+    {
+     "type": "say",
+     "text": "Si ton alias contient un espace ou des majuscules à conserver, mets-le entre **guillemets doubles** : `AS \"Nom du client\"`. Attention : en SQL, les **guillemets simples `'…'` servent aux textes**, les doubles aux noms."
+    },
+    {
+     "type": "choice",
+     "q": "Quels guillemets pour un alias avec espace, comme Nom du client ?",
+     "options": [
+      "'Nom du client'",
+      "\"Nom du client\"",
+      "`Nom du client`"
+     ],
+     "answer": 1,
+     "explain": "Oracle utilise les guillemets doubles pour les identifiants (noms de colonnes, alias). Les simples sont réservés aux valeurs texte et dates."
+    },
+    {
+     "type": "say",
+     "text": "Tu peux aussi **calculer** dans un `SELECT`. Regarde avec les produits :"
+    },
+    {
+     "type": "code",
+     "sql": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)",
+     "title": "Table PRODUITS"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix, prix * 1.18 AS prix_ttc\nFROM   produits;",
+     "title": "Une expression calculée",
+     "note": "Chaque ligne affiche le prix augmenté de 18 % (TVA)."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **nom** de chaque produit et son prix **diminué de 10 %**, avec l'alias `prix_solde`.",
+     "hints": [
+      "Baisser de 10 % = multiplier par 0,9.",
+      "SELECT nom, prix * ... AS prix_solde FROM produits;"
+     ],
+     "accept": [
+      "SELECT nom, prix - prix * 0.1 AS prix_solde FROM produits;",
+      "SELECT nom, prix * (1 - 0.1) AS prix_solde FROM produits;",
+      "SELECT nom, prix*0.90 AS prix_solde FROM produits;"
+     ],
+     "solution": "SELECT nom, prix * 0.9 AS prix_solde FROM produits;",
+     "explain": "Une expression peut apparaître directement dans la liste du SELECT ; l'alias donne un nom propre à la colonne calculée.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Pour **coller du texte**, Oracle utilise l'opérateur `||` (deux barres verticales), pas `+` :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom || ' habite à ' || ville AS phrase\nFROM   clients;",
+     "title": "Concaténation",
+     "note": "Résultat de la 1re ligne : Awa habite à Cotonou"
+    },
+    {
+     "type": "choice",
+     "q": "Quel opérateur concatène deux textes en Oracle ?",
+     "options": [
+      "+",
+      "&",
+      "||"
+     ],
+     "answer": 2,
+     "explain": "En Oracle, `||` concatène. `+` est réservé aux nombres (et provoque une erreur sur du texte). `CONCAT(a, b)` existe aussi, mais n'accepte que deux arguments."
+    },
+    {
+     "type": "say",
+     "text": "Dernier outil : `DISTINCT`. Il **supprime les doublons** du résultat. Combien de villes différentes dans CLIENTS ? Sans DISTINCT, Cotonou apparaît deux fois."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT DISTINCT ville\nFROM   clients;",
+     "title": "4 lignes au lieu de 5"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les villes **distinctes** où habitent nos clients.",
+     "hints": [
+      "Le mot-clé se place juste après SELECT.",
+      "SELECT DISTINCT colonne FROM table;"
+     ],
+     "accept": [],
+     "solution": "SELECT DISTINCT ville FROM clients;",
+     "explain": "`DISTINCT` s'applique à **toute la ligne** du résultat : avec plusieurs colonnes, c'est la combinaison qui doit être unique.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Et la fameuse table **DUAL** ? C'est une table Oracle à une seule ligne, très pratique pour tester un calcul sans table réelle. En Oracle, `SELECT` sans `FROM` est **interdit** (avant la version 23), alors on écrit :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT 12 * 5 AS resultat, SYSDATE AS maintenant\nFROM   dual;"
+    },
+    {
+     "type": "choice",
+     "q": "Pour calculer 7 * 6 sans table, en Oracle classique, on écrit…",
+     "options": [
+      "SELECT 7 * 6;",
+      "SELECT 7 * 6 FROM dual;",
+      "CALC 7 * 6;"
+     ],
+     "answer": 1,
+     "explain": "`DUAL` est la table à une ligne qui sert de support. Les versions récentes (23ai) acceptent `SELECT` sans `FROM`, mais `FROM dual` marche partout."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Bilan de la leçon : `SELECT` + colonnes, `FROM` + table, `AS` pour renommer, `||` pour coller, `DISTINCT` pour dédoublonner, `DUAL` pour tester. Tu as déjà les bases !"
+    }
+   ]
+  },
+  {
+   "id": "where",
+   "title": "Filtrer avec WHERE",
+   "emoji": "🎯",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Jusqu'ici on a pris **toutes** les lignes. Dans la vraie vie, on veut *certaines* lignes. C'est le rôle de `WHERE` : **il garde uniquement les lignes qui vérifient une condition**."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix\nFROM   produits\nWHERE  prix > 10000;",
+     "title": "Les produits chers"
+    },
+    {
+     "type": "say",
+     "text": "La table PRODUITS, pour mémoire :"
+    },
+    {
+     "type": "code",
+     "sql": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Ici seuls Clavier (15 000), Écran (85 000) et Casque (22 000) passent le filtre. Les opérateurs de comparaison : `=`  `<>` (ou `!=`)  `<`  `>`  `<=`  `>=`."
+    },
+    {
+     "type": "choice",
+     "q": "Comment écrit-on « différent de » en Oracle ?",
+     "options": [
+      "!==",
+      "<>",
+      "=/="
+     ],
+     "answer": 1,
+     "explain": "`<>` est la forme standard SQL. Oracle accepte aussi `!=` et `^=`."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des produits dont le prix est **inférieur ou égal à 8000**.",
+     "hints": [
+      "Le signe pour « inférieur ou égal » est <=",
+      "WHERE prix <= ..."
+     ],
+     "accept": [],
+     "solution": "SELECT nom FROM produits WHERE prix <= 8000;",
+     "explain": "Souris (8 000) et Câble HDMI (3 500) sont retournés.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Texte = guillemets simples, et la casse compte !** `'Cotonou'` n'est pas `'cotonou'`."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom FROM clients WHERE ville = 'Cotonou';",
+     "title": "OK : retourne Awa et Sènami"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom FROM clients WHERE ville = 'cotonou';",
+     "title": "Retourne 0 ligne ! (casse différente)"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des clients qui habitent à **Parakou**.",
+     "hints": [
+      "Le texte se met entre guillemets simples.",
+      "WHERE ville = '...'"
+     ],
+     "accept": [],
+     "solution": "SELECT nom FROM clients WHERE ville = 'Parakou';",
+     "explain": "Un seul client : Yao. Pense à respecter la casse exacte de la valeur.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "On combine les conditions avec `AND`, `OR` et `NOT`. Attention à la **priorité** : `AND` passe **avant** `OR`, comme la multiplication avant l'addition."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix FROM produits\nWHERE  prix > 10000 AND prix < 50000;",
+     "title": "Entre 10 000 et 50 000 exclus"
+    },
+    {
+     "type": "choice",
+     "q": "`WHERE a = 1 OR b = 2 AND c = 3` est évalué comme…",
+     "options": [
+      "(a = 1 OR b = 2) AND c = 3",
+      "a = 1 OR (b = 2 AND c = 3)",
+      "De gauche à droite, sans priorité"
+     ],
+     "answer": 1,
+     "explain": "`AND` est prioritaire sur `OR`. En cas de doute, **mets des parenthèses** : c'est plus lisible et sans risque."
+    },
+    {
+     "type": "say",
+     "text": "Trois raccourcis très utiles. **BETWEEN** (bornes **incluses**), **IN** (liste de valeurs), **LIKE** (recherche de motif avec `%` = n'importe quoi, `_` = un caractère)."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom FROM produits WHERE prix BETWEEN 8000 AND 22000;\nSELECT nom FROM clients  WHERE ville IN ('Cotonou', 'Parakou');\nSELECT nom FROM clients  WHERE nom LIKE 'A%';",
+     "title": "Les trois raccourcis"
+    },
+    {
+     "type": "choice",
+     "q": "`prix BETWEEN 8000 AND 22000` retourne un produit à 22000 ?",
+     "options": [
+      "Oui, les bornes sont incluses",
+      "Non, la borne haute est exclue",
+      "Seulement si on écrit >= "
+     ],
+     "answer": 0,
+     "explain": "`BETWEEN a AND b` équivaut à `>= a AND <= b` : les deux bornes sont **incluses**."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des clients dont le nom **commence par la lettre S**.",
+     "hints": [
+      "LIKE avec % remplace « n'importe quelle suite de caractères ».",
+      "WHERE nom LIKE 'S%'"
+     ],
+     "accept": [],
+     "solution": "SELECT nom FROM clients WHERE nom LIKE 'S%';",
+     "explain": "`'S%'` = commence par S. `'%a'` = finit par a. `'%o%'` = contient un o.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des clients qui habitent à **Cotonou ou à Abomey**, avec `IN`.",
+     "hints": [
+      "IN prend une liste entre parenthèses.",
+      "WHERE ville IN ('...', '...')"
+     ],
+     "accept": [
+      "SELECT nom FROM clients WHERE ville = 'Cotonou' OR ville = 'Abomey';"
+     ],
+     "solution": "SELECT nom FROM clients WHERE ville IN ('Cotonou', 'Abomey');",
+     "explain": "`IN (a, b)` est un `OR` condensé : `ville = 'Cotonou' OR ville = 'Abomey'`.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Maintenant le piège n°1 du débutant : **NULL**. NULL ne veut pas dire 0 ni vide : il veut dire **« inconnu »**. Du coup, `= NULL` ne marche **jamais**. Il faut `IS NULL`."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom FROM clients WHERE email = NULL;   -- ❌ 0 ligne, toujours\nSELECT nom FROM clients WHERE email IS NULL;   -- ✅ Koffi, Ibrahim",
+     "title": "Comparer à NULL"
+    },
+    {
+     "type": "choice",
+     "q": "Comment trouver les clients sans email ?",
+     "options": [
+      "WHERE email = NULL",
+      "WHERE email = ''",
+      "WHERE email IS NULL"
+     ],
+     "answer": 2,
+     "explain": "Toute comparaison avec NULL (`=`, `<>`…) donne « inconnu », jamais vrai. Seuls `IS NULL` / `IS NOT NULL` fonctionnent. (Et en Oracle, la chaîne vide `''` **est** NULL !)"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des clients qui **ont** un email.",
+     "hints": [
+      "Le contraire de IS NULL.",
+      "WHERE email IS NOT NULL"
+     ],
+     "accept": [
+      "SELECT nom FROM clients WHERE NOT email IS NULL;"
+     ],
+     "solution": "SELECT nom FROM clients WHERE email IS NOT NULL;",
+     "explain": "Awa, Sènami et Yao. `IS NOT NULL` garde les lignes où la valeur est connue.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi** : produits **de plus de 5000 Fcfa** dont la catégorie n'est **pas renseignée** (affiche le nom).",
+     "hints": [
+      "Deux conditions reliées par AND.",
+      "prix > 5000 AND categorie_id IS ..."
+     ],
+     "accept": [],
+     "solution": "SELECT nom FROM produits WHERE prix > 5000 AND categorie_id IS NULL;",
+     "explain": "Seul le Casque (22 000, catégorie NULL) répond. On a combiné une comparaison et un test de NULL.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu sais filtrer : comparaisons, `AND/OR`, `BETWEEN`, `IN`, `LIKE`, `IS NULL`. Prochaine étape : **mettre de l'ordre** dans les résultats !"
+    }
+   ]
+  },
+  {
+   "id": "tri",
+   "title": "Trier et limiter",
+   "emoji": "📊",
+   "minutes": 8,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Une requête sans tri te donne les lignes **dans un ordre non garanti**. Si l'ordre compte, une seule solution : `ORDER BY`. Toujours **en dernier** dans la requête."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix\nFROM   produits\nORDER BY prix;",
+     "title": "Du moins cher au plus cher (ASC par défaut)"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix\nFROM   produits\nORDER BY prix DESC;",
+     "title": "Du plus cher au moins cher"
+    },
+    {
+     "type": "choice",
+     "q": "Quel est le sens de tri par défaut ?",
+     "options": [
+      "Décroissant (DESC)",
+      "Croissant (ASC)",
+      "Aucun, il faut toujours le préciser"
+     ],
+     "answer": 1,
+     "explain": "Sans précision, `ORDER BY` trie en **ASC** (croissant). `DESC` doit être demandé."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom et le prix des produits, **du plus cher au moins cher**.",
+     "hints": [
+      "ORDER BY se place à la fin.",
+      "ORDER BY prix DESC"
+     ],
+     "accept": [],
+     "solution": "SELECT nom, prix FROM produits ORDER BY prix DESC;",
+     "explain": "Écran (85 000) arrive en tête.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Tu peux trier sur **plusieurs colonnes** : la 2e ne sert que pour départager les égalités de la 1re."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, ville FROM clients\nORDER BY ville ASC, nom DESC;",
+     "title": "Villes de A à Z, et dans chaque ville les noms de Z à A"
+    },
+    {
+     "type": "say",
+     "text": "Et les **NULL** dans le tri ? En Oracle, ils sont considérés comme **les plus grands** : en ASC ils finissent en bas, en DESC ils remontent en haut. On peut forcer avec `NULLS FIRST` / `NULLS LAST`."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, categorie_id FROM produits\nORDER BY categorie_id DESC NULLS LAST;",
+     "title": "Le Casque (NULL) est relégué à la fin"
+    },
+    {
+     "type": "choice",
+     "q": "`ORDER BY categorie_id DESC` (sans NULLS) : où apparaît le Casque (catégorie NULL) ?",
+     "options": [
+      "En dernier",
+      "Tout en haut",
+      "Il disparaît du résultat"
+     ],
+     "answer": 1,
+     "explain": "En Oracle, NULL est vu comme la plus grande valeur : en tri décroissant, il est **en premier**. Ajoute `NULLS LAST` pour l'envoyer en bas."
+    },
+    {
+     "type": "say",
+     "text": "Autre astuce : tu peux trier par **numéro de colonne** (`ORDER BY 2`) ou par **alias**. L'alias fonctionne ici car `ORDER BY` s'exécute *après* le `SELECT`."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix * 1.18 AS ttc\nFROM   produits\nORDER BY ttc DESC;"
+    },
+    {
+     "type": "say",
+     "text": "Maintenant, **limiter** le nombre de lignes : « les 3 produits les plus chers ». ⚠️ **`LIMIT` n'existe pas en Oracle**. Depuis Oracle 12c, on écrit `FETCH FIRST n ROWS ONLY` :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix\nFROM   produits\nORDER BY prix DESC\nFETCH FIRST 3 ROWS ONLY;"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des **2 produits les moins chers**.",
+     "hints": [
+      "Trie d'abord par prix croissant.",
+      "... ORDER BY prix FETCH FIRST 2 ROWS ONLY"
+     ],
+     "accept": [],
+     "solution": "SELECT nom FROM produits ORDER BY prix FETCH FIRST 2 ROWS ONLY;",
+     "explain": "Câble HDMI (3 500) et Souris (8 000). Le tri est **indispensable** : sans lui, « les 2 premiers » n'a pas de sens.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Sur les versions anciennes, on utilise `ROWNUM`. Et là… **piège classique** ⚠️. Regarde :"
+    },
+    {
+     "type": "code",
+     "sql": "-- ❌ FAUX : ROWNUM est attribué AVANT le tri\nSELECT nom, prix FROM produits\nWHERE  ROWNUM <= 3\nORDER BY prix DESC;\n\n-- ✅ BON : on trie dans une sous-requête, PUIS on limite\nSELECT * FROM (\n  SELECT nom, prix FROM produits ORDER BY prix DESC\n)\nWHERE ROWNUM <= 3;",
+     "title": "ROWNUM : le bon et le mauvais"
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi la 1re requête est fausse ?",
+     "options": [
+      "ROWNUM n'existe pas",
+      "ROWNUM numérote les lignes avant ORDER BY : on trie 3 lignes quelconques",
+      "ORDER BY est interdit avec ROWNUM"
+     ],
+     "answer": 1,
+     "explain": "Oracle numérote les lignes **au fil de la lecture**, avant le tri. Il faut donc trier dans une sous-requête, puis filtrer sur `ROWNUM` à l'extérieur."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Retiens : `ORDER BY` en dernier, `DESC` pour décroissant, `NULLS LAST` pour maîtriser les NULL, `FETCH FIRST n ROWS ONLY` (ou `ROWNUM` dans une sous-requête triée) pour le Top-N."
+    }
+   ]
+  },
+  {
+   "id": "fonctions",
+   "title": "Les fonctions sur les lignes",
+   "emoji": "🧰",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Oracle te donne une **boîte à outils** de fonctions pour transformer les valeurs *ligne par ligne*. On va voir les plus utiles : texte, nombres, NULL et conditions."
+    },
+    {
+     "type": "say",
+     "text": "**Le texte** d'abord :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT UPPER(nom)      AS majuscules,   -- AWA\n       LOWER(nom)      AS minuscules,   -- awa\n       INITCAP(nom)    AS capitalise,   -- Awa\n       LENGTH(nom)     AS longueur,     -- 3\n       SUBSTR(nom,1,2) AS deux_lettres  -- Aw\nFROM   clients;",
+     "title": "Fonctions texte"
+    },
+    {
+     "type": "say",
+     "text": "`SUBSTR(texte, début, longueur)` : **la position 1 est la première lettre** (pas 0 comme dans d'autres langages !)."
+    },
+    {
+     "type": "choice",
+     "q": "`SUBSTR('Koffi', 2, 3)` retourne…",
+     "options": [
+      "Kof",
+      "off",
+      "ffi"
+     ],
+     "answer": 1,
+     "explain": "On démarre à la position 2 (la lettre `o`) et on prend 3 caractères : `o`, `f`, `f` → **off**."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des clients **en majuscules**.",
+     "hints": [
+      "La fonction s'appelle UPPER.",
+      "SELECT UPPER(nom) FROM clients;"
+     ],
+     "accept": [],
+     "solution": "SELECT UPPER(nom) FROM clients;",
+     "explain": "`UPPER` est très utile pour comparer sans se soucier de la casse : `WHERE UPPER(ville) = 'COTONOU'`.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Astuce pratique : ignorer la casse dans un filtre."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom FROM clients\nWHERE  UPPER(ville) = 'COTONOU';"
+    },
+    {
+     "type": "say",
+     "text": "**Les nombres** : `ROUND(x, n)` arrondit, `TRUNC(x, n)` coupe, `MOD(a, b)` donne le reste."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT ROUND(15432.678, 1) AS arrondi,   -- 15432,7\n       TRUNC(15432.678, 1) AS coupe,     -- 15432,6\n       MOD(10, 3)          AS reste      -- 1\nFROM   dual;"
+    },
+    {
+     "type": "choice",
+     "q": "`ROUND(2.5)` et `TRUNC(2.9)` donnent…",
+     "options": [
+      "3 et 3",
+      "3 et 2",
+      "2 et 2"
+     ],
+     "answer": 1,
+     "explain": "`ROUND` arrondit à l'entier le plus proche (2,5 → 3). `TRUNC` coupe sans arrondir (2,9 → 2)."
+    },
+    {
+     "type": "say",
+     "text": "Le héros de la gestion des valeurs manquantes : **`NVL(valeur, remplacement)`**. Si la valeur est NULL, il renvoie le remplacement."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, NVL(email, 'pas d''email') AS contact\nFROM   clients;",
+     "title": "Remplacer NULL"
+    },
+    {
+     "type": "say",
+     "text": "Remarque l'apostrophe **doublée** (`''`) pour écrire une apostrophe dans un texte. Autres cousins : `NVL2(x, si_non_null, si_null)` et `COALESCE(a, b, c…)` qui renvoie la **première valeur non nulle**."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom et la catégorie des produits, en remplaçant une catégorie NULL par **0**.",
+     "hints": [
+      "NVL(colonne, valeur_de_remplacement)",
+      "NVL(categorie_id, 0)"
+     ],
+     "accept": [
+      "SELECT nom, COALESCE(categorie_id, 0) FROM produits;"
+     ],
+     "solution": "SELECT nom, NVL(categorie_id, 0) FROM produits;",
+     "explain": "Le Casque affiche 0 à la place de NULL. Attention : c'est juste un affichage, la table n'est pas modifiée.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)"
+    },
+    {
+     "type": "choice",
+     "q": "`NVL(NULL, 5) + 10` donne…",
+     "options": [
+      "15",
+      "NULL",
+      "Erreur"
+     ],
+     "answer": 0,
+     "explain": "NVL remplace NULL par 5, puis 5 + 10 = 15. Sans NVL, `NULL + 10` donnerait NULL : **NULL contamine les calculs**."
+    },
+    {
+     "type": "say",
+     "text": "Enfin, **`CASE`** : le « si… alors… sinon » du SQL. Il crée une colonne selon des conditions."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix,\n       CASE\n         WHEN prix >= 50000 THEN 'Premium'\n         WHEN prix >= 10000 THEN 'Standard'\n         ELSE 'Éco'\n       END AS gamme\nFROM   produits;",
+     "title": "CASE … WHEN … THEN … ELSE … END"
+    },
+    {
+     "type": "say",
+     "text": "Les `WHEN` sont testés **dans l'ordre** ; le premier vrai gagne. N'oublie pas le `END` final ! Ici : Écran → Premium, Clavier et Casque → Standard, les autres → Éco."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom et une colonne `statut` : **'Joignable'** si l'email est renseigné, sinon **'Injoignable'**.",
+     "hints": [
+      "Utilise CASE WHEN ... IS NULL THEN ... ELSE ... END",
+      "N'oublie pas END et l'alias statut."
+     ],
+     "accept": [
+      "SELECT nom, CASE WHEN email IS NOT NULL THEN 'Joignable' ELSE 'Injoignable' END AS statut FROM clients;"
+     ],
+     "solution": "SELECT nom, CASE WHEN email IS NULL THEN 'Injoignable' ELSE 'Joignable' END AS statut FROM clients;",
+     "explain": "Ici on teste **IS NULL** dans le WHEN (jamais `= NULL`).",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Boîte à outils : `UPPER/LOWER/INITCAP/LENGTH/SUBSTR`, `ROUND/TRUNC/MOD`, `NVL/NVL2/COALESCE`, `CASE`. (Les fonctions de **dates** ont leur propre formation 📅 !)"
+    }
+   ]
+  },
+  {
+   "id": "agregats",
+   "title": "Agréger et regrouper",
+   "emoji": "📈",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Jusqu'ici une ligne en entrée = une ligne en sortie. Avec les **fonctions d'agrégation**, **plusieurs lignes se résument en une valeur** : combien ? quelle somme ? quelle moyenne ?"
+    },
+    {
+     "type": "code",
+     "sql": "COMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000",
+     "title": "Table COMMANDES"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT COUNT(*)      AS nb,\n       SUM(montant)    AS total,\n       AVG(montant)    AS moyenne,\n       MIN(montant)    AS plus_petite,\n       MAX(montant)    AS plus_grande\nFROM   commandes;",
+     "title": "Résumé de toute la table",
+     "note": "→ 5 | 134500 | 26900 | 3500 | 85000"
+    },
+    {
+     "type": "say",
+     "text": "**`COUNT(*)`** compte les lignes, **`COUNT(colonne)`** compte les valeurs **non NULL** de cette colonne. Différence cruciale ! Pour les clients :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT COUNT(*) AS nb_clients, COUNT(email) AS nb_emails\nFROM   clients;",
+     "title": "→ 5 et 3 (deux emails sont NULL)"
+    },
+    {
+     "type": "choice",
+     "q": "Table CLIENTS : `SELECT COUNT(email) FROM clients;` retourne…",
+     "options": [
+      "5",
+      "3",
+      "2"
+     ],
+     "answer": 1,
+     "explain": "COUNT(colonne) ignore les NULL : seuls 3 clients ont un email. `COUNT(*)` aurait donné 5."
+    },
+    {
+     "type": "exercise",
+     "q": "Calcule le **montant total** de toutes les commandes (une seule valeur).",
+     "hints": [
+      "Fonction d'agrégation qui additionne.",
+      "SELECT SUM(...) FROM commandes;"
+     ],
+     "accept": [],
+     "solution": "SELECT SUM(montant) FROM commandes;",
+     "explain": "134 500. Les agrégats **ignorent les NULL** (sauf COUNT(*)).",
+     "table": "COMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Maintenant la magie : **`GROUP BY`**. Il découpe les lignes en *paquets* (un par valeur) et applique l'agrégat à **chaque paquet**."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT client_id, COUNT(*) AS nb_cmd, SUM(montant) AS total\nFROM   commandes\nGROUP BY client_id;",
+     "title": "Un résumé par client",
+     "note": "→ 1 : 2 commandes, 108000 · 2 : 1, 8000 · 3 : 1, 3500 · 4 : 1, 15000"
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Règle d'or** : toute colonne du `SELECT` qui n'est **pas dans un agrégat** doit figurer dans le `GROUP BY`. Sinon Oracle répond **ORA-00979 : not a GROUP BY expression**."
+    },
+    {
+     "type": "code",
+     "sql": "-- ❌ ORA-00979\nSELECT client_id, montant, COUNT(*)\nFROM   commandes\nGROUP BY client_id;",
+     "title": "Pourquoi ? Quel montant afficher pour un paquet de 2 commandes ?"
+    },
+    {
+     "type": "choice",
+     "q": "Quelle requête est valide ?",
+     "options": [
+      "SELECT ville, COUNT(*) FROM clients;",
+      "SELECT ville, COUNT(*) FROM clients GROUP BY ville;",
+      "SELECT ville, nom, COUNT(*) FROM clients GROUP BY ville;"
+     ],
+     "answer": 1,
+     "explain": "La 1re mélange colonne et agrégat sans `GROUP BY` ; la 3e affiche `nom` qui n'est ni agrégé ni groupé."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche chaque **ville** et le **nombre de clients** qui y habitent.",
+     "hints": [
+      "Regroupe par ville.",
+      "SELECT ville, COUNT(*) FROM clients GROUP BY ville;"
+     ],
+     "accept": [],
+     "solution": "SELECT ville, COUNT(*) FROM clients GROUP BY ville;",
+     "explain": "Cotonou 2, Porto-Novo 1, Parakou 1, Abomey 1.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)"
+    },
+    {
+     "type": "say",
+     "text": "Et pour **filtrer les paquets** ? Si tu veux « les clients ayant plus d'une commande », `WHERE` ne marche pas : il agit **avant** le regroupement, quand les compteurs n'existent pas encore. Il faut **`HAVING`** :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT client_id, COUNT(*) AS nb_cmd\nFROM   commandes\nGROUP BY client_id\nHAVING COUNT(*) > 1;",
+     "title": "Seul le client 1 (2 commandes)"
+    },
+    {
+     "type": "say",
+     "text": "Moyen mnémotechnique : **WHERE filtre les lignes, HAVING filtre les groupes.** On peut utiliser les deux ensemble : WHERE d'abord (réduit les données), HAVING ensuite."
+    },
+    {
+     "type": "choice",
+     "q": "Quelle clause permet de garder les groupes dont la somme dépasse 10 000 ?",
+     "options": [
+      "WHERE SUM(montant) > 10000",
+      "HAVING SUM(montant) > 10000",
+      "GROUP BY SUM(montant) > 10000"
+     ],
+     "answer": 1,
+     "explain": "Les agrégats sont interdits dans `WHERE` ; on les place dans `HAVING`."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les `client_id` dont le **total des commandes dépasse 10000**, avec ce total.",
+     "hints": [
+      "GROUP BY client_id puis HAVING SUM(montant) > ...",
+      "HAVING SUM(montant) > 10000"
+     ],
+     "accept": [],
+     "solution": "SELECT client_id, SUM(montant) FROM commandes GROUP BY client_id HAVING SUM(montant) > 10000;",
+     "explain": "Clients 1 (108 000) et 4 (15 000).",
+     "table": "COMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Voici l'**ordre d'écriture** complet, et l'ordre **logique** d'exécution à retenir pour ne jamais se tromper :"
+    },
+    {
+     "type": "code",
+     "sql": "-- Écriture\nSELECT ... FROM ... WHERE ... GROUP BY ... HAVING ... ORDER BY ...\n\n-- Exécution logique\n1. FROM      (quelle table ?)\n2. WHERE     (quelles lignes ?)\n3. GROUP BY  (quels paquets ?)\n4. HAVING    (quels paquets garder ?)\n5. SELECT    (quelles colonnes / alias ?)\n6. ORDER BY  (quel tri ?)",
+     "title": "L'ordre à connaître par cœur"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi** : pour chaque client, affiche `client_id` et le total de ses commandes, ne garde que les totaux **supérieurs à 5000**, puis trie du **plus grand au plus petit** total.",
+     "hints": [
+      "Enchaîne GROUP BY, HAVING puis ORDER BY.",
+      "ORDER BY total DESC (l'alias est autorisé ici)."
+     ],
+     "accept": [
+      "SELECT client_id, SUM(montant) AS total FROM commandes GROUP BY client_id HAVING SUM(montant) > 5000 ORDER BY SUM(montant) DESC;",
+      "SELECT client_id, SUM(montant) FROM commandes GROUP BY client_id HAVING SUM(montant) > 5000 ORDER BY SUM(montant) DESC;",
+      "SELECT client_id, SUM(montant) AS total FROM commandes GROUP BY client_id HAVING SUM(montant) > 5000 ORDER BY 2 DESC;"
+     ],
+     "solution": "SELECT client_id, SUM(montant) AS total FROM commandes GROUP BY client_id HAVING SUM(montant) > 5000 ORDER BY total DESC;",
+     "explain": "Résultat : 1 (108 000), 4 (15 000), 2 (8 000). `ORDER BY` accepte l'alias car il s'exécute après `SELECT`.",
+     "table": "COMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu maîtrises les agrégats : `COUNT/SUM/AVG/MIN/MAX`, `GROUP BY`, `HAVING`, et l'ordre logique. Dernière leçon : les **sous-requêtes** !"
+    }
+   ]
+  },
+  {
+   "id": "sous-requetes",
+   "title": "Sous-requêtes et défi final",
+   "emoji": "🏆",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Dernière marche ! Une **sous-requête**, c'est une requête **à l'intérieur** d'une autre, entre parenthèses. Elle répond à une question intermédiaire."
+    },
+    {
+     "type": "say",
+     "text": "Exemple : « quels produits coûtent plus cher que la **moyenne** ? » Il faut d'abord *connaître* la moyenne… c'est la sous-requête."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom, prix\nFROM   produits\nWHERE  prix > (SELECT AVG(prix) FROM produits);",
+     "title": "Sous-requête qui retourne UNE valeur",
+     "note": "Moyenne = 26 700 → seul l'Écran (85 000) la dépasse."
+    },
+    {
+     "type": "say",
+     "text": "Quand la sous-requête retourne **une seule valeur**, on peut utiliser `=`, `>`, `<`… Si elle en retourne **plusieurs**, il faut `IN`, `ANY` ou `ALL`."
+    },
+    {
+     "type": "choice",
+     "q": "`WHERE prix = (SELECT prix FROM produits WHERE categorie_id = 1)` provoque…",
+     "options": [
+      "Rien de spécial",
+      "ORA-01427 : sous-requête ramenant plus d'une ligne",
+      "Un résultat vide"
+     ],
+     "answer": 1,
+     "explain": "La catégorie 1 contient 2 produits : la sous-requête retourne 2 lignes, incompatible avec `=`. Utilise `IN`."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom FROM clients\nWHERE  id IN (SELECT client_id FROM commandes);",
+     "title": "Les clients qui ont déjà commandé"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des clients **qui ont passé au moins une commande**, avec `IN` et une sous-requête.",
+     "hints": [
+      "Sous-requête : SELECT client_id FROM commandes.",
+      "WHERE id IN ( ... )"
+     ],
+     "accept": [],
+     "solution": "SELECT nom FROM clients WHERE id IN (SELECT client_id FROM commandes);",
+     "explain": "Awa, Koffi, Sènami, Yao. Ibrahim n'a aucune commande.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Et le contraire : les clients **sans commande** ? Tentation : `NOT IN`. Mais ⚠️ **le piège NULL** guette…"
+    },
+    {
+     "type": "code",
+     "sql": "-- Si UNE SEULE valeur de la sous-requête est NULL,\n-- NOT IN ne retourne JAMAIS aucune ligne !\nSELECT nom FROM clients\nWHERE  id NOT IN (SELECT client_id FROM commandes);",
+     "title": "Ça marche ici car client_id n'est jamais NULL"
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi `NOT IN` est dangereux ?",
+     "options": [
+      "Il est très lent",
+      "Si la sous-requête contient un NULL, le résultat est toujours vide",
+      "Il n'existe pas en Oracle"
+     ],
+     "answer": 1,
+     "explain": "`id NOT IN (1, 2, NULL)` se réduit à « inconnu » pour toutes les lignes → 0 résultat. Protège-toi avec `WHERE client_id IS NOT NULL` dans la sous-requête, ou utilise `NOT EXISTS`."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom FROM clients c\nWHERE  NOT EXISTS (\n  SELECT 1 FROM commandes cmd WHERE cmd.client_id = c.id\n);",
+     "title": "La version sûre : NOT EXISTS"
+    },
+    {
+     "type": "say",
+     "text": "`EXISTS` ne s'intéresse qu'à **l'existence** d'une ligne, pas à son contenu — d'où le `SELECT 1`. Comme elle fait référence à `c.id` de la requête extérieure, on parle de sous-requête **corrélée**."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des clients **sans aucune commande**, avec `NOT EXISTS`.",
+     "hints": [
+      "La sous-requête doit relier cmd.client_id à c.id.",
+      "WHERE NOT EXISTS (SELECT 1 FROM commandes cmd WHERE cmd.client_id = c.id)"
+     ],
+     "accept": [
+      "SELECT nom FROM clients WHERE id NOT IN (SELECT client_id FROM commandes);",
+      "SELECT nom FROM clients c WHERE NOT EXISTS (SELECT * FROM commandes cmd WHERE cmd.client_id = c.id);",
+      "SELECT nom FROM clients c WHERE NOT EXISTS (SELECT 1 FROM commandes WHERE commandes.client_id = c.id);"
+     ],
+     "solution": "SELECT nom FROM clients c WHERE NOT EXISTS (SELECT 1 FROM commandes cmd WHERE cmd.client_id = c.id);",
+     "explain": "Résultat : Ibrahim uniquement.",
+     "table": "CLIENTS\nID | NOM     | VILLE      | EMAIL\n 1 | Awa     | Cotonou    | awa@mail.bj\n 2 | Koffi   | Porto-Novo | (NULL)\n 3 | Sènami  | Cotonou    | senami@mail.bj\n 4 | Yao     | Parakou    | yao@mail.bj\n 5 | Ibrahim | Abomey     | (NULL)\n\nCOMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "🔥 Passons au **défi final**. Tu as tout ce qu'il faut : projection, filtre, tri, fonctions, agrégats et sous-requêtes. Prêt ?"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi final 1/2** : affiche le **nom des produits dont le prix est supérieur au prix moyen**, triés par prix décroissant.",
+     "hints": [
+      "Sous-requête avec AVG(prix).",
+      "ORDER BY prix DESC à la fin."
+     ],
+     "accept": [],
+     "solution": "SELECT nom FROM produits WHERE prix > (SELECT AVG(prix) FROM produits) ORDER BY prix DESC;",
+     "explain": "Un seul produit (l'Écran) dépasse 26 700 ; mais la requête reste correcte si le catalogue grandit.",
+     "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi final 2/2** : affiche `client_id` et le **montant maximal** de ses commandes, uniquement pour les clients ayant **au moins 2 commandes**.",
+     "hints": [
+      "GROUP BY client_id.",
+      "HAVING COUNT(*) >= 2"
+     ],
+     "accept": [
+      "SELECT client_id, MAX(montant) FROM commandes GROUP BY client_id HAVING COUNT(*) > 1;"
+     ],
+     "solution": "SELECT client_id, MAX(montant) FROM commandes GROUP BY client_id HAVING COUNT(*) >= 2;",
+     "explain": "Seul le client 1 : 85 000. Tu combines GROUP BY, HAVING et un agrégat différent dans le SELECT.",
+     "table": "COMMANDES\nID  | CLIENT_ID | MONTANT\n101 | 1         | 23000\n102 | 1         | 85000\n103 | 2         |  8000\n104 | 3         |  3500\n105 | 4         | 15000"
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Félicitations !** Tu sais maintenant lire, filtrer, trier, transformer, agréger et imbriquer. Tu peux enchaîner avec la formation sur **les jointures** pour relier plusieurs tables."
+    }
+   ]
+  }
+ ]
+}

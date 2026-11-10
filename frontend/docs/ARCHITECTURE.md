@@ -29,6 +29,18 @@ frontend/supabase/schema.sql profils, progression privée, messagerie et règles
 - Épreuve : jusqu'à 200 XP la première fois, puis 10 + progression.
 - Révision espacée (Leitner) : cases 1 à 5, intervalles 1/3/7/14/30 jours.
 
+## Formations coachées
+
+Une *formation* est un parcours thématique court (ex. « Tout savoir sur le SELECT ») rattaché à un module.
+
+- Contenu : `frontend/content/modules/<module>/formations/<id>.json` (un fichier par formation, `id` = nom du fichier).
+  Champs : `title`, `tagline`, `emoji`, `color`, `level`, `minutes`, `order`, `pitch[]` (dialogue d'accueil de Nimbo), `benefits[]`, `lessons[]`.
+  Une leçon contient des `steps` : `say` (bulle du coach, markdown), `code` (bloc SQL), `choice` (QCM instantané), `exercise` (requête libre comparée à `solution` + `accept[]` après normalisation, avec `hints[]`).
+- API : `GET /api/modules/:id/formations` (repli local via `import.meta.glob`).
+- Progression : action `formation-lesson` (`moduleId`, `formationId`, `lessonId`) ; XP serveur 20 par leçon + 60 à la fin de la formation ; état `formations["module:formation"] = [leçons]` ; compteur `counters.formations` ; badges `formation-1` et `formation-3`.
+- UI : `FormationShowcase` (nuage à lunettes qui annonce les titres, puis discussion de présentation si plusieurs formations), `FormationPage` (parcours), `FormationLessonPage` (lecteur de leçon façon chat).
+- `npm run validate` vérifie la structure des formations.
+
 ## Limites
 - Les notes d’examen sont auto-évaluées par l’étudiant et bornées au barème du contenu.
 - Le démarrage local commun est `npm run dev`; le backend écoute sur le port 4000 et Vite proxy `/api`.

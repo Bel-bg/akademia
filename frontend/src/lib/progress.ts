@@ -3,7 +3,7 @@
  * Facile à tester et indépendante du stockage (local ou Supabase).
  */
 import { BADGES, Ctx, XP, evaluateBadges, levelFromXp } from './gamification';
-import type { Attempt, AttemptKind, BackendThemeId, FiliereId, Summary, UserState, XpLine } from './types';
+import type { Attempt, AttemptKind, BackendThemeId, FiliereId, Formation, Summary, UserState, XpLine } from './types';
 import { addDays, diffDays, todayKey, uid } from './utils';
 
 export function normalizeFiliere(value: unknown): FiliereId | null {
@@ -20,8 +20,8 @@ export function defaultState(): UserState {
   return {
     v: 1, filiere: null, theme: 'ciel', xp: 0, streak: 0, bestStreak: 0, lastActive: null,
     daily: { date: todayKey(), xp: 0 }, dailyGoal: XP.dailyGoal,
-    chaptersRead: {}, attempts: [], badges: {}, review: {}, chapterStats: {}, examBest: {},
-    counters: { quizzes: 0, perfectQuizzes: 0, blitzBest: 0, maxCombo: 0, cardsKnown: 0, exams: 0 },
+    chaptersRead: {}, formations: {}, attempts: [], badges: {}, review: {}, chapterStats: {}, examBest: {},
+    counters: { quizzes: 0, perfectQuizzes: 0, blitzBest: 0, maxCombo: 0, cardsKnown: 0, exams: 0, formations: 0 },
   };
 }
 
@@ -36,7 +36,7 @@ export function normalizeState(raw: unknown): UserState {
     theme: themeForFiliere(filiere),
     daily: { ...d.daily, ...(r.daily ?? {}) },
     counters: { ...d.counters, ...(r.counters ?? {}) },
-    chaptersRead: r.chaptersRead ?? {}, attempts: r.attempts ?? [], badges: r.badges ?? {},
+    chaptersRead: r.chaptersRead ?? {}, formations: r.formations ?? {}, attempts: r.attempts ?? [], badges: r.badges ?? {},
     review: r.review ?? {}, chapterStats: r.chapterStats ?? {}, examBest: r.examBest ?? {},
   };
 }
@@ -144,6 +144,24 @@ export function applyChapterRead(s: UserState, ctx: Ctx, moduleId: string, chapt
   const next: UserState = { ...s, chaptersRead: { ...s.chaptersRead, [moduleId]: [...list, chapterId] } };
   const lines: XpLine[] = [{ label: 'Chapitre terminé', xp: XP.chapterRead }];
   const r = finish(next, ctx, { score: 1, max: 1 }, lines, XP.chapterRead);
+  return { state: r.state, summary: r.summary };
+}
+
+export function applyFormationLesson(s: UserState, ctx: Ctx, f: Formation, lessonId: string) {
+  const key = `${f.moduleId}:${f.id}`;
+  const done = s.formations?.[key] ?? [];
+  if (done.includes(lessonId) || !f.lessons.some((l) => l.id === lessonId)) return { state: s, summary: null as Summary | null };
+  const nextDone = [...done, lessonId];
+  const finished = f.lessons.every((l) => nextDone.includes(l.id));
+  const lines: XpLine[] = [{ label: 'Leçon terminée', xp: XP.formationLesson }];
+  let gain = XP.formationLesson;
+  if (finished) { lines.push({ label: `Formation « ${f.title} » terminée`, xp: XP.formationDone }); gain += XP.formationDone; }
+  const next: UserState = {
+    ...s,
+    formations: { ...(s.formations ?? {}), [key]: nextDone },
+    counters: { ...s.counters, formations: (s.counters.formations ?? 0) + (finished ? 1 : 0) },
+  };
+  const r = finish(next, ctx, { score: nextDone.length, max: f.lessons.length }, lines, gain);
   return { state: r.state, summary: r.summary };
 }
 

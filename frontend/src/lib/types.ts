@@ -70,6 +70,36 @@ export interface Exam {
   parts: ExamPart[];
 }
 
+// ---------- Formations (parcours coachés thématiques) ----------
+export type FormationStep =
+  | { type: 'say'; text: string; mood?: string }
+  | { type: 'code'; title?: string; sql: string; note?: string }
+  | { type: 'choice'; q: string; options: string[]; answer: number; explain: string }
+  | { type: 'exercise'; q: string; table?: string; hints: string[]; accept: string[]; solution: string; explain: string };
+export interface FormationLesson {
+  id: string;
+  title: string;
+  emoji: string;
+  minutes: number;
+  steps: FormationStep[];
+}
+export interface Formation {
+  id: string;
+  /** Renseigné au chargement */
+  moduleId: string;
+  order?: number;
+  title: string;
+  tagline: string;
+  emoji: string;
+  color: string;
+  level: string;
+  minutes: number;
+  /** Dialogue d'accueil (le nuage explique la formation) */
+  pitch: string[];
+  benefits: string[];
+  lessons: FormationLesson[];
+}
+
 // ---------- Progression de l'utilisateur ----------
 export type AttemptKind = 'qcm' | 'blitz' | 'review' | 'exam' | 'cards';
 
@@ -102,6 +132,8 @@ export interface UserState {
   daily: { date: string; xp: number };
   dailyGoal: number;
   chaptersRead: Record<string, string[]>;
+  /** Leçons de formation terminées, clé « moduleId:formationId » */
+  formations: Record<string, string[]>;
   attempts: Attempt[];
   badges: Record<string, string>;
   review: Record<string, ReviewItem>;
@@ -114,6 +146,7 @@ export interface UserState {
     maxCombo: number;
     cardsKnown: number;
     exams: number;
+    formations: number;
   };
 }
 

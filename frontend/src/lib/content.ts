@@ -3,7 +3,7 @@
  * L’API backend concentre désormais la source de vérité pour les données pédagogiques,
  * tandis que le système local reste en fallback pour garder l’application fonctionnelle.
  */
-import type { ChapterMeta, Exam, ExamIndexItem, Flashcard, ModuleMeta, Question } from './types';
+import type { ChapterMeta, Exam, Formation, ExamIndexItem, Flashcard, ModuleMeta, Question } from './types';
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? '/api';
 
@@ -12,6 +12,7 @@ const chapterLoaders = import.meta.glob('/content/modules/*/chapters/*.md', { qu
 const quizLoaders = import.meta.glob('/content/modules/*/quiz.json', { import: 'default' }) as Record<string, () => Promise<Question[]>>;
 const cardLoaders = import.meta.glob('/content/modules/*/flashcards.json', { import: 'default' }) as Record<string, () => Promise<Flashcard[]>>;
 const examIndexLoaders = import.meta.glob('/content/modules/*/exams-index.json', { import: 'default' }) as Record<string, () => Promise<ExamIndexItem[]>>;
+const formationLoaders = import.meta.glob('/content/modules/*/formations/*.json', { eager: true, import: 'default' }) as Record<string, Formation>;
 const examLoaders = import.meta.glob('/content/modules/*/exams/*.json', { import: 'default' }) as Record<string, () => Promise<Exam>>;
 
 export async function prepareOfflineContent(): Promise<void> {
@@ -104,3 +105,25 @@ export const loadExam = (moduleId: string, n: number) =>
       return pick(examLoaders, `/content/modules/${moduleId}/exams/e${String(n).padStart(2, '0')}.json`)();
     }
   });
+
+/** Formations d'un module (API puis repli local). */
+export const loadFormations = (moduleId: string) =>
+  memo(`formations:${moduleId}`, async () => {
+    let list: Formation[];
+    try {
+      list = await apiGet<Formation[]>(`/modules/${encodeURIComponent(moduleId)}/formations`);
+    } catch {
+      list = Object.entries(formationLoaders)
+        .filter(([p]) => p.startsWith(`/content/modules/${moduleId}/formations/`))
+        .map(([, f]) => f)
+        .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+    }
+    return list.map((f) => ({ ...f, moduleId }));
+  });
+
+/** Lecture synchrone locale (affichage immédiat des badges de la page module). */
+export const localFormations = (moduleId: string): Formation[] =>
+  Object.entries(formationLoaders)
+    .filter(([p]) => p.startsWith(`/content/modules/${moduleId}/formations/`))
+    .map(([, f]) => ({ ...f, moduleId }))
+    .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));

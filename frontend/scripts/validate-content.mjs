@@ -72,6 +72,31 @@ for (const dir of fs.readdirSync(root, { withFileTypes: true }).filter((d) => d.
     }
     console.log(`  ${idx.length} épreuves`);
   } else if (m.features?.exams) err('features.exams activé mais exams-index.json absent');
+
+  const fdir = path.join(base, 'formations');
+  if (fs.existsSync(fdir)) {
+    const fids = new Set();
+    for (const file of fs.readdirSync(fdir).filter((x) => x.endsWith('.json'))) {
+      const f = readJson(path.join(fdir, file)); if (!f) continue;
+      if (f.id !== file.replace(/\.json$/, '')) err(`formation ${file} : id "${f.id}" ≠ nom du fichier`);
+      if (fids.has(f.id)) err(`formation dupliquée : ${f.id}`); fids.add(f.id);
+      for (const k of ['title', 'tagline', 'emoji', 'color', 'level', 'minutes', 'pitch', 'benefits', 'lessons']) if (f[k] === undefined) err(`formation ${f.id} : champ "${k}" manquant`);
+      const lids = new Set(); let exos = 0;
+      for (const l of f.lessons ?? []) {
+        if (lids.has(l.id)) err(`formation ${f.id} : leçon dupliquée ${l.id}`); lids.add(l.id);
+        if (!l.steps?.length) err(`formation ${f.id}/${l.id} : aucune étape`);
+        (l.steps ?? []).forEach((st, i) => {
+          const where = `formation ${f.id}/${l.id} étape ${i + 1}`;
+          if (st.type === 'say' && !st.text) err(`${where} : texte vide`);
+          else if (st.type === 'code' && !st.sql) err(`${where} : code vide`);
+          else if (st.type === 'choice') { if (!Array.isArray(st.options) || st.options.length < 2 || !Number.isInteger(st.answer) || st.answer < 0 || st.answer >= st.options.length) err(`${where} : choix invalide`); if (!st.explain) err(`${where} : explication manquante`); }
+          else if (st.type === 'exercise') { exos++; if (!st.solution || !st.hints?.length || !st.explain) err(`${where} : exercice incomplet (solution, hints, explain)`); }
+          else if (!['say', 'code'].includes(st.type)) err(`${where} : type inconnu "${st.type}"`);
+        });
+      }
+      console.log(`  formation « ${f.id} » : ${(f.lessons ?? []).length} leçons, ${exos} exercices`);
+    }
+  }
 }
 console.log(`\n${errors ? '✗' : '✓'} ${errors} erreur(s), ${warns} avertissement(s)`);
 process.exit(errors ? 1 : 0);

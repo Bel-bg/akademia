@@ -1,0 +1,822 @@
+{
+ "id": "dates",
+ "order": 3,
+ "title": "Devenir expert des dates sous Oracle",
+ "tagline": "TO_DATE, TO_CHAR, ADD_MONTHS, intervalles, heures cachées : maîtrise le type DATE et ses pièges.",
+ "emoji": "📅",
+ "color": "#059669",
+ "level": "Intermédiaire",
+ "minutes": 55,
+ "pitch": [
+  "Salut ! Aujourd'hui je te présente **« Devenir expert des dates sous Oracle »** 📅.",
+  "Tu as déjà vu une requête qui marche chez toi mais pas chez ton voisin ? Ou un `BETWEEN` qui « oublie » des lignes ? Les dates Oracle cachent des **pièges sournois** : une heure invisible, un format qui dépend de la session, des mois de longueurs différentes…",
+  "Dans cette formation, on démonte tout ça : comment Oracle stocke une date, comment la convertir proprement, comment calculer, et comment filtrer **sans perdre aucune ligne**. À chaque étape : exercices pratiques, indices et corrections.",
+  "Tu repartiras avec des réflexes solides pour tes TP, tes examens… et tes vrais projets."
+ ],
+ "benefits": [
+  "Comprendre le type DATE (et l'heure cachée) une bonne fois pour toutes",
+  "Convertir avec TO_DATE / TO_CHAR sans erreur ORA-018xx",
+  "Calculer : jours, mois, ancienneté, fin de mois, délais",
+  "Filtrer par période sans perdre de lignes ni ralentir la requête"
+ ],
+ "lessons": [
+  {
+   "id": "stockage",
+   "title": "Comment Oracle voit une date",
+   "emoji": "🕰️",
+   "minutes": 8,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Bienvenue dans la formation **Dates sous Oracle** 📅 ! Les dates font tomber beaucoup de monde : affichage bizarre, heures cachées, calculs faux. On va tout éclaircir."
+    },
+    {
+     "type": "say",
+     "text": "Première vérité, la plus importante : le type **`DATE`** d'Oracle ne stocke **pas seulement un jour**. Il stocke **siècle, année, mois, jour, heure, minute et seconde**, dans un format interne binaire."
+    },
+    {
+     "type": "choice",
+     "q": "Une colonne de type DATE contient…",
+     "options": [
+      "Uniquement jour, mois, année",
+      "Jour, mois, année ET heure, minute, seconde",
+      "Un texte comme '12/03/2025'"
+     ],
+     "answer": 1,
+     "explain": "En Oracle, `DATE` inclut toujours l'heure (à la seconde). Si tu n'as pas saisi d'heure, elle vaut **00:00:00** (minuit). C'est source de pièges qu'on verra."
+    },
+    {
+     "type": "say",
+     "text": "Deuxième vérité : ce que tu *vois* à l'écran (`12/03/2025` ou `12-MAR-25`) n'est **qu'une mise en forme**. Elle dépend du paramètre de session **`NLS_DATE_FORMAT`**. La valeur stockée ne change pas."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT SYSDATE FROM dual;",
+     "title": "SYSDATE = date et heure actuelles du serveur",
+     "note": "Affichage par défaut selon la configuration, par exemple 10-NOV-26 ou 10/11/2026."
+    },
+    {
+     "type": "say",
+     "text": "Pour voir toute la valeur, on demande l'affichage explicite avec `TO_CHAR` (leçon suivante) :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT TO_CHAR(SYSDATE, 'DD/MM/YYYY HH24:MI:SS') AS maintenant\nFROM   dual;",
+     "title": "→ par exemple 10/11/2026 21:54:07"
+    },
+    {
+     "type": "say",
+     "text": "Troisième vérité : une date **n'est pas un texte**. Si tu compares `date_cmd = '12/03/2025'`, Oracle essaie de convertir le texte en date en utilisant le NLS_DATE_FORMAT *de ta session*… qui peut être différent chez ton voisin. Résultat : une requête qui marche chez toi et plante chez lui (**ORA-01843**, **ORA-01861**)."
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi `WHERE date_cmd = '12/03/2025'` est risqué ?",
+     "options": [
+      "Les dates doivent être en anglais",
+      "Ça dépend du NLS_DATE_FORMAT de la session ; le résultat peut varier ou échouer",
+      "Les guillemets sont interdits"
+     ],
+     "answer": 1,
+     "explain": "La conversion implicite dépend de la configuration. La bonne pratique : **toujours convertir explicitement** avec `TO_DATE`, ou utiliser un littéral `DATE 'AAAA-MM-JJ'`."
+    },
+    {
+     "type": "say",
+     "text": "Oracle propose justement un **littéral de date** sans ambiguïté : `DATE '2025-03-12'` (format ISO fixe, toujours le même, quelle que soit la session)."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT * FROM commandes\nWHERE  date_cmd >= DATE '2025-04-01';",
+     "title": "Littéral DATE : portable et sûr"
+    },
+    {
+     "type": "say",
+     "text": "Voici notre table de travail. Remarque les **heures** des commandes 104 et 105 : elles ne sont pas à minuit !"
+    },
+    {
+     "type": "code",
+     "sql": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000",
+     "title": "COMMANDES avec heures"
+    },
+    {
+     "type": "choice",
+     "q": "Quelle est l'heure de la commande 102 (saisie sans heure) ?",
+     "options": [
+      "Midi",
+      "00:00:00",
+      "NULL"
+     ],
+     "answer": 1,
+     "explain": "Sans heure précisée, Oracle met minuit (00:00:00)."
+    },
+    {
+     "type": "say",
+     "text": "Dernier outil de la leçon : `TRUNC(date)` **supprime l'heure** (remet à minuit). Très utile pour comparer des jours."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT TO_CHAR(TRUNC(SYSDATE), 'DD/MM/YYYY HH24:MI:SS') FROM dual;",
+     "title": "→ 10/11/2026 00:00:00 (l'heure est remise à zéro)"
+    },
+    {
+     "type": "choice",
+     "q": "`TRUNC(SYSDATE)` retourne…",
+     "options": [
+      "La date du jour à 00:00:00",
+      "L'heure actuelle seulement",
+      "Le premier jour de l'année"
+     ],
+     "answer": 0,
+     "explain": "Sans second argument, `TRUNC` sur une date coupe l'heure. (Avec un masque comme 'MM' ou 'YYYY', il tronque au mois ou à l'année.)"
+    },
+    {
+     "type": "exercise",
+     "q": "Écris une requête qui affiche la **date du jour sans l'heure**, en utilisant `TRUNC` et `SYSDATE` (table `dual`).",
+     "hints": [
+      "Combine TRUNC et SYSDATE.",
+      "SELECT TRUNC(SYSDATE) FROM dual;"
+     ],
+     "accept": [
+      "SELECT TRUNC(SYSDATE) FROM dual"
+     ],
+     "solution": "SELECT TRUNC(SYSDATE) FROM dual;",
+     "explain": "Bien joué. `SYSDATE` donne date + heure du serveur ; `TRUNC` retire l'heure."
+    },
+    {
+     "type": "say",
+     "text": "🏁 À retenir : DATE = date **+ heure**, l'affichage dépend du NLS, on convertit **explicitement**, et `TRUNC` retire l'heure. Prochaine étape : convertir texte ↔ date."
+    }
+   ]
+  },
+  {
+   "id": "conversion",
+   "title": "TO_DATE et TO_CHAR : les masques",
+   "emoji": "🎭",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Deux fonctions à connaître par cœur, comme un aller-retour : **`TO_DATE`** transforme un *texte en date* ; **`TO_CHAR`** transforme une *date en texte*. Les deux utilisent un **masque de format** qui décrit la forme du texte."
+    },
+    {
+     "type": "code",
+     "sql": "-- texte → date\nSELECT TO_DATE('25/12/2025', 'DD/MM/YYYY') FROM dual;\n\n-- date → texte\nSELECT TO_CHAR(SYSDATE, 'DD/MM/YYYY') FROM dual;",
+     "title": "Les deux sens"
+    },
+    {
+     "type": "say",
+     "text": "Les éléments de masque les plus utiles :"
+    },
+    {
+     "type": "code",
+     "sql": "DD    jour du mois (01-31)         YYYY  année sur 4 chiffres\nMM    mois en chiffres (01-12)     YY    année sur 2 chiffres\nMON   mois abrégé (NOV)           MONTH mois complet (NOVEMBER)\nDY    jour abrégé (TUE)            DAY   jour complet (TUESDAY)\nHH24  heure 00-23                  HH    heure 01-12 (avec AM/PM)\nMI    minutes                      SS    secondes\nD     jour de semaine (1-7)        Q     trimestre (1-4)\nIW    semaine ISO (01-53)          DDD   jour de l'année (1-366)",
+     "title": "Aide-mémoire des masques"
+    },
+    {
+     "type": "choice",
+     "q": "Quel masque affiche l'heure de 00 à 23 ?",
+     "options": [
+      "HH",
+      "HH12",
+      "HH24"
+     ],
+     "answer": 2,
+     "explain": "`HH24` = format 24 h. `HH` donne 01-12 : sans AM/PM, on ne sait plus s'il est 3 h ou 15 h."
+    },
+    {
+     "type": "choice",
+     "q": "Le masque `MM` désigne…",
+     "options": [
+      "Les minutes",
+      "Le mois en chiffres",
+      "Le mois en lettres"
+     ],
+     "answer": 1,
+     "explain": "`MM` = mois, `MI` = minutes. Confondre `MM` et `MI` est l'erreur n°1 !"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche la date du jour au format **jour/mois/année**, par exemple `10/11/2026`.",
+     "hints": [
+      "TO_CHAR(SYSDATE, 'masque')",
+      "Le masque est 'DD/MM/YYYY'"
+     ],
+     "accept": [
+      "SELECT TO_CHAR(SYSDATE, 'dd/mm/yyyy') FROM dual;"
+     ],
+     "solution": "SELECT TO_CHAR(SYSDATE, 'DD/MM/YYYY') FROM dual;",
+     "explain": "Les séparateurs (`/`, `-`, espace) sont recopiés tels quels dans le résultat."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche la date et l'heure du jour au format `10/11/2026 21:54:07`.",
+     "hints": [
+      "Ajoute l'heure avec HH24:MI:SS.",
+      "'DD/MM/YYYY HH24:MI:SS'"
+     ],
+     "accept": [
+      "SELECT TO_CHAR(SYSDATE, 'DD/MM/YYYY HH24:MI:SS') FROM dual"
+     ],
+     "solution": "SELECT TO_CHAR(SYSDATE, 'DD/MM/YYYY HH24:MI:SS') FROM dual;",
+     "explain": "Heures en `HH24`, minutes en `MI`, secondes en `SS`."
+    },
+    {
+     "type": "say",
+     "text": "Passons au **texte en toutes lettres** : `DAY`, `MONTH`. Oracle les complète d'espaces pour avoir une largeur fixe. Le préfixe **`FM`** (*fill mode*) supprime ces espaces et ces zéros inutiles."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT TO_CHAR(DATE '2025-03-05', 'DD MONTH YYYY')  AS sans_fm,\n       TO_CHAR(DATE '2025-03-05', 'fmDD Month YYYY') AS avec_fm\nFROM   dual;",
+     "title": "avec_fm → 5 March 2025 (sans zéro devant le 5, sans espaces superflus)"
+    },
+    {
+     "type": "say",
+     "text": "La **langue** des noms de mois/jours dépend de `NLS_DATE_LANGUAGE`. Pour forcer le français sans toucher la session, on ajoute un 3e argument :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT TO_CHAR(DATE '2025-03-05', 'fmDay DD Month YYYY',\n                 'NLS_DATE_LANGUAGE=FRENCH') AS en_francais\nFROM   dual;",
+     "title": "→ Mercredi 5 Mars 2025"
+    },
+    {
+     "type": "choice",
+     "q": "Comment obtenir « Mercredi » indépendamment de la configuration ?",
+     "options": [
+      "TO_CHAR(d, 'DAY', 'NLS_DATE_LANGUAGE=FRENCH')",
+      "TO_DATE(d, 'DAY')",
+      "FRENCH(d)"
+     ],
+     "answer": 0,
+     "explain": "Le 3e argument de `TO_CHAR` fixe la langue pour cet appel seulement."
+    },
+    {
+     "type": "say",
+     "text": "Sens inverse : `TO_DATE`. Le masque doit **correspondre exactement** au texte. Sinon, les erreurs fusent :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT TO_DATE('2025-12-25', 'DD/MM/YYYY') FROM dual;   -- ❌ ORA-01843 : mois non valide\nSELECT TO_DATE('25/12/2025', 'DD/MM/YYYY') FROM dual;   -- ✅\nSELECT TO_DATE('31/02/2025', 'DD/MM/YYYY') FROM dual;   -- ❌ ORA-01839 : date non valide",
+     "title": "Les erreurs classiques"
+    },
+    {
+     "type": "choice",
+     "q": "`TO_DATE('2025-12-25', 'DD/MM/YYYY')` provoque…",
+     "options": [
+      "Une date correcte",
+      "Une erreur : le masque ne correspond pas au texte",
+      "NULL"
+     ],
+     "answer": 1,
+     "explain": "Le texte est en `AAAA-MM-JJ`, le masque annonce `JJ/MM/AAAA` : Oracle lève une erreur (ORA-01843 ou ORA-01861)."
+    },
+    {
+     "type": "exercise",
+     "q": "Convertis le texte `'14/07/2025'` en date avec `TO_DATE` (jour/mois/année).",
+     "hints": [
+      "TO_DATE('texte', 'masque')",
+      "Masque : 'DD/MM/YYYY'"
+     ],
+     "accept": [
+      "SELECT TO_DATE('14/07/2025','dd/mm/yyyy') FROM dual;"
+     ],
+     "solution": "SELECT TO_DATE('14/07/2025', 'DD/MM/YYYY') FROM dual;",
+     "explain": "Une date est maintenant une vraie date (et plus un texte) : on peut calculer dessus."
+    },
+    {
+     "type": "say",
+     "text": "Un piège **YY vs RR** : avec `YY`, `'25'` devient 2025 ; mais `'99'` devient aussi **2099** ! Le masque `RR` applique une règle glissante (50-99 → 19xx, 00-49 → 20xx). **Préfère toujours `YYYY`.**"
+    },
+    {
+     "type": "choice",
+     "q": "Pour éviter toute ambiguïté de siècle, on utilise…",
+     "options": [
+      "YY",
+      "RR",
+      "YYYY"
+     ],
+     "answer": 2,
+     "explain": "`YYYY` est explicite. `YY`/`RR` laissent Oracle deviner le siècle."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu sais convertir dans les deux sens. Maintenant, le plus amusant : **calculer** avec des dates !"
+    }
+   ]
+  },
+  {
+   "id": "calculs",
+   "title": "Calculer avec les dates",
+   "emoji": "🧮",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Super nouvelle : Oracle permet de faire des **mathématiques directement sur les dates**. Une unité = **un jour**."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT SYSDATE + 7  AS dans_une_semaine,\n       SYSDATE - 30 AS il_y_a_30_jours,\n       SYSDATE + 1/24 AS dans_une_heure\nFROM   dual;",
+     "title": "Ajouter/retrancher des jours (même fractionnaires)"
+    },
+    {
+     "type": "say",
+     "text": "`+ 1` = un jour, `+ 1/24` = une heure, `+ 1/1440` = une minute. Les fractions de jour deviennent des heures et minutes."
+    },
+    {
+     "type": "choice",
+     "q": "Comment ajouter 12 heures à une date `d` ?",
+     "options": [
+      "d + 12",
+      "d + 12/24",
+      "d + 0.12"
+     ],
+     "answer": 1,
+     "explain": "12 heures = 12/24 de jour = 0,5 jour."
+    },
+    {
+     "type": "say",
+     "text": "La **différence entre deux dates** est un **nombre de jours** (décimal s'il y a des heures) :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT DATE '2025-12-25' - DATE '2025-12-01' AS nb_jours\nFROM   dual;",
+     "title": "→ 24"
+    },
+    {
+     "type": "exercise",
+     "q": "Calcule le nombre de jours entre le `2025-01-01` et le `2025-03-01` avec des littéraux DATE.",
+     "hints": [
+      "Soustrais la date la plus ancienne de la plus récente.",
+      "DATE '2025-03-01' - DATE '2025-01-01'"
+     ],
+     "accept": [
+      "SELECT DATE '2025-03-01' - DATE '2025-01-01' AS nb FROM dual;"
+     ],
+     "solution": "SELECT DATE '2025-03-01' - DATE '2025-01-01' FROM dual;",
+     "explain": "31 + 28 = **59 jours** (2025 n'est pas bissextile)."
+    },
+    {
+     "type": "say",
+     "text": "⚠️ Attention : `date - date` donne un **nombre**, mais `date + date` n'existe pas (ORA-00975). Seules les opérations `date ± nombre` et `date - date` sont permises."
+    },
+    {
+     "type": "choice",
+     "q": "`SYSDATE + SYSDATE` provoque…",
+     "options": [
+      "Le double de la date",
+      "ORA-00975 : l'addition de deux dates n'est pas permise",
+      "Un nombre de jours"
+     ],
+     "answer": 1,
+     "explain": "Additionner deux dates n'a aucun sens : Oracle refuse."
+    },
+    {
+     "type": "say",
+     "text": "Pour les **mois**, on évite d'ajouter 30 jours à la main (les mois n'ont pas tous 30 jours). On utilise **`ADD_MONTHS`** :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT ADD_MONTHS(DATE '2025-01-15', 3)  AS a,   -- 15/04/2025\n       ADD_MONTHS(DATE '2023-01-31', 1)  AS b    -- 28/02/2023 (fin de mois)\nFROM   dual;",
+     "title": "ADD_MONTHS et la fin de mois"
+    },
+    {
+     "type": "say",
+     "text": "Si le jour d'origine n'existe pas dans le mois d'arrivée (31 février !), Oracle prend le **dernier jour du mois**. Et si la date d'origine est déjà un dernier jour de mois, le résultat est lui aussi un dernier jour de mois."
+    },
+    {
+     "type": "choice",
+     "q": "`ADD_MONTHS(DATE '2023-01-31', 1)` donne…",
+     "options": [
+      "31/02/2023 (erreur)",
+      "28/02/2023",
+      "03/03/2023"
+     ],
+     "answer": 1,
+     "explain": "Février 2023 n'a que 28 jours : Oracle retombe sur le dernier jour valide."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche la date correspondant à **6 mois après** le `2025-03-12`.",
+     "hints": [
+      "ADD_MONTHS(date, nombre_de_mois)",
+      "Ici : ADD_MONTHS(DATE '2025-03-12', 6)"
+     ],
+     "accept": [
+      "SELECT ADD_MONTHS(DATE '2025-03-12', 6) AS d FROM dual;"
+     ],
+     "solution": "SELECT ADD_MONTHS(DATE '2025-03-12', 6) FROM dual;",
+     "explain": "12/09/2025."
+    },
+    {
+     "type": "say",
+     "text": "`MONTHS_BETWEEN(d1, d2)` renvoie le **nombre de mois** (décimal) entre deux dates : positif si `d1` est après `d2`."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT MONTHS_BETWEEN(DATE '2025-07-15', DATE '2025-01-15') AS m1,   -- 6\n       MONTHS_BETWEEN(DATE '2025-07-01', DATE '2025-01-15') AS m2    -- ≈ 5,55\nFROM   dual;"
+    },
+    {
+     "type": "choice",
+     "q": "`MONTHS_BETWEEN(DATE '2026-01-01', DATE '2025-01-01')` vaut…",
+     "options": [
+      "12",
+      "1",
+      "365"
+     ],
+     "answer": 0,
+     "explain": "Douze mois exactement d'écart."
+    },
+    {
+     "type": "say",
+     "text": "Trois fonctions bien pratiques pour **se repérer dans le calendrier** :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT LAST_DAY(DATE '2025-02-10')      AS fin_fevrier,     -- 28/02/2025\n       NEXT_DAY(DATE '2025-11-10', 'MONDAY') AS prochain_lundi,  -- 17/11/2025\n       TRUNC(DATE '2025-11-10', 'MM')   AS debut_de_mois     -- 01/11/2025\nFROM   dual;",
+     "title": "LAST_DAY, NEXT_DAY, TRUNC avec masque"
+    },
+    {
+     "type": "say",
+     "text": "`NEXT_DAY` attend le nom du jour **dans la langue de la session** ('MONDAY' en anglais, 'LUNDI' en français selon NLS_DATE_LANGUAGE) : à manier avec prudence. `TRUNC(d, 'MM')` = premier jour du mois, `TRUNC(d, 'YYYY')` = 1er janvier."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **dernier jour du mois** de la date `2025-04-10`.",
+     "hints": [
+      "Une fonction dont le nom dit tout…",
+      "LAST_DAY(DATE '2025-04-10')"
+     ],
+     "accept": [
+      "SELECT LAST_DAY(DATE '2025-04-10') AS d FROM dual;"
+     ],
+     "solution": "SELECT LAST_DAY(DATE '2025-04-10') FROM dual;",
+     "explain": "30/04/2025."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **premier jour du mois** de la date `2025-04-10`, avec `TRUNC` et un masque.",
+     "hints": [
+      "TRUNC accepte un 2e argument : le niveau de troncature.",
+      "TRUNC(date, 'MM')"
+     ],
+     "accept": [
+      "SELECT TRUNC(DATE '2025-04-10', 'month') FROM dual;"
+     ],
+     "solution": "SELECT TRUNC(DATE '2025-04-10', 'MM') FROM dual;",
+     "explain": "01/04/2025. `TRUNC(d,'YYYY')` aurait donné le 01/01/2025."
+    },
+    {
+     "type": "say",
+     "text": "Enfin, **`EXTRACT`** récupère une partie de la date sous forme de nombre :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT EXTRACT(YEAR  FROM DATE '2025-03-12') AS annee,   -- 2025\n       EXTRACT(MONTH FROM DATE '2025-03-12') AS mois,    -- 3\n       EXTRACT(DAY   FROM DATE '2025-03-12') AS jour     -- 12\nFROM   dual;"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche uniquement l'**année** de la date `2024-06-10` avec `EXTRACT`.",
+     "hints": [
+      "EXTRACT(YEAR FROM ...)",
+      "Pas de virgule : c'est FROM à l'intérieur !"
+     ],
+     "accept": [
+      "SELECT EXTRACT(YEAR FROM DATE '2024-06-10') AS annee FROM dual;"
+     ],
+     "solution": "SELECT EXTRACT(YEAR FROM DATE '2024-06-10') FROM dual;",
+     "explain": "Résultat : 2024 (un nombre, pas un texte)."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Arsenal du calcul : `± n` jours, `d1 - d2`, `ADD_MONTHS`, `MONTHS_BETWEEN`, `LAST_DAY`, `NEXT_DAY`, `TRUNC(d,'MM')`, `EXTRACT`. Direction : les **filtres** sur dates, là où se cachent les vrais pièges."
+    }
+   ]
+  },
+  {
+   "id": "filtres",
+   "title": "Filtrer par date sans se piéger",
+   "emoji": "🪤",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voilà la leçon qui te sauvera à l'examen 🛟. Filtrer sur une date semble facile… jusqu'à ce qu'on oublie **l'heure cachée**."
+    },
+    {
+     "type": "code",
+     "sql": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000",
+     "title": "Rappel de la table"
+    },
+    {
+     "type": "say",
+     "text": "Question : « Quelles commandes ont été passées en **avril 2025** ? » Réflexe classique :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT id, date_cmd\nFROM   commandes\nWHERE  date_cmd BETWEEN DATE '2025-04-01' AND DATE '2025-04-30';",
+     "title": "❌ Piège !",
+     "note": "Retourne 103 et 104. La commande 105 (30/04 à 18:45) est PERDUE."
+    },
+    {
+     "type": "say",
+     "text": "Pourquoi ? `DATE '2025-04-30'` signifie **30/04/2025 à 00:00:00**. Une commande passée à 18:45 le 30 est *après* minuit : elle dépasse la borne haute, et `BETWEEN` l'exclut."
+    },
+    {
+     "type": "choice",
+     "q": "La commande 105 (30/04/2025 18:45) est-elle retournée par le BETWEEN ci-dessus ?",
+     "options": [
+      "Oui",
+      "Non, car la borne haute est le 30/04 à 00:00",
+      "Ça dépend du NLS"
+     ],
+     "answer": 1,
+     "explain": "Une date sans heure vaut minuit. Tout ce qui se passe le 30 après 00:00:00 est hors de l'intervalle."
+    },
+    {
+     "type": "say",
+     "text": "La **solution propre** : un intervalle **semi-ouvert** `[début ; début du mois suivant[`. On prend `>=` pour le premier jour, et `<` pour le jour **suivant** la fin :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT id, date_cmd\nFROM   commandes\nWHERE  date_cmd >= DATE '2025-04-01'\n  AND  date_cmd <  DATE '2025-05-01';",
+     "title": "✅ Retourne 103, 104 et 105"
+    },
+    {
+     "type": "say",
+     "text": "C'est la bonne pratique **universelle** : fonctionne avec ou sans heures, et sur n'importe quel mois (plus besoin de savoir s'il a 28, 30 ou 31 jours)."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche l'`id` des commandes passées en **mars 2025** (intervalle semi-ouvert).",
+     "hints": [
+      "Deux conditions : >= début du mois, < début du mois suivant.",
+      "DATE '2025-03-01' et DATE '2025-04-01'"
+     ],
+     "accept": [
+      "SELECT id FROM commandes WHERE date_cmd >= DATE '2025-03-01' AND date_cmd < DATE '2025-04-01'",
+      "SELECT id FROM commandes WHERE date_cmd >= TO_DATE('01/03/2025','DD/MM/YYYY') AND date_cmd < TO_DATE('01/04/2025','DD/MM/YYYY');"
+     ],
+     "solution": "SELECT id FROM commandes WHERE date_cmd >= DATE '2025-03-01' AND date_cmd < DATE '2025-04-01';",
+     "explain": "101 et 102.",
+     "table": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Autre besoin : « les commandes d'**un jour précis** », par exemple le 15/04/2025. Deux écritures valables, mais pas équivalentes en performance."
+    },
+    {
+     "type": "code",
+     "sql": "-- A : on retire l'heure de la colonne\nWHERE TRUNC(date_cmd) = DATE '2025-04-15'\n\n-- B : intervalle d'une journée\nWHERE date_cmd >= DATE '2025-04-15'\n  AND date_cmd <  DATE '2025-04-16'",
+     "title": "Les deux fonctionnent ici"
+    },
+    {
+     "type": "say",
+     "text": "**A** est plus lisible, mais applique une fonction **sur la colonne** : Oracle ne peut plus utiliser un index normal sur `date_cmd` (sur une grosse table, c'est lent). **B** laisse la colonne intacte : l'index reste utilisable. Règle : *évite les fonctions sur la colonne filtrée*, mets-les du côté de la valeur."
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi préférer `date_cmd >= … AND date_cmd < …` à `TRUNC(date_cmd) = …` sur une grande table ?",
+     "options": [
+      "C'est plus joli",
+      "La colonne n'est pas transformée, donc l'index sur date_cmd reste utilisable",
+      "Parce que TRUNC est interdit dans WHERE"
+     ],
+     "answer": 1,
+     "explain": "Une fonction appliquée à la colonne empêche l'usage d'un index classique sur cette colonne."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche l'`id` des commandes du **15 avril 2025** (toute la journée, heure comprise) avec `TRUNC`.",
+     "hints": [
+      "TRUNC retire l'heure de la colonne.",
+      "WHERE TRUNC(date_cmd) = DATE '2025-04-15'"
+     ],
+     "accept": [
+      "SELECT id FROM commandes WHERE date_cmd >= DATE '2025-04-15' AND date_cmd < DATE '2025-04-16';",
+      "SELECT id FROM commandes WHERE date_cmd >= DATE '2025-04-15' AND date_cmd < DATE '2025-04-15' + 1;"
+     ],
+     "solution": "SELECT id FROM commandes WHERE TRUNC(date_cmd) = DATE '2025-04-15';",
+     "explain": "Seule la commande 104 (15/04 à 14:30) est retournée. Les autres jours ne correspondent pas.",
+     "table": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000"
+    },
+    {
+     "type": "say",
+     "text": "Et la **date du jour** ? `SYSDATE` contient l'heure actuelle ; pour « aujourd'hui » on prend `TRUNC(SYSDATE)` et le jour suivant :"
+    },
+    {
+     "type": "code",
+     "sql": "WHERE date_cmd >= TRUNC(SYSDATE)\n  AND date_cmd <  TRUNC(SYSDATE) + 1",
+     "title": "Les commandes d'aujourd'hui"
+    },
+    {
+     "type": "say",
+     "text": "Dernier cas fréquent : « **depuis plus d'un an** » (archivage). On compare à une date calculée :"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT id FROM commandes\nWHERE  date_cmd < ADD_MONTHS(TRUNC(SYSDATE), -12);",
+     "title": "Plus anciennes qu'un an"
+    },
+    {
+     "type": "choice",
+     "q": "`WHERE date_cmd < ADD_MONTHS(TRUNC(SYSDATE), -12)` sélectionne…",
+     "options": [
+      "Les commandes de moins d'un an",
+      "Les commandes de plus d'un an",
+      "Les commandes d'aujourd'hui"
+     ],
+     "answer": 1,
+     "explain": "On calcule la date d'il y a 12 mois, et on garde ce qui est **avant**."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche l'`id` des commandes passées **avant le 1er avril 2025**.",
+     "hints": [
+      "Opérateur < avec un littéral DATE.",
+      "DATE '2025-04-01'"
+     ],
+     "accept": [
+      "SELECT id FROM commandes WHERE date_cmd < TO_DATE('01/04/2025','DD/MM/YYYY');"
+     ],
+     "solution": "SELECT id FROM commandes WHERE date_cmd < DATE '2025-04-01';",
+     "explain": "101 et 102. Comparer deux dates avec `<` fonctionne comme pour des nombres.",
+     "table": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Les 3 réflexes : **intervalle semi-ouvert**, **littéral DATE ou TO_DATE** (jamais de texte implicite), **pas de fonction sur la colonne** quand on peut l'éviter."
+    }
+   ]
+  },
+  {
+   "id": "cas-pratiques",
+   "title": "Cas pratiques et défi final",
+   "emoji": "🏆",
+   "minutes": 12,
+   "steps": [
+    {
+     "type": "say",
+     "text": "On passe à la **pratique réelle** ! Quatre cas qu'on rencontre dans presque tous les projets : ancienneté, regroupement par mois, retards, rapports. Table de travail : les employés."
+    },
+    {
+     "type": "code",
+     "sql": "EMPLOYES\nID | NOM     | DATE_EMBAUCHE\n 1 | Fatou   | 15/01/2018\n 2 | Gilbert | 01/09/2020\n 3 | Hélène  | 31/01/2023\n 4 | Idriss  | 10/06/2024",
+     "title": "EMPLOYES"
+    },
+    {
+     "type": "say",
+     "text": "**Cas 1 : l'ancienneté.** Pour savoir depuis combien d'*années* un employé travaille, on divise `MONTHS_BETWEEN` par 12 et on coupe avec `TRUNC` (ou `FLOOR`). Prenons le 01/01/2026 comme date de référence."
+    },
+    {
+     "type": "code",
+     "sql": "SELECT nom,\n       TRUNC(MONTHS_BETWEEN(DATE '2026-01-01', date_embauche) / 12) AS anciennete\nFROM   employes;",
+     "title": "Fatou 7 · Gilbert 5 · Hélène 2 · Idriss 1"
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi ne pas faire `(date_ref - date_embauche) / 365` ?",
+     "options": [
+      "C'est interdit",
+      "Les années bissextiles (366 jours) rendent le calcul imprécis ; MONTHS_BETWEEN est plus fiable",
+      "C'est plus lent"
+     ],
+     "answer": 1,
+     "explain": "`MONTHS_BETWEEN / 12` suit le calendrier réel. La division par 365 dérive d'un jour tous les 4 ans."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom et l'ancienneté **en années entières** au `2026-01-01` des employés.",
+     "hints": [
+      "TRUNC(MONTHS_BETWEEN(...) / 12)",
+      "MONTHS_BETWEEN(DATE '2026-01-01', date_embauche)"
+     ],
+     "accept": [
+      "SELECT nom, FLOOR(MONTHS_BETWEEN(DATE '2026-01-01', date_embauche) / 12) FROM employes;",
+      "SELECT nom, TRUNC(MONTHS_BETWEEN(DATE '2026-01-01', date_embauche) / 12) AS anciennete FROM employes;",
+      "SELECT nom, FLOOR(MONTHS_BETWEEN(DATE '2026-01-01', date_embauche) / 12) AS anciennete FROM employes;"
+     ],
+     "solution": "SELECT nom, TRUNC(MONTHS_BETWEEN(DATE '2026-01-01', date_embauche) / 12) FROM employes;",
+     "explain": "7, 5, 2 et 1 ans. `TRUNC` supprime la partie décimale.",
+     "table": "EMPLOYES\nID | NOM     | DATE_EMBAUCHE\n 1 | Fatou   | 15/01/2018\n 2 | Gilbert | 01/09/2020\n 3 | Hélène  | 31/01/2023\n 4 | Idriss  | 10/06/2024"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le nom des employés **embauchés depuis plus de 3 ans** au `2026-01-01` (ancienneté en années entières > 3).",
+     "hints": [
+      "Utilise MONTHS_BETWEEN / 12 dans le WHERE.",
+      "... / 12 > 3"
+     ],
+     "accept": [
+      "SELECT nom FROM employes WHERE MONTHS_BETWEEN(DATE '2026-01-01', date_embauche) > 36;",
+      "SELECT nom FROM employes WHERE date_embauche < ADD_MONTHS(DATE '2026-01-01', -36);",
+      "SELECT nom FROM employes WHERE TRUNC(MONTHS_BETWEEN(DATE '2026-01-01', date_embauche) / 12) > 3;"
+     ],
+     "solution": "SELECT nom FROM employes WHERE MONTHS_BETWEEN(DATE '2026-01-01', date_embauche) / 12 > 3;",
+     "explain": "Fatou (≈ 7,96 ans) et Gilbert (≈ 5,33 ans).",
+     "table": "EMPLOYES\nID | NOM     | DATE_EMBAUCHE\n 1 | Fatou   | 15/01/2018\n 2 | Gilbert | 01/09/2020\n 3 | Hélène  | 31/01/2023\n 4 | Idriss  | 10/06/2024"
+    },
+    {
+     "type": "say",
+     "text": "**Cas 2 : regrouper par mois.** On a besoin d'une *clé de regroupement* : le mois. Astuce : `TO_CHAR(date, 'YYYY-MM')` donne un texte triable (année d'abord)."
+    },
+    {
+     "type": "code",
+     "sql": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000",
+     "title": "Retour aux commandes"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT TO_CHAR(date_cmd, 'YYYY-MM') AS mois,\n       COUNT(*)  AS nb,\n       SUM(montant) AS total\nFROM   commandes\nGROUP BY TO_CHAR(date_cmd, 'YYYY-MM')\nORDER BY mois;",
+     "title": "Chiffre d'affaires mensuel",
+     "note": "2025-03 : 2 commandes, 108000 · 2025-04 : 3 commandes, 26500"
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi `'YYYY-MM'` plutôt que `'MM-YYYY'` pour trier ?",
+     "options": [
+      "Pour l'esthétique",
+      "Le tri alphabétique donne alors l'ordre chronologique",
+      "MM-YYYY est invalide"
+     ],
+     "answer": 1,
+     "explain": "Avec l'année en premier, le tri de texte coïncide avec l'ordre du temps. En `MM-YYYY`, « 04-2024 » viendrait avant « 05-2023 »."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche, pour chaque **mois** (`YYYY-MM`), le **montant total** des commandes (`TO_CHAR` + `GROUP BY`).",
+     "hints": [
+      "La même expression TO_CHAR dans SELECT et GROUP BY.",
+      "GROUP BY TO_CHAR(date_cmd, 'YYYY-MM')"
+     ],
+     "accept": [
+      "SELECT TO_CHAR(date_cmd, 'YYYY-MM') AS mois, SUM(montant) AS total FROM commandes GROUP BY TO_CHAR(date_cmd, 'YYYY-MM') ORDER BY mois;",
+      "SELECT TO_CHAR(date_cmd, 'YYYY-MM') AS mois, SUM(montant) FROM commandes GROUP BY TO_CHAR(date_cmd, 'YYYY-MM') ORDER BY 1;",
+      "SELECT TO_CHAR(date_cmd, 'YYYY-MM'), SUM(montant) FROM commandes GROUP BY TO_CHAR(date_cmd, 'YYYY-MM') ORDER BY TO_CHAR(date_cmd, 'YYYY-MM');"
+     ],
+     "solution": "SELECT TO_CHAR(date_cmd, 'YYYY-MM'), SUM(montant) FROM commandes GROUP BY TO_CHAR(date_cmd, 'YYYY-MM');",
+     "explain": "2025-03 → 108 000 ; 2025-04 → 26 500. Oracle exige que l'expression du `GROUP BY` soit la même que celle du `SELECT`.",
+     "table": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000"
+    },
+    {
+     "type": "say",
+     "text": "**Cas 3 : un délai de paiement.** Une facture doit être payée **30 jours** après la commande. Date limite = `date_cmd + 30`. Combien de jours de retard au 01/06/2025 ?"
+    },
+    {
+     "type": "code",
+     "sql": "SELECT id,\n       TRUNC(date_cmd) + 30            AS date_limite,\n       DATE '2025-06-01' - (TRUNC(date_cmd) + 30) AS jours_retard\nFROM   commandes;",
+     "title": "On tronque pour ignorer l'heure"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche l'`id` des commandes dont la **date limite de paiement** (`TRUNC(date_cmd) + 30`) est **antérieure au 2025-05-01**.",
+     "hints": [
+      "Calcule TRUNC(date_cmd) + 30 dans le WHERE.",
+      "... < DATE '2025-05-01'"
+     ],
+     "accept": [
+      "SELECT id FROM commandes WHERE TRUNC(date_cmd) + 30 < TO_DATE('01/05/2025','DD/MM/YYYY');"
+     ],
+     "solution": "SELECT id FROM commandes WHERE TRUNC(date_cmd) + 30 < DATE '2025-05-01';",
+     "explain": "101 (limite 11/04), 102 (limite 19/04), 103 (limite 02/05 → non), donc **101 et 102** seulement. La 103 : 02/04 + 30 = 02/05, postérieur au 01/05.",
+     "table": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000"
+    },
+    {
+     "type": "say",
+     "text": "🔥 **Défi final** ! Deux questions de niveau examen. Prends ton temps, relis les 4 leçons si besoin."
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/2** — Affiche l'`id` et le `montant` des commandes passées **en avril 2025**, de la plus récente à la plus ancienne (intervalle semi-ouvert, ORDER BY sur la date).",
+     "hints": [
+      "Deux bornes : >= 01/04 et < 01/05.",
+      "ORDER BY date_cmd DESC"
+     ],
+     "accept": [
+      "SELECT id, montant FROM commandes WHERE date_cmd >= TO_DATE('01/04/2025','DD/MM/YYYY') AND date_cmd < TO_DATE('01/05/2025','DD/MM/YYYY') ORDER BY date_cmd DESC;"
+     ],
+     "solution": "SELECT id, montant FROM commandes WHERE date_cmd >= DATE '2025-04-01' AND date_cmd < DATE '2025-05-01' ORDER BY date_cmd DESC;",
+     "explain": "105 (30/04), 104 (15/04), 103 (02/04). Tu n'as perdu aucune commande, même celle de 18:45 !",
+     "table": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/2** — Affiche le **nombre de commandes** par **jour de la semaine abrégé en français** : utilise `TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH')` dans le SELECT et le GROUP BY.",
+     "hints": [
+      "Recopie la même expression TO_CHAR dans le GROUP BY.",
+      "COUNT(*)"
+     ],
+     "accept": [
+      "SELECT TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH') AS jour, COUNT(*) AS nb FROM commandes GROUP BY TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH');",
+      "SELECT TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH') AS jour, COUNT(*) FROM commandes GROUP BY TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH');"
+     ],
+     "solution": "SELECT TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH'), COUNT(*) FROM commandes GROUP BY TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH');",
+     "explain": "Chaque commande est classée par jour de la semaine. Si tu groupes par une expression, **la même** doit apparaître dans le SELECT.",
+     "table": "COMMANDES\nID  | CLIENT_ID | DATE_CMD         | MONTANT\n101 | 1         | 12/03/2025 00:00 | 23000\n102 | 1         | 20/03/2025 00:00 | 85000\n103 | 2         | 02/04/2025 00:00 |  8000\n104 | 3         | 15/04/2025 14:30 |  3500\n105 | 4         | 30/04/2025 18:45 | 15000"
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo, expert des dates !** Tu sais comment Oracle stocke une date, la convertir, calculer dessus, la filtrer sans perdre de lignes et construire des rapports mensuels. Ces réflexes te serviront à l'examen **et** dans tes projets."
+    }
+   ]
+  }
+ ]
+}

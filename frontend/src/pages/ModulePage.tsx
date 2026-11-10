@@ -11,7 +11,10 @@ import {
   Tasks,
 } from '@getpapillon/papicons';
 import { Bar } from '@/components/ui';
-import { getModule } from '@/lib/content';
+import { getModule, localFormations, loadFormations } from '@/lib/content';
+import FormationShowcase from '@/components/FormationShowcase';
+import { useEffect, useState } from 'react';
+import type { Formation } from '@/lib/types';
 import { dueCardIds, dueQuestionIds } from '@/lib/progress';
 import { chapterAccuracy, moduleRatio, nextChapter } from '@/lib/stats';
 import { useStore } from '@/state/Store';
@@ -22,6 +25,13 @@ export default function ModulePage() {
   const { moduleId } = useParams();
   const m = getModule(moduleId);
   const { state } = useStore();
+  const [formations, setFormations] = useState<Formation[]>(() => (moduleId ? localFormations(moduleId) : []));
+  useEffect(() => {
+    if (!moduleId) return;
+    let alive = true;
+    loadFormations(moduleId).then((x) => alive && x.length && setFormations(x)).catch(() => undefined);
+    return () => { alive = false; };
+  }, [moduleId]);
   if (!m) return <Navigate to="/modules" replace />;
   const read = new Set(state.chaptersRead[m.id] ?? []);
   const nc = nextChapter(state, m);
@@ -98,6 +108,8 @@ export default function ModulePage() {
         </div>
         <p className="mt-4 max-w-3xl text-sm font-semibold text-muted">{m.description}</p>
       </section>
+
+      {formations.length > 0 && <FormationShowcase module={m} formations={formations} />}
 
       {/* Modes d'entraînement gamifiés */}
       <section className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4">

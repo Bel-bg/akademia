@@ -42,6 +42,8 @@ export function nextTier(level: number): Tier | undefined {
 // ---------- Récompenses ----------
 export const XP = {
   chapterRead: 25,
+  formationLesson: 20,
+  formationDone: 60,
   perfectQuiz: 30,
   goodQuiz: 15, // >= 80 %
   badge: 20,
@@ -106,6 +108,8 @@ export const BADGES: BadgeDef[] = [
   { id: 'streak-3', name: 'Régulier', desc: '3 jours d’affilée.', rarity: 'commun', check: (s) => s.bestStreak >= 3, progress: (s) => prog(s.bestStreak, 3) },
   { id: 'streak-7', name: 'Semaine de feu', desc: '7 jours d’affilée.', rarity: 'rare', check: (s) => s.bestStreak >= 7, progress: (s) => prog(s.bestStreak, 7) },
   { id: 'streak-30', name: 'Légende du mois', desc: '30 jours d’affilée.', rarity: 'légendaire', check: (s) => s.bestStreak >= 30, progress: (s) => prog(s.bestStreak, 30) },
+  { id: 'formation-1', name: 'Élève coaché', desc: 'Terminer une formation complète.', rarity: 'rare', check: (s) => (s.counters.formations ?? 0) >= 1 },
+  { id: 'formation-3', name: 'Diplômé du coaching', desc: 'Terminer 3 formations.', rarity: 'épique', check: (s) => (s.counters.formations ?? 0) >= 3, progress: (s) => prog(s.counters.formations ?? 0, 3) },
   { id: 'level-5', name: 'Ampoule allumée', desc: 'Atteindre le niveau 5.', rarity: 'commun', check: (s) => levelFromXp(s.xp) >= 5 },
   { id: 'level-10', name: 'Moteur lancé', desc: 'Atteindre le niveau 10.', rarity: 'rare', check: (s) => levelFromXp(s.xp) >= 10 },
   { id: 'level-20', name: 'Fusion nucléaire', desc: 'Atteindre le niveau 20.', rarity: 'légendaire', check: (s) => levelFromXp(s.xp) >= 20 },
