@@ -1,0 +1,744 @@
+{
+ "id": "disques",
+ "order": 5,
+ "title": "Disques, partitions et systèmes de fichiers",
+ "tagline": "fdisk, mkfs, mount, fstab : ajoute un disque à un serveur de A à Z, sans rien casser.",
+ "emoji": "💾",
+ "color": "#0EA5E9",
+ "level": "Intermédiaire",
+ "minutes": 65,
+ "pitch": [
+  "Bonjour ! Je te présente **« Disques, partitions et systèmes de fichiers »** 💾.",
+  "Ajouter un disque à un serveur, c'est une **tâche d'administrateur incontournable**… et un sujet d'examen très fréquent. Beaucoup d'étudiants connaissent les commandes mais ne savent pas dans quel **ordre** les utiliser, ni pourquoi.",
+  "On clarifie d'abord la différence entre disque, partition et système de fichiers. Puis on observe (`lsblk`, `df`, `du`, les inodes), on partitionne avec `fdisk`, on formate avec `mkfs`, on monte avec `mount`, et on rend le tout permanent avec `/etc/fstab`, **avec les bons réflexes de sécurité**.",
+  "Chaque étape est suivie d'exercices et le tout se termine par un défi : ajouter un nouveau disque de A à Z."
+ ],
+ "benefits": [
+  "Distinguer disque, partition et système de fichiers",
+  "Observer l'état du stockage avec lsblk, df et du",
+  "Partitionner, formater et monter un disque dans le bon ordre",
+  "Écrire une ligne fstab correcte et la tester avec mount -a"
+ ],
+ "lessons": [
+  {
+   "id": "concepts",
+   "title": "Disque, partition, système de fichiers",
+   "emoji": "🧱",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Quand on ajoute un disque à un serveur, il ne suffit pas de le brancher : il faut **le préparer** avant de pouvoir y stocker quoi que ce soit. Trois notions à distinguer, et c'est la clé de tout le chapitre."
+    },
+    {
+     "type": "code",
+     "sql": "1) Le DISQUE         → le support physique (ou virtuel) : /dev/sda, /dev/sdb\n2) La PARTITION      → une « tranche » du disque : /dev/sda1, /dev/sda2\n3) Le SYSTÈME DE FICHIERS → l'organisation interne d'une partition (ext4, xfs…)\n                           qui permet de ranger des fichiers et des dossiers",
+     "lang": "Terminal",
+     "title": "Les 3 niveaux"
+    },
+    {
+     "type": "say",
+     "text": "Une bonne image : le **disque** est un grand terrain, les **partitions** sont des parcelles clôturées, et le **système de fichiers** est le plan des rues et des numéros de maison construit sur chaque parcelle. Sans plan, impossible de ranger quoi que ce soit."
+    },
+    {
+     "type": "choice",
+     "q": "Dans quel ordre prépare-t-on un nouveau disque ?",
+     "options": [
+      "Formater, puis partitionner, puis monter",
+      "Partitionner, puis formater (système de fichiers), puis monter",
+      "Monter, puis formater, puis partitionner"
+     ],
+     "answer": 1,
+     "explain": "**Partitionner** → **créer le système de fichiers** (formater) → **monter** dans l'arborescence. Un ordre à retenir !"
+    },
+    {
+     "type": "say",
+     "text": "Les **noms de périphériques** suivent une logique. Sur un disque SATA/SCSI/USB : `/dev/sda`, `/dev/sdb`… (la lettre = le disque). Les partitions ajoutent un chiffre : `sda1`, `sda2`. Les disques NVMe s'appellent `/dev/nvme0n1` avec des partitions `nvme0n1p1`. Les machines virtuelles utilisent souvent `/dev/vda`."
+    },
+    {
+     "type": "choice",
+     "q": "Que désigne `/dev/sdb2` ?",
+     "options": [
+      "Le 2ᵉ disque, 1re partition",
+      "La 2ᵉ partition du 2ᵉ disque (sdb)",
+      "Le disque sdb2"
+     ],
+     "answer": 1,
+     "explain": "`sdb` = 2ᵉ disque (a, b, c…), `2` = 2ᵉ partition de ce disque."
+    },
+    {
+     "type": "choice",
+     "q": "Un disque virtuel apparaît sous le nom `/dev/vdb`. C'est probablement…",
+     "options": [
+      "Un disque virtio (machine virtuelle)",
+      "Un CD-ROM",
+      "Un disque réseau"
+     ],
+     "answer": 0,
+     "explain": "`vd*` est le nom des disques **virtio** des machines virtuelles (KVM, VirtualBox avec virtio…)."
+    },
+    {
+     "type": "say",
+     "text": "Les **systèmes de fichiers** courants sous Linux : **ext4** (le standard, robuste, polyvalent), **xfs** (très performant, fichiers volumineux, défaut de RHEL), **btrfs** (instantanés), **vfat/FAT32** (clé USB, compatible Windows), **ntfs** (Windows). Et la **swap** est une zone spéciale, pas un système de fichiers."
+    },
+    {
+     "type": "choice",
+     "q": "Quel système de fichiers est le standard historique de beaucoup de distributions Linux (Ubuntu, Debian) ?",
+     "options": [
+      "ntfs",
+      "ext4",
+      "fat32"
+     ],
+     "answer": 1,
+     "explain": "**ext4** est le système de fichiers par défaut sur Debian/Ubuntu."
+    },
+    {
+     "type": "say",
+     "text": "Deux schémas de partitionnement : **MBR** (ancien : 4 partitions primaires, disques < 2 To) et **GPT** (moderne : jusqu'à 128 partitions, disques énormes, requis avec UEFI). Aujourd'hui, on choisit GPT sauf contrainte."
+    },
+    {
+     "type": "choice",
+     "q": "Quelle limite a un disque en **MBR** ?",
+     "options": [
+      "Pas plus de 4 partitions primaires et ~2 To",
+      "Pas plus de 128 partitions",
+      "Il ne marche qu'avec ext4"
+     ],
+     "answer": 0,
+     "explain": "MBR : **4 partitions primaires** maximum (ou 3 + une étendue) et **2 To**. GPT lève ces limites."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Disque → **partition** → **système de fichiers** → **montage**. Noms : `sda`, `sda1`, `nvme0n1p1`, `vda`. Dans la leçon suivante : **observer** l'état des disques."
+    }
+   ]
+  },
+  {
+   "id": "observer",
+   "title": "Observer : lsblk, df, du",
+   "emoji": "🔭",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Avant de modifier quoi que ce soit, on **regarde**. Trois commandes pour observer les disques, avec trois questions différentes. Les confondre est une erreur classique."
+    },
+    {
+     "type": "code",
+     "sql": "lsblk     → QUELS disques et partitions existent ? (structure)\ndf -h     → COMBIEN d'espace reste-t-il sur chaque système de fichiers monté ?\ndu -sh    → COMBIEN d'espace occupe CE dossier ?",
+     "lang": "Terminal",
+     "title": "Trois questions, trois commandes"
+    },
+    {
+     "type": "code",
+     "sql": "$ lsblk\nNAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT\nsda      8:0    0   40G  0 disk\n├─sda1   8:1    0    1G  0 part /boot\n└─sda2   8:2    0   39G  0 part /\nsdb      8:16   0   20G  0 disk",
+     "lang": "Terminal",
+     "title": "Exemple de lsblk"
+    },
+    {
+     "type": "say",
+     "text": "Ici, le disque `sdb` (20 Go) n'a **aucune partition** et n'est **monté nulle part** : il est vierge. `sda1` est monté sur `/boot`, `sda2` sur `/`."
+    },
+    {
+     "type": "choice",
+     "q": "Dans la sortie précédente, quel disque est encore inutilisé ?",
+     "options": [
+      "sda",
+      "sdb",
+      "sda1"
+     ],
+     "answer": 1,
+     "explain": "`sdb` n'a ni partition ni point de montage : **disque vierge**."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche les disques et partitions sous forme d'arbre ?",
+     "hints": [
+      "Contraction de *list block devices*."
+     ],
+     "accept": [],
+     "solution": "lsblk",
+     "explain": "`lsblk` affiche l'arbre des périphériques bloc, avec taille et point de montage.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche **l'espace libre** de chaque système de fichiers monté, en unités lisibles ?",
+     "hints": [
+      "Disk Free + human."
+     ],
+     "accept": [
+      "df -hT"
+     ],
+     "solution": "df -h",
+     "explain": "`df -h` : colonnes taille, utilisé, disponible, % et point de montage.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Pour trouver **qui occupe la place** : `du` (*disk usage*). Options : `-s` (un seul total), `-h` (lisible), `--max-depth=1` (un niveau)."
+    },
+    {
+     "type": "code",
+     "sql": "du -sh /var/log                         → taille totale de /var/log\ndu -h --max-depth=1 /var | sort -h       → dossiers de /var, du plus petit au plus gros",
+     "lang": "Terminal",
+     "title": "du"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche la **taille totale** du dossier `/var/log`, en unités lisibles.",
+     "hints": [
+      "du -s (total) + -h."
+     ],
+     "accept": [
+      "du -hs /var/log",
+      "du -sh /var/log/"
+     ],
+     "solution": "du -sh /var/log",
+     "explain": "`-s` donne un seul total, `-h` l'unité lisible.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "`df` et `du` donnent des chiffres différents. Que mesurent-ils ?",
+     "options": [
+      "Rien de différent",
+      "df : l'espace du système de fichiers entier ; du : l'espace de fichiers/dossiers précis",
+      "df : les dossiers ; du : les disques"
+     ],
+     "answer": 1,
+     "explain": "`df` interroge le **système de fichiers** (blocs libres/utilisés) ; `du` additionne la taille de **fichiers** réels. Des écarts apparaissent (fichiers supprimés mais encore ouverts, espace réservé…)."
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Un disque « plein » sans l'être.** Un système de fichiers peut être saturé **en inodes** (le nombre maximal de fichiers) alors qu'il reste de la place en octets. Symptôme : *No space left on device* malgré `df -h` qui montre de l'espace libre."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche l'**utilisation des inodes** ?",
+     "hints": [
+      "Même commande que pour l'espace, avec l'option -i."
+     ],
+     "accept": [],
+     "solution": "df -i",
+     "explain": "`df -i` montre les inodes utilisés et libres. À 100 %, on ne peut plus créer de fichiers.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "`df -h` montre 40 % d'espace libre, mais on ne peut plus créer de fichiers (« No space left on device »). Première piste ?",
+     "options": [
+      "Les inodes sont épuisés (df -i)",
+      "Le disque est défectueux",
+      "Il faut redémarrer"
+     ],
+     "answer": 0,
+     "explain": "Un système de fichiers saturé en **inodes** (par exemple des millions de petits fichiers) refuse d'en créer d'autres même avec de la place."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche le **type** de système de fichiers de chaque partition **montée**, en unités lisibles ?",
+     "hints": [
+      "df -h avec une option pour le Type."
+     ],
+     "accept": [
+      "df -Th"
+     ],
+     "solution": "df -hT",
+     "explain": "`-T` ajoute la colonne *Type* (ext4, xfs, tmpfs…).",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "🏁 `lsblk` (structure), `df -h` (espace libre), `du -sh` (taille d'un dossier), `df -i` (inodes), `df -hT` (types)."
+    }
+   ]
+  },
+  {
+   "id": "partitionner",
+   "title": "Partitionner avec fdisk",
+   "emoji": "✂️",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Le disque `sdb` est vierge. Première étape : le **partitionner**. L'outil classique est `fdisk` : **interactif**, il fonctionne en tapant de petites commandes d'une lettre."
+    },
+    {
+     "type": "code",
+     "sql": "sudo fdisk -l            → lister tous les disques et leurs partitions\nsudo fdisk /dev/sdb      → partitionner le disque sdb (mode interactif)",
+     "lang": "Terminal",
+     "title": "Lancer fdisk"
+    },
+    {
+     "type": "say",
+     "text": "⚠️ On travaille sur **le disque** (`/dev/sdb`), **pas** sur une partition (`/dev/sdb1`). Et surtout : **vérifie 2 fois le nom du disque**. Se tromper de disque, c'est détruire des données."
+    },
+    {
+     "type": "choice",
+     "q": "Pour partitionner le 2ᵉ disque SATA, on lance…",
+     "options": [
+      "sudo fdisk /dev/sdb",
+      "sudo fdisk /dev/sdb1",
+      "sudo fdisk /dev/sda"
+     ],
+     "answer": 0,
+     "explain": "On donne le **disque** entier, `/dev/sdb`. `sdb1` est déjà une partition, `sda` est le 1er disque."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande **liste** les disques et partitions avec fdisk (sudo) ?",
+     "hints": [
+      "fdisk avec l'option -l (list)."
+     ],
+     "accept": [
+      "fdisk -l"
+     ],
+     "solution": "sudo fdisk -l",
+     "explain": "`fdisk -l` n'est pas interactif : il affiche juste l'état et sort.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Une fois dans `fdisk`, tu tapes des **lettres** (il y a une aide avec `m`). Les principales :"
+    },
+    {
+     "type": "code",
+     "sql": "m   aide\np   afficher la table de partitions actuelle\ng   créer une nouvelle table GPT vide\no   créer une nouvelle table MBR (DOS) vide\nn   créer une NOUVELLE partition\nd   supprimer une partition\nt   changer le type d'une partition\nw   ÉCRIRE les changements et quitter\nq   quitter SANS rien enregistrer",
+     "lang": "Terminal",
+     "title": "Les commandes de fdisk"
+    },
+    {
+     "type": "choice",
+     "q": "Dans fdisk, quelle touche **enregistre** réellement les modifications sur le disque ?",
+     "options": [
+      "s",
+      "w",
+      "q"
+     ],
+     "answer": 1,
+     "explain": "`w` = *write* : écrit la table sur le disque et quitte. Rien n'est modifié avant. `q` quitte **sans** enregistrer, c'est ton filet de sécurité."
+    },
+    {
+     "type": "say",
+     "text": "Voici le **déroulé typique** pour créer une partition de 10 Go sur un disque vierge :"
+    },
+    {
+     "type": "code",
+     "sql": "sudo fdisk /dev/sdb\n  g          (table GPT)\n  n          (nouvelle partition)\n  [Entrée]   (numéro 1, par défaut)\n  [Entrée]   (premier secteur, par défaut)\n  +10G       (taille de 10 Go)\n  p          (vérifier)\n  w          (écrire et quitter)",
+     "lang": "Terminal",
+     "title": "Créer une partition de 10 Go"
+    },
+    {
+     "type": "choice",
+     "q": "Dans fdisk, pour demander une partition de 10 Go, quelle valeur donne-t-on au « dernier secteur » ?",
+     "options": [
+      "10G",
+      "+10G",
+      "-10G"
+     ],
+     "answer": 1,
+     "explain": "Le préfixe **`+`** signifie « à partir du début, ajouter cette taille » : `+10G`. Sans le `+`, fdisk interprète un numéro de secteur."
+    },
+    {
+     "type": "say",
+     "text": "Après avoir écrit la table, le noyau doit connaître la nouvelle partition. Si elle n'apparaît pas, `sudo partprobe` demande au noyau de relire les tables de partitions. Vérifie ensuite avec `lsblk`."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande demande au noyau de **relire les tables de partitions** ? (sudo)",
+     "hints": [
+      "Contraction de *partition probe*."
+     ],
+     "accept": [
+      "partprobe"
+     ],
+     "solution": "sudo partprobe",
+     "explain": "`partprobe` évite parfois de redémarrer.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Pour des disques > 2 To, ou pour **scripter** le partitionnement, on utilise plutôt `parted` (non interactif possible) ou `gdisk` (GPT). Retiens que `fdisk` moderne gère aussi GPT."
+    },
+    {
+     "type": "choice",
+     "q": "Quelle est la bonne vérification **avant** `w` dans fdisk ?",
+     "options": [
+      "Aucune, w ne peut pas échouer",
+      "Taper p pour afficher la table et s'assurer qu'elle est correcte",
+      "Redémarrer le serveur"
+     ],
+     "answer": 1,
+     "explain": "Toujours **`p`** (afficher) avant **`w`** (écrire) : tant que tu n'as pas écrit, tu peux tout annuler avec `q`."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `fdisk -l` pour lister, `fdisk /dev/sdb` pour partitionner, `g`/`n`/`+10G`/`p`/`w`, et `q` pour quitter sans rien changer. Étape suivante : **formater** la partition."
+    }
+   ]
+  },
+  {
+   "id": "formater",
+   "title": "Créer un système de fichiers",
+   "emoji": "🏗️",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "La partition `/dev/sdb1` existe, mais elle est **vide de structure**. On y construit un **système de fichiers** avec `mkfs` (*make filesystem*). C'est ce qu'on appelle couramment « formater »."
+    },
+    {
+     "type": "code",
+     "sql": "sudo mkfs.ext4 /dev/sdb1         → crée un système de fichiers ext4\nsudo mkfs -t ext4 /dev/sdb1        → même chose (forme générique)\nsudo mkfs.xfs /dev/sdb1            → xfs\nsudo mkfs.vfat /dev/sdb1           → FAT32 (clé USB)\nsudo mkfs.ext4 -L donnees /dev/sdb1 → avec une étiquette (label)",
+     "lang": "Terminal",
+     "title": "mkfs"
+    },
+    {
+     "type": "exercise",
+     "q": "Crée un système de fichiers **ext4** sur `/dev/sdb1` (sudo).",
+     "hints": [
+      "mkfs.ext4 puis la partition."
+     ],
+     "accept": [
+      "sudo mkfs -t ext4 /dev/sdb1",
+      "mkfs -t ext4 /dev/sdb1",
+      "sudo mkfs.ext4 /dev/sdb1",
+      "mkfs.ext4 /dev/sdb1"
+     ],
+     "solution": "sudo mkfs.ext4 /dev/sdb1",
+     "explain": "`mkfs.ext4 /dev/sdb1` écrit la structure ext4 sur la partition.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Crée un système de fichiers **xfs** sur `/dev/sdb1` (sudo).",
+     "hints": [
+      "mkfs.xfs puis la partition."
+     ],
+     "accept": [
+      "sudo mkfs -t xfs /dev/sdb1",
+      "mkfs -t xfs /dev/sdb1",
+      "mkfs.xfs /dev/sdb1"
+     ],
+     "solution": "sudo mkfs.xfs /dev/sdb1",
+     "explain": "xfs excelle avec les gros fichiers et les gros volumes.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **`mkfs` efface les données** de la partition. Aucune confirmation sur une partition vierge : une faute de frappe sur `/dev/sda2` au lieu de `/dev/sdb1`, et ton système est perdu. **Règle :** `lsblk` avant, et relire le nom du périphérique avant d'appuyer sur Entrée."
+    },
+    {
+     "type": "choice",
+     "q": "Quelle précaution prendre avant `mkfs` ?",
+     "options": [
+      "Aucune",
+      "Vérifier avec lsblk qu'il s'agit bien de la bonne partition (et qu'elle est démontée)",
+      "Redémarrer"
+     ],
+     "answer": 1,
+     "explain": "`mkfs` détruit les données existantes. Confirme le nom de la partition (et qu'elle n'est pas montée)."
+    },
+    {
+     "type": "say",
+     "text": "Après `mkfs`, la partition a un **UUID** (identifiant unique) que `blkid` affiche. On l'utilise dans `/etc/fstab` : c'est plus fiable que `/dev/sdb1`, dont le nom peut **changer** d'un démarrage à l'autre."
+    },
+    {
+     "type": "code",
+     "sql": "sudo blkid /dev/sdb1\n/dev/sdb1: UUID=\"3f7a9c1e-...\" TYPE=\"ext4\"",
+     "lang": "Terminal",
+     "title": "blkid"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche l'**UUID** et le **type** de `/dev/sdb1` ? (sudo)",
+     "hints": [
+      "Block ID."
+     ],
+     "accept": [
+      "sudo lsblk -f /dev/sdb1",
+      "lsblk -f /dev/sdb1",
+      "blkid /dev/sdb1"
+     ],
+     "solution": "sudo blkid /dev/sdb1",
+     "explain": "`blkid` lit les métadonnées du système de fichiers.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi préfère-t-on l'UUID au nom `/dev/sdb1` dans `/etc/fstab` ?",
+     "options": [
+      "L'UUID est plus court",
+      "Le nom /dev/sdbN peut changer selon l'ordre de détection ; l'UUID reste stable",
+      "Le nom ne marche jamais"
+     ],
+     "answer": 1,
+     "explain": "Si tu ajoutes ou retires un disque, `sdb` peut devenir `sdc`. L'**UUID** identifie le système de fichiers lui-même."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `mkfs.ext4 /dev/sdb1` (⚠️ destructif), `blkid` pour l'UUID. Dernière étape avant utilisation : **monter**."
+    }
+   ]
+  },
+  {
+   "id": "monter",
+   "title": "Monter et rendre permanent",
+   "emoji": "📌",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Un système de fichiers existe mais il est **déconnecté** : on ne peut pas encore l'utiliser. Il faut le **monter**, c'est-à-dire le rattacher à un **dossier** de l'arborescence, appelé **point de montage**."
+    },
+    {
+     "type": "code",
+     "sql": "sudo mkdir /mnt/donnees               → crée le point de montage (un dossier vide)\nsudo mount /dev/sdb1 /mnt/donnees     → monte la partition\nls /mnt/donnees                        → on voit son contenu\nsudo umount /mnt/donnees               → démonte (« umount », sans n !)",
+     "lang": "Terminal",
+     "title": "Monter manuellement"
+    },
+    {
+     "type": "say",
+     "text": "Remarque : la commande s'écrit **`umount`** (pas « unmount »). Et on démonte avec le **point de montage** (ou le périphérique), jamais avec les deux."
+    },
+    {
+     "type": "exercise",
+     "q": "Monte `/dev/sdb1` sur `/mnt/donnees` (sudo).",
+     "hints": [
+      "mount <périphérique> <point de montage>"
+     ],
+     "accept": [
+      "mount /dev/sdb1 /mnt/donnees"
+     ],
+     "solution": "sudo mount /dev/sdb1 /mnt/donnees",
+     "explain": "Après le montage, tout ce que tu écris dans `/mnt/donnees` va sur `/dev/sdb1`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Démonte** le système de fichiers monté sur `/mnt/donnees` (sudo).",
+     "hints": [
+      "umount, sans le n."
+     ],
+     "accept": [
+      "sudo umount /dev/sdb1",
+      "umount /dev/sdb1",
+      "umount /mnt/donnees"
+     ],
+     "solution": "sudo umount /mnt/donnees",
+     "explain": "`umount /mnt/donnees` (ou `umount /dev/sdb1`).",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "`umount /mnt/donnees` répond « target is busy ». Que s'est-il passé ?",
+     "options": [
+      "Le disque est cassé",
+      "Un processus (ou ton terminal) utilise encore ce dossier",
+      "Il faut formater"
+     ],
+     "answer": 1,
+     "explain": "Cause fréquente : ton shell est **dans** `/mnt/donnees` (fais `cd ~`) ou un programme y a un fichier ouvert. `lsof +D` ou `fuser -m` permettent de trouver lequel."
+    },
+    {
+     "type": "say",
+     "text": "⚠️ Un montage avec `mount` est **temporaire** : il disparaît au redémarrage. Pour le rendre **permanent**, on ajoute une ligne dans `/etc/fstab`."
+    },
+    {
+     "type": "code",
+     "sql": "# /etc/fstab : <périphérique>  <point de montage>  <type>  <options>  <dump>  <pass>\nUUID=3f7a9c1e-...    /mnt/donnees    ext4    defaults    0    2",
+     "lang": "Terminal",
+     "title": "Une ligne de /etc/fstab"
+    },
+    {
+     "type": "code",
+     "sql": "Champ 1 : périphérique (UUID=... recommandé)\nChamp 2 : point de montage\nChamp 3 : type de système de fichiers (ext4, xfs…)\nChamp 4 : options (defaults, noexec, ro, nofail…)\nChamp 5 : dump (0 = pas de sauvegarde par dump)\nChamp 6 : pass (ordre de fsck : 1 pour /, 2 pour les autres, 0 = pas de vérification)",
+     "lang": "Terminal",
+     "title": "Les 6 champs"
+    },
+    {
+     "type": "choice",
+     "q": "Combien de champs a une ligne de `/etc/fstab` ?",
+     "options": [
+      "4",
+      "6",
+      "8"
+     ],
+     "answer": 1,
+     "explain": "Six : périphérique, point de montage, type, options, dump, pass."
+    },
+    {
+     "type": "choice",
+     "q": "Dans fstab, que signifie `0 2` à la fin d'une ligne ?",
+     "options": [
+      "dump = 0, ordre de fsck = 2",
+      "2 sauvegardes par jour",
+      "0 utilisateur, 2 groupes"
+     ],
+     "answer": 0,
+     "explain": "`dump` (0 = ignorée) puis `pass` : 1 pour la racine, 2 pour les autres partitions vérifiées au démarrage, 0 = jamais vérifié."
+    },
+    {
+     "type": "say",
+     "text": "🛟 **Teste ton fstab avant de redémarrer !** Une erreur dans `/etc/fstab` peut empêcher le démarrage du système. `sudo mount -a` monte tout ce qui est dans fstab : s'il y a une erreur, tu la vois **maintenant**, pas au prochain boot."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande **monte tout** ce qui est listé dans `/etc/fstab` (pour tester le fichier) ? (sudo)",
+     "hints": [
+      "mount avec l'option « all »."
+     ],
+     "accept": [
+      "mount -a"
+     ],
+     "solution": "sudo mount -a",
+     "explain": "`mount -a` est le test de sécurité obligatoire après modification de fstab.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Tu as modifié `/etc/fstab`. Que fais-tu **avant** de redémarrer ?",
+     "options": [
+      "Rien, tout ira bien",
+      "sudo mount -a pour détecter les erreurs",
+      "Supprimer fstab"
+     ],
+     "answer": 1,
+     "explain": "`mount -a` révèle immédiatement une erreur de syntaxe ou un mauvais UUID, qui bloquerait sinon le démarrage."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `mkdir` (point de montage), `mount`/`umount`, `/etc/fstab` (6 champs, UUID, `defaults 0 2`), et **`mount -a` pour tester**."
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : un nouveau disque",
+   "emoji": "🏆",
+   "minutes": 12,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Défi final ! On ajoute un disque de données à un serveur. Tu déroules **la procédure complète**, étape par étape."
+    },
+    {
+     "type": "choice",
+     "q": "**Défi 1/7** — Remets dans le bon ordre : A) monter, B) partitionner, C) créer le système de fichiers.",
+     "options": [
+      "B, C, A",
+      "A, B, C",
+      "C, B, A"
+     ],
+     "answer": 0,
+     "explain": "Partitionner (B), formater (C), monter (A)."
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/7** — Quelle commande **observe** les disques et partitions avant de commencer ?",
+     "hints": [
+      "list block devices."
+     ],
+     "accept": [
+      "sudo fdisk -l",
+      "fdisk -l",
+      "lsblk -f"
+     ],
+     "solution": "lsblk",
+     "explain": "On regarde toujours avant d'agir.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/7** — Lance le partitionnement **interactif** du disque `/dev/sdb` (sudo).",
+     "hints": [
+      "fdisk + le DISQUE entier."
+     ],
+     "accept": [
+      "fdisk /dev/sdb"
+     ],
+     "solution": "sudo fdisk /dev/sdb",
+     "explain": "`fdisk /dev/sdb`, puis `g`, `n`, `+10G`, `p`, `w`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 4/7** — Crée un système de fichiers ext4 sur `/dev/sdb1` (sudo).",
+     "hints": [
+      "mkfs.ext4 + partition."
+     ],
+     "accept": [
+      "sudo mkfs -t ext4 /dev/sdb1",
+      "mkfs -t ext4 /dev/sdb1",
+      "mkfs.ext4 /dev/sdb1"
+     ],
+     "solution": "sudo mkfs.ext4 /dev/sdb1",
+     "explain": "Une seule commande, mais destructive : vérifie le nom !",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 5/7** — Crée le **point de montage** `/mnt/donnees` (sudo).",
+     "hints": [
+      "Un point de montage est un dossier."
+     ],
+     "accept": [
+      "sudo mkdir -p /mnt/donnees",
+      "mkdir -p /mnt/donnees",
+      "mkdir /mnt/donnees"
+     ],
+     "solution": "sudo mkdir /mnt/donnees",
+     "explain": "Le dossier doit exister avant le montage.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 6/7** — Monte `/dev/sdb1` sur `/mnt/donnees` (sudo).",
+     "hints": [
+      "mount <périphérique> <point de montage>"
+     ],
+     "accept": [
+      "mount /dev/sdb1 /mnt/donnees"
+     ],
+     "solution": "sudo mount /dev/sdb1 /mnt/donnees",
+     "explain": "Vérifie ensuite avec `df -h` ou `lsblk`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "**Défi 7/7 (boss)** — Pour que le montage survive au redémarrage, quelle ligne ajoutes-tu à `/etc/fstab` ?",
+     "options": [
+      "UUID=3f7a9c1e-...  /mnt/donnees  ext4  defaults  0  2",
+      "/mnt/donnees  /dev/sdb1  ext4",
+      "mount /dev/sdb1 /mnt/donnees"
+     ],
+     "answer": 0,
+     "explain": "Périphérique (UUID), point de montage, type, options, dump, pass. Puis **`mount -a`** pour tester."
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu sais observer, partitionner, formater, monter et rendre permanent un disque. Prochaine étape naturelle : **LVM**, pour rendre le stockage flexible."
+    }
+   ]
+  }
+ ]
+}

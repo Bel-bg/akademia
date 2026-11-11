@@ -1,0 +1,762 @@
+{
+ "id": "permissions",
+ "order": 4,
+ "title": "Les permissions de A à Z",
+ "tagline": "rwx, octal, chmod, chown, umask : maîtrise les droits sous Linux, sans jamais te tromper.",
+ "emoji": "🔐",
+ "color": "#EF4444",
+ "level": "Intermédiaire",
+ "minutes": 60,
+ "pitch": [
+  "Salut ! Je te présente **« Les permissions de A à Z »** 🔐.",
+  "Les permissions sont **au cœur de la sécurité Linux**, et elles tombent à **chaque examen**. Pourtant, beaucoup d'étudiants hésitent entre `755` et `644`, ou ne comprennent pas pourquoi un `rm` est refusé.",
+  "On part de la lecture de `ls -l`, puis la notation octale (que tu sauras convertir dans les deux sens sans calculatrice), `chmod`, `chown`, `chgrp` et enfin le `umask`. Chaque notion est suivie d'exercices où tu écris la commande ou calcules la valeur, avec indices et corrections.",
+  "À la fin, tu sauras expliquer **pourquoi** un utilisateur a (ou n'a pas) accès à un fichier."
+ ],
+ "benefits": [
+  "Lire rwx et comprendre fichier vs dossier",
+  "Convertir lettres ↔ octal en quelques secondes",
+  "Utiliser chmod, chown, chgrp et -R sans danger",
+  "Prévoir les droits par défaut avec umask (et éviter le piège du 033)"
+ ],
+ "lessons": [
+  {
+   "id": "lire",
+   "title": "Lire les droits rwx",
+   "emoji": "👓",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Les permissions, c'est ce qui décide **qui a le droit de faire quoi** sur chaque fichier. C'est la base de la sécurité sous Linux, et un grand classique d'examen. On part de zéro."
+    },
+    {
+     "type": "say",
+     "text": "Chaque fichier a **trois propriétaires de droits** : l'**utilisateur** propriétaire (**u**, *user*), le **groupe** propriétaire (**g**), et **tous les autres** (**o**, *others*). On regroupe aussi les trois sous le nom **a** (*all*)."
+    },
+    {
+     "type": "say",
+     "text": "Et pour chacun, **trois droits** possibles : **r** (lire), **w** (écrire/modifier), **x** (exécuter). Un tiret `-` signifie « droit absent »."
+    },
+    {
+     "type": "code",
+     "sql": "-rwxr-x---  1  awa  admin  4096  nov 11 06:00  script.sh\n │└┬┘└┬┘└┬┘\n │ │  │  └─ autres (o) : ---   aucun droit\n │ │  └──── groupe (g) : r-x   lire + exécuter\n │ └─────── utilisateur (u) : rwx  tout\n └───────── type : - fichier, d dossier, l lien",
+     "lang": "Terminal",
+     "title": "Les 10 caractères de ls -l"
+    },
+    {
+     "type": "choice",
+     "q": "Dans `-rwxr-x---`, que peut faire le **groupe** ?",
+     "options": [
+      "Lire, écrire et exécuter",
+      "Lire et exécuter, mais pas modifier",
+      "Rien du tout"
+     ],
+     "answer": 1,
+     "explain": "Le groupe est le **2ᵉ triplet** : `r-x` → lecture + exécution, pas d'écriture."
+    },
+    {
+     "type": "choice",
+     "q": "Dans `-rwxr-x---`, que peuvent faire les **autres** ?",
+     "options": [
+      "Lire seulement",
+      "Rien du tout",
+      "Exécuter seulement"
+     ],
+     "answer": 1,
+     "explain": "Le 3ᵉ triplet est `---` : aucun droit."
+    },
+    {
+     "type": "say",
+     "text": "**Sens des droits sur un FICHIER** : `r` = lire le contenu ; `w` = modifier le contenu ; `x` = **exécuter** le fichier comme un programme (script, binaire)."
+    },
+    {
+     "type": "say",
+     "text": "**Sens des droits sur un DOSSIER** : ce n'est pas pareil ! `r` = **lister** les noms ; `w` = **créer, renommer, supprimer** des éléments dedans ; `x` = **traverser** le dossier (y entrer avec `cd`, accéder à son contenu)."
+    },
+    {
+     "type": "code",
+     "sql": "Dossier :   r  → ls  (voir les noms)\n            w  → créer / supprimer / renommer des fichiers dedans\n            x  → cd dedans, accéder aux fichiers qu'il contient",
+     "lang": "Terminal",
+     "title": "Les droits sur un dossier"
+    },
+    {
+     "type": "choice",
+     "q": "Pour entrer dans un dossier avec `cd`, quel droit faut-il dessus ?",
+     "options": [
+      "r",
+      "w",
+      "x"
+     ],
+     "answer": 2,
+     "explain": "Le droit **x** (traverser) sur le dossier est indispensable pour `cd` et pour accéder à son contenu."
+    },
+    {
+     "type": "choice",
+     "q": "Pour **supprimer** un fichier, de quel droit as-tu besoin ?",
+     "options": [
+      "w sur le fichier lui-même",
+      "w sur le dossier qui le contient",
+      "x sur le fichier"
+     ],
+     "answer": 1,
+     "explain": "Supprimer un fichier **modifie le dossier** (on retire une entrée). C'est donc le droit **w sur le dossier** qui compte, pas celui du fichier."
+    },
+    {
+     "type": "say",
+     "text": "Comment Linux décide-t-il ? Il regarde **d'abord** si tu es le **propriétaire** (→ droits `u`), sinon si tu es dans le **groupe** (→ droits `g`), sinon tu es « autre » (→ droits `o`). **Un seul** de ces cas s'applique, jamais un cumul."
+    },
+    {
+     "type": "choice",
+     "q": "Awa est propriétaire d'un fichier en `----rw-rw-`. Elle est aussi dans le groupe. Peut-elle le lire ?",
+     "options": [
+      "Oui, grâce au groupe",
+      "Non : en tant que propriétaire, seul le triplet u (---) s'applique",
+      "Oui, car elle est dans le groupe et propriétaire"
+     ],
+     "answer": 1,
+     "explain": "Le triplet du **propriétaire** passe en premier et est le seul appliqué : `---` → aucun droit, même si le groupe a `rw-`."
+    },
+    {
+     "type": "say",
+     "text": "Et **root** ? L'administrateur **ignore les permissions** : il peut lire et écrire presque partout (c'est pourquoi on évite de travailler en root)."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `u/g/o/a`, `r/w/x`, sens différent pour **fichier** et **dossier**, un seul triplet appliqué, root passe partout. Ensuite : la **notation octale**."
+    }
+   ]
+  },
+  {
+   "id": "octal",
+   "title": "La notation octale",
+   "emoji": "🔢",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Écrire `rwxr-x---` est lisible, mais pour **configurer** les droits on utilise surtout des **nombres** : la notation **octale**. C'est rapide dès qu'on a compris la règle."
+    },
+    {
+     "type": "code",
+     "sql": "r = 4\nw = 2\nx = 1\n\nOn additionne les droits accordés :\nrwx = 4+2+1 = 7\nrw- = 4+2   = 6\nr-x = 4+1   = 5\nr-- = 4     = 4\n--- = 0",
+     "lang": "Terminal",
+     "title": "Chaque droit a un poids"
+    },
+    {
+     "type": "say",
+     "text": "Un triplet = **un chiffre**. Trois triplets (u, g, o) = **trois chiffres**. Exemple : `rwxr-x---` → u = 7, g = 5, o = 0 → **750**."
+    },
+    {
+     "type": "exercise",
+     "q": "Donne la notation octale de `rwxr-xr-x`.",
+     "hints": [
+      "rwx = 7, r-x = 5, r-x = 5.",
+      "7 puis 5 puis 5."
+     ],
+     "accept": [],
+     "solution": "755",
+     "explain": "rwx (7), r-x (5), r-x (5) → **755** : le plus courant pour un dossier ou un programme.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Donne la notation octale de `rw-r--r--`.",
+     "hints": [
+      "rw- = 4+2 = 6.",
+      "r-- = 4."
+     ],
+     "accept": [],
+     "solution": "644",
+     "explain": "rw- (6), r-- (4), r-- (4) → **644** : le plus courant pour un fichier ordinaire.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Donne la notation octale de `rw-------`.",
+     "hints": [
+      "Seul le propriétaire a des droits : rw- = 6.",
+      "Puis 0 et 0."
+     ],
+     "accept": [],
+     "solution": "600",
+     "explain": "**600** : fichier **privé** (clés SSH, mots de passe…).",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Dans l'autre sens : on **décompose** chaque chiffre. `640` → 6 = rw-, 4 = r--, 0 = --- → `rw-r-----`."
+    },
+    {
+     "type": "exercise",
+     "q": "Donne les droits en lettres pour `750`.",
+     "hints": [
+      "7 = rwx, 5 = r-x, 0 = ---.",
+      "Colle les trois triplets."
+     ],
+     "accept": [],
+     "solution": "rwxr-x---",
+     "explain": "7 = `rwx`, 5 = `r-x`, 0 = `---` → **rwxr-x---**.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Donne les droits en lettres pour `640`.",
+     "hints": [
+      "6 = rw-, 4 = r--, 0 = ---."
+     ],
+     "accept": [],
+     "solution": "rw-r-----",
+     "explain": "6 = `rw-`, 4 = `r--`, 0 = `---` → **rw-r-----**.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Donne les droits en lettres pour `755`.",
+     "hints": [
+      "7 = rwx, 5 = r-x, 5 = r-x."
+     ],
+     "accept": [],
+     "solution": "rwxr-xr-x",
+     "explain": "**rwxr-xr-x**.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Les valeurs à connaître **par cœur** :"
+    },
+    {
+     "type": "code",
+     "sql": "755  rwxr-xr-x   programmes, dossiers publics\n644  rw-r--r--   fichiers de données ordinaires\n600  rw-------   fichiers privés (clés, secrets)\n700  rwx------   dossiers privés (~/.ssh)\n750  rwxr-x---   accès au groupe seulement\n775  rwxrwxr-x   dossier de travail partagé en groupe\n777  rwxrwxrwx   TOUT À TOUS : à éviter !",
+     "lang": "Terminal",
+     "title": "Aide-mémoire"
+    },
+    {
+     "type": "choice",
+     "q": "Un script que tout le monde peut lire et exécuter, mais que seul son propriétaire peut modifier :",
+     "options": [
+      "777",
+      "755",
+      "644"
+     ],
+     "answer": 1,
+     "explain": "u = rwx (7), g = r-x (5), o = r-x (5) → **755**."
+    },
+    {
+     "type": "choice",
+     "q": "Une clé privée SSH doit être lisible et modifiable **uniquement** par son propriétaire :",
+     "options": [
+      "600",
+      "644",
+      "666"
+     ],
+     "answer": 0,
+     "explain": "Seul le propriétaire : `rw-` = 6 ; les autres : 0 → **600**. SSH refuse d'ailleurs une clé trop permissive."
+    },
+    {
+     "type": "say",
+     "text": "Petit contrôle de cohérence : un chiffre **> 7** est impossible (le max est 4+2+1 = 7). `chmod 800` ou `chmod 689` sont donc invalides."
+    },
+    {
+     "type": "choice",
+     "q": "Laquelle de ces valeurs est **invalide** ?",
+     "options": [
+      "640",
+      "7071",
+      "689"
+     ],
+     "answer": 2,
+     "explain": "Chaque chiffre est entre 0 et 7. Le **8** et le **9** de `689` sont impossibles."
+    },
+    {
+     "type": "say",
+     "text": "🏁 r=4, w=2, x=1, un chiffre par triplet. Ensuite : **modifier** les droits avec `chmod`."
+    }
+   ]
+  },
+  {
+   "id": "chmod",
+   "title": "chmod : modifier les droits",
+   "emoji": "🔧",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "`chmod` (*change mode*) modifie les droits. Deux syntaxes : **octale** (`chmod 644 fichier`) ou **symbolique** (`chmod u+x fichier`). Tu dois savoir faire les deux."
+    },
+    {
+     "type": "say",
+     "text": "**Octale** : tu donnes **tous** les droits d'un coup, ils **remplacent** les anciens."
+    },
+    {
+     "type": "code",
+     "sql": "chmod 644 notes.txt     → rw-r--r--\nchmod 755 script.sh     → rwxr-xr-x\nchmod 600 secret.key    → rw-------",
+     "lang": "Terminal",
+     "title": "chmod octal"
+    },
+    {
+     "type": "exercise",
+     "q": "Donne à `script.sh` les droits `rwxr-xr-x` avec la notation octale.",
+     "hints": [
+      "chmod + 3 chiffres + fichier."
+     ],
+     "accept": [],
+     "solution": "chmod 755 script.sh",
+     "explain": "`rwx` (7), `r-x` (5), `r-x` (5) → `chmod 755 script.sh`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Rends `secret.key` privé : lecture/écriture pour le propriétaire seul.",
+     "hints": [
+      "rw------- = 600."
+     ],
+     "accept": [],
+     "solution": "chmod 600 secret.key",
+     "explain": "`chmod 600 secret.key` : plus personne d'autre n'a accès.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**Symbolique** : on dit **qui** (`u`, `g`, `o`, `a`), **quelle opération** (`+` ajouter, `-` retirer, `=` fixer), et **quel droit** (`r`, `w`, `x`). On ne modifie que ce qu'on précise : le reste reste inchangé."
+    },
+    {
+     "type": "code",
+     "sql": "chmod u+x script.sh      → ajoute x au propriétaire\nchmod g-w fichier         → retire w au groupe\nchmod o-rwx fichier       → retire TOUT aux autres\nchmod a+r fichier         → ajoute r à tout le monde\nchmod u=rwx,g=rx,o=r f    → fixe précisément les trois triplets\nchmod +x script.sh        → x à tout le monde",
+     "lang": "Terminal",
+     "title": "chmod symbolique"
+    },
+    {
+     "type": "exercise",
+     "q": "Ajoute le droit d'**exécution** au **propriétaire** de `script.sh` (sans toucher aux autres droits).",
+     "hints": [
+      "u pour user, + pour ajouter, x pour exécuter."
+     ],
+     "accept": [],
+     "solution": "chmod u+x script.sh",
+     "explain": "`u+x` ajoute x uniquement au propriétaire.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Retire **tous** les droits aux **autres** (o) sur `notes.txt`.",
+     "hints": [
+      "o pour others, - pour retirer, rwx pour tout."
+     ],
+     "accept": [
+      "chmod o= notes.txt",
+      "chmod o-rwx notes.txt"
+     ],
+     "solution": "chmod o-rwx notes.txt",
+     "explain": "`o-rwx` : les autres n'ont plus rien.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Retire le droit d'**écriture** au **groupe** sur `partage.txt`.",
+     "hints": [
+      "g pour group, - pour retirer, w pour écrire."
+     ],
+     "accept": [],
+     "solution": "chmod g-w partage.txt",
+     "explain": "`g-w` retire uniquement l'écriture au groupe.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Un fichier est en `rw-r--r--`. Après `chmod g+w,o-r fichier`, il devient…",
+     "options": [
+      "rw-rw----",
+      "rw-rw-r--",
+      "rwxrw----"
+     ],
+     "answer": 0,
+     "explain": "`g+w` ajoute w au groupe (r-- → rw-). `o-r` retire r aux autres (r-- → ---). Résultat : `rw-rw----`."
+    },
+    {
+     "type": "say",
+     "text": "Pour appliquer à **un dossier et tout son contenu**, on ajoute `-R` (récursif). ⚠️ À manier avec prudence : un `chmod -R 777 /` a cassé bien des systèmes."
+    },
+    {
+     "type": "code",
+     "sql": "chmod -R 755 projet/",
+     "lang": "Terminal",
+     "title": "Récursif"
+    },
+    {
+     "type": "exercise",
+     "q": "Applique `755` au dossier `projet` **et à tout son contenu**.",
+     "hints": [
+      "Option -R pour récursif."
+     ],
+     "accept": [
+      "chmod -R 755 projet/",
+      "chmod 755 -R projet",
+      "chmod -R 755 projet/"
+     ],
+     "solution": "chmod -R 755 projet",
+     "explain": "`-R` descend dans tous les sous-dossiers.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi `chmod -R 777 dossier` est-elle une mauvaise habitude ?",
+     "options": [
+      "Elle donne tous les droits à tout le monde : faille de sécurité",
+      "Elle ne marche pas",
+      "Elle supprime le dossier"
+     ],
+     "answer": 0,
+     "explain": "`777` autorise **n'importe qui** à lire, modifier et exécuter. Utiliser 777 « pour que ça marche » masque le vrai problème et ouvre une faille."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `chmod 755 f` (octal) ou `chmod u+x f` (symbolique), `-R` pour récursif. Place à la **propriété** : `chown` et `chgrp`."
+    }
+   ]
+  },
+  {
+   "id": "chown",
+   "title": "chown et chgrp : changer le propriétaire",
+   "emoji": "👤",
+   "minutes": 8,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Les droits `u` et `g` s'appliquent à **un propriétaire** et **un groupe**. On les change avec `chown` (*change owner*) et `chgrp` (*change group*). Seul **root** peut changer le propriétaire d'un fichier."
+    },
+    {
+     "type": "code",
+     "sql": "sudo chown awa fichier            → awa devient propriétaire\nsudo chown awa:admin fichier       → propriétaire awa ET groupe admin\nsudo chown :admin fichier          → change seulement le groupe\nsudo chgrp admin fichier           → idem, pour le groupe\nsudo chown -R awa:admin dossier/   → récursif",
+     "lang": "Terminal",
+     "title": "chown / chgrp"
+    },
+    {
+     "type": "say",
+     "text": "Le format est **`utilisateur:groupe`** (avec deux-points). On peut omettre l'un des deux."
+    },
+    {
+     "type": "exercise",
+     "q": "Donne `rapport.txt` à l'utilisateur `awa` (propriétaire seulement), avec sudo.",
+     "hints": [
+      "sudo chown <utilisateur> <fichier>"
+     ],
+     "accept": [
+      "chown awa rapport.txt"
+     ],
+     "solution": "sudo chown awa rapport.txt",
+     "explain": "`sudo chown awa rapport.txt`. Sans sudo, seul root peut changer de propriétaire.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Donne `rapport.txt` à l'utilisateur `awa` **et** au groupe `compta`, avec sudo.",
+     "hints": [
+      "Format utilisateur:groupe."
+     ],
+     "accept": [
+      "chown awa:compta rapport.txt",
+      "sudo chown awa.compta rapport.txt"
+     ],
+     "solution": "sudo chown awa:compta rapport.txt",
+     "explain": "`utilisateur:groupe` en un seul argument.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Change **seulement le groupe** de `rapport.txt` pour `compta` avec `chgrp` (sudo).",
+     "hints": [
+      "chgrp <groupe> <fichier>"
+     ],
+     "accept": [
+      "chgrp compta rapport.txt",
+      "sudo chown :compta rapport.txt",
+      "chown :compta rapport.txt"
+     ],
+     "solution": "sudo chgrp compta rapport.txt",
+     "explain": "`chgrp compta rapport.txt` : le propriétaire ne change pas.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Un utilisateur normal peut-il donner **son** fichier à un autre utilisateur avec `chown` ?",
+     "options": [
+      "Oui, c'est son fichier",
+      "Non, seul root peut changer le propriétaire",
+      "Oui, avec chmod"
+     ],
+     "answer": 1,
+     "explain": "Pour éviter les abus (contourner les quotas par exemple), **seul root** peut changer le propriétaire. Le propriétaire peut en revanche changer le **groupe** vers un groupe dont il fait partie."
+    },
+    {
+     "type": "say",
+     "text": "**Cas typique d'administration** : un dossier partagé par une équipe. On le donne à un **groupe**, on fixe les droits du groupe, et on interdit les autres :"
+    },
+    {
+     "type": "code",
+     "sql": "sudo mkdir /srv/compta\nsudo chown root:compta /srv/compta\nsudo chmod 770 /srv/compta        → rwxrwx---",
+     "lang": "Terminal",
+     "title": "Un dossier d'équipe"
+    },
+    {
+     "type": "choice",
+     "q": "Avec `chown root:compta` puis `chmod 770`, qui peut écrire dans `/srv/compta` ?",
+     "options": [
+      "Tout le monde",
+      "Root et les membres du groupe compta",
+      "Seulement root"
+     ],
+     "answer": 1,
+     "explain": "770 = `rwxrwx---` : propriétaire (root) et **groupe** (compta) ont tous les droits ; les autres rien."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `chown user:groupe`, `chgrp`, `-R`, et seul root change le propriétaire. Prochaine notion : **umask**, les droits par défaut des nouveaux fichiers."
+    }
+   ]
+  },
+  {
+   "id": "umask",
+   "title": "umask : les droits par défaut",
+   "emoji": "🎭",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Quand tu crées un fichier (`touch`) ou un dossier (`mkdir`), qui décide de ses droits ? Le **umask** : un **masque** qui **retire** des droits à la valeur de départ."
+    },
+    {
+     "type": "code",
+     "sql": "Valeur de départ :   fichier = 666 (rw-rw-rw-)      dossier = 777 (rwxrwxrwx)\numask 022 retire :   w au groupe et aux autres\n\nRésultat par défaut :  fichier = 644 (rw-r--r--)       dossier = 755 (rwxr-xr-x)",
+     "lang": "Terminal",
+     "title": "umask 022 : le défaut habituel"
+    },
+    {
+     "type": "say",
+     "text": "Pourquoi un fichier part de **666** et pas de 777 ? Parce que Linux n'accorde **jamais** le droit d'exécution par défaut à un nouveau fichier : c'est une sécurité (un fichier téléchargé n'est pas exécutable tant que tu ne le décides pas)."
+    },
+    {
+     "type": "choice",
+     "q": "Un nouveau fichier est créé avec umask `022`. Ses droits par défaut :",
+     "options": [
+      "755",
+      "644",
+      "666"
+     ],
+     "answer": 1,
+     "explain": "666 moins 022 → **644** (`rw-r--r--`). Un dossier aurait 777 − 022 = **755**."
+    },
+    {
+     "type": "say",
+     "text": "Le calcul le plus simple : **retire** chaque chiffre du umask de 6 (fichier) ou de 7 (dossier), chiffre par chiffre."
+    },
+    {
+     "type": "code",
+     "sql": "umask 027 → fichier : 6-0 | 6-2 | 6-7→0 = 640    dossier : 7-0 | 7-2 | 7-7 = 750\numask 077 → fichier : 600                         dossier : 700\numask 002 → fichier : 664                         dossier : 775",
+     "lang": "Terminal",
+     "title": "Exemples"
+    },
+    {
+     "type": "exercise",
+     "q": "Avec un umask `027`, quels droits (en octal) aura un **nouveau fichier** ?",
+     "hints": [
+      "666 − 027, chiffre par chiffre.",
+      "6 puis 6−2 puis 6−7 (qui ne peut pas descendre sous 0)."
+     ],
+     "accept": [],
+     "solution": "640",
+     "explain": "u : 6−0 = 6, g : 6−2 = 4, o : 6−7 → 0. Fichier = **640**.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Avec un umask `027`, quels droits (en octal) aura un **nouveau dossier** ?",
+     "hints": [
+      "777 − 027."
+     ],
+     "accept": [],
+     "solution": "750",
+     "explain": "u : 7, g : 7−2 = 5, o : 7−7 = 0 → **750**.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Avec un umask `077`, quels droits aura un **nouveau fichier** ? (octal)",
+     "hints": [
+      "Retire tout au groupe et aux autres."
+     ],
+     "accept": [],
+     "solution": "600",
+     "explain": "6, puis 0, puis 0 → **600** : un fichier privé.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Quelle commande ? `umask` seul **affiche** le masque actuel. `umask 077` le **change** pour la session en cours (pas définitif : pour le rendre permanent, on le met dans `~/.bashrc` ou `/etc/profile`)."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande **affiche** le umask actuel ?",
+     "hints": [
+      "Un seul mot."
+     ],
+     "accept": [],
+     "solution": "umask",
+     "explain": "`umask` sans argument affiche la valeur (par exemple `0022`).",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande règle le umask sur `077` pour la session en cours ?",
+     "hints": [
+      "umask suivi de la valeur."
+     ],
+     "accept": [],
+     "solution": "umask 077",
+     "explain": "Les fichiers créés ensuite seront privés (600) et les dossiers aussi (700).",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Avec un umask `033`, les droits d'un nouveau fichier sont…",
+     "options": [
+      "633 (666 − 033)",
+      "644",
+      "622"
+     ],
+     "answer": 1,
+     "explain": "⚠️ Ce n'est **pas** toujours une soustraction ! C'est un **ET** avec le **complément** du umask : `666 & ~033 = 644`. Pour un fichier, le bit x est de toute façon absent. Cas piège d'examen !"
+    },
+    {
+     "type": "say",
+     "text": "🏁 umask retire des droits à **666 (fichiers)** / **777 (dossiers)** ; `022` → 644/755 ; `027` → 640/750 ; `077` → 600/700. Défaut d'un utilisateur : souvent `022`."
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : permissions",
+   "emoji": "🏆",
+   "minutes": 12,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Défi final ! Sept situations d'examen mêlant lecture, octal, `chmod`, `chown` et `umask`."
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/7** — Octal de `rwxr-x---` ?",
+     "hints": [
+      "7, 5, 0."
+     ],
+     "accept": [],
+     "solution": "750",
+     "explain": "u = rwx (7), g = r-x (5), o = --- (0) → **750**.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/7** — Lettres de `664` ?",
+     "hints": [
+      "6 = rw-, 6 = rw-, 4 = r--."
+     ],
+     "accept": [],
+     "solution": "rw-rw-r--",
+     "explain": "**rw-rw-r--**.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/7** — Rends `deploy.sh` exécutable **par son propriétaire** uniquement (sans toucher aux autres droits).",
+     "hints": [
+      "u + x."
+     ],
+     "accept": [],
+     "solution": "chmod u+x deploy.sh",
+     "explain": "`u+x` modifie seulement le triplet du propriétaire.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 4/7** — Donne à `app.conf` les droits `rw-r-----` (octal).",
+     "hints": [
+      "rw- = 6, r-- = 4, --- = 0."
+     ],
+     "accept": [
+      "chmod u=rw,g=r,o= app.conf"
+     ],
+     "solution": "chmod 640 app.conf",
+     "explain": "640 : le propriétaire écrit, le groupe lit, les autres rien.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 5/7** — Donne `/srv/data` à l'utilisateur `awa` et au groupe `equipe`, de façon **récursive** (sudo).",
+     "hints": [
+      "chown -R utilisateur:groupe chemin."
+     ],
+     "accept": [
+      "sudo chown -R awa:equipe /srv/data/",
+      "chown -R awa:equipe /srv/data",
+      "sudo chown awa:equipe -R /srv/data"
+     ],
+     "solution": "sudo chown -R awa:equipe /srv/data",
+     "explain": "`-R` applique à tout le contenu.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 6/7** — Avec un umask `022`, quels droits (octal) pour un **nouveau fichier** ?",
+     "hints": [
+      "666 − 022."
+     ],
+     "accept": [],
+     "solution": "644",
+     "explain": "6, 6−2, 6−2 → **644**.",
+     "placeholder": "Écris ta réponse ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "**Défi 7/7 (boss)** — `drwxr-x---` pour `/srv/compta` (propriétaire root, groupe compta). Marie n'est PAS dans le groupe compta. Peut-elle faire `ls /srv/compta` ?",
+     "options": [
+      "Oui, tout le monde peut lister",
+      "Non : elle est « autre » et n'a aucun droit (---)",
+      "Oui, car elle est root"
+     ],
+     "answer": 1,
+     "explain": "Marie n'est ni propriétaire ni dans le groupe : on applique le triplet « autres » = `---` → accès refusé (*Permission denied*)."
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu sais lire, calculer, modifier les droits, changer le propriétaire et prévoir les droits par défaut. Pour aller plus loin : **SUID, SGID, sticky bit** et les **ACL** (formation avancée)."
+    }
+   ]
+  }
+ ]
+}
