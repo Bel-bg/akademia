@@ -31,6 +31,7 @@ import { fetchBattle, WeeklyBattleInfo } from '@/data/repo';
 
 const MOBILE_NAV = [
   { to: '/', label: 'Accueil', icon: Home, end: true },
+  { to: '/formations', label: 'Formations', icon: GraduationHat },
   { to: '/actu', label: 'Actu', icon: Newspaper },
   { to: '/classement', label: 'Classement', icon: Crown },
   { to: '/profil', label: 'Profil', icon: User },
@@ -38,8 +39,9 @@ const MOBILE_NAV = [
 
 const DESKTOP_NAV = [
   { to: '/', label: 'Accueil', icon: Home, end: true },
-  { to: '/actu', label: 'Actualités & Battles', icon: Newspaper },
+  { to: '/formations', label: 'Formations', icon: GraduationHat },
   { to: '/modules', label: 'Modules de cours', icon: Folder },
+  { to: '/actu', label: 'Actualités & Battles', icon: Newspaper },
   { to: '/classement', label: 'Classement', icon: Crown },
   { to: '/messages', label: 'Messages', icon: TextBubble },
   { to: '/profil', label: 'Mon Profil', icon: User },
@@ -313,10 +315,10 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      {/* Bottom Navigation Bar Mobile-First (4 Onglets : Accueil, Actu, Classement, Profil) */}
+      {/* Bottom Navigation Bar Mobile-First (5 Onglets : Accueil, Formations, Actu, Classement, Profil) */}
       <nav
         aria-label="Navigation mobile"
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-line/70 bg-card/95 px-2 pb-[env(safe-area-inset-bottom)] pt-1 shadow-[0_-4px_20px_rgb(0_0_0/0.05)] backdrop-blur-md lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-line/70 bg-card/95 px-2 pb-[env(safe-area-inset-bottom)] pt-1 shadow-[0_-4px_20px_rgb(0_0_0/0.05)] backdrop-blur-md lg:hidden"
       >
         {MOBILE_NAV.map((n) => (
           <NavLink

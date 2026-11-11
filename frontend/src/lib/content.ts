@@ -127,3 +127,53 @@ export const localFormations = (moduleId: string): Formation[] =>
     .filter(([p]) => p.startsWith(`/content/modules/${moduleId}/formations/`))
     .map(([, f]) => ({ ...f, moduleId }))
     .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+
+export interface FormationWithModule extends Formation {
+  moduleTitle: string;
+  moduleEmoji: string;
+  moduleColor: string;
+}
+
+/** Lecture synchrone de toutes les formations disponibles tous modules confondus. */
+export const localAllFormations = (): FormationWithModule[] =>
+  Object.entries(formationLoaders)
+    .map(([p, f]) => {
+      const match = p.match(/\/content\/modules\/([^/]+)\/formations\//);
+      const modId = match ? match[1] : (f.moduleId || '');
+      const mod = getModule(modId);
+      return {
+        ...f,
+        moduleId: modId,
+        moduleTitle: mod?.title ?? modId,
+        moduleEmoji: mod?.emoji ?? '📚',
+        moduleColor: mod?.color ?? '#6366f1',
+      };
+    })
+    .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+
+/** Chargement asynchrone de toutes les formations tous modules confondus. */
+export const loadAllFormations = async (): Promise<FormationWithModule[]> => {
+  const allModules = modules;
+  const lists = await Promise.all(
+    allModules.map(async (m) => {
+      try {
+        const forms = await loadFormations(m.id);
+        return forms.map((f) => ({
+          ...f,
+          moduleTitle: m.title,
+          moduleEmoji: m.emoji,
+          moduleColor: m.color,
+        }));
+      } catch {
+        return localFormations(m.id).map((f) => ({
+          ...f,
+          moduleTitle: m.title,
+          moduleEmoji: m.emoji,
+          moduleColor: m.color,
+        }));
+      }
+    }),
+  );
+  return lists.flat().sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+};
+

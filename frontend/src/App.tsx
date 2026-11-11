@@ -13,6 +13,7 @@ import ExamsPage from '@/pages/ExamsPage';
 import FeedPage from '@/pages/FeedPage';
 import FormationLessonPage from '@/pages/FormationLessonPage';
 import FormationPage from '@/pages/FormationPage';
+import FormationsListPage from '@/pages/FormationsListPage';
 import FlashcardsPage from '@/pages/FlashcardsPage';
 import LeaderboardPage from '@/pages/LeaderboardPage';
 import MessagesPage from '@/pages/MessagesPage';
@@ -38,6 +39,7 @@ export default function App() {
       <Route path="/connexion" element={<AuthPage />} />
       <Route element={<Gate />}>
         <Route index element={<Dashboard />} />
+        <Route path="formations" element={<FormationsListPage />} />
         <Route path="actu" element={<FeedPage />} />
         <Route path="profil" element={<ProfilePage />} />
         <Route path="modules" element={<ModulesPage />} />

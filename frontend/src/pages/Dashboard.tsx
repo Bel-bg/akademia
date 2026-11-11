@@ -200,6 +200,34 @@ export default function Dashboard() {
         </div>
       </section>
 
+      {/* ==================== FORMATIONS COACHÉES ==================== */}
+      <section className="card p-5 relative overflow-hidden bg-gradient-to-r from-card via-card to-soft/40 border-2 border-brand/20">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand text-white shadow-btn-brand">
+              <GraduationHat size={24} />
+            </span>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-soft px-2.5 py-0.5 text-[11px] font-extrabold text-brand">
+                  Nouveau · Tous modules
+                </span>
+                <span className="text-xs font-bold text-muted">14 parcours disponibles</span>
+              </div>
+              <h2 className="h-display mt-0.5 flex items-center gap-1.5 text-xl">
+                <span>Formations interactives & coachées</span>
+              </h2>
+              <p className="text-xs font-bold text-muted">
+                Apprends avec Nimbo pas à pas, pratique sur terminal et SQL, et partage tes formations.
+              </p>
+            </div>
+          </div>
+          <Link to="/formations" className="btn btn-primary">
+            <span>Voir les formations</span> <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
+
       {/* ==================== RÉVISIONS ESPACÉES DUES ==================== */}
       {due > 0 && (
         <section className="card flex flex-wrap items-center justify-between gap-3 border-2 border-brand/25 bg-soft/60 p-5">

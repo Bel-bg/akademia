@@ -5,6 +5,7 @@ import { Spinner } from '@/components/ui';
 import { GlassesCloud } from '@/components/GlassesCloud';
 import { ConfettiBackdrop } from '@/components/Decor';
 import { AnimatedEmoji } from '@/components/AnimatedEmoji';
+import { FormationShareAction } from '@/components/FormationShareModal';
 import { getModule, loadFormations } from '@/lib/content';
 import type { Formation } from '@/lib/types';
 import { useStore } from '@/state/Store';
@@ -34,7 +35,10 @@ export default function FormationPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <Link to={`/m/${m.id}`} className="btn btn-soft !px-3.5 !py-1.5 text-xs"><ArrowLeft size={15} /> {m.title}</Link>
+      <div className="flex items-center justify-between gap-2">
+        <Link to={`/m/${m.id}`} className="btn btn-soft !px-3.5 !py-1.5 text-xs"><ArrowLeft size={15} /> {m.title}</Link>
+        <FormationShareAction formation={f} moduleTitle={m.title} moduleEmoji={m.emoji} moduleColor={f.color} />
+      </div>
 
       <section className="card relative overflow-hidden p-6 text-center" style={{ background: `linear-gradient(160deg, ${f.color}2e, transparent 70%)` }}>
         {finished && <ConfettiBackdrop />}

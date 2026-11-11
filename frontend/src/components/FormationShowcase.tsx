@@ -7,6 +7,7 @@ import { GlassesCloud } from './GlassesCloud';
 import { CoachBubble, UserBubble } from './CoachBubble';
 import { FourPointStar } from './Decor';
 import { AnimatedEmoji } from './AnimatedEmoji';
+import { FormationShareAction } from './FormationShareModal';
 
 const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 const typingTime = (t: string) => Math.min(1700, 650 + t.length * 13);
@@ -88,6 +89,12 @@ export default function FormationShowcase({ module: m, formations }: { module: M
               <span>{prog.n > 0 ? 'Reprendre la discussion' : 'Discuter avec Nimbo'}</span>
               <ArrowRight size={16} />
             </span>
+            <FormationShareAction
+              formation={f}
+              moduleTitle={m.title}
+              moduleEmoji={m.emoji}
+              moduleColor={f.color}
+            />
             {formations.length > 1 && (
               <span className="flex items-center gap-1.5" aria-hidden>
                 {formations.map((x, k) => (
@@ -210,15 +217,19 @@ function FormationChat({ module: m, formations, startAt, onClose, onPick }: {
           {typing && <CoachBubble typing avatar={!coachSeen} color={f.color} />}
         </div>
 
-        <footer className="flex flex-wrap gap-2 border-t border-line/70 bg-card/70 p-3">
+        <footer className="flex flex-wrap items-center gap-2 border-t border-line/70 bg-card/70 p-3">
           {ready ? (
             <>
               <button type="button" onClick={start} className="btn btn-primary btn-lg flex-1 shine-sweep rise-in"><AnimatedEmoji emoji="🚀" /> On commence !</button>
               {formations.length > 1 && <button type="button" onClick={other} className="btn btn-soft rise-in"><AnimatedEmoji emoji="👀" /> Une autre formation</button>}
+              <FormationShareAction formation={f} moduleTitle={m.title} moduleEmoji={m.emoji} moduleColor={f.color} />
               <button type="button" onClick={onClose} className="btn btn-ghost rise-in">Plus tard</button>
             </>
           ) : (
-            <p className="w-full py-2 text-center text-xs font-bold text-muted">Nimbo te présente la formation…</p>
+            <div className="flex w-full items-center justify-between">
+              <p className="py-2 text-xs font-bold text-muted">Nimbo te présente la formation…</p>
+              <FormationShareAction formation={f} moduleTitle={m.title} moduleEmoji={m.emoji} moduleColor={f.color} />
+            </div>
           )}
         </footer>
       </div>
