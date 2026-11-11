@@ -638,7 +638,7 @@
     },
     {
      "type": "choice",
-     "q": "**Défi 1/7** — Remets dans le bon ordre : A) monter, B) partitionner, C) créer le système de fichiers.",
+     "q": "**Défi 1/7** - Remets dans le bon ordre : A) monter, B) partitionner, C) créer le système de fichiers.",
      "options": [
       "B, C, A",
       "A, B, C",
@@ -649,7 +649,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/7** — Quelle commande **observe** les disques et partitions avant de commencer ?",
+     "q": "**Défi 2/7** - Quelle commande **observe** les disques et partitions avant de commencer ?",
      "hints": [
       "list block devices."
      ],
@@ -665,7 +665,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 3/7** — Lance le partitionnement **interactif** du disque `/dev/sdb` (sudo).",
+     "q": "**Défi 3/7** - Lance le partitionnement **interactif** du disque `/dev/sdb` (sudo).",
      "hints": [
       "fdisk + le DISQUE entier."
      ],
@@ -679,7 +679,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 4/7** — Crée un système de fichiers ext4 sur `/dev/sdb1` (sudo).",
+     "q": "**Défi 4/7** - Crée un système de fichiers ext4 sur `/dev/sdb1` (sudo).",
      "hints": [
       "mkfs.ext4 + partition."
      ],
@@ -695,7 +695,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 5/7** — Crée le **point de montage** `/mnt/donnees` (sudo).",
+     "q": "**Défi 5/7** - Crée le **point de montage** `/mnt/donnees` (sudo).",
      "hints": [
       "Un point de montage est un dossier."
      ],
@@ -711,7 +711,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 6/7** — Monte `/dev/sdb1` sur `/mnt/donnees` (sudo).",
+     "q": "**Défi 6/7** - Monte `/dev/sdb1` sur `/mnt/donnees` (sudo).",
      "hints": [
       "mount <périphérique> <point de montage>"
      ],
@@ -725,7 +725,7 @@
     },
     {
      "type": "choice",
-     "q": "**Défi 7/7 (boss)** — Pour que le montage survive au redémarrage, quelle ligne ajoutes-tu à `/etc/fstab` ?",
+     "q": "**Défi 7/7 (boss)** - Pour que le montage survive au redémarrage, quelle ligne ajoutes-tu à `/etc/fstab` ?",
      "options": [
       "UUID=3f7a9c1e-...  /mnt/donnees  ext4  defaults  0  2",
       "/mnt/donnees  /dev/sdb1  ext4",

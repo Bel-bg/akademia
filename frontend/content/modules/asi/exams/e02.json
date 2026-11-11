@@ -19,7 +19,7 @@
         {
           "id": "e02p1q2",
           "q": "Construisez la matrice RACI pour les activités d'un centre de formation : Inscrire un apprenant, Encaisser une mensualité, Saisir les notes, et Éditer les bulletins. Justifiez le respect des règles d'or.",
-          "a": "| Activité | Direction | Secrétaire | Comptable | Formateurs |\n|---|:---:|:---:|:---:|:---:|\n| Inscrire un apprenant | I | R / A | C | I |\n| Encaisser une mensualité | I | C | R / A | — |\n| Saisir les notes | A | — | — | R |\n| Éditer les bulletins | A | R | I | C |\nJustification : Chaque ligne comporte exactement UN SEUL 'A' (l'autorité responsable du résultat est non ambiguë) et AU MOINS UN 'R' (la tâche est assurée de façon concrète). Le cumul R/A est parfaitement valide pour un acteur unique assumant réalisation et responsabilité directe.",
+          "a": "| Activité | Direction | Secrétaire | Comptable | Formateurs |\n|---|:---:|:---:|:---:|:---:|\n| Inscrire un apprenant | I | R / A | C | I |\n| Encaisser une mensualité | I | C | R / A | - |\n| Saisir les notes | A | - | - | R |\n| Éditer les bulletins | A | R | I | C |\nJustification : Chaque ligne comporte exactement UN SEUL 'A' (l'autorité responsable du résultat est non ambiguë) et AU MOINS UN 'R' (la tâche est assurée de façon concrète). Le cumul R/A est parfaitement valide pour un acteur unique assumant réalisation et responsabilité directe.",
           "points": 3
         }
       ]

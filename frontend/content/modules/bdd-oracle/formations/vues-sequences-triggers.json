@@ -1,0 +1,376 @@
+{
+ "id": "vues-sequences-triggers",
+ "order": 5,
+ "title": "Le Trio Gagnant : Vues, Séquences & Triggers",
+ "tagline": "Sécuriser, auto-incrémenter et automatiser : les 3 objets incontournables de l'administration Oracle.",
+ "emoji": "🛡️",
+ "color": "#0D9488",
+ "level": "Intermédiaire → Avancé",
+ "minutes": 55,
+ "pitch": [
+  "Hello ! Nimbo ☁️ au rapport pour un parcours central de base de données : **« Vues, Séquences et Triggers »**.",
+  "Dans toute vraie architecture d'entreprise, ces 3 objets forment le bouclier d'intégrité et le moteur d'automatisation.",
+  "Les **Vues** masquent les colonnes confidentielles et figent les requêtes complexes. Les **Séquences** génèrent des identifiants uniques sans risque de collision. Les **Triggers** exécutent des règles métier automatiques et infalsifiables.",
+  "Mais attention aux questions pièges d'examen : `WITH CHECK OPTION`, la clause `FOR EACH ROW`, les pseudo-colonnes `:OLD` et `:NEW`, et la redoutée table mutante `ORA-04091` ! On décortique tout avec méthode."
+ ],
+ "benefits": [
+  "Créer des vues simples et complexes pour sécuriser l'accès aux données",
+  "Verrouiller les mises à jour avec WITH CHECK OPTION et WITH READ ONLY",
+  "Générer des clés primaires performantes avec les séquences (.NEXTVAL, .CURRVAL)",
+  "Maîtriser les 12 types de déclencheurs (BEFORE/AFTER, ligne/instruction)",
+  "Utiliser :NEW et :OLD pour l'audit et le contrôle de cohérence",
+  "Implémenter l'auto-incrémentation avec le combo Séquence + Trigger",
+  "Comprendre et éviter le piège de la table mutante (ORA-04091)"
+ ],
+ "lessons": [
+  {
+   "id": "vues-fondations",
+   "title": "Créer et sécuriser des Vues",
+   "emoji": "🪟",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Commençons par le premier membre du trio : les **Vues** (`VIEW`)."
+    },
+    {
+     "type": "say",
+     "text": "Une vue est une **table virtuelle** : elle ne stocke pas de données physiques sur le disque, mais uniquement la définition d'une requête `SELECT`. Chaque fois que tu interroges la vue, Oracle exécute la requête sous-jacente."
+    },
+    {
+     "type": "say",
+     "text": "Pourquoi utilise-t-on des vues ?\n1. **Sécurité** : masquer des colonnes sensibles (salaires, mots de passe).\n2. **Simplicité** : éviter aux utilisateurs de réécrire des jointures complexes de 4 tables.\n3. **Indépendance logique** : si le schéma interne change, on peut adapter la vue sans casser les applications."
+    },
+    {
+     "type": "code",
+     "sql": "CREATE OR REPLACE VIEW v_clients_public AS\nSELECT id, nom, ville\nFROM   clients\nWHERE  ville = 'Cotonou';",
+     "title": "Création d'une vue simple"
+    },
+    {
+     "type": "choice",
+     "q": "Une vue classique occupe-t-elle de l'espace disque pour les données qu'elle affiche ?",
+     "options": [
+      "Oui, elle duplique les lignes de la table d'origine",
+      "Non, elle stocke uniquement sa définition SQL dans le dictionnaire de données",
+      "Oui, mais seulement les 100 premières lignes"
+     ],
+     "answer": 1,
+     "explain": "Une vue standard ne contient pas de données. C'est une requête stockée dans le dictionnaire (`USER_VIEWS`). Seules les vues matérialisées (`MATERIALIZED VIEW`) stockent physiquement un instantané des données."
+    },
+    {
+     "type": "say",
+     "text": "Tu peux utiliser une vue exactement comme une vraie table dans tes requêtes : `SELECT * FROM v_clients_public;`."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la commande SQL pour créer ou remplacer une vue nommée `v_employes_it` qui sélectionne `id`, `nom` et `poste` de la table `employes` où `departement = 'IT'`.",
+     "hints": [
+      "Commence par CREATE OR REPLACE VIEW v_employes_it AS",
+      "Puis écris le SELECT id, nom, poste FROM employes",
+      "Ajoute la condition WHERE departement = 'IT';"
+     ],
+     "accept": [
+      "CREATE OR REPLACE VIEW v_employes_it AS SELECT id, nom, poste FROM employes WHERE departement = 'IT';",
+      "CREATE OR REPLACE VIEW v_employes_it AS\nSELECT id, nom, poste\nFROM employes\nWHERE departement = 'IT';"
+     ],
+     "solution": "CREATE OR REPLACE VIEW v_employes_it AS\nSELECT id, nom, poste\nFROM   employes\nWHERE  departement = 'IT';",
+     "explain": "La clause `CREATE OR REPLACE VIEW nom AS SELECT ...` crée la vue virtuelle sans dupliquer les lignes sur disque."
+    }
+   ]
+  },
+  {
+   "id": "vues-contraintes",
+   "title": "Vues modifiables et options de sécurité",
+   "emoji": "🔒",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Peut-on faire un `INSERT`, `UPDATE` ou `DELETE` à travers une vue ? La réponse est : **oui, mais sous conditions strictes** !"
+    },
+    {
+     "type": "say",
+     "text": "Une vue est modifiable si elle est **simple** (porte sur une seule table, sans `DISTINCT`, sans `GROUP BY`, sans fonction d'agrégation comme `SUM` ou `AVG`)."
+    },
+    {
+     "type": "say",
+     "text": "Pour interdire catégoriquement toute modification à travers la vue, on ajoute la clause `WITH READ ONLY` à la fin de la déclaration."
+    },
+    {
+     "type": "code",
+     "sql": "CREATE OR REPLACE VIEW v_clients_readonly AS\nSELECT id, nom, ville\nFROM   clients\nWITH READ ONLY;",
+     "title": "Vue strictement en lecture seule"
+    },
+    {
+     "type": "say",
+     "text": "Autre option cruciale : `WITH CHECK OPTION`. Elle empêche toute insertion ou modification qui ferait **sortir** la ligne des critères du `WHERE` de la vue !"
+    },
+    {
+     "type": "code",
+     "sql": "CREATE OR REPLACE VIEW v_clients_cotonou AS\nSELECT id, nom, ville\nFROM   clients\nWHERE  ville = 'Cotonou'\nWITH CHECK OPTION CONSTRAINT ck_ville_cotonou;",
+     "title": "Vue avec WITH CHECK OPTION"
+    },
+    {
+     "type": "choice",
+     "q": "Avec la vue ci-dessus (`WITH CHECK OPTION`), que se passe-t-il si un utilisateur tente : `INSERT INTO v_clients_cotonou VALUES (9, 'Marc', 'Parakou');` ?",
+     "options": [
+      "La ligne est insérée sans problème",
+      "Oracle rejette l'insertion avec l'erreur ORA-01402 (violation de CHECK OPTION)",
+      "La ville est automatiquement remplacée par 'Cotonou'"
+     ],
+     "answer": 1,
+     "explain": "`WITH CHECK OPTION` garantit que toutes les opérations DML (`INSERT` ou `UPDATE`) respectent strictement le filtre `WHERE ville = 'Cotonou'`. Tenter d'insérer 'Parakou' échoue immédiatement."
+    },
+    {
+     "type": "exercise",
+     "q": "Ajoute la clause de lecture seule à la fin de la vue `v_catalog` pour empêcher tout INSERT/UPDATE/DELETE. Écris la commande complète : `CREATE OR REPLACE VIEW v_catalog AS SELECT id, libelle FROM articles WITH READ ONLY;`",
+     "hints": [
+      "La syntaxe se termine par : WITH READ ONLY;",
+      "La commande complète commence par CREATE OR REPLACE VIEW v_catalog AS ..."
+     ],
+     "accept": [
+      "CREATE OR REPLACE VIEW v_catalog AS SELECT id, libelle FROM articles WITH READ ONLY;",
+      "CREATE OR REPLACE VIEW v_catalog AS\nSELECT id, libelle\nFROM articles\nWITH READ ONLY;"
+     ],
+     "solution": "CREATE OR REPLACE VIEW v_catalog AS\nSELECT id, libelle\nFROM   articles\nWITH READ ONLY;",
+     "explain": "`WITH READ ONLY` est le moyen le plus simple et le plus sûr en SQL Oracle de protéger une table contre les modifications accidentelles via une vue."
+    }
+   ]
+  },
+  {
+   "id": "sequences-cles",
+   "title": "Générer des identifiants avec les Séquences",
+   "emoji": "🔢",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Passons au deuxième membre du trio : les **Séquences** (`SEQUENCE`)."
+    },
+    {
+     "type": "say",
+     "text": "Une séquence est un générateur de nombres entiers uniques, géré en mémoire par Oracle. Contrairement à un `MAX(id) + 1` qui bloque toute la base en concurrence, une séquence est **ultra-rapide et garantie sans collision** entre utilisateurs simultanés !"
+    },
+    {
+     "type": "code",
+     "sql": "CREATE SEQUENCE seq_clients\n    START WITH 1\n    INCREMENT BY 1\n    NOCACHE\n    NOCYCLE;",
+     "title": "Création d'une séquence"
+    },
+    {
+     "type": "say",
+     "text": "Pour utiliser une séquence, Oracle fournit deux pseudo-colonnes indispensables :\n- `seq.NEXTVAL` : génère et renvoie le **nombre suivant** (incrémente la séquence).\n- `seq.CURRVAL` : renvoie la **valeur courante** générée par le dernier NEXTVAL dans ta session."
+    },
+    {
+     "type": "code",
+     "sql": "-- 1. Insérer un client avec le prochain numéro\nINSERT INTO clients (id, nom, ville)\nVALUES (seq_clients.NEXTVAL, 'Mireille', 'Ouidah');\n\n-- 2. Connaître le numéro qui vient d'être attribué\nSELECT seq_clients.CURRVAL FROM DUAL;",
+     "title": "Utilisation de NEXTVAL et CURRVAL"
+    },
+    {
+     "type": "choice",
+     "q": "Peut-on appeler `seq.CURRVAL` dans une session qui n'a pas encore appelé `seq.NEXTVAL` ?",
+     "options": [
+      "Oui, cela renvoie la valeur de départ (START WITH)",
+      "Non, Oracle lève l'erreur ORA-08002 : sequence CURRVAL is not yet defined in this session",
+      "Oui, cela renvoie NULL"
+     ],
+     "answer": 1,
+     "explain": "Une session doit impérativement appeler au moins une fois `NEXTVAL` avant de pouvoir consulter `CURRVAL`. Sinon, Oracle ne sait pas quel numéro a été attribué à cette session."
+    },
+    {
+     "type": "say",
+     "text": "Attention au piège classique d'examen : si une transaction fait un `ROLLBACK`, les numéros de séquence déjà consommés avec `NEXTVAL` **ne sont jamais récupérés**. Il peut donc y avoir des 'trous' dans la numérotation, ce qui est parfaitement normal pour une clé primaire technique."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la commande SQL pour créer une séquence nommée `seq_commandes` qui démarre à 100 (`START WITH 100`) et s'incrémente de 1 (`INCREMENT BY 1`).",
+     "hints": [
+      "La syntaxe est : CREATE SEQUENCE seq_commandes",
+      "Ajoute : START WITH 100",
+      "Puis : INCREMENT BY 1;"
+     ],
+     "accept": [
+      "CREATE SEQUENCE seq_commandes START WITH 100 INCREMENT BY 1;",
+      "CREATE SEQUENCE seq_commandes\nSTART WITH 100\nINCREMENT BY 1;"
+     ],
+     "solution": "CREATE SEQUENCE seq_commandes\n    START WITH 100\n    INCREMENT BY 1;",
+     "explain": "Cette commande crée l'objet séquence qui générera 100, 101, 102... à chaque appel de `seq_commandes.NEXTVAL`."
+    }
+   ]
+  },
+  {
+   "id": "triggers-fondations",
+   "title": "Fondations des Triggers",
+   "emoji": "⚡",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voici maintenant le roi de l'automatisation : le **Trigger** (déclencheur) !"
+    },
+    {
+     "type": "say",
+     "text": "Un trigger est un bloc PL/SQL stocké qui s'exécute **automatiquement et implicitement** lorsque se produit un événement précis sur une table (comme `INSERT`, `UPDATE` ou `DELETE`). On ne l'appelle jamais manuellement !"
+    },
+    {
+     "type": "say",
+     "text": "Les triggers se classent selon **3 dimensions fondamentales** :\n1. **Le moment** : `BEFORE` (avant l'ordre SQL) ou `AFTER` (après l'ordre SQL).\n2. **L'événement** : `INSERT`, `UPDATE` ou `DELETE` (ou une combinaison : `INSERT OR UPDATE`).\n3. **Le niveau** : au niveau **instruction** (exécuté 1 seule fois pour tout l'ordre) ou au niveau **ligne** (`FOR EACH ROW`, exécuté pour chaque ligne modifiée)."
+    },
+    {
+     "type": "code",
+     "sql": "CREATE OR REPLACE TRIGGER trg_log_commandes\nAFTER INSERT ON commandes\nBEGIN\n    DBMS_OUTPUT.PUT_LINE('Une nouvelle commande a été ajoutée dans la base.');\nEND;\n/",
+     "title": "Trigger d'instruction (exécuté une seule fois)"
+    },
+    {
+     "type": "choice",
+     "q": "Si un ordre `UPDATE clients SET ville = 'Cotonou';` modifie 50 lignes, combien de fois s'exécute un trigger défini SANS la clause `FOR EACH ROW` ?",
+     "options": [
+      "50 fois",
+      "1 seule fois",
+      "0 fois s'il n'y a pas eu de COMMIT"
+     ],
+     "answer": 1,
+     "explain": "Sans la clause `FOR EACH ROW`, c'est un trigger de niveau **instruction**. Il s'exécute exactement une fois par ordre SQL, quel que soit le nombre de lignes impactées (même 0 ligne !)."
+    },
+    {
+     "type": "say",
+     "text": "Règle d'or :\n- Utilise `BEFORE` si tu veux **valider ou modifier** les données avant qu'elles ne soient écrites.\n- Utilise `AFTER` pour des opérations d'**audit, de journalisation** ou de notification une fois que l'écriture est garantie."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris l'en-tête d'un trigger nommé `trg_securite_emp` qui se déclenche AVANT un INSERT ou un UPDATE sur la table `employes`. Écris uniquement l'en-tête jusqu'au mot BEGIN (sans le corps).",
+     "hints": [
+      "Commence par : CREATE OR REPLACE TRIGGER trg_securite_emp",
+      "Le moment et les événements : BEFORE INSERT OR UPDATE ON employes",
+      "Ne mets pas FOR EACH ROW ici."
+     ],
+     "accept": [
+      "CREATE OR REPLACE TRIGGER trg_securite_emp BEFORE INSERT OR UPDATE ON employes",
+      "CREATE OR REPLACE TRIGGER trg_securite_emp\nBEFORE INSERT OR UPDATE ON employes"
+     ],
+     "solution": "CREATE OR REPLACE TRIGGER trg_securite_emp\nBEFORE INSERT OR UPDATE ON employes",
+     "explain": "L'en-tête définit le nom du trigger, son moment d'action (`BEFORE`), les événements déclencheurs combinés avec `OR`, et la table cible."
+    }
+   ]
+  },
+  {
+   "id": "triggers-lignes",
+   "title": "Triggers ligne et variables :OLD et :NEW",
+   "emoji": "🔍",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Dès qu'on ajoute `FOR EACH ROW`, le trigger devient un **trigger de ligne**. Et là, un super-pouvoir s'active : l'accès aux valeurs `:OLD` et `:NEW` !"
+    },
+    {
+     "type": "say",
+     "text": "Que contiennent `:OLD` et `:NEW` ?\n- Lors d'un `INSERT` : `:OLD` est vide (`NULL`), `:NEW` contient la nouvelle ligne insérée.\n- Lors d'un `UPDATE` : `:OLD` contient l'ancienne valeur avant modif, `:NEW` contient la nouvelle valeur.\n- Lors d'un `DELETE` : `:OLD` contient la ligne qui va être supprimée, `:NEW` est vide (`NULL`)."
+    },
+    {
+     "type": "code",
+     "sql": "CREATE OR REPLACE TRIGGER trg_check_salaire\nBEFORE UPDATE OF salaire ON employes\nFOR EACH ROW\nBEGIN\n    -- On interdit toute baisse de salaire !\n    IF :NEW.salaire < :OLD.salaire THEN\n        RAISE_APPLICATION_ERROR(-20005, 'Baisse de salaire strictement interdite !');\n    END IF;\nEND;\n/",
+     "title": "Contrôle de cohérence avec :OLD et :NEW"
+    },
+    {
+     "type": "choice",
+     "q": "Dans le corps d'un trigger en PL/SQL, comment référence-t-on la nouvelle valeur de la colonne `prix` ?",
+     "options": [
+      "NEW.prix (sans deux-points)",
+      ":NEW.prix (avec deux-points)",
+      "prix:NEW",
+      "ROW.prix"
+     ],
+     "answer": 1,
+     "explain": "Dans le bloc exécutable PL/SQL (`BEGIN ... END;`), les variables de substitution s'écrivent obligatoirement avec un deux-points devant : `:NEW.colonne` et `:OLD.colonne`. (Attention : dans la clause `WHEN`, on écrit `NEW.colonne` sans deux-points !)."
+    },
+    {
+     "type": "say",
+     "text": "Dans un trigger `BEFORE INSERT` ou `BEFORE UPDATE`, tu as le droit de **modifier directement** la valeur de `:NEW` ! C'est idéal pour forcer des majuscules ou nettoyer des données :"
+    },
+    {
+     "type": "code",
+     "sql": ":NEW.ville := UPPER(:NEW.ville);"
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la condition IF en PL/SQL qui vérifie si le nouveau prix (`:NEW.prix`) est inférieur ou égal à zéro, et si c'est le cas, appelle `RAISE_APPLICATION_ERROR(-20001, 'Prix invalide');`. Termine par `END IF;`.",
+     "hints": [
+      "Commence par IF :NEW.prix <= 0 THEN",
+      "À l'intérieur : RAISE_APPLICATION_ERROR(-20001, 'Prix invalide');",
+      "Termine par END IF;"
+     ],
+     "accept": [
+      "IF :NEW.prix <= 0 THEN RAISE_APPLICATION_ERROR(-20001, 'Prix invalide'); END IF;",
+      "IF :NEW.prix <= 0 THEN\nRAISE_APPLICATION_ERROR(-20001, 'Prix invalide');\nEND IF;"
+     ],
+     "solution": "IF :NEW.prix <= 0 THEN\n    RAISE_APPLICATION_ERROR(-20001, 'Prix invalide');\nEND IF;",
+     "explain": "Cette règle garantit qu'aucune valeur négative ou nulle ne pourra jamais entrer dans la colonne prix, même si la requête vient d'un administrateur."
+    }
+   ]
+  },
+  {
+   "id": "combo-et-mutante",
+   "title": "Auto-incrémentation & Table mutante",
+   "emoji": "🏆",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Pour finir en beauté, réunissons nos 3 objets dans le **combo classique d'Oracle** : l'auto-incrémentation !"
+    },
+    {
+     "type": "say",
+     "text": "Avant Oracle 12c (qui a introduit la clause IDENTITY), comment créait-on un champ auto-incrémenté ? Grâce à une **Séquence + un Trigger BEFORE INSERT** !"
+    },
+    {
+     "type": "code",
+     "sql": "CREATE SEQUENCE seq_articles START WITH 1 INCREMENT BY 1;\n\nCREATE OR REPLACE TRIGGER trg_articles_autoincrement\nBEFORE INSERT ON articles\nFOR EACH ROW\nBEGIN\n    IF :NEW.id IS NULL THEN\n        :NEW.id := seq_articles.NEXTVAL;\n    END IF;\nEND;\n/",
+     "title": "Le combo Séquence + Trigger d'auto-incrémentation"
+    },
+    {
+     "type": "say",
+     "text": "Désormais, dès que quelqu'un exécute `INSERT INTO articles (libelle) VALUES ('Clavier');`, le trigger intercepte la ligne, appelle la séquence, et injecte le numéro dans `:NEW.id` automatiquement !"
+    },
+    {
+     "type": "say",
+     "text": "Terminons par la bête noire des étudiants : l'erreur **ORA-04091 : Table mutante**."
+    },
+    {
+     "type": "say",
+     "text": "Qu'est-ce qu'une table mutante ? C'est quand un trigger de ligne (`FOR EACH ROW`) tente de faire un `SELECT`, `UPDATE` ou `DELETE` **sur la table même qui est en train d'être modifiée** !"
+    },
+    {
+     "type": "code",
+     "sql": "-- ERREUR TABLE MUTANTE (ORA-04091) :\nCREATE OR REPLACE TRIGGER trg_interdit\nAFTER INSERT ON employes\nFOR EACH ROW\nDECLARE\n    v_nb NUMBER;\nBEGIN\n    -- INTERDIT : on lit la table employes alors qu'elle est en cours de modification !\n    SELECT COUNT(*) INTO v_nb FROM employes;\nEND;",
+     "title": "Piège classique : la table mutante"
+    },
+    {
+     "type": "choice",
+     "q": "Comment évite-t-on l'erreur de table mutante ORA-04091 quand on a besoin de statistiques globales après une modification ?",
+     "options": [
+      "En utilisant un trigger au niveau instruction (sans FOR EACH ROW)",
+      "En ajoutant un COMMIT dans le trigger",
+      "En renommant la table"
+     ],
+     "answer": 0,
+     "explain": "Un trigger de niveau instruction (sans `FOR EACH ROW`) s'exécute une fois que toutes les modifications de lignes sont achevées et que la table est redevenue stable. Il peut donc lire la table sans provoquer d'erreur mutante."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris l'instruction d'affectation en PL/SQL qui affecte la valeur suivante de la séquence `seq_clients` à la nouvelle colonne `:NEW.id`.",
+     "hints": [
+      "La cible est : :NEW.id",
+      "L'opérateur d'affectation est : :=",
+      "La source est : seq_clients.NEXTVAL;"
+     ],
+     "accept": [
+      ":NEW.id := seq_clients.NEXTVAL;",
+      ":NEW.id := seq_clients.NEXTVAL"
+     ],
+     "solution": ":NEW.id := seq_clients.NEXTVAL;",
+     "explain": "C'est l'instruction centrale de tout trigger d'auto-incrémentation : elle attribue le numéro généré par la séquence avant que la ligne ne soit enregistrée."
+    }
+   ]
+  }
+ ]
+}

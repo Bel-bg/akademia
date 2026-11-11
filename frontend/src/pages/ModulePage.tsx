@@ -20,6 +20,7 @@ import { chapterAccuracy, moduleRatio, nextChapter } from '@/lib/stats';
 import { useStore } from '@/state/Store';
 import { Mascot } from '@/components/Mascot';
 import { cn } from '@/lib/utils';
+import { renderWithAnimatedEmojis } from '@/components/AnimatedEmoji';
 
 export default function ModulePage() {
   const { moduleId } = useParams();
@@ -89,8 +90,8 @@ export default function ModulePage() {
             <span className="rounded-full bg-soft px-3 py-0.5 text-xs font-extrabold text-brand">
               {m.level} · ~{m.estimatedHours} h
             </span>
-            <h1 className="h-display mt-1.5 text-3xl sm:text-4xl">{m.title}</h1>
-            <p className="font-semibold text-muted">{m.subtitle}</p>
+            <h1 className="h-display mt-1.5 text-3xl sm:text-4xl">{renderWithAnimatedEmojis(m.title)}</h1>
+            <p className="font-semibold text-muted">{renderWithAnimatedEmojis(m.subtitle)}</p>
             <div className="mt-3 flex items-center gap-3">
               <Bar value={moduleRatio(state, m)} color={m.color} h={10} className="max-w-xs" />
               <span className="font-display text-sm font-extrabold text-ink">
@@ -106,7 +107,7 @@ export default function ModulePage() {
             </Link>
           )}
         </div>
-        <p className="mt-4 max-w-3xl text-sm font-semibold text-muted">{m.description}</p>
+        <p className="mt-4 max-w-3xl text-sm font-semibold text-muted">{renderWithAnimatedEmojis(m.description)}</p>
       </section>
 
       {formations.length > 0 && <FormationShowcase module={m} formations={formations} />}
@@ -147,7 +148,7 @@ export default function ModulePage() {
           {m.parts.map((p) => (
             <div key={p.id}>
               <h3 className="mb-2.5 text-xs font-extrabold uppercase tracking-wider text-brand">
-                {p.title}
+                {renderWithAnimatedEmojis(p.title)}
               </h3>
               <div className="grid gap-2.5">
                 {p.chapters.map((cid) => {
@@ -172,7 +173,7 @@ export default function ModulePage() {
 
                       <div className="min-w-0 flex-1">
                         <div className="font-display text-base font-extrabold text-ink">
-                          {c.title}
+                          {renderWithAnimatedEmojis(c.title)}
                         </div>
                         <div className="line-clamp-1 text-xs font-semibold text-muted">
                           {c.summary}

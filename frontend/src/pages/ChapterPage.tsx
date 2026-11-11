@@ -9,6 +9,7 @@ import { useStore } from '@/state/Store';
 import { Mascot } from '@/components/Mascot';
 import { ConfettiBackdrop, HexStarMedal } from '@/components/Decor';
 import { fireConfetti } from '@/components/Celebrations';
+import { renderWithAnimatedEmojis } from '@/components/AnimatedEmoji';
 
 interface Head {
   id: string;
@@ -148,8 +149,8 @@ export default function ChapterPage() {
             >
               Chapitre {c.number} · {c.minutes} min de lecture
             </span>
-            <h1 className="h-display mt-2 text-3xl sm:text-4xl">{c.title}</h1>
-            <p className="mt-1.5 font-semibold text-muted">{c.summary}</p>
+            <h1 className="h-display mt-2 text-3xl sm:text-4xl">{renderWithAnimatedEmojis(c.title)}</h1>
+            <p className="mt-1.5 font-semibold text-muted">{renderWithAnimatedEmojis(c.summary)}</p>
           </header>
 
           <div ref={body} className={cn('card p-5 sm:p-8', big ? 'reader-lg' : 'reader-sm')}>

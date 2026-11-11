@@ -386,7 +386,7 @@
  {
   "id": "bd-f065",
   "front": "`RAISE_APPLICATION_ERROR`",
-  "back": "`RAISE_APPLICATION_ERROR(-20001, 'msg');` — code entre -20000 et -20999.",
+  "back": "`RAISE_APPLICATION_ERROR(-20001, 'msg');` - code entre -20000 et -20999.",
   "tag": "Erreurs"
  },
  {

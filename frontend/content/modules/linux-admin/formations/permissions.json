@@ -665,7 +665,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 1/7** — Octal de `rwxr-x---` ?",
+     "q": "**Défi 1/7** - Octal de `rwxr-x---` ?",
      "hints": [
       "7, 5, 0."
      ],
@@ -677,7 +677,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/7** — Lettres de `664` ?",
+     "q": "**Défi 2/7** - Lettres de `664` ?",
      "hints": [
       "6 = rw-, 6 = rw-, 4 = r--."
      ],
@@ -689,7 +689,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 3/7** — Rends `deploy.sh` exécutable **par son propriétaire** uniquement (sans toucher aux autres droits).",
+     "q": "**Défi 3/7** - Rends `deploy.sh` exécutable **par son propriétaire** uniquement (sans toucher aux autres droits).",
      "hints": [
       "u + x."
      ],
@@ -701,7 +701,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 4/7** — Donne à `app.conf` les droits `rw-r-----` (octal).",
+     "q": "**Défi 4/7** - Donne à `app.conf` les droits `rw-r-----` (octal).",
      "hints": [
       "rw- = 6, r-- = 4, --- = 0."
      ],
@@ -715,7 +715,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 5/7** — Donne `/srv/data` à l'utilisateur `awa` et au groupe `equipe`, de façon **récursive** (sudo).",
+     "q": "**Défi 5/7** - Donne `/srv/data` à l'utilisateur `awa` et au groupe `equipe`, de façon **récursive** (sudo).",
      "hints": [
       "chown -R utilisateur:groupe chemin."
      ],
@@ -731,7 +731,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 6/7** — Avec un umask `022`, quels droits (octal) pour un **nouveau fichier** ?",
+     "q": "**Défi 6/7** - Avec un umask `022`, quels droits (octal) pour un **nouveau fichier** ?",
      "hints": [
       "666 − 022."
      ],
@@ -743,7 +743,7 @@
     },
     {
      "type": "choice",
-     "q": "**Défi 7/7 (boss)** — `drwxr-x---` pour `/srv/compta` (propriétaire root, groupe compta). Marie n'est PAS dans le groupe compta. Peut-elle faire `ls /srv/compta` ?",
+     "q": "**Défi 7/7 (boss)** - `drwxr-x---` pour `/srv/compta` (propriétaire root, groupe compta). Marie n'est PAS dans le groupe compta. Peut-elle faire `ls /srv/compta` ?",
      "options": [
       "Oui, tout le monde peut lister",
       "Non : elle est « autre » et n'a aucun droit (---)",

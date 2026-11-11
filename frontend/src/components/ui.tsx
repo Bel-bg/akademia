@@ -1,6 +1,9 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Mascot, MascotMood } from './Mascot';
+import Loader from './Loader';
+import { renderWithAnimatedEmojis } from './AnimatedEmoji';
+export { Loader };
 
 export function Ring({
   value,
@@ -66,11 +69,11 @@ export function Bar({
   );
 }
 
-export function Spinner({ label = 'Chargement…' }: { label?: string }) {
+export function Spinner({ label = 'Chargement…', size = '4.5rem' }: { label?: string; size?: string | number }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 py-14 text-muted" role="status">
-      <Mascot mood="thinking" size={92} />
-      <span className="font-display text-base font-extrabold text-ink">{label}</span>
+    <div className="flex flex-col items-center justify-center gap-4 py-14 text-muted" role="status">
+      <Loader size={size} />
+      <span className="font-display text-base font-extrabold text-ink animate-pulse">{label}</span>
     </div>
   );
 }
@@ -87,7 +90,7 @@ export function Empty({
   return (
     <div className="card flex flex-col items-center gap-3 px-6 py-10 text-center">
       <Mascot mood={mood} size={112} />
-      <h3 className="h-display text-xl">{title}</h3>
+      <h3 className="h-display text-xl">{renderWithAnimatedEmojis(title)}</h3>
       {children && <div className="max-w-md text-sm font-semibold text-muted">{children}</div>}
     </div>
   );
@@ -109,9 +112,9 @@ export function PageTitle({
       <div>
         <h1 className="h-display flex items-center gap-2.5 text-3xl sm:text-4xl">
           {icon && <span className="inline-flex items-center text-brand">{icon}</span>}
-          <span>{title}</span>
+          <span>{renderWithAnimatedEmojis(title)}</span>
         </h1>
-        {sub && <p className="mt-1 text-sm font-semibold text-muted">{sub}</p>}
+        {sub && <p className="mt-1 text-sm font-semibold text-muted">{renderWithAnimatedEmojis(sub)}</p>}
       </div>
       {right}
     </div>

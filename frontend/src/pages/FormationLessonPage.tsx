@@ -6,6 +6,7 @@ import { CoachBubble, TypingDots, UserBubble } from '@/components/CoachBubble';
 import { GlassesCloud } from '@/components/GlassesCloud';
 import { Inline } from '@/components/Markdown';
 import { fireConfetti } from '@/components/Celebrations';
+import { AnimatedEmoji, renderWithAnimatedEmojis } from '@/components/AnimatedEmoji';
 import { getModule, loadFormations } from '@/lib/content';
 import type { Formation, FormationStep, Summary } from '@/lib/types';
 import { useStore } from '@/state/Store';
@@ -112,9 +113,9 @@ function Player({ f, lessonId, moduleTitle }: { f: Formation; lessonId: string; 
           <Link to={`/m/${f.moduleId}/formation/${f.id}`} className="btn btn-ghost !p-2" aria-label="Retour au parcours"><ArrowLeft size={18} /></Link>
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs font-extrabold text-muted">{moduleTitle} · {f.title}</p>
-            <p className="truncate font-display text-base font-extrabold">{lesson.emoji} Leçon {li + 1}/{f.lessons.length} — {lesson.title}</p>
+            <p className="truncate font-display text-base font-extrabold"><AnimatedEmoji emoji={lesson.emoji} /> Leçon {li + 1}/{f.lessons.length} - {lesson.title}</p>
           </div>
-          {streak >= 2 && <span key={streak} className="chip animate-pop bg-gold/30 text-ink">🔥 x{streak}</span>}
+          {streak >= 2 && <span key={streak} className="chip animate-pop bg-gold/30 text-ink"><AnimatedEmoji emoji="🔥" /> x{streak}</span>}
         </div>
         <div className="mt-2 h-2 overflow-hidden rounded-full bg-soft">
           <div className="h-full rounded-full transition-all duration-500" style={{ width: `${(Math.min(pos, steps.length) / steps.length) * 100}%`, background: f.color }} />
@@ -135,17 +136,17 @@ function Player({ f, lessonId, moduleTitle }: { f: Formation; lessonId: string; 
         {finished && (
           <div className="rise-in card relative overflow-hidden p-6 text-center" style={{ background: `linear-gradient(160deg, ${f.color}30, transparent 70%)` }}>
             <div className="mx-auto w-fit"><GlassesCloud size={120} color={f.color} /></div>
-            <h2 className="h-display text-2xl">Leçon terminée ! 🎉</h2>
+            <h2 className="h-display text-2xl">Leçon terminée ! <AnimatedEmoji emoji="🎉" /></h2>
             <p className="mt-1 font-semibold text-muted">{exoCount > 0 && <>Du premier coup : <b className="text-ink">{exoOk}/{exoCount}</b>. </>}Chaque erreur t’a appris quelque chose.</p>
             {summary === undefined && !error && <p className="mt-3"><TypingDots /></p>}
             {summary && (
               <div className="mx-auto mt-4 w-fit rounded-2xl bg-card px-5 py-3 shadow-card animate-pop">
                 <p className="font-display text-3xl font-extrabold text-brand">+{summary.xp} XP</p>
                 {summary.lines.map((l) => <p key={l.label} className="text-xs font-bold text-muted">{l.label} · +{l.xp}</p>)}
-                {summary.levelUp && <p className="mt-1 text-sm font-extrabold text-gold">⬆️ Niveau {summary.newLevel} !</p>}
+                {summary.levelUp && <p className="mt-1 text-sm font-extrabold text-gold"><AnimatedEmoji emoji="⬆️" /> Niveau {summary.newLevel} !</p>}
               </div>
             )}
-            {summary === null && !error && <p className="mt-3 text-sm font-bold text-muted">Leçon déjà validée : rien de plus à gagner, mais la révision, ça ne fait jamais de mal 😉</p>}
+            {summary === null && !error && <p className="mt-3 text-sm font-bold text-muted">{renderWithAnimatedEmojis('Leçon déjà validée : rien de plus à gagner, mais la révision, ça ne fait jamais de mal 😉')}</p>}
             {error && <p className="mt-3 text-sm font-bold text-bad">{error}</p>}
             <div className="mt-5 flex flex-wrap justify-center gap-2">
               {nextLesson ? (
@@ -153,7 +154,7 @@ function Player({ f, lessonId, moduleTitle }: { f: Formation; lessonId: string; 
                   Leçon suivante <ArrowRight size={18} />
                 </button>
               ) : (
-                <button type="button" className="btn btn-primary btn-lg shine-sweep" onClick={() => nav(`/m/${f.moduleId}/formation/${f.id}`)}>🎓 Voir mon parcours</button>
+                <button type="button" className="btn btn-primary btn-lg shine-sweep" onClick={() => nav(`/m/${f.moduleId}/formation/${f.id}`)}><AnimatedEmoji emoji="🎓" /> Voir mon parcours</button>
               )}
               <Link to={`/m/${f.moduleId}`} className="btn btn-soft">Retour au module</Link>
             </div>
@@ -254,11 +255,11 @@ function ExerciseView({ s, color, result, onResult }: { s: Extract<FormationStep
               onKeyDown={(e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') check(); }}
               className="w-full resize-y rounded-2xl border-2 border-line bg-[#141B2D] p-3 font-mono text-[13px] text-slate-100 outline-none transition focus:border-brand"
             />
-            {s.hints.slice(0, hints).map((h, i) => <p key={i} className="bubble-in rounded-2xl bg-gold/20 px-3.5 py-2 text-sm font-bold">💡 Indice {i + 1} : {h}</p>)}
-            {msg && <p className="text-sm font-bold text-muted">{msg}</p>}
+            {s.hints.slice(0, hints).map((h, i) => <p key={i} className="bubble-in rounded-2xl bg-gold/20 px-3.5 py-2 text-sm font-bold"><AnimatedEmoji emoji="💡" /> Indice {i + 1} : {renderWithAnimatedEmojis(h)}</p>)}
+            {msg && <p className="text-sm font-bold text-muted">{renderWithAnimatedEmojis(msg)}</p>}
             <div className="flex flex-wrap gap-2">
               <button type="button" onClick={check} className="btn btn-primary">Vérifier ✓</button>
-              {hints < s.hints.length && <button type="button" onClick={() => setHints((h) => h + 1)} className="btn btn-soft">💡 Un indice</button>}
+              {hints < s.hints.length && <button type="button" onClick={() => setHints((h) => h + 1)} className="btn btn-soft"><AnimatedEmoji emoji="💡" /> Un indice</button>}
               {tries >= 2 && <button type="button" onClick={giveUp} className="btn btn-ghost">Voir la solution</button>}
             </div>
           </>

@@ -10,7 +10,7 @@
  "pitch": [
   "Salut ! Je te présente **« Subnetting sans douleur »** 🧮.",
   "Le subnetting tombe **à chaque examen de réseau**… et beaucoup d'étudiants perdent des points sur des calculs de binaire interminables.",
-  "Je t'apprends **une seule méthode** — la méthode du pas — qui permet de trouver réseau, broadcast et plage d'hôtes en quelques secondes. Chaque notion est suivie d'exercices où tu calcules toi-même, avec des indices et des corrections détaillées.",
+  "Je t'apprends **une seule méthode** - la méthode du pas - qui permet de trouver réseau, broadcast et plage d'hôtes en quelques secondes. Chaque notion est suivie d'exercices où tu calcules toi-même, avec des indices et des corrections détaillées.",
   "À la fin, tu sauras aussi découper un réseau et choisir le bon masque selon le nombre de machines."
  ],
  "benefits": [
@@ -250,7 +250,7 @@
     },
     {
      "type": "exercise",
-     "q": "`10.0.0.200/27` — donne l'**adresse réseau**.",
+     "q": "`10.0.0.200/27` - donne l'**adresse réseau**.",
      "hints": [
       "Masque /27 → 224 → pas = 32.",
       "Multiples de 32 : …, 160, 192, 224. Lequel encadre 200 ?"
@@ -262,7 +262,7 @@
     },
     {
      "type": "exercise",
-     "q": "`10.0.0.200/27` — donne l'**adresse de broadcast**.",
+     "q": "`10.0.0.200/27` - donne l'**adresse de broadcast**.",
      "hints": [
       "Prochain réseau : 10.0.0.224.",
       "224 − 1"
@@ -274,7 +274,7 @@
     },
     {
      "type": "exercise",
-     "q": "`172.16.5.130/25` — donne la **première adresse utilisable**.",
+     "q": "`172.16.5.130/25` - donne la **première adresse utilisable**.",
      "hints": [
       "/25 → pas = 128 → réseau 172.16.5.128.",
       "Première utilisable = réseau + 1."
@@ -307,7 +307,7 @@
     },
     {
      "type": "exercise",
-     "q": "`172.16.45.9/20` — donne l'**adresse de broadcast**.",
+     "q": "`172.16.45.9/20` - donne l'**adresse de broadcast**.",
      "hints": [
       "Le réseau suivant : 172.16.48.0.",
       "Avant 48.0 → 47.255."
@@ -319,7 +319,7 @@
     },
     {
      "type": "exercise",
-     "q": "`10.20.30.40/21` — donne l'**adresse réseau**.",
+     "q": "`10.20.30.40/21` - donne l'**adresse réseau**.",
      "hints": [
       "/21 = 8 + 8 + 5 → 3ᵉ octet : masque 248 → pas = 8.",
       "Multiples de 8 autour de 30 : 24, 32."
@@ -390,7 +390,7 @@
     },
     {
      "type": "code",
-     "sql": "PC1 : 192.168.1.10 /27 → réseau 192.168.1.0   (plage 0–31)\nPC2 : 192.168.1.40 /27 → réseau 192.168.1.32  (plage 32–63)\n→ réseaux différents : il faut un routeur !",
+     "sql": "PC1 : 192.168.1.10 /27 → réseau 192.168.1.0   (plage 0-31)\nPC2 : 192.168.1.40 /27 → réseau 192.168.1.32  (plage 32-63)\n→ réseaux différents : il faut un routeur !",
      "lang": "Réseau",
      "title": "Même masque, réseaux différents"
     },
@@ -444,7 +444,7 @@
     },
     {
      "type": "exercise",
-     "q": "`10.10.10.37/29` — donne l'**adresse réseau**.",
+     "q": "`10.10.10.37/29` - donne l'**adresse réseau**.",
      "hints": [
       "/29 → masque 248 → pas = 8.",
       "Multiple de 8 juste en dessous de 37."
@@ -734,7 +734,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 1/6** — `192.168.50.200/28` : donne l'**adresse réseau**.",
+     "q": "**Défi 1/6** - `192.168.50.200/28` : donne l'**adresse réseau**.",
      "hints": [
       "/28 → masque 240 → pas = 16.",
       "Multiples de 16 : …, 176, 192, 208."
@@ -746,7 +746,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/6** — Même adresse `192.168.50.200/28` : donne l'**adresse de broadcast**.",
+     "q": "**Défi 2/6** - Même adresse `192.168.50.200/28` : donne l'**adresse de broadcast**.",
      "hints": [
       "Prochain réseau : 192.168.50.208.",
       "208 − 1."
@@ -758,7 +758,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 3/6** — `172.31.130.77/18` : donne l'**adresse réseau**.",
+     "q": "**Défi 3/6** - `172.31.130.77/18` : donne l'**adresse réseau**.",
      "hints": [
       "/18 = 8 + 8 + 2 → 3ᵉ octet, masque 192 → pas = 64.",
       "Multiples de 64 : 0, 64, 128, 192."
@@ -772,7 +772,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 4/6** — Quel est le masque décimal d'un réseau qui doit contenir **2000 hôtes** (le plus petit possible) ?",
+     "q": "**Défi 4/6** - Quel est le masque décimal d'un réseau qui doit contenir **2000 hôtes** (le plus petit possible) ?",
      "hints": [
       "2^10 − 2 = 1022 : trop petit.",
       "2^11 − 2 = 2046 → h = 11 → préfixe /21."
@@ -784,7 +784,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 5/6** — On découpe `10.0.0.0/8` en sous-réseaux **/10**. Combien de sous-réseaux obtient-on ?",
+     "q": "**Défi 5/6** - On découpe `10.0.0.0/8` en sous-réseaux **/10**. Combien de sous-réseaux obtient-on ?",
      "hints": [
       "Bits empruntés : 10 − 8 = 2.",
       "2^2"
@@ -796,7 +796,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 6/6 (boss)** — `10.20.30.40/21` : donne l'**adresse de broadcast**.",
+     "q": "**Défi 6/6 (boss)** - `10.20.30.40/21` : donne l'**adresse de broadcast**.",
      "hints": [
       "Réseau = 10.20.24.0 (pas = 8 sur le 3ᵉ octet).",
       "Réseau suivant : 10.20.32.0."

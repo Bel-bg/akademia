@@ -21,7 +21,7 @@ Pour obtenir l'intégralité des points lors du déroulement de l'algorithme A\*
 
 | Itération | Nœud extrait $n$ | $g(n)$ | $h(n)$ | $f(n) = g + h$ | File d'attente $Q$ (triée par $f$ croissant) | Ensemble fermé $C$ |
 |---|---|---|---|---|---|---|
-| **0** | — | — | — | — | `[(S, f=11.0)]` | `[]` |
+| **0** | - | - | - | - | `[(S, f=11.0)]` | `[]` |
 | **1** | $S$ | 0 | 11.0 | 11.0 | `[(A, f=12.4), (D, f=13.9)]` | `[S]` |
 | **2** | $A$ | 2 | 10.4 | 12.4 | `[(B, f=9.7), (D, f=13.9)]` | `[S, A]` |
 

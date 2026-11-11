@@ -704,7 +704,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 1/6** — Écris `fin` dans `etat.txt` en **ajoutant** à la fin du fichier.",
+     "q": "**Défi 1/6** - Écris `fin` dans `etat.txt` en **ajoutant** à la fin du fichier.",
      "hints": [
       "Deux chevrons."
      ],
@@ -719,7 +719,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/6** — Lance `ls /inconnu` en **jetant** les erreurs.",
+     "q": "**Défi 2/6** - Lance `ls /inconnu` en **jetant** les erreurs.",
      "hints": [
       "2> vers /dev/null."
      ],
@@ -733,7 +733,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 3/6** — Affiche la **dernière ligne** de `journal.log`.",
+     "q": "**Défi 3/6** - Affiche la **dernière ligne** de `journal.log`.",
      "hints": [
       "tail -n 1."
      ],
@@ -748,7 +748,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 4/6** — Affiche les **âges distincts** (3ᵉ champ) des élèves, triés numériquement.",
+     "q": "**Défi 4/6** - Affiche les **âges distincts** (3ᵉ champ) des élèves, triés numériquement.",
      "hints": [
       "Extrais le 3ᵉ champ, puis trie numériquement sans doublon."
      ],
@@ -767,7 +767,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 5/6** — Affiche **combien d'élèves ont chaque âge** (compte par âge).",
+     "q": "**Défi 5/6** - Affiche **combien d'élèves ont chaque âge** (compte par âge).",
      "hints": [
       "Extrais, trie, compte."
      ],
@@ -784,7 +784,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 6/6 (boss)** — Affiche la **ville la plus fréquente** (une seule ligne) : classement des villes puis `head -1`.",
+     "q": "**Défi 6/6 (boss)** - Affiche la **ville la plus fréquente** (une seule ligne) : classement des villes puis `head -1`.",
      "hints": [
       "Recette du Top N : sort | uniq -c | sort -rn | head."
      ],

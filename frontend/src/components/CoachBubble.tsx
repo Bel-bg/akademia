@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Inline } from './Markdown';
 import { GlassesCloud } from './GlassesCloud';
 import { cn } from '@/lib/utils';
+import { renderWithAnimatedEmojis } from './AnimatedEmoji';
 
 export function TypingDots() {
   return (
@@ -41,7 +42,7 @@ export function UserBubble({ children, className }: { children: ReactNode; class
   return (
     <div className="bubble-in flex justify-end">
       <div className={cn('max-w-[85%] rounded-3xl rounded-br-md bg-brand px-4 py-2.5 text-[15px] font-bold text-white shadow-btn-brand', className)}>
-        {children}
+        {typeof children === 'string' ? renderWithAnimatedEmojis(children) : children}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 -- ============================================================
--- Akademia — Schéma Supabase & Règles Métier Universitaires
+-- Akademia - Schéma Supabase & Règles Métier Universitaires
 -- À exécuter dans la console Supabase : SQL Editor > New query > Run
 -- ============================================================
 

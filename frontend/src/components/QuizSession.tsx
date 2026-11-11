@@ -7,6 +7,7 @@ import { Inline } from './Markdown';
 import { Bar } from './ui';
 import { Mascot } from './Mascot';
 import { ConfettiBackdrop, DifficultyStars, FlameBadgeIcon, SuccessCheckCircle } from './Decor';
+import { renderWithAnimatedEmojis } from './AnimatedEmoji';
 
 export interface QuizResult {
   results: { id: string; chapter: string; correct: boolean; answerIndex: number; elapsedSeconds: number }[];
@@ -250,7 +251,7 @@ export default function QuizSession({ questions, onFinish, lives, timeLimit, cha
                 >
                   {isRight ? <Check size={16} /> : isWrong ? <Cross size={16} /> : LETTERS[k]}
                 </span>
-                <span className="flex-1">{o}</span>
+                <span className="flex-1">{typeof o === 'string' ? renderWithAnimatedEmojis(o) : o}</span>
               </button>
             );
           })}

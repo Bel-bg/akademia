@@ -61,8 +61,8 @@ La **matrice RACI** est un outil standard de gouvernance qui clarifie, pour chaq
 | Tâche opérationnelle | Direction | Secrétaire | Comptable | Formateurs |
 |---|:---:|:---:|:---:|:---:|
 | **Inscrire un apprenant** | I | **R / A** | C | I |
-| **Encaisser une mensualité** | I | C | **R / A** | — |
-| **Saisir les notes** | A | — | — | **R** |
+| **Encaisser une mensualité** | I | C | **R / A** | - |
+| **Saisir les notes** | A | - | - | **R** |
 | **Éditer les bulletins de notes** | A | **R** | I | C |
 
 #### Analyse des combinaisons

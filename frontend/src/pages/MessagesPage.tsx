@@ -11,6 +11,7 @@ import {
 } from '@/data/social';
 import { useAuth } from '@/state/AuthContext';
 import { CustomAvatar } from '@/components/CustomAvatar';
+import { renderWithAnimatedEmojis } from '@/components/AnimatedEmoji';
 
 function messageTime(iso: string) {
   const date = new Date(iso);
@@ -145,7 +146,7 @@ export default function MessagesPage() {
                   <span className="mt-1 flex items-center justify-between gap-3">
                     <span className="truncate text-xs font-semibold text-muted">
                       {latest.sender_id === user.id ? 'Vous : ' : ''}
-                      {latest.body}
+                      {renderWithAnimatedEmojis(latest.body)}
                     </span>
                     {unread > 0 && (
                       <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-extrabold text-white">

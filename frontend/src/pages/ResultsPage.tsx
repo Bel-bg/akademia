@@ -67,7 +67,7 @@ export default function ResultsPage() {
       </div>
 
       <section className="card mt-6 p-5 sm:p-6">
-        <h2 className="h-display mb-4 text-xl">XP gagnés — 14 derniers jours</h2>
+        <h2 className="h-display mb-4 text-xl">XP gagnés - 14 derniers jours</h2>
         <div
           className="flex h-36 items-end gap-2"
           role="img"
@@ -95,7 +95,7 @@ export default function ResultsPage() {
 
       {modules.map((m) => (
         <section key={m.id} className="card mt-6 p-5 sm:p-6">
-          <h2 className="h-display mb-3 text-xl">{m.title} — maîtrise par chapitre</h2>
+          <h2 className="h-display mb-3 text-xl">{m.title} - maîtrise par chapitre</h2>
           <div className="space-y-3">
             {m.chapters.map((c) => {
               const a = chapterAccuracy(state, m.id, c.id);
@@ -117,7 +117,7 @@ export default function ResultsPage() {
                     }
                   />
                   <span className="w-12 text-right text-xs font-extrabold text-muted">
-                    {a === null ? '—' : `${Math.round(a * 100)} %`}
+                    {a === null ? '-' : `${Math.round(a * 100)} %`}
                   </span>
                 </div>
               );

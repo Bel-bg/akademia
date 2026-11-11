@@ -136,7 +136,7 @@
     },
     {
      "type": "code",
-     "sql": "LAN A : 192.168.1.0/24\nLAN B : 192.168.2.0/24\nLiaison R1 — R2 : 10.0.0.0/30\n   R1 S0/0/0 = 10.0.0.1     R2 S0/0/0 = 10.0.0.2",
+     "sql": "LAN A : 192.168.1.0/24\nLAN B : 192.168.2.0/24\nLiaison R1 - R2 : 10.0.0.0/30\n   R1 S0/0/0 = 10.0.0.1     R2 S0/0/0 = 10.0.0.2",
      "lang": "Réseau",
      "title": "Plan d'adressage"
     },
@@ -463,15 +463,15 @@
     },
     {
      "type": "say",
-     "text": "**Erreur n°1 — La route retour oubliée.** On configure R1 → LAN B, mais pas R2 → LAN A. Le ping aller arrive, la réponse est perdue. *Symptôme :* ping qui échoue (« . . . . . ») alors que tout semble bien configuré."
+     "text": "**Erreur n°1 - La route retour oubliée.** On configure R1 → LAN B, mais pas R2 → LAN A. Le ping aller arrive, la réponse est perdue. *Symptôme :* ping qui échoue (« . . . . . ») alors que tout semble bien configuré."
     },
     {
      "type": "say",
-     "text": "**Erreur n°2 — Mauvais masque.** `ip route 192.168.2.0 255.255.0.0 10.0.0.2` ne désigne plus le même réseau : le masque change la portée de la route (et peut capturer d'autres réseaux)."
+     "text": "**Erreur n°2 - Mauvais masque.** `ip route 192.168.2.0 255.255.0.0 10.0.0.2` ne désigne plus le même réseau : le masque change la portée de la route (et peut capturer d'autres réseaux)."
     },
     {
      "type": "say",
-     "text": "**Erreur n°3 — Mauvais next-hop.** On écrit `10.0.0.1` (sa propre adresse !) au lieu de `10.0.0.2`, ou l'adresse d'un équipement qui n'est pas le voisin direct."
+     "text": "**Erreur n°3 - Mauvais next-hop.** On écrit `10.0.0.1` (sa propre adresse !) au lieu de `10.0.0.2`, ou l'adresse d'un équipement qui n'est pas le voisin direct."
     },
     {
      "type": "choice",
@@ -486,11 +486,11 @@
     },
     {
      "type": "say",
-     "text": "**Erreur n°4 — Réseau mal écrit.** On écrit l'adresse d'un *hôte* au lieu de l'adresse du *réseau* : `ip route 192.168.2.10 255.255.255.0 10.0.0.2`. Le réseau est `192.168.2.0` (adresse réseau, bits hôtes à 0). IOS répond alors « %Inconsistent address and mask » et peut ne pas installer la route comme prévu : écris toujours l'adresse **du réseau**."
+     "text": "**Erreur n°4 - Réseau mal écrit.** On écrit l'adresse d'un *hôte* au lieu de l'adresse du *réseau* : `ip route 192.168.2.10 255.255.255.0 10.0.0.2`. Le réseau est `192.168.2.0` (adresse réseau, bits hôtes à 0). IOS répond alors « %Inconsistent address and mask » et peut ne pas installer la route comme prévu : écris toujours l'adresse **du réseau**."
     },
     {
      "type": "say",
-     "text": "**Erreur n°5 — Interface éteinte.** Une interface administrativement *down* ou un câble débranché retirent la route de la table."
+     "text": "**Erreur n°5 - Interface éteinte.** Une interface administrativement *down* ou un câble débranché retirent la route de la table."
     },
     {
      "type": "code",
@@ -571,7 +571,7 @@
     },
     {
      "type": "code",
-     "sql": "LAN1 192.168.1.0/24 — R1 ═ 10.0.12.0/30 ═ R2 ═ 10.0.23.0/30 ═ R3 — LAN3 192.168.3.0/24\n\nLiaison R1–R2 (10.0.12.0/30) : R1 = 10.0.12.1   R2 = 10.0.12.2\nLiaison R2–R3 (10.0.23.0/30) : R2 = 10.0.23.1   R3 = 10.0.23.2",
+     "sql": "LAN1 192.168.1.0/24 - R1 ═ 10.0.12.0/30 ═ R2 ═ 10.0.23.0/30 ═ R3 - LAN3 192.168.3.0/24\n\nLiaison R1-R2 (10.0.12.0/30) : R1 = 10.0.12.1   R2 = 10.0.12.2\nLiaison R2-R3 (10.0.23.0/30) : R2 = 10.0.23.1   R3 = 10.0.23.2",
      "lang": "Réseau",
      "title": "Topologie du défi"
     },
@@ -581,7 +581,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 1/5** — Route sur **R1** pour atteindre LAN3 (192.168.3.0/24).",
+     "q": "**Défi 1/5** - Route sur **R1** pour atteindre LAN3 (192.168.3.0/24).",
      "hints": [
       "R1 envoie vers R2 : next-hop = 10.0.12.2.",
       "ip route 192.168.3.0 255.255.255.0 ..."
@@ -593,7 +593,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/5** — Route sur **R3** pour atteindre LAN1 (192.168.1.0/24).",
+     "q": "**Défi 2/5** - Route sur **R3** pour atteindre LAN1 (192.168.1.0/24).",
      "hints": [
       "R3 est branché sur R2 (10.0.23.1).",
       "ip route 192.168.1.0 255.255.255.0 ..."
@@ -605,10 +605,10 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 3/5** — Route sur **R2** pour atteindre LAN3 (192.168.3.0/24).",
+     "q": "**Défi 3/5** - Route sur **R2** pour atteindre LAN3 (192.168.3.0/24).",
      "hints": [
       "Le saut suivant vers LAN3 est R3.",
-      "Next-hop = adresse de R3 sur la liaison R2–R3."
+      "Next-hop = adresse de R3 sur la liaison R2-R3."
      ],
      "accept": [],
      "solution": "ip route 192.168.3.0 255.255.255.0 10.0.23.2",
@@ -617,7 +617,7 @@
     },
     {
      "type": "choice",
-     "q": "**Défi 4/5** — Combien de routes statiques **minimum** faut-il au total (3 routeurs) pour que LAN1 et LAN3 communiquent dans les deux sens ?",
+     "q": "**Défi 4/5** - Combien de routes statiques **minimum** faut-il au total (3 routeurs) pour que LAN1 et LAN3 communiquent dans les deux sens ?",
      "options": [
       "2",
       "4",
@@ -628,7 +628,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 5/5 (boss)** — R1 et R3 sont des **stubs** (une seule sortie). Écris la **route par défaut** sur R1 qui remplacerait la route vers LAN3.",
+     "q": "**Défi 5/5 (boss)** - R1 et R3 sont des **stubs** (une seule sortie). Écris la **route par défaut** sur R1 qui remplacerait la route vers LAN3.",
      "hints": [
       "Route par défaut = 0.0.0.0 0.0.0.0.",
       "Next-hop = R2 : 10.0.12.2."

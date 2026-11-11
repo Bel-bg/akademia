@@ -9,7 +9,7 @@
  "minutes": 55,
  "pitch": [
   "Salut ! Moi c'est Nimbo ☁️. Je vais te présenter **« Tout savoir sur le SELECT »**.",
-  "Le `SELECT` est l'instruction la plus utilisée en SQL — et pourtant, beaucoup d'étudiants la connaissent « à peu près ». Résultat : requêtes qui marchent par chance, erreurs ORA-00979, NULL qui piègent…",
+  "Le `SELECT` est l'instruction la plus utilisée en SQL - et pourtant, beaucoup d'étudiants la connaissent « à peu près ». Résultat : requêtes qui marchent par chance, erreurs ORA-00979, NULL qui piègent…",
   "Dans cette formation, je te prends par la main : 6 leçons courtes, des explications claires, et **des exercices à chaque étape** où tu écris toi-même tes requêtes. Je te donne des indices si tu bloques, et je corrige avec toi.",
   "À la fin, tu liras n'importe quelle requête sans hésiter, et tu écriras les tiennes avec méthode."
  ],
@@ -918,7 +918,7 @@
     },
     {
      "type": "say",
-     "text": "`EXISTS` ne s'intéresse qu'à **l'existence** d'une ligne, pas à son contenu — d'où le `SELECT 1`. Comme elle fait référence à `c.id` de la requête extérieure, on parle de sous-requête **corrélée**."
+     "text": "`EXISTS` ne s'intéresse qu'à **l'existence** d'une ligne, pas à son contenu - d'où le `SELECT 1`. Comme elle fait référence à `c.id` de la requête extérieure, on parle de sous-requête **corrélée**."
     },
     {
      "type": "exercise",

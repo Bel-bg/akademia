@@ -6,7 +6,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- 1. Thème Ciel (Bleu Azur — par défaut) ---------- */
+/* ---------- 1. Thème Ciel (Bleu Azur - par défaut) ---------- */
 :root,
 [data-theme='ciel'] {
   --bg: 251 247 239;          /* #FBF7EF Crème doux */

@@ -10,6 +10,7 @@ import App from './App';
 import { AuthProvider } from './state/AuthContext';
 import { StoreProvider } from './state/Store';
 import { ThemeProvider } from './state/Theme';
+import { LoadingProvider } from './state/LoadingContext';
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -31,7 +32,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <AuthProvider>
         <StoreProvider>
           <ThemeProvider>
-            <App />
+            <LoadingProvider>
+              <App />
+            </LoadingProvider>
           </ThemeProvider>
         </StoreProvider>
       </AuthProvider>

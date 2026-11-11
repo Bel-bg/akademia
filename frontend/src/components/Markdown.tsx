@@ -5,6 +5,8 @@ import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import { AlertTriangle, Bookmark, GraduationHat, Sparkles } from '@getpapillon/papicons';
 import { Mascot, MascotMood } from './Mascot';
+import { AnimatedEmoji, renderWithAnimatedEmojis } from './AnimatedEmoji';
+import { rehypeAnimatedEmoji } from './rehypeAnimatedEmoji';
 
 const KINDS = {
   retenir: {
@@ -64,7 +66,7 @@ function split(md: string): Seg[] {
   return out;
 }
 
-const plugins = { remark: [remarkGfm], rehype: [rehypeRaw, rehypeSlug] };
+const plugins = { remark: [remarkGfm], rehype: [rehypeRaw, rehypeSlug, rehypeAnimatedEmoji] };
 
 function Md({ text }: { text: string }) {
   return (
@@ -72,6 +74,14 @@ function Md({ text }: { text: string }) {
       remarkPlugins={plugins.remark}
       rehypePlugins={plugins.rehype}
       components={{
+        span: ({ node, ...props }) => {
+          const raw = props as Record<string, any>;
+          const emoji = raw['data-emoji'] || raw['dataEmoji'];
+          if (emoji) {
+            return <AnimatedEmoji emoji={emoji} />;
+          }
+          return <span {...props} />;
+        },
         table: ({ children }) => (
           <div className="my-5 overflow-x-auto rounded-2xl border border-line bg-card shadow-sm">
             <table>{children}</table>
@@ -123,7 +133,7 @@ export function Course({ text }: { text: string }) {
                   {KINDS[s.kind].label}
                 </span>
                 {s.title && (
-                  <span className="font-display text-base font-extrabold text-ink">{s.title}</span>
+                  <span className="font-display text-base font-extrabold text-ink">{renderWithAnimatedEmojis(s.title)}</span>
                 )}
               </div>
               <Mascot mood={KINDS[s.kind].mood} size={44} animate={false} className="-my-2 shrink-0" />
@@ -159,9 +169,9 @@ function InlineCode({ text }: { text: string }) {
         part.startsWith('`') && part.endsWith('`') && part.length > 2 ? (
           <code key={index} className="rounded bg-soft px-1.5 py-0.5 font-mono text-[0.9em]">{part.slice(1, -1)}</code>
         ) : part.startsWith('**') && part.endsWith('**') && part.length > 4 ? (
-          <strong key={index}>{part.slice(2, -2)}</strong>
+          <strong key={index}>{renderWithAnimatedEmojis(part.slice(2, -2))}</strong>
         ) : (
-          <span key={index}>{part}</span>
+          <span key={index}>{renderWithAnimatedEmojis(part)}</span>
         ),
       )}
     </>

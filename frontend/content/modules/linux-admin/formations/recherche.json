@@ -721,7 +721,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 1/6** — Affiche les lignes de `notes.txt` contenant `erreur` **quelle que soit la casse**, avec leur numéro.",
+     "q": "**Défi 1/6** - Affiche les lignes de `notes.txt` contenant `erreur` **quelle que soit la casse**, avec leur numéro.",
      "hints": [
       "Deux options : ignorer la casse et numéroter."
      ],
@@ -738,7 +738,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/6** — Liste les **noms des fichiers** (récursif, depuis le dossier courant) contenant `TODO`.",
+     "q": "**Défi 2/6** - Liste les **noms des fichiers** (récursif, depuis le dossier courant) contenant `TODO`.",
      "hints": [
       "-r et -l."
      ],
@@ -754,7 +754,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 3/6** — Trouve tous les `.c` **et** compte leurs lignes (`-exec wc -l`).",
+     "q": "**Défi 3/6** - Trouve tous les `.c` **et** compte leurs lignes (`-exec wc -l`).",
      "hints": [
       "find ... -exec ... {} \\;"
      ],
@@ -769,7 +769,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 4/6** — Liste les fichiers `.log` **modifiés il y a plus de 30 jours**.",
+     "q": "**Défi 4/6** - Liste les fichiers `.log` **modifiés il y a plus de 30 jours**.",
      "hints": [
       "Combine -name et -mtime."
      ],
@@ -788,7 +788,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 5/6** — Cherche `TODO` dans tous les `.c`, en affichant **seulement le nombre de lignes trouvées au total** (`find`, `xargs grep`, `wc -l`).",
+     "q": "**Défi 5/6** - Cherche `TODO` dans tous les `.c`, en affichant **seulement le nombre de lignes trouvées au total** (`find`, `xargs grep`, `wc -l`).",
      "hints": [
       "find ... | xargs grep TODO | wc -l"
      ],
@@ -805,7 +805,7 @@
     },
     {
      "type": "choice",
-     "q": "**Défi 6/6 (boss)** — Tu veux **supprimer** tous les `.tmp` d'un serveur. Quelle est la bonne méthode ?",
+     "q": "**Défi 6/6 (boss)** - Tu veux **supprimer** tous les `.tmp` d'un serveur. Quelle est la bonne méthode ?",
      "options": [
       "find / -name \"*.tmp\" -delete directement",
       "Lister d'abord avec find / -name \"*.tmp\" 2>/dev/null, vérifier, puis ajouter -delete",

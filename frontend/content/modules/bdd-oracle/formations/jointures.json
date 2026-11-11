@@ -10,7 +10,7 @@
  "pitch": [
   "Bonjour ! Je te propose **« Résoudre l'énigme des jointures »** 🧩.",
   "Les jointures sont **le** point qui fait trébucher beaucoup d'étudiants : on connaît les mots (INNER, LEFT…), mais on ne sait pas vraiment *pourquoi* une ligne apparaît ou disparaît.",
-  "Ici, on part de la seule idée qui compte — recoller des tables grâce à une clé — et on construit pas à pas, avec des tableaux de résultats que tu peux suivre ligne par ligne. Tu vas aussi résoudre une **enquête finale** à 3 questions.",
+  "Ici, on part de la seule idée qui compte - recoller des tables grâce à une clé - et on construit pas à pas, avec des tableaux de résultats que tu peux suivre ligne par ligne. Tu vas aussi résoudre une **enquête finale** à 3 questions.",
   "Chaque leçon est courte, interactive, et tu écris toi-même les requêtes. Je t'aide avec des indices si tu bloques."
  ],
  "benefits": [
@@ -255,7 +255,7 @@
     },
     {
      "type": "say",
-     "text": "La solution : `LEFT JOIN`. Il garde **toutes les lignes de la table de gauche** (celle avant le mot JOIN), et complète avec les correspondances de droite — ou des **NULL** s'il n'y en a pas."
+     "text": "La solution : `LEFT JOIN`. Il garde **toutes les lignes de la table de gauche** (celle avant le mot JOIN), et complète avec les correspondances de droite - ou des **NULL** s'il n'y en a pas."
     },
     {
      "type": "code",
@@ -345,7 +345,7 @@
       "SELECT nom FROM produits WHERE categorie_id IS NULL;"
      ],
      "solution": "SELECT p.nom FROM produits p LEFT JOIN categories cat ON cat.id = p.categorie_id WHERE cat.id IS NULL;",
-     "explain": "Le Casque. (Ici on aurait aussi pu écrire directement `WHERE categorie_id IS NULL` — plus simple — mais l'anti-jointure fonctionne quand la clé existe sans correspondance, ex. une catégorie supprimée.)",
+     "explain": "Le Casque. (Ici on aurait aussi pu écrire directement `WHERE categorie_id IS NULL` - plus simple - mais l'anti-jointure fonctionne quand la clé existe sans correspondance, ex. une catégorie supprimée.)",
      "table": "PRODUITS\nID | NOM        | PRIX  | CATEGORIE_ID\n 1 | Clavier    | 15000 | 1\n 2 | Souris     |  8000 | 1\n 3 | Écran      | 85000 | 2\n 4 | Câble HDMI |  3500 | 3\n 5 | Casque     | 22000 | (NULL)\n\nCATEGORIES\nID | LIBELLE\n 1 | Périphériques\n 2 | Affichage\n 3 | Connectique\n 4 | Audio"
     },
     {
@@ -530,7 +530,7 @@
     },
     {
      "type": "say",
-     "text": "Piège subtil ⚠️ : si tu veux **aussi les clients à 0 commande**, il faut un `LEFT JOIN` — et surtout compter une colonne de la **table de droite**, pas `COUNT(*)` !"
+     "text": "Piège subtil ⚠️ : si tu veux **aussi les clients à 0 commande**, il faut un `LEFT JOIN` - et surtout compter une colonne de la **table de droite**, pas `COUNT(*)` !"
     },
     {
      "type": "code",
@@ -578,7 +578,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Enquête 1/3** — Affiche le **nom des clients de Cotonou** et le **total** de leurs commandes (clients ayant commandé), triés du plus grand total au plus petit.",
+     "q": "**Enquête 1/3** - Affiche le **nom des clients de Cotonou** et le **total** de leurs commandes (clients ayant commandé), triés du plus grand total au plus petit.",
      "hints": [
       "JOIN, puis WHERE sur la ville, GROUP BY, ORDER BY.",
       "ORDER BY total DESC"
@@ -593,7 +593,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Enquête 2/3** — Affiche les **villes** dont le total des commandes dépasse **20000** (colonnes `ville`, total).",
+     "q": "**Enquête 2/3** - Affiche les **villes** dont le total des commandes dépasse **20000** (colonnes `ville`, total).",
      "hints": [
       "GROUP BY c.ville.",
       "HAVING SUM(cmd.montant) > 20000"
@@ -607,7 +607,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Enquête 3/3 (finale)** — Affiche le **nom des clients qui n'ont jamais commandé**, ainsi que ceux dont le **total est inférieur à 5000**, avec un LEFT JOIN, `GROUP BY` et `HAVING NVL(SUM(cmd.montant), 0) < 5000`. Colonne : `c.nom` seule.",
+     "q": "**Enquête 3/3 (finale)** - Affiche le **nom des clients qui n'ont jamais commandé**, ainsi que ceux dont le **total est inférieur à 5000**, avec un LEFT JOIN, `GROUP BY` et `HAVING NVL(SUM(cmd.montant), 0) < 5000`. Colonne : `c.nom` seule.",
      "hints": [
       "LEFT JOIN + GROUP BY c.nom.",
       "Le HAVING est déjà donné dans l'énoncé."

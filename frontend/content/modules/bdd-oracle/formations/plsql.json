@@ -1,0 +1,381 @@
+{
+ "id": "plsql",
+ "order": 4,
+ "title": "Le guide ultime du PL/SQL",
+ "tagline": "Blocs anonymes, variables %TYPE, curseurs explicites, exceptions et procédures stockées : le procédural Oracle maîtrisé.",
+ "emoji": "⚡",
+ "color": "#E11D48",
+ "level": "Intermédiaire → Avancé",
+ "minutes": 60,
+ "pitch": [
+  "Salut ! C'est encore Nimbo ☁️. Bienvenue dans **« Le guide ultime du PL/SQL »** !",
+  "Le SQL pur est formidable pour interroger des données, mais dès qu'il te faut des conditions (`IF`), des boucles (`FOR`, `WHILE`), des traitements ligne par ligne ou des règles métier complexes, tu as besoin de **PL/SQL** (*Procedural Language / SQL*).",
+  "Beaucoup d'étudiants se font piéger aux examens par la structure d'un bloc `DECLARE...BEGIN...EXCEPTION...END;`, l'attribut `%TYPE`, les curseurs non fermés ou les exceptions mal interceptées.",
+  "Dans cette formation pratique en 6 leçons, on part du bloc anonyme le plus simple jusqu'aux procédures et fonctions stockées, avec des exercices concrets à chaque étape où tu écris le code toi-même !"
+ ],
+ "benefits": [
+  "Structurer sans faute un bloc anonyme (DECLARE, BEGIN, EXCEPTION, END;)",
+  "Sécuriser les déclarations avec %TYPE et %ROWTYPE",
+  "Maîtriser les curseurs explicites (OPEN, FETCH, CLOSE, %FOUND, %NOTFOUND)",
+  "Simplifier le parcours avec la boucle FOR curseur automatique",
+  "Gérer les exceptions standard et personnalisées (RAISE, RAISE_APPLICATION_ERROR)",
+  "Créer des fonctions et procédures stockées avec paramètres IN, OUT et IN OUT"
+ ],
+ "lessons": [
+  {
+   "id": "bloc-anonyme",
+   "title": "Anatomie d'un bloc PL/SQL",
+   "emoji": "🧱",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Hello ! C'est **Nimbo** ☁️. Commençons par la brique fondamentale de tout programme PL/SQL : le **bloc anonyme**."
+    },
+    {
+     "type": "say",
+     "text": "Un bloc PL/SQL se compose de 3 sections bien délimitées :\n1. `DECLARE` (facultatif) : où l'on déclare variables, constantes et curseurs.\n2. `BEGIN` (obligatoire) : le corps exécutable qui contient tes instructions SQL et logiques.\n3. `EXCEPTION` (facultatif) : pour intercepter les erreurs sans planter le programme.\nLe tout se termine toujours par `END;`."
+    },
+    {
+     "type": "code",
+     "sql": "SET SERVEROUTPUT ON;\n\nDECLARE\n    v_message VARCHAR2(50) := 'Bienvenue sur Akademia !';\nBEGIN\n    DBMS_OUTPUT.PUT_LINE(v_message);\nEND;\n/",
+     "title": "Structure minimale d'un bloc PL/SQL",
+     "note": "Le slash '/' final ordonne à SQL*Plus ou SQL Developer d'exécuter le bloc compilé."
+    },
+    {
+     "type": "choice",
+     "q": "Quelle section est strictement obligatoire dans un bloc PL/SQL ?",
+     "options": [
+      "La section DECLARE",
+      "La section BEGIN ... END;",
+      "La section EXCEPTION",
+      "Toutes les trois sont obligatoires"
+     ],
+     "answer": 1,
+     "explain": "Seul le bloc exécutable `BEGIN ... END;` est strictement obligatoire. `DECLARE` et `EXCEPTION` sont optionnels."
+    },
+    {
+     "type": "say",
+     "text": "En PL/SQL, l'affectation d'une valeur à une variable se fait avec l'opérateur `:=` (deux-points égal), et non un simple égal `=` qui sert uniquement aux comparaisons !"
+    },
+    {
+     "type": "code",
+     "sql": "DECLARE\n    v_taux   CONSTANT NUMBER(3,2) := 0.18;\n    v_solde  NUMBER(10,2) := 5000;\nBEGIN\n    v_solde := v_solde + (v_solde * v_taux);\n    DBMS_OUTPUT.PUT_LINE('Nouveau solde : ' || v_solde);\nEND;",
+     "title": "Affectation avec :="
+    },
+    {
+     "type": "say",
+     "text": "Pour éviter qu'une variable ne casse si le schéma de la table évolue, utilise l'ancrage `%TYPE`. Cela copie le type exact d'une colonne de table !"
+    },
+    {
+     "type": "code",
+     "sql": "DECLARE\n    v_nom clients.nom%TYPE;\nBEGIN\n    SELECT nom INTO v_nom FROM clients WHERE id = 1;\n    DBMS_OUTPUT.PUT_LINE('Client trouvé : ' || v_nom);\nEND;",
+     "title": "Utilisation de %TYPE et SELECT ... INTO"
+    },
+    {
+     "type": "exercise",
+     "q": "Écris un bloc PL/SQL anonyme complet qui déclare une variable `v_ville` ancrée sur la colonne `ville` de la table `clients` (`clients.ville%TYPE`), puis sélectionne la ville du client ayant l'`id = 2` dans cette variable avec `SELECT ... INTO`, et termine le bloc.",
+     "hints": [
+      "Commence par DECLARE, déclare v_ville clients.ville%TYPE;",
+      "Puis BEGIN, SELECT ville INTO v_ville FROM clients WHERE id = 2;",
+      "Termine par END;"
+     ],
+     "accept": [
+      "DECLARE v_ville clients.ville%TYPE; BEGIN SELECT ville INTO v_ville FROM clients WHERE id = 2; END;",
+      "DECLARE\nv_ville clients.ville%TYPE;\nBEGIN\nSELECT ville INTO v_ville FROM clients WHERE id = 2;\nEND;"
+     ],
+     "solution": "DECLARE\n    v_ville clients.ville%TYPE;\nBEGIN\n    SELECT ville INTO v_ville FROM clients WHERE id = 2;\nEND;",
+     "explain": "On déclare `v_ville` avec `%TYPE`, puis la clause `INTO` affecte le résultat de la requête à notre variable dans le corps `BEGIN ... END;`."
+    }
+   ]
+  },
+  {
+   "id": "controle-boucles",
+   "title": "Conditions et Boucles",
+   "emoji": "🔄",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Maintenant que tu connais le bloc de base, donnons-lui de l'intelligence avec les **structures conditionnelles** et les **boucles** !"
+    },
+    {
+     "type": "say",
+     "text": "La condition `IF` s'écrit `IF ... THEN`, suivie de `ELSIF ... THEN` (attention à l'orthographe : pas de 'E' entre L et S en PL/SQL !) et `ELSE`, terminée obligatoirement par `END IF;`."
+    },
+    {
+     "type": "code",
+     "sql": "IF v_note >= 16 THEN\n    v_mention := 'Très Bien';\nELSIF v_note >= 14 THEN\n    v_mention := 'Bien';\nELSIF v_note >= 10 THEN\n    v_mention := 'Passable';\nELSE\n    v_mention := 'Ajourné';\nEND IF;",
+     "title": "Condition IF-ELSIF-ELSE"
+    },
+    {
+     "type": "choice",
+     "q": "Comment s'écrit correctement le 'sinon si' en PL/SQL ?",
+     "options": [
+      "ELSE IF",
+      "ELSEIF",
+      "ELSIF",
+      "CASE IF"
+     ],
+     "answer": 2,
+     "explain": "En PL/SQL Oracle, le mot-clé exact est `ELSIF` (sans second 'e'). C'est une faute d'inattention très fréquente à l'examen !"
+    },
+    {
+     "type": "say",
+     "text": "Pour répéter des actions, PL/SQL propose trois types de boucles :\n1. La boucle de base `LOOP ... EXIT WHEN condition; ... END LOOP;`\n2. La boucle `WHILE condition LOOP ... END LOOP;`\n3. La boucle `FOR compteur IN debut..fin LOOP ... END LOOP;`."
+    },
+    {
+     "type": "code",
+     "sql": "DECLARE\n    v_total NUMBER := 0;\nBEGIN\n    FOR i IN 1..5 LOOP\n        v_total := v_total + i;\n    END LOOP;\n    DBMS_OUTPUT.PUT_LINE('Total : ' || v_total);\nEND;",
+     "title": "Boucle FOR numérique"
+    },
+    {
+     "type": "say",
+     "text": "Remarque essentielle : dans une boucle `FOR i IN 1..5`, la variable de compteur `i` est **déclarée implicitement** en tant qu'entier ! Pas besoin de la déclarer dans la section `DECLARE`."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris une boucle FOR en PL/SQL qui itère de 1 à 10 avec le compteur `i` et affiche chaque valeur avec `DBMS_OUTPUT.PUT_LINE(i);`. Écris uniquement le bloc BEGIN...END; contenant la boucle.",
+     "hints": [
+      "La syntaxe est : FOR i IN 1..10 LOOP ... END LOOP;",
+      "À l'intérieur, écris DBMS_OUTPUT.PUT_LINE(i);",
+      "Encadre le tout par BEGIN et END;"
+     ],
+     "accept": [
+      "BEGIN FOR i IN 1..10 LOOP DBMS_OUTPUT.PUT_LINE(i); END LOOP; END;",
+      "BEGIN\nFOR i IN 1..10 LOOP\nDBMS_OUTPUT.PUT_LINE(i);\nEND LOOP;\nEND;"
+     ],
+     "solution": "BEGIN\n    FOR i IN 1..10 LOOP\n        DBMS_OUTPUT.PUT_LINE(i);\n    END LOOP;\nEND;",
+     "explain": "La boucle `FOR i IN 1..10 LOOP ... END LOOP;` gère automatiquement l'incrémentation de 1 en 1 de la variable implicite `i`."
+    }
+   ]
+  },
+  {
+   "id": "curseurs",
+   "title": "Dompter les curseurs explicites",
+   "emoji": "🎯",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voici l'un des chapitres rois de tout examen Oracle : les **curseurs explicites** !"
+    },
+    {
+     "type": "say",
+     "text": "Quand un `SELECT ... INTO` renvoie **plus d'une ligne**, Oracle lève l'erreur fatale `TOO_MANY_ROWS`. Pour traiter plusieurs lignes une à une, il faut impérativement un curseur explicite."
+    },
+    {
+     "type": "say",
+     "text": "Le cycle de vie classique d'un curseur explicite se déroule toujours en **4 étapes chronologiques** :\n1. **DECLARE** : `CURSOR c_nom IS SELECT ...;`\n2. **OPEN** : `OPEN c_nom;` (exécute la requête et positionne le pointeur)\n3. **FETCH** : `FETCH c_nom INTO v_var;` (lit la ligne courante et avance)\n4. **CLOSE** : `CLOSE c_nom;` (libère la mémoire)."
+    },
+    {
+     "type": "code",
+     "sql": "DECLARE\n    CURSOR c_clients IS\n        SELECT nom, ville FROM clients;\n    v_nom   clients.nom%TYPE;\n    v_ville clients.ville%TYPE;\nBEGIN\n    OPEN c_clients;\n    LOOP\n        FETCH c_clients INTO v_nom, v_ville;\n        EXIT WHEN c_clients%NOTFOUND;\n        DBMS_OUTPUT.PUT_LINE(v_nom || ' habite à ' || v_ville);\n    END LOOP;\n    CLOSE c_clients;\nEND;",
+     "title": "Cycle de vie complet d'un curseur explicite"
+    },
+    {
+     "type": "choice",
+     "q": "Quel attribut de curseur permet de savoir si la dernière opération FETCH n'a trouvé aucune ligne ?",
+     "options": [
+      "c%EMPTY",
+      "c%NOTFOUND",
+      "c%ISCLOSED",
+      "c%ROWCOUNT"
+     ],
+     "answer": 1,
+     "explain": "`%NOTFOUND` renvoie TRUE dès qu'un FETCH n'a ramené aucune ligne. On l'utilise quasi-systématiquement pour sortir de la boucle : `EXIT WHEN c%NOTFOUND;`."
+    },
+    {
+     "type": "say",
+     "text": "Les 4 attributs d'un curseur `c` à connaître par cœur sont :\n- `c%FOUND` : TRUE si la dernière ligne a été lue avec succès.\n- `c%NOTFOUND` : TRUE si aucune ligne n'a été lue.\n- `c%ROWCOUNT` : Nombre de lignes lues jusqu'ici.\n- `c%ISOPEN` : TRUE si le curseur est actuellement ouvert."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la section DECLARE d'un curseur nommé `c_emp` qui sélectionne `id` et `salaire` dans la table `employes` où `salaire > 300000`.",
+     "hints": [
+      "La syntaxe est : CURSOR nom_curseur IS SELECT ...;",
+      "Déclare uniquement la ligne du curseur."
+     ],
+     "accept": [
+      "CURSOR c_emp IS SELECT id, salaire FROM employes WHERE salaire > 300000;",
+      "CURSOR c_emp IS SELECT id, salaire FROM employes WHERE salaire > 300000"
+     ],
+     "solution": "CURSOR c_emp IS SELECT id, salaire FROM employes WHERE salaire > 300000;",
+     "explain": "La déclaration d'un curseur explicite associe un nom de curseur à une requête SQL sans exécuter la requête tout de suite."
+    }
+   ]
+  },
+  {
+   "id": "curseurs-for",
+   "title": "L'élégance de la boucle FOR curseur",
+   "emoji": "✨",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Ouvrir, fetcher, vérifier %NOTFOUND, fermer... C'est rigoureux, mais un peu long. Oracle propose une syntaxe magique : la **boucle FOR curseur** !"
+    },
+    {
+     "type": "say",
+     "text": "Avec la boucle FOR curseur, Oracle se charge **automatiquement** de :\n- Ouvrir le curseur (`OPEN`)\n- Déclarer la variable d'enregistrement `rec` de type `%ROWTYPE`\n- Récupérer les lignes (`FETCH`)\n- Sortir quand il n'y a plus de données\n- Fermer le curseur (`CLOSE`), même en cas d'erreur !"
+    },
+    {
+     "type": "code",
+     "sql": "DECLARE\n    CURSOR c_clients IS\n        SELECT nom, ville FROM clients;\nBEGIN\n    FOR rec IN c_clients LOOP\n        DBMS_OUTPUT.PUT_LINE(rec.nom || ' habite à ' || rec.ville);\n    END LOOP;\nEND;",
+     "title": "Boucle FOR avec curseur déclaré"
+    },
+    {
+     "type": "choice",
+     "q": "Dans une boucle `FOR rec IN c_clients LOOP`, doit-on écrire `CLOSE c_clients;` à la fin ?",
+     "options": [
+      "Oui, sinon il y aura une fuite de mémoire",
+      "Non, Oracle ferme automatiquement le curseur en quittant la boucle",
+      "Seulement si une exception est levée"
+     ],
+     "answer": 1,
+     "explain": "La boucle FOR curseur est entièrement automatisée : OPEN, FETCH et CLOSE sont gérés par le moteur PL/SQL sans aucune intervention manuelle."
+    },
+    {
+     "type": "say",
+     "text": "Tu peux même écrire la sous-requête directement dans la boucle FOR, sans passer par la section `DECLARE` !"
+    },
+    {
+     "type": "code",
+     "sql": "BEGIN\n    FOR rec IN (SELECT nom, email FROM clients WHERE email IS NOT NULL) LOOP\n        DBMS_OUTPUT.PUT_LINE('Email de ' || rec.nom || ' : ' || rec.email);\n    END LOOP;\nEND;",
+     "title": "Curseur FOR avec sous-requête en ligne"
+    },
+    {
+     "type": "exercise",
+     "q": "Écris un bloc `BEGIN ... END;` avec une boucle FOR curseur qui parcourt tous les `nom` de la table `clients` et affiche `rec.nom` avec `DBMS_OUTPUT.PUT_LINE(rec.nom);`.",
+     "hints": [
+      "Commence par BEGIN",
+      "Écris : FOR rec IN (SELECT nom FROM clients) LOOP",
+      "Puis : DBMS_OUTPUT.PUT_LINE(rec.nom);",
+      "Termine par END LOOP; puis END;"
+     ],
+     "accept": [
+      "BEGIN FOR rec IN (SELECT nom FROM clients) LOOP DBMS_OUTPUT.PUT_LINE(rec.nom); END LOOP; END;",
+      "BEGIN\nFOR rec IN (SELECT nom FROM clients) LOOP\nDBMS_OUTPUT.PUT_LINE(rec.nom);\nEND LOOP;\nEND;"
+     ],
+     "solution": "BEGIN\n    FOR rec IN (SELECT nom FROM clients) LOOP\n        DBMS_OUTPUT.PUT_LINE(rec.nom);\n    END LOOP;\nEND;",
+     "explain": "C'est la manière la plus concise et sûre en PL/SQL d'itérer sur un ensemble de lignes."
+    }
+   ]
+  },
+  {
+   "id": "exceptions",
+   "title": "Intercepter et gérer les exceptions",
+   "emoji": "🛡️",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Un bon développeur ne laisse jamais son programme se crasher sur une erreur SQL. Bienvenue dans la section `EXCEPTION` !"
+    },
+    {
+     "type": "say",
+     "text": "Oracle possède des exceptions prédéfinies levées automatiquement :\n- `NO_DATA_FOUND` : un `SELECT INTO` ne renvoie aucune ligne.\n- `TOO_MANY_ROWS` : un `SELECT INTO` renvoie plus d'une ligne.\n- `ZERO_DIVIDE` : tentative de division par zéro.\n- `DUP_VAL_ON_INDEX` : violation de clé primaire ou contrainte UNIQUE.\n- `WHEN OTHERS` : intercepte toute autre erreur non spécifiée."
+    },
+    {
+     "type": "code",
+     "sql": "DECLARE\n    v_nom clients.nom%TYPE;\nBEGIN\n    SELECT nom INTO v_nom FROM clients WHERE id = 999;\n    DBMS_OUTPUT.PUT_LINE('Trouvé : ' || v_nom);\nEXCEPTION\n    WHEN NO_DATA_FOUND THEN\n        DBMS_OUTPUT.PUT_LINE('Aucun client trouvé avec cet identifiant.');\n    WHEN TOO_MANY_ROWS THEN\n        DBMS_OUTPUT.PUT_LINE('Erreur : plusieurs clients portent cet id !');\n    WHEN OTHERS THEN\n        DBMS_OUTPUT.PUT_LINE('Autre erreur : ' || SQLERRM);\nEND;",
+     "title": "Interception des exceptions standards"
+    },
+    {
+     "type": "choice",
+     "q": "Quelle fonction système permet d'obtenir le message d'erreur textuel dans un bloc WHEN OTHERS ?",
+     "options": [
+      "ERR_TEXT",
+      "SQLERRM",
+      "SQLCODE_MSG",
+      "DBMS_ERROR"
+     ],
+     "answer": 1,
+     "explain": "`SQLERRM` renvoie le message d'erreur d'Oracle (ex: 'ORA-01403: aucune donnée trouvée'). `SQLCODE` renvoie quant à lui le code numérique de l'erreur."
+    },
+    {
+     "type": "say",
+     "text": "Pour renvoyer une erreur personnalisée avec un code compris entre -20000 et -20999, on utilise la procédure standard `RAISE_APPLICATION_ERROR` !"
+    },
+    {
+     "type": "code",
+     "sql": "IF v_solde < 0 THEN\n    RAISE_APPLICATION_ERROR(-20001, 'Solde négatif interdit pour ce compte.');\nEND IF;",
+     "title": "Déclenchement d'erreur personnalisée"
+    },
+    {
+     "type": "exercise",
+     "q": "Complète la section EXCEPTION pour intercepter l'erreur où aucune donnée n'est trouvée (`NO_DATA_FOUND`) et afficher le message `'Introuvable'` avec `DBMS_OUTPUT.PUT_LINE('Introuvable');`. Écris uniquement les lignes du bloc EXCEPTION.",
+     "hints": [
+      "Commence par EXCEPTION",
+      "Puis la clause : WHEN NO_DATA_FOUND THEN",
+      "L'action : DBMS_OUTPUT.PUT_LINE('Introuvable');"
+     ],
+     "accept": [
+      "EXCEPTION WHEN NO_DATA_FOUND THEN DBMS_OUTPUT.PUT_LINE('Introuvable');",
+      "EXCEPTION\nWHEN NO_DATA_FOUND THEN\nDBMS_OUTPUT.PUT_LINE('Introuvable');"
+     ],
+     "solution": "EXCEPTION\n    WHEN NO_DATA_FOUND THEN\n        DBMS_OUTPUT.PUT_LINE('Introuvable');",
+     "explain": "Cette clause garantit que si la requête ne ramène rien, le bloc se termine proprement sans afficher d'erreur système ORA-01403."
+    }
+   ]
+  },
+  {
+   "id": "procedures-fonctions",
+   "title": "Procédures et Fonctions stockées",
+   "emoji": "📦",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Le point culminant du PL/SQL : rendre ton code **permanent et réutilisable** dans le dictionnaire de données avec les procédures et fonctions stockées !"
+    },
+    {
+     "type": "say",
+     "text": "La différence clé :\n- Une **FONCTION** retourne **obligatoirement** une valeur via la clause `RETURN` (et peut être appelée directement dans un `SELECT`).\n- Une **PROCÉDURE** accomplit une action sans obligation de retourner une valeur, mais peut modifier des paramètres via le mode `OUT` ou `IN OUT`."
+    },
+    {
+     "type": "code",
+     "sql": "CREATE OR REPLACE FUNCTION calculer_tva(p_montant IN NUMBER)\nRETURN NUMBER\nIS\n    v_taux CONSTANT NUMBER := 0.18;\nBEGIN\n    RETURN p_montant * v_taux;\nEND;\n/",
+     "title": "Création d'une fonction stockée"
+    },
+    {
+     "type": "say",
+     "text": "Les modes des paramètres :\n- `IN` (par défaut) : valeur passée en lecture seule.\n- `OUT` : valeur retournée par la procédure à l'appelant.\n- `IN OUT` : valeur fournie à l'entrée, modifiée et renvoyée."
+    },
+    {
+     "type": "code",
+     "sql": "CREATE OR REPLACE PROCEDURE augmenter_salaire(\n    p_emp_id IN employes.id%TYPE,\n    p_taux   IN NUMBER\n)\nIS\nBEGIN\n    UPDATE employes\n    SET    salaire = salaire * (1 + p_taux)\n    WHERE  id = p_emp_id;\n    COMMIT;\nEND;\n/",
+     "title": "Création d'une procédure stockée"
+    },
+    {
+     "type": "choice",
+     "q": "Où déclare-t-on les variables locales dans une fonction ou procédure stockée ?",
+     "options": [
+      "Dans une section DECLARE comme dans un bloc anonyme",
+      "Entre le mot IS (ou AS) et le mot-clé BEGIN",
+      "Après le mot END",
+      "Dans les paramètres de la fonction"
+     ],
+     "answer": 1,
+     "explain": "Dans un sous-programme stocké (`PROCEDURE` ou `FUNCTION`), on n'écrit pas `DECLARE`. Les variables locales se déclarent directement entre `IS` (ou `AS`) et `BEGIN`."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la commande d'en-tête pour créer ou remplacer une fonction nommée `get_nom` qui prend en paramètre `p_id IN NUMBER` et retourne un `VARCHAR2`. Écris uniquement la clause d'en-tête (jusqu'à RETURN VARCHAR2).",
+     "hints": [
+      "Commence par CREATE OR REPLACE FUNCTION get_nom",
+      "Ajoute les parenthèses : (p_id IN NUMBER)",
+      "Termine par la clause : RETURN VARCHAR2"
+     ],
+     "accept": [
+      "CREATE OR REPLACE FUNCTION get_nom(p_id IN NUMBER) RETURN VARCHAR2",
+      "CREATE OR REPLACE FUNCTION get_nom(p_id IN NUMBER) RETURN VARCHAR2;",
+      "CREATE OR REPLACE FUNCTION get_nom (p_id IN NUMBER) RETURN VARCHAR2"
+     ],
+     "solution": "CREATE OR REPLACE FUNCTION get_nom(p_id IN NUMBER) RETURN VARCHAR2",
+     "explain": "La syntaxe d'en-tête spécifie le nom, la liste des paramètres typés et le type de retour obligatoire pour une fonction."
+    }
+   ]
+  }
+ ]
+}

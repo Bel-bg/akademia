@@ -548,7 +548,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 1/5** — Affiche le **répertoire courant**.",
+     "q": "**Défi 1/5** - Affiche le **répertoire courant**.",
      "hints": [
       "Print Working Directory."
      ],
@@ -560,7 +560,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/5** — Tu es n'importe où : va dans `/var/log` avec un chemin **absolu**.",
+     "q": "**Défi 2/5** - Tu es n'importe où : va dans `/var/log` avec un chemin **absolu**.",
      "hints": [
       "Commence par /."
      ],
@@ -574,7 +574,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 3/5** — Tu es dans `/var/log`. Remonte dans `/var`.",
+     "q": "**Défi 3/5** - Tu es dans `/var/log`. Remonte dans `/var`.",
      "hints": [
       "Le parent s'écrit ..."
      ],
@@ -589,7 +589,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 4/5** — Liste en **format long**, avec les fichiers **cachés**, tailles **lisibles** de ton répertoire.",
+     "q": "**Défi 4/5** - Liste en **format long**, avec les fichiers **cachés**, tailles **lisibles** de ton répertoire.",
      "hints": [
       "Trois options : l, a, h."
      ],
@@ -608,7 +608,7 @@
     },
     {
      "type": "choice",
-     "q": "**Défi 5/5 (boss)** — `-rwxr-x--- 1 root admin 4096 nov 11 06:00 script.sh` : qui peut **exécuter** ce fichier ?",
+     "q": "**Défi 5/5 (boss)** - `-rwxr-x--- 1 root admin 4096 nov 11 06:00 script.sh` : qui peut **exécuter** ce fichier ?",
      "options": [
       "Tout le monde",
       "Le propriétaire (root) et le groupe (admin)",

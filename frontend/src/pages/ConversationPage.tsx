@@ -17,6 +17,7 @@ import {
 import { supabase } from '@/data/supabase';
 import { useAuth } from '@/state/AuthContext';
 import { CustomAvatar } from '@/components/CustomAvatar';
+import { renderWithAnimatedEmojis } from '@/components/AnimatedEmoji';
 
 function appendMessage(messages: DirectMessage[], message: DirectMessage) {
   if (messages.some((item) => item.id === message.id)) return messages;
@@ -215,7 +216,7 @@ export default function ConversationPage() {
                 }`}
               >
                 <p className="whitespace-pre-wrap break-words text-sm font-semibold leading-relaxed">
-                  {message.body}
+                  {renderWithAnimatedEmojis(message.body)}
                 </p>
                 <p
                   className={`mt-1 text-right text-[10px] font-bold ${

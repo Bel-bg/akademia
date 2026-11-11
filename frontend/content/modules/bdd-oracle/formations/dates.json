@@ -785,7 +785,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 1/2** — Affiche l'`id` et le `montant` des commandes passées **en avril 2025**, de la plus récente à la plus ancienne (intervalle semi-ouvert, ORDER BY sur la date).",
+     "q": "**Défi 1/2** - Affiche l'`id` et le `montant` des commandes passées **en avril 2025**, de la plus récente à la plus ancienne (intervalle semi-ouvert, ORDER BY sur la date).",
      "hints": [
       "Deux bornes : >= 01/04 et < 01/05.",
       "ORDER BY date_cmd DESC"
@@ -799,7 +799,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/2** — Affiche le **nombre de commandes** par **jour de la semaine abrégé en français** : utilise `TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH')` dans le SELECT et le GROUP BY.",
+     "q": "**Défi 2/2** - Affiche le **nombre de commandes** par **jour de la semaine abrégé en français** : utilise `TO_CHAR(date_cmd, 'DY', 'NLS_DATE_LANGUAGE=FRENCH')` dans le SELECT et le GROUP BY.",
      "hints": [
       "Recopie la même expression TO_CHAR dans le GROUP BY.",
       "COUNT(*)"

@@ -5,6 +5,7 @@ import { modules } from '@/lib/content';
 import { moduleRatio, readCount } from '@/lib/stats';
 import { useStore } from '@/state/Store';
 import { Mascot } from '@/components/Mascot';
+import { renderWithAnimatedEmojis } from '@/components/AnimatedEmoji';
 
 export default function ModulesPage() {
   const { state } = useStore();
@@ -36,13 +37,13 @@ export default function ModulesPage() {
                     <div className="inline-flex items-center gap-1 rounded-full bg-soft px-3 py-0.5 text-xs font-extrabold text-brand">
                       <GraduationHat size={14} /> {m.level}
                     </div>
-                    <h2 className="h-display mt-1 text-2xl leading-tight">{m.title}</h2>
+                    <h2 className="h-display mt-1 text-2xl leading-tight">{renderWithAnimatedEmojis(m.title)}</h2>
                     <p className="mt-0.5 flex items-center gap-1.5 text-xs font-bold text-muted">
                       <Clock size={13} /> ~{m.estimatedHours} h · {m.chapters.length} chapitres
                     </p>
                   </div>
                 </div>
-                <p className="mt-4 text-sm font-semibold text-muted">{m.description}</p>
+                <p className="mt-4 text-sm font-semibold text-muted">{renderWithAnimatedEmojis(m.description)}</p>
               </div>
 
               <div className="mt-5 space-y-3">

@@ -167,7 +167,7 @@
     },
     {
      "type": "code",
-     "sql": "Classe | 1er octet  | Bits de tête | Masque par défaut | Usage\n  A    |   1 – 126  |     0        | 255.0.0.0   (/8)  | très grands réseaux\n  B    | 128 – 191  |     10       | 255.255.0.0 (/16) | réseaux moyens\n  C    | 192 – 223  |     110      | 255.255.255.0 (/24)| petits réseaux\n  D    | 224 – 239  |     1110     | —                 | multicast\n  E    | 240 – 255  |     1111     | —                 | réservé / expérimental",
+     "sql": "Classe | 1er octet  | Bits de tête | Masque par défaut | Usage\n  A    |   1 - 126  |     0        | 255.0.0.0   (/8)  | très grands réseaux\n  B    | 128 - 191  |     10       | 255.255.0.0 (/16) | réseaux moyens\n  C    | 192 - 223  |     110      | 255.255.255.0 (/24)| petits réseaux\n  D    | 224 - 239  |     1110     | -                 | multicast\n  E    | 240 - 255  |     1111     | -                 | réservé / expérimental",
      "lang": "Réseau",
      "title": "Tableau des classes"
     },
@@ -244,7 +244,7 @@
     },
     {
      "type": "say",
-     "text": "Pourquoi **127 est absent** de la classe A (1–126) ? Parce que tout le bloc `127.0.0.0/8` est réservé au **bouclage** (*loopback*) : `127.0.0.1` désigne « moi-même ». On y reviendra."
+     "text": "Pourquoi **127 est absent** de la classe A (1-126) ? Parce que tout le bloc `127.0.0.0/8` est réservé au **bouclage** (*loopback*) : `127.0.0.1` désigne « moi-même ». On y reviendra."
     },
     {
      "type": "choice",
@@ -306,7 +306,7 @@
     },
     {
      "type": "say",
-     "text": "🏁 Retiens les plages du premier octet : **A 1–126, B 128–191, C 192–223, D 224–239, E 240–255**, et que 127 est réservé. Ensuite : quelles adresses sont **privées** ?"
+     "text": "🏁 Retiens les plages du premier octet : **A 1-126, B 128-191, C 192-223, D 224-239, E 240-255**, et que 127 est réservé. Ensuite : quelles adresses sont **privées** ?"
     }
    ]
   },
@@ -322,7 +322,7 @@
     },
     {
      "type": "code",
-     "sql": "Bloc privé       | Plage                         | CIDR\n10.0.0.0         | 10.0.0.0 – 10.255.255.255      | 10.0.0.0/8\n172.16.0.0       | 172.16.0.0 – 172.31.255.255    | 172.16.0.0/12\n192.168.0.0      | 192.168.0.0 – 192.168.255.255  | 192.168.0.0/16",
+     "sql": "Bloc privé       | Plage                         | CIDR\n10.0.0.0         | 10.0.0.0 - 10.255.255.255      | 10.0.0.0/8\n172.16.0.0       | 172.16.0.0 - 172.31.255.255    | 172.16.0.0/12\n192.168.0.0      | 192.168.0.0 - 192.168.255.255  | 192.168.0.0/16",
      "lang": "Réseau",
      "title": "Les adresses privées (RFC 1918)"
     },
@@ -435,7 +435,7 @@
     },
     {
      "type": "code",
-     "sql": "0.0.0.0              : « cette machine / n'importe laquelle » (adresse non spécifiée, route par défaut)\n127.0.0.0/8          : bouclage (loopback) — 127.0.0.1 = « moi-même »\n169.254.0.0/16       : adresses « link-local » (APIPA)\n255.255.255.255      : broadcast limité (toutes les machines du réseau local)\n224.0.0.0/4          : multicast (classe D)\nadresse réseau       : première adresse d'un sous-réseau\nadresse de broadcast : dernière adresse d'un sous-réseau",
+     "sql": "0.0.0.0              : « cette machine / n'importe laquelle » (adresse non spécifiée, route par défaut)\n127.0.0.0/8          : bouclage (loopback) - 127.0.0.1 = « moi-même »\n169.254.0.0/16       : adresses « link-local » (APIPA)\n255.255.255.255      : broadcast limité (toutes les machines du réseau local)\n224.0.0.0/4          : multicast (classe D)\nadresse réseau       : première adresse d'un sous-réseau\nadresse de broadcast : dernière adresse d'un sous-réseau",
      "lang": "Réseau",
      "title": "Aide-mémoire"
     },
@@ -604,7 +604,7 @@
     },
     {
      "type": "code",
-     "sql": "PC1 : 10.0.4.20 /23  → réseau 10.0.4.0 (plage 10.0.4.0 – 10.0.5.255)\nPC2 : 10.0.5.30 /23  → réseau 10.0.4.0 → MÊME réseau\nPC3 : 10.0.6.30 /23  → réseau 10.0.6.0 → réseau différent",
+     "sql": "PC1 : 10.0.4.20 /23  → réseau 10.0.4.0 (plage 10.0.4.0 - 10.0.5.255)\nPC2 : 10.0.5.30 /23  → réseau 10.0.4.0 → MÊME réseau\nPC3 : 10.0.6.30 /23  → réseau 10.0.6.0 → réseau différent",
      "lang": "Réseau",
      "title": "Un /23 couvre deux « troisièmes octets »"
     },
@@ -682,7 +682,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 1/6** — Convertis l'octet binaire `11110000` en décimal.",
+     "q": "**Défi 1/6** - Convertis l'octet binaire `11110000` en décimal.",
      "hints": [
       "128 + 64 + 32 + 16",
       "Quatre bits à 1 au début."
@@ -694,10 +694,10 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 2/6** — Classe de `130.5.6.7` ? (A, B, C, D ou E)",
+     "q": "**Défi 2/6** - Classe de `130.5.6.7` ? (A, B, C, D ou E)",
      "hints": [
       "Premier octet : 130.",
-      "Classe B : 128 – 191."
+      "Classe B : 128 - 191."
      ],
      "accept": [
       "classe b"
@@ -708,7 +708,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 3/6** — `172.20.99.1` est-elle privée ou publique ?",
+     "q": "**Défi 3/6** - `172.20.99.1` est-elle privée ou publique ?",
      "hints": [
       "Bloc privé : 172.16.0.0 → 172.31.255.255.",
       "20 est-il entre 16 et 31 ?"
@@ -724,7 +724,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 4/6** — Un PC obtient `169.254.88.3`. Quel service n'a pas répondu ? (un mot ou sigle)",
+     "q": "**Défi 4/6** - Un PC obtient `169.254.88.3`. Quel service n'a pas répondu ? (un mot ou sigle)",
      "hints": [
       "APIPA se déclenche quand…",
       "Service qui distribue les adresses automatiquement."
@@ -739,7 +739,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 5/6** — `10.0.4.20/23` et `10.0.5.30/23` sont-ils dans le même réseau ? (`oui` ou `non`)",
+     "q": "**Défi 5/6** - `10.0.4.20/23` et `10.0.5.30/23` sont-ils dans le même réseau ? (`oui` ou `non`)",
      "hints": [
       "Un /23 couvre deux « troisièmes octets » consécutifs.",
       "10.0.4.0/23 va de 10.0.4.0 à 10.0.5.255."
@@ -753,7 +753,7 @@
     },
     {
      "type": "exercise",
-     "q": "**Défi 6/6 (boss)** — Pour `192.168.1.0/24`, donne la **dernière adresse attribuable** à un hôte.",
+     "q": "**Défi 6/6 (boss)** - Pour `192.168.1.0/24`, donne la **dernière adresse attribuable** à un hôte.",
      "hints": [
       "Dernière adresse du réseau = broadcast (.255).",
       "La dernière attribuable est juste avant."

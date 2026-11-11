@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Check, Play } from '@getpapillon/papicons';
 import { Spinner } from '@/components/ui';
 import { GlassesCloud } from '@/components/GlassesCloud';
 import { ConfettiBackdrop } from '@/components/Decor';
+import { AnimatedEmoji } from '@/components/AnimatedEmoji';
 import { getModule, loadFormations } from '@/lib/content';
 import type { Formation } from '@/lib/types';
 import { useStore } from '@/state/Store';
@@ -40,14 +41,14 @@ export default function FormationPage() {
         <div className="relative z-10 flex flex-col items-center">
           <GlassesCloud size={150} color={f.color} />
           <p className="mt-1 text-xs font-extrabold uppercase tracking-wider text-muted">Formation · {f.level} · ~{f.minutes} min</p>
-          <h1 className="h-display mt-1 text-3xl">{f.emoji} {f.title}</h1>
+          <h1 className="h-display mt-1 text-3xl"><AnimatedEmoji emoji={f.emoji} /> {f.title}</h1>
           <p className="mt-1 max-w-md font-semibold text-muted">{f.tagline}</p>
           <div className="mt-4 h-3 w-full max-w-sm overflow-hidden rounded-full bg-soft">
             <div className="h-full rounded-full transition-all duration-700" style={{ width: `${pct * 100}%`, background: f.color }} />
           </div>
           <p className="mt-1 text-xs font-extrabold text-muted">{done.length}/{f.lessons.length} leçons</p>
           {finished ? (
-            <p className="mt-3 rounded-2xl bg-good/15 px-4 py-2 font-display font-extrabold text-good">🎓 Formation validée — bravo, tu es passé expert !</p>
+            <p className="mt-3 rounded-2xl bg-good/15 px-4 py-2 font-display font-extrabold text-good"><AnimatedEmoji emoji="🎓" /> Formation validée - bravo, tu es passé expert !</p>
           ) : (
             <Link to={`/m/${m.id}/formation/${f.id}/${f.lessons[nextIdx].id}`} className="btn btn-primary btn-lg shine-sweep glow-pulse mt-4">
               <Play size={18} /> {done.length ? 'Continuer la formation' : 'Commencer la formation'}
@@ -77,7 +78,7 @@ export default function FormationPage() {
                     {isDone ? <Check size={22} /> : i + 1}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block font-display text-lg font-extrabold leading-tight">{l.emoji} {l.title}</span>
+                    <span className="block font-display text-lg font-extrabold leading-tight"><AnimatedEmoji emoji={l.emoji} /> {l.title}</span>
                     <span className="text-xs font-bold text-muted">~{l.minutes} min · {l.steps.filter((s) => s.type === 'exercise').length} exercice(s)</span>
                   </span>
                   <ArrowRight size={18} className="text-muted transition group-hover:translate-x-1" />

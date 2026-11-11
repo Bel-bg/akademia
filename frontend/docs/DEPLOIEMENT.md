@@ -43,7 +43,7 @@ La clé `service_role` contourne RLS : elle doit rester uniquement dans les vari
 
 Le service worker conserve le shell de l’application, les cours et les banques de QCM déjà préchargés; les actions de progression hors ligne sont gardées dans le stockage local du navigateur jusqu’au rejeu authentifié.
 
-### Option B — Netlify
+### Option B - Netlify
 Même principe : **Add new site → Import from Git**, build `npm run build`, dossier `frontend/dist`, mêmes variables. `frontend/public/_redirects` gère les routes.
 
 ## 4. Autoriser ton site dans Supabase (indispensable pour les comptes)
