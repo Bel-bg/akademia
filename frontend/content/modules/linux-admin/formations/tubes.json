@@ -1,0 +1,810 @@
+{
+ "id": "tubes",
+ "order": 2,
+ "title": "Redirections, tubes et filtres",
+ "tagline": "Flux, >, >>, 2>, |, sort, uniq, cut : l'art d'enchaîner les commandes comme un pro.",
+ "emoji": "🔗",
+ "color": "#6366F1",
+ "level": "Intermédiaire",
+ "minutes": 65,
+ "pitch": [
+  "Salut ! Je te présente **« Redirections, tubes et filtres »** 🔗.",
+  "C'est ici que Linux devient **puissant**. Au lieu d'apprendre mille commandes, on en apprend une dizaine… et on les **enchaîne**.",
+  "On comprend d'abord les trois flux (entrée, sortie, erreurs), puis les redirections (`>`, `>>`, `2>`), les tubes (`|`) et les filtres (`cut`, `sort`, `uniq`, `tr`). Ensuite, on cuisine de vraies **recettes d'administrateur** sur un journal de serveur : classement, comptage, extraction.",
+  "Chaque exercice te demande d'écrire la commande, avec indices et corrections."
+ ],
+ "benefits": [
+  "Comprendre stdin, stdout, stderr et rediriger chacun",
+  "Éviter les pièges classiques (> qui écrase, ordre de 2>&1)",
+  "Enchaîner head, tail, cut, sort, uniq et tr",
+  "Maîtriser la recette du « Top N » pour analyser n'importe quel fichier"
+ ],
+ "lessons": [
+  {
+   "id": "flux",
+   "title": "Les flux et la redirection",
+   "emoji": "🚰",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Voici l'idée qui fait la force d'Unix : on **enchaîne de petits outils** pour en faire des gros. Pour y arriver, il faut comprendre les **flux**."
+    },
+    {
+     "type": "say",
+     "text": "Chaque programme a **trois canaux** de communication, numérotés :"
+    },
+    {
+     "type": "code",
+     "sql": "0  stdin   entrée standard   (le clavier, par défaut)\n1  stdout  sortie standard   (l'écran, par défaut)\n2  stderr  sortie d'erreurs  (l'écran aussi, par défaut)",
+     "lang": "Terminal",
+     "title": "Les 3 flux"
+    },
+    {
+     "type": "choice",
+     "q": "Un programme affiche un message d'erreur. Il l'écrit sur…",
+     "options": [
+      "stdin (0)",
+      "stdout (1)",
+      "stderr (2)"
+     ],
+     "answer": 2,
+     "explain": "Les erreurs ont leur **propre canal**, stderr (2). Il s'affiche à l'écran comme stdout, mais on peut le séparer."
+    },
+    {
+     "type": "say",
+     "text": "Par défaut, tout s'affiche à l'écran. Mais on peut **rediriger** les flux vers des fichiers. Le symbole `>` envoie la sortie **dans un fichier** :"
+    },
+    {
+     "type": "code",
+     "sql": "echo Bonjour > salut.txt     → crée salut.txt (ou l'ÉCRASE s'il existe)\necho Au revoir >> salut.txt   → AJOUTE à la fin du fichier\ncat salut.txt                → affiche le contenu",
+     "lang": "Terminal",
+     "title": "> écrase, >> ajoute"
+    },
+    {
+     "type": "choice",
+     "q": "`echo X > f.txt` quand `f.txt` existe déjà avec du contenu…",
+     "options": [
+      "Ajoute X à la fin",
+      "Remplace tout le contenu par X",
+      "Provoque une erreur"
+     ],
+     "answer": 1,
+     "explain": "`>` **écrase** le fichier sans prévenir. C'est une cause classique de perte de données ! Pour ajouter, utilise `>>`."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris `Bonjour` dans un fichier `salut.txt` (en écrasant son contenu).",
+     "hints": [
+      "echo + > + nom du fichier."
+     ],
+     "accept": [
+      "echo \"Bonjour\" > salut.txt",
+      "echo 'Bonjour' > salut.txt"
+     ],
+     "solution": "echo Bonjour > salut.txt",
+     "explain": "`>` crée ou écrase le fichier.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Ajoute** la ligne `Au revoir` à la fin de `salut.txt`.",
+     "hints": [
+      "Deux chevrons pour ajouter."
+     ],
+     "accept": [
+      "echo \"Au revoir\" >> salut.txt",
+      "echo 'Au revoir' >> salut.txt"
+     ],
+     "solution": "echo Au revoir >> salut.txt",
+     "explain": "`>>` ajoute sans effacer.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Sens inverse : `<` envoie un **fichier en entrée** d'une commande. Utile avec `wc` (compteur) : `wc -l fichier` affiche le nom du fichier, `wc -l < fichier` **non**, car la commande ne sait pas d'où viennent les données."
+    },
+    {
+     "type": "code",
+     "sql": "wc -l journal.log     → 6 journal.log\nwc -l < journal.log   → 6",
+     "lang": "Terminal",
+     "title": "< : fichier en entrée"
+    },
+    {
+     "type": "exercise",
+     "q": "Compte les lignes de `journal.log` **sans afficher le nom du fichier** (avec `<`).",
+     "hints": [
+      "wc -l, puis < et le fichier."
+     ],
+     "accept": [],
+     "solution": "wc -l < journal.log",
+     "explain": "Avec `<`, `wc` lit son entrée standard et n'affiche que le nombre.",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "🏁 Trois flux (0, 1, 2), `>` écrase, `>>` ajoute, `<` lit un fichier. Prochaine étape : maîtriser les **erreurs** (`2>`)."
+    }
+   ]
+  },
+  {
+   "id": "erreurs",
+   "title": "Rediriger les erreurs",
+   "emoji": "🚨",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Tu as sûrement déjà vu un écran inondé d'erreurs mélangées aux résultats. Grâce au flux **2 (stderr)**, on peut les **traiter à part**."
+    },
+    {
+     "type": "code",
+     "sql": "ls /etc /inconnu 2> erreurs.txt     → les ERREURS vont dans erreurs.txt, le reste à l'écran\nls /etc /inconnu 2>/dev/null       → les erreurs sont JETÉES\nls /etc /inconnu > tout.txt 2>&1   → sortie ET erreurs dans tout.txt",
+     "lang": "Terminal",
+     "title": "Rediriger stderr"
+    },
+    {
+     "type": "say",
+     "text": "`/dev/null` est le **trou noir** de Linux : tout ce qu'on y écrit disparaît. Parfait pour faire taire les erreurs sans importance (par exemple les « Permission denied » d'un `find`)."
+    },
+    {
+     "type": "choice",
+     "q": "Que fait `commande 2>/dev/null` ?",
+     "options": [
+      "Efface le fichier null",
+      "Jette les messages d'erreur",
+      "Envoie la sortie à l'écran"
+     ],
+     "answer": 1,
+     "explain": "On envoie le flux 2 (erreurs) vers `/dev/null` : ils disparaissent."
+    },
+    {
+     "type": "exercise",
+     "q": "Exécute `ls /inconnu` en **cachant** le message d'erreur.",
+     "hints": [
+      "N'oublie pas le numéro de flux avant le chevron."
+     ],
+     "accept": [
+      "ls /inconnu 2> /dev/null"
+     ],
+     "solution": "ls /inconnu 2>/dev/null",
+     "explain": "`2>/dev/null` fait disparaître les erreurs.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Exécute `ls /inconnu` en envoyant les erreurs dans un fichier `erreurs.txt`.",
+     "hints": [
+      "2> puis le nom du fichier."
+     ],
+     "accept": [
+      "ls /inconnu 2>erreurs.txt"
+     ],
+     "solution": "ls /inconnu 2> erreurs.txt",
+     "explain": "Les erreurs finissent dans `erreurs.txt`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Pour envoyer **les deux flux** (sortie + erreurs) dans le même fichier, on écrit `> fichier 2>&1` : « redirige stdout vers le fichier, puis stderr **là où va stdout** ». Raccourci bash : `&> fichier`."
+    },
+    {
+     "type": "choice",
+     "q": "Quelle commande envoie sortie **et** erreurs dans `tout.log` ?",
+     "options": [
+      "ls /etc /x 2>&1 > tout.log",
+      "ls /etc /x > tout.log 2>&1",
+      "ls /etc /x >> 2>&1 tout.log"
+     ],
+     "answer": 1,
+     "explain": "L'**ordre compte** : `> tout.log` d'abord, puis `2>&1`. Dans l'autre ordre, stderr part vers l'écran (l'ancienne destination de stdout)."
+    },
+    {
+     "type": "exercise",
+     "q": "Exécute `ls /etc /inconnu` en envoyant **sortie et erreurs** dans `tout.log` (syntaxe `2>&1`).",
+     "hints": [
+      "> fichier 2>&1, dans cet ordre."
+     ],
+     "accept": [
+      "ls /etc /inconnu &> tout.log"
+     ],
+     "solution": "ls /etc /inconnu > tout.log 2>&1",
+     "explain": "Le piège classique est d'inverser l'ordre.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Cas d'usage réel : lancer un script la nuit et garder une **trace** de tout ce qu'il affiche :"
+    },
+    {
+     "type": "code",
+     "sql": "./sauvegarde.sh >> /var/log/sauvegarde.log 2>&1",
+     "lang": "Terminal",
+     "title": "Garder un journal"
+    },
+    {
+     "type": "choice",
+     "q": "Dans la commande précédente, `>>` plutôt que `>` signifie…",
+     "options": [
+      "On conserve l'historique des exécutions précédentes",
+      "On supprime les anciennes lignes",
+      "On double l'écriture"
+     ],
+     "answer": 0,
+     "explain": "`>>` **ajoute** à la fin : chaque exécution s'ajoute au journal au lieu de l'écraser."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `2>` pour les erreurs, `2>/dev/null` pour les faire taire, `> f 2>&1` (dans cet ordre !) pour tout garder."
+    }
+   ]
+  },
+  {
+   "id": "tubes",
+   "title": "Les tubes : enchaîner les commandes",
+   "emoji": "🔗",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voici le **super-pouvoir** d'Unix : le **tube** (*pipe*) `|`. Il branche la **sortie d'une commande** sur **l'entrée de la suivante**, sans fichier intermédiaire."
+    },
+    {
+     "type": "code",
+     "sql": "commande1 | commande2 | commande3\n\nls /etc | wc -l       → combien de fichiers dans /etc ?",
+     "lang": "Terminal",
+     "title": "Le tube"
+    },
+    {
+     "type": "say",
+     "text": "Chaque commande fait **une seule chose**, mais on les combine. Comme des briques de LEGO. Premières briques utiles : `head` (début), `tail` (fin), `wc -l` (compter les lignes)."
+    },
+    {
+     "type": "code",
+     "sql": "head -n 3 fichier   → les 3 premières lignes\ntail -n 2 fichier   → les 2 dernières lignes\nwc -l fichier        → nombre de lignes",
+     "lang": "Terminal",
+     "title": "head, tail, wc"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les **3 premières lignes** de `journal.log`.",
+     "hints": [
+      "head -n <nombre> fichier"
+     ],
+     "accept": [
+      "head -3 journal.log"
+     ],
+     "solution": "head -n 3 journal.log",
+     "explain": "`head -n 3 journal.log` (ou `head -3`).",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les **2 dernières lignes** de `journal.log`.",
+     "hints": [
+      "tail -n <nombre> fichier"
+     ],
+     "accept": [
+      "tail -2 journal.log"
+     ],
+     "solution": "tail -n 2 journal.log",
+     "explain": "`tail -n 2 journal.log`.",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Que fait `cat journal.log | wc -l` ?",
+     "options": [
+      "Compte les mots",
+      "Compte les lignes de journal.log",
+      "Supprime journal.log"
+     ],
+     "answer": 1,
+     "explain": "`cat` envoie le fichier dans le tube ; `wc -l` compte les lignes reçues : **6**."
+    },
+    {
+     "type": "say",
+     "text": "On peut **enchaîner autant de tubes qu'on veut**. Exemple : afficher **seulement les lignes 3 et 4** du journal : on prend les 4 premières (`head`), puis les 2 dernières de celles-là (`tail`)."
+    },
+    {
+     "type": "code",
+     "sql": "head -n 4 journal.log | tail -n 2",
+     "lang": "Terminal",
+     "title": "Lignes 3 à 4"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche **les lignes 2 et 3** de `journal.log` avec un tube.",
+     "hints": [
+      "Prends les 3 premières, puis garde les 2 dernières."
+     ],
+     "accept": [
+      "head -3 journal.log | tail -2",
+      "head -n 3 journal.log | tail -2",
+      "head -3 journal.log | tail -n 2"
+     ],
+     "solution": "head -n 3 journal.log | tail -n 2",
+     "explain": "Les 3 premières lignes → on garde les 2 dernières : lignes 2 et 3.",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "⚠️ Un tube ne transporte que **stdout**. Les **erreurs (stderr)** ne passent pas dans le tube : elles s'affichent à l'écran. Pour les inclure, il faut `2>&1` avant le tube."
+    },
+    {
+     "type": "choice",
+     "q": "`ls /inconnu | wc -l` affiche `0`, mais le message d'erreur s'affiche quand même. Pourquoi ?",
+     "options": [
+      "Le message est sur stderr, qui ne passe pas dans le tube",
+      "wc ne marche pas",
+      "Le tube est cassé"
+     ],
+     "answer": 0,
+     "explain": "Le tube ne relaie que stdout. L'erreur (stderr) reste sur l'écran ; `wc` ne reçoit rien et compte **0** ligne."
+    },
+    {
+     "type": "say",
+     "text": "Dernier outil : `tee` écrit **à la fois** à l'écran **et** dans un fichier. Parfait pour garder une trace tout en regardant :"
+    },
+    {
+     "type": "code",
+     "sql": "ls /etc | tee liste.txt | wc -l",
+     "lang": "Terminal",
+     "title": "tee : un T dans la tuyauterie"
+    },
+    {
+     "type": "choice",
+     "q": "Que fait `tee` ?",
+     "options": [
+      "Il duplique le flux : écran (ou suite du tube) + fichier",
+      "Il compte les lignes",
+      "Il trie les lignes"
+     ],
+     "answer": 0,
+     "explain": "Comme un raccord en T : une branche part vers le fichier, l'autre continue."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `|` branche une sortie sur une entrée ; `head`, `tail`, `wc -l`, `tee`. Maintenant, les vrais **filtres** qui transforment les données."
+    }
+   ]
+  },
+  {
+   "id": "filtres",
+   "title": "Les filtres : sort, uniq, cut, tr",
+   "emoji": "🧪",
+   "minutes": 12,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Passons aux **filtres** : des commandes qui lisent un flux, le transforment, et le renvoient. Nos données d'entraînement :"
+    },
+    {
+     "type": "code",
+     "sql": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "lang": "Terminal",
+     "title": "Fichier eleves.txt (nom:ville:âge)"
+    },
+    {
+     "type": "say",
+     "text": "**`cut`** extrait des **colonnes**. `-d` choisit le séparateur, `-f` le numéro de champ."
+    },
+    {
+     "type": "code",
+     "sql": "cut -d: -f1 eleves.txt   → les noms (Awa, Koffi, Senami…)\ncut -d: -f2 eleves.txt   → les villes",
+     "lang": "Terminal",
+     "title": "cut"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche **uniquement les villes** (2ᵉ champ, séparateur `:`) de `eleves.txt`.",
+     "hints": [
+      "cut -d<sep> -f<n> fichier"
+     ],
+     "accept": [
+      "cut -f2 -d: eleves.txt",
+      "cut -d ':' -f2 eleves.txt",
+      "cut -d':' -f2 eleves.txt"
+     ],
+     "solution": "cut -d: -f2 eleves.txt",
+     "explain": "`-d:` indique « séparateur = : », `-f2` le deuxième champ.",
+     "table": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**`sort`** trie les lignes. Options utiles : `-r` (inverse), `-n` (ordre **numérique**), `-u` (supprime les doublons), `-t` et `-k` (trier sur un champ précis)."
+    },
+    {
+     "type": "code",
+     "sql": "sort fichier          → ordre alphabétique\nsort -r fichier       → ordre inverse\nsort -n fichier       → tri numérique (2 avant 10)\nsort -u fichier       → trié ET sans doublon\nsort -t: -k3 -n eleves.txt → trié sur le 3ᵉ champ (âge), numériquement",
+     "lang": "Terminal",
+     "title": "sort"
+    },
+    {
+     "type": "choice",
+     "q": "Sans `-n`, `sort` place `10` avant `2`. Pourquoi ?",
+     "options": [
+      "C'est un bug",
+      "Il trie alphabétiquement : « 1 » < « 2 »",
+      "Il n'aime pas les chiffres"
+     ],
+     "answer": 1,
+     "explain": "Sans `-n`, c'est un tri **alphabétique** caractère par caractère. Avec `-n`, l'ordre est numérique."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les **villes distinctes**, triées (une par ligne).",
+     "hints": [
+      "Extrais les villes, puis trie en supprimant les doublons."
+     ],
+     "accept": [
+      "cut -d: -f2 eleves.txt | sort | uniq",
+      "cut -d':' -f2 eleves.txt | sort -u",
+      "cut -d':' -f2 eleves.txt | sort | uniq"
+     ],
+     "solution": "cut -d: -f2 eleves.txt | sort -u",
+     "explain": "`cut` extrait, `sort -u` trie et dédoublonne.",
+     "table": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**`uniq`** supprime les doublons **consécutifs** (il faut donc trier avant). Avec `-c`, il **compte** les occurrences : c'est la base de tous les « top 10 »."
+    },
+    {
+     "type": "code",
+     "sql": "cut -d: -f2 eleves.txt | sort | uniq -c\n      3 Cotonou\n      1 Parakou\n      1 Porto-Novo",
+     "lang": "Terminal",
+     "title": "Compter par ville"
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi faut-il `sort` avant `uniq` ?",
+     "options": [
+      "uniq ne retire que les doublons côte à côte",
+      "sort est obligatoire en Linux",
+      "uniq n'accepte que du texte trié alphabétiquement"
+     ],
+     "answer": 0,
+     "explain": "`uniq` compare chaque ligne avec la précédente seulement. Trier rassemble les doublons."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **nombre d'élèves par ville** (avec `uniq -c`).",
+     "hints": [
+      "cut, sort, puis uniq -c."
+     ],
+     "accept": [
+      "cut -d':' -f2 eleves.txt | sort | uniq -c"
+     ],
+     "solution": "cut -d: -f2 eleves.txt | sort | uniq -c",
+     "explain": "Cotonou 3, Parakou 1, Porto-Novo 1.",
+     "table": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche la **ligne de l'élève le plus âgé** (tri numérique inverse sur le 3ᵉ champ, puis `head -1`).",
+     "hints": [
+      "sort -t: -k3 ... puis head -1.",
+      "-n pour numérique, -r pour inverse."
+     ],
+     "accept": [
+      "sort -t: -k3 -n -r eleves.txt | head -1",
+      "sort -t: -nr -k3 eleves.txt | head -1",
+      "sort -t: -k3nr eleves.txt | head -1",
+      "sort -t: -k3 -rn eleves.txt | head -1",
+      "sort -t: -k3 -rn eleves.txt | head -n 1",
+      "sort -t: -k3 -nr eleves.txt | head -n 1"
+     ],
+     "solution": "sort -t: -k3 -nr eleves.txt | head -1",
+     "explain": "Tri décroissant sur l'âge : la première ligne est `Yao:Parakou:30`.",
+     "table": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**`tr`** remplace ou supprime des **caractères**. Pratique pour passer en majuscules :"
+    },
+    {
+     "type": "code",
+     "sql": "cut -d: -f1 eleves.txt | tr a-z A-Z\nAWA\nKOFFI\nSENAMI\nYAO\nIBRAHIM",
+     "lang": "Terminal",
+     "title": "tr"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les **noms** (1ᵉʳ champ) **en majuscules**.",
+     "hints": [
+      "cut puis tr a-z A-Z."
+     ],
+     "accept": [
+      "cut -d: -f1 eleves.txt | tr '[:lower:]' '[:upper:]'",
+      "cut -d':' -f1 eleves.txt | tr a-z A-Z"
+     ],
+     "solution": "cut -d: -f1 eleves.txt | tr a-z A-Z",
+     "explain": "`tr a-z A-Z` traduit chaque minuscule en majuscule.",
+     "table": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "🏁 `cut` (colonnes), `sort` (tri), `uniq -c` (compter), `tr` (caractères). Avec les tubes, tu peux répondre à presque toutes les questions sur un fichier texte."
+    }
+   ]
+  },
+  {
+   "id": "recettes",
+   "title": "Recettes d'administrateur",
+   "emoji": "🍳",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voici le moment de **cuisiner** avec nos briques ! Les mêmes motifs reviennent tout le temps dans l'administration de serveurs. Notre journal :"
+    },
+    {
+     "type": "code",
+     "sql": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "lang": "Terminal",
+     "title": "journal.log (date heure NIVEAU message)"
+    },
+    {
+     "type": "say",
+     "text": "**Recette n°1 : combien de lignes pour chaque niveau (INFO, ERROR, WARN) ?** On extrait le niveau (champ 3), on trie, on compte, puis on classe du plus fréquent au moins fréquent."
+    },
+    {
+     "type": "code",
+     "sql": "cut -d' ' -f3 journal.log | sort | uniq -c | sort -rn\n      3 INFO\n      2 ERROR\n      1 WARN",
+     "lang": "Terminal",
+     "title": "Top des niveaux"
+    },
+    {
+     "type": "say",
+     "text": "Remarque le **second `sort -rn`** à la fin : après `uniq -c`, on trie sur le **nombre** (numérique, inverse) pour obtenir un classement. C'est la **recette du « Top N »** : `sort | uniq -c | sort -rn | head`."
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **nombre d'occurrences de chaque niveau**, du plus fréquent au moins fréquent.",
+     "hints": [
+      "Le niveau est le 3ᵉ champ (séparateur espace).",
+      "cut, sort, uniq -c, sort -rn."
+     ],
+     "accept": [
+      "cut -d ' ' -f3 journal.log | sort | uniq -c | sort -nr",
+      "cut -d' ' -f3 journal.log | sort | uniq -c | sort -nr",
+      "cut -d ' ' -f 3 journal.log | sort | uniq -c | sort -rn"
+     ],
+     "solution": "cut -d' ' -f3 journal.log | sort | uniq -c | sort -rn",
+     "explain": "Recette du classement : extraire → trier → compter → trier par nombre.",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**Recette n°2 : les heures des erreurs.** Il faut d'abord **filtrer les lignes** `ERROR` (on creusera `grep` dans la formation « Rechercher comme un pro »), puis extraire le champ heure."
+    },
+    {
+     "type": "code",
+     "sql": "grep ERROR journal.log | cut -d' ' -f2\n08:05\n09:20",
+     "lang": "Terminal",
+     "title": "Heures des erreurs"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche **l'heure** de chaque ligne `ERROR` de `journal.log` (grep puis cut).",
+     "hints": [
+      "grep filtre, cut extrait le 2ᵉ champ."
+     ],
+     "accept": [
+      "grep ERROR journal.log | cut -d ' ' -f2",
+      "grep 'ERROR' journal.log | cut -d' ' -f2"
+     ],
+     "solution": "grep ERROR journal.log | cut -d' ' -f2",
+     "explain": "`grep` garde les lignes ERROR ; `cut` extrait l'heure (champ 2).",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**Recette n°3 : combien d'erreurs ?** `grep` filtre, `wc -l` compte. (On verra que `grep -c` le fait en une seule commande.)"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche le **nombre de lignes ERROR** de `journal.log` (avec `grep` et `wc`).",
+     "hints": [
+      "grep ... | wc -l"
+     ],
+     "accept": [
+      "grep -c ERROR journal.log"
+     ],
+     "solution": "grep ERROR journal.log | wc -l",
+     "explain": "Résultat : **2**. `grep -c ERROR journal.log` donnerait le même résultat.",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**Recette n°4 : les utilisateurs qui se sont connectés (sans doublon).**"
+    },
+    {
+     "type": "code",
+     "sql": "grep INFO journal.log | cut -d' ' -f5 | sort -u\nawa\nkoffi",
+     "lang": "Terminal",
+     "title": "Utilisateurs distincts (lignes INFO)"
+    },
+    {
+     "type": "choice",
+     "q": "Dans la recette n°4, pourquoi la sortie contient-elle `awa` une seule fois alors que `awa` apparaît 2 fois dans INFO ?",
+     "options": [
+      "Parce que `sort -u` supprime les doublons",
+      "Parce que cut supprime les doublons",
+      "Parce que grep est intelligent"
+     ],
+     "answer": 0,
+     "explain": "`sort -u` trie et supprime les doublons : chaque utilisateur n'apparaît qu'une fois."
+    },
+    {
+     "type": "say",
+     "text": "**Garder une trace** : `tee` te permet de sauvegarder le résultat tout en le consultant."
+    },
+    {
+     "type": "exercise",
+     "q": "Classe les niveaux comme à la recette 1 **et** enregistre le résultat dans `niveaux.txt` avec `tee`, en gardant l'affichage.",
+     "hints": [
+      "Ajoute `| tee niveaux.txt` à la fin."
+     ],
+     "accept": [
+      "cut -d ' ' -f3 journal.log | sort | uniq -c | sort -nr | tee niveaux.txt",
+      "cut -d' ' -f3 journal.log | sort | uniq -c | sort -nr | tee niveaux.txt"
+     ],
+     "solution": "cut -d' ' -f3 journal.log | sort | uniq -c | sort -rn | tee niveaux.txt",
+     "explain": "`tee` écrit dans le fichier ET laisse passer le flux vers l'écran.",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu viens de voir les **4 motifs** de l'administrateur : **filtrer → extraire → trier → compter**. Place au défi final !"
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : tubes et filtres",
+   "emoji": "🏆",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Défi final ! Mêmes fichiers (`journal.log` et `eleves.txt`). Six questions de difficulté croissante."
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/6** — Écris `fin` dans `etat.txt` en **ajoutant** à la fin du fichier.",
+     "hints": [
+      "Deux chevrons."
+     ],
+     "accept": [
+      "echo \"fin\" >> etat.txt",
+      "echo 'fin' >> etat.txt"
+     ],
+     "solution": "echo fin >> etat.txt",
+     "explain": "`>>` ajoute à la fin.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/6** — Lance `ls /inconnu` en **jetant** les erreurs.",
+     "hints": [
+      "2> vers /dev/null."
+     ],
+     "accept": [
+      "ls /inconnu 2> /dev/null"
+     ],
+     "solution": "ls /inconnu 2>/dev/null",
+     "explain": "`2>/dev/null`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/6** — Affiche la **dernière ligne** de `journal.log`.",
+     "hints": [
+      "tail -n 1."
+     ],
+     "accept": [
+      "tail -1 journal.log"
+     ],
+     "solution": "tail -n 1 journal.log",
+     "explain": "`tail -n 1 journal.log` (ou `tail -1`).",
+     "table": "journal.log\n2025-03-12 08:01 INFO connexion awa\n2025-03-12 08:05 ERROR disque plein\n2025-03-12 08:09 INFO connexion koffi\n2025-03-12 09:14 WARN memoire haute\n2025-03-12 09:20 ERROR connexion refusee\n2025-03-12 10:02 INFO deconnexion awa",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 4/6** — Affiche les **âges distincts** (3ᵉ champ) des élèves, triés numériquement.",
+     "hints": [
+      "Extrais le 3ᵉ champ, puis trie numériquement sans doublon."
+     ],
+     "accept": [
+      "cut -d: -f3 eleves.txt | sort -n | uniq",
+      "cut -d: -f3 eleves.txt | sort -un",
+      "cut -d':' -f3 eleves.txt | sort -nu",
+      "cut -d':' -f3 eleves.txt | sort -n | uniq",
+      "cut -d: -f3 eleves.txt | sort -n -u"
+     ],
+     "solution": "cut -d: -f3 eleves.txt | sort -nu",
+     "explain": "Âges distincts : 22, 25, 30.",
+     "table": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 5/6** — Affiche **combien d'élèves ont chaque âge** (compte par âge).",
+     "hints": [
+      "Extrais, trie, compte."
+     ],
+     "accept": [
+      "cut -d: -f3 eleves.txt | sort | uniq -c",
+      "cut -d':' -f3 eleves.txt | sort -n | uniq -c",
+      "cut -d':' -f3 eleves.txt | sort | uniq -c"
+     ],
+     "solution": "cut -d: -f3 eleves.txt | sort -n | uniq -c",
+     "explain": "22 → 2 élèves, 25 → 2 élèves, 30 → 1 élève.",
+     "table": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 6/6 (boss)** — Affiche la **ville la plus fréquente** (une seule ligne) : classement des villes puis `head -1`.",
+     "hints": [
+      "Recette du Top N : sort | uniq -c | sort -rn | head."
+     ],
+     "accept": [
+      "cut -d: -f2 eleves.txt | sort | uniq -c | sort -nr | head -1",
+      "cut -d':' -f2 eleves.txt | sort | uniq -c | sort -rn | head -1",
+      "cut -d: -f2 eleves.txt | sort | uniq -c | sort -rn | head -n 1",
+      "cut -d: -f2 eleves.txt | sort | uniq -c | sort -nr | head -n 1"
+     ],
+     "solution": "cut -d: -f2 eleves.txt | sort | uniq -c | sort -rn | head -1",
+     "explain": "Cotonou apparaît 3 fois : `      3 Cotonou`.",
+     "table": "eleves.txt\nAwa:Cotonou:22\nKoffi:Porto-Novo:25\nSenami:Cotonou:22\nYao:Parakou:30\nIbrahim:Cotonou:25",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu maîtrises les flux, les redirections, les tubes et les filtres. C'est ce qui fait de toi quelqu'un capable de **résoudre un problème** en une ligne de commande, pas seulement de connaître des commandes."
+    }
+   ]
+  }
+ ]
+}

@@ -26,6 +26,16 @@ export function normalizeSql(sql: string): string {
     .trim();
 }
 
+/** Normalise une commande shell : espaces, tubes et redirections ; la casse est conservée, ainsi que le contenu des guillemets. */
+export function normalizeShell(cmd: string): string {
+  return cmd
+    .split(/("[^"]*"|'[^']*')/g)
+    .map((part, i) => (i % 2 ? part : part.replace(/\s+/g, ' ').replace(/\s*(\||&&|;|>>|>|<)\s*/g, '$1')))
+    .join('')
+    .trim()
+    .replace(/;$/, '');
+}
+
 const delayFor = (s: FormationStep) => (s.type === 'say' ? Math.min(1500, 500 + s.text.length * 9) : 550);
 const isInteractive = (s: FormationStep) => s.type === 'choice' || s.type === 'exercise';
 
@@ -217,13 +227,13 @@ function ExerciseView({ s, color, result, onResult }: { s: Extract<FormationStep
   const [tries, setTries] = useState(0);
   const [hints, setHints] = useState(0);
   const [msg, setMsg] = useState<string | null>(null);
-  const accepted = useMemo(() => new Set([s.solution, ...s.accept].map(normalizeSql)), [s]);
+  const accepted = useMemo(() => new Set([s.solution, ...s.accept].map(s.caseSensitive ? normalizeShell : normalizeSql)), [s]);
 
   const check = () => {
     if (!text.trim()) { setMsg('Écris ta requête d’abord 😉'); return; }
     const t = tries + 1;
     setTries(t);
-    if (accepted.has(normalizeSql(text))) { onResult({ ok: true, tries: t, text }); fireConfetti(false); return; }
+    if (accepted.has((s.caseSensitive ? normalizeShell : normalizeSql)(text))) { onResult({ ok: true, tries: t, text }); fireConfetti(false); return; }
     setMsg(t >= 2 ? 'Pas encore. Prends un indice, ou regarde la solution si tu bloques.' : 'Presque ? Relis l’énoncé, vérifie chaque détail (ponctuation, noms, valeurs).');
     if (hints < s.hints.length && t >= 1) setHints((h) => Math.max(h, 1));
   };

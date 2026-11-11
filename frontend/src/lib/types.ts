@@ -75,7 +75,7 @@ export type FormationStep =
   | { type: 'say'; text: string; mood?: string }
   | { type: 'code'; title?: string; lang?: string; sql: string; note?: string }
   | { type: 'choice'; q: string; options: string[]; answer: number; explain: string }
-  | { type: 'exercise'; q: string; table?: string; placeholder?: string; hints: string[]; accept: string[]; solution: string; explain: string };
+  | { type: 'exercise'; q: string; table?: string; placeholder?: string; caseSensitive?: boolean; hints: string[]; accept: string[]; solution: string; explain: string };
 export interface FormationLesson {
   id: string;
   title: string;

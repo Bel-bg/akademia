@@ -1,0 +1,627 @@
+{
+ "id": "terminal",
+ "order": 1,
+ "title": "Dompter le terminal",
+ "tagline": "Invite, arborescence, navigation, ls -l, aide et historique : les premiers pas d'un vrai administrateur.",
+ "emoji": "🖥️",
+ "color": "#10B981",
+ "level": "Débutant",
+ "minutes": 50,
+ "pitch": [
+  "Salut ! Je te présente **« Dompter le terminal »** 🖥️.",
+  "Un écran noir, un curseur… Le terminal impressionne. Pourtant, toute l'administration Linux commence ici, et les mêmes réflexes servent dans **tous** les TP et examens.",
+  "On décode l'invite, on parcourt l'arborescence (`/etc`, `/var`, `/home`…), on apprend à naviguer avec les chemins absolus et relatifs, à **lire `ls -l`** sans se tromper, et à gagner du temps avec l'aide, la touche Tab et l'historique. Chaque notion est suivie d'exercices où tu tapes toi-même la commande.",
+  "À la fin, le terminal sera ton meilleur ami."
+ ],
+ "benefits": [
+  "Comprendre l'invite, les commandes, options et arguments",
+  "Te déplacer partout avec chemins absolus et relatifs",
+  "Lire une ligne de ls -l sans erreur",
+  "Gagner du temps : man, Tab, historique, raccourcis"
+ ],
+ "lessons": [
+  {
+   "id": "shell",
+   "title": "Le shell et son invite",
+   "emoji": "🐚",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Le terminal fait peur au début : un écran noir, un curseur qui clignote… Mais c'est en réalité **l'outil le plus puissant** d'un administrateur. On l'apprivoise ensemble."
+    },
+    {
+     "type": "say",
+     "text": "Quand tu ouvres un terminal, tu parles à un programme appelé le **shell** (souvent **bash**). Il lit ce que tu tapes, l'exécute, et affiche le résultat. Tu vois d'abord l'**invite** (*prompt*) :"
+    },
+    {
+     "type": "code",
+     "sql": "awa@serveur:~$ ",
+     "lang": "Terminal",
+     "title": "L'invite"
+    },
+    {
+     "type": "code",
+     "sql": "awa      → ton nom d'utilisateur\n@        → séparateur\nserveur  → le nom de la machine (hostname)\n~        → ton répertoire courant (~ = ton dossier personnel)\n$        → tu es un utilisateur normal    (# = tu es root, l'administrateur !)",
+     "lang": "Terminal",
+     "title": "Décoder l'invite"
+    },
+    {
+     "type": "choice",
+     "q": "Que signifie un `#` à la fin de l'invite, à la place du `$` ?",
+     "options": [
+      "Le terminal est en pause",
+      "Tu es connecté en root (administrateur) : attention !",
+      "La commande est commentée"
+     ],
+     "answer": 1,
+     "explain": "`$` = utilisateur normal. `#` = **root**, qui peut tout faire, y compris tout casser. On y travaille avec prudence."
+    },
+    {
+     "type": "say",
+     "text": "Une commande suit toujours la même structure : **commande**, puis des **options** (commencent par `-`), puis des **arguments** (sur quoi agir)."
+    },
+    {
+     "type": "code",
+     "sql": "ls  -l  /etc\n│   │   └─ argument : le répertoire à lister\n│   └─ option : format long\n└─ commande",
+     "lang": "Terminal",
+     "title": "Anatomie d'une commande"
+    },
+    {
+     "type": "choice",
+     "q": "Dans `cp -r photos sauvegarde`, qu'est-ce que `-r` ?",
+     "options": [
+      "La commande",
+      "Une option",
+      "Un argument"
+     ],
+     "answer": 1,
+     "explain": "`-r` est une **option** (ici : récursif). `photos` et `sauvegarde` sont les arguments."
+    },
+    {
+     "type": "say",
+     "text": "Trois commandes pour te situer, à connaître par cœur :"
+    },
+    {
+     "type": "code",
+     "sql": "whoami     → qui suis-je ? (mon nom d'utilisateur)\nhostname   → quel est le nom de cette machine ?\npwd        → où suis-je ? (Print Working Directory)",
+     "lang": "Terminal",
+     "title": "Se repérer"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche **le répertoire courant** ?",
+     "hints": [
+      "Trois lettres : *Print Working Directory*."
+     ],
+     "accept": [],
+     "solution": "pwd",
+     "explain": "`pwd` affiche le chemin complet du répertoire où tu te trouves.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche **ton nom d'utilisateur** ?",
+     "hints": [
+      "*Who am I ?* en un seul mot."
+     ],
+     "accept": [],
+     "solution": "whoami",
+     "explain": "`whoami` répond par exemple `awa`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Une petite commande pour afficher du texte : `echo`. Elle te servira tout le temps (pour tester, pour écrire dans des fichiers…)."
+    },
+    {
+     "type": "code",
+     "sql": "echo Bonjour le monde\n→ Bonjour le monde",
+     "lang": "Terminal",
+     "title": "echo"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche le texte `Bonjour` à l'écran ?",
+     "hints": [
+      "Le verbe « répéter » en anglais commence comme l'écho.",
+      "echo <texte>"
+     ],
+     "accept": [
+      "echo \"Bonjour\"",
+      "echo 'Bonjour'"
+     ],
+     "solution": "echo Bonjour",
+     "explain": "`echo Bonjour` affiche `Bonjour`. Les guillemets sont facultatifs ici.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Linux fait la différence entre majuscules et minuscules.** `Ls` n'existe pas, `LS` non plus : c'est `ls`. De même `Notes.txt` et `notes.txt` sont deux fichiers **différents**."
+    },
+    {
+     "type": "choice",
+     "q": "`Notes.txt` et `notes.txt` sont…",
+     "options": [
+      "Le même fichier",
+      "Deux fichiers différents",
+      "Impossible dans un même dossier"
+     ],
+     "answer": 1,
+     "explain": "Le système de fichiers Linux est **sensible à la casse** : ce sont deux fichiers distincts."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu sais lire l'invite, reconnaître commande/option/argument, et utiliser `pwd`, `whoami`, `hostname`, `echo`. Dans la leçon suivante : **l'arborescence**."
+    }
+   ]
+  },
+  {
+   "id": "arborescence",
+   "title": "L'arborescence de Linux",
+   "emoji": "🌳",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Sous Windows, tu as des lecteurs `C:`, `D:`. Sous Linux, il n'y a **qu'un seul arbre**, qui part d'une racine : `/`. Tout y est rangé : fichiers, périphériques, même les disques branchés."
+    },
+    {
+     "type": "say",
+     "text": "Une idée fondatrice d'Unix : **« tout est fichier »**. Un document, un répertoire, un périphérique, une imprimante… tous sont représentés comme des fichiers."
+    },
+    {
+     "type": "code",
+     "sql": "/\n├── bin    commandes de base (ls, cp, cat…)\n├── boot   noyau et démarrage\n├── dev    périphériques (disques, clavier…)\n├── etc    fichiers de CONFIGURATION\n├── home   dossiers personnels des utilisateurs (/home/awa)\n├── root   dossier personnel de l'administrateur\n├── tmp    fichiers temporaires\n├── usr    programmes et bibliothèques\n├── var    données qui changent (journaux, mails…)\n└── proc   informations sur le système en cours",
+     "lang": "Terminal",
+     "title": "L'arborescence standard"
+    },
+    {
+     "type": "choice",
+     "q": "Où se trouvent généralement les fichiers de **configuration** du système ?",
+     "options": [
+      "/var",
+      "/etc",
+      "/tmp"
+     ],
+     "answer": 1,
+     "explain": "`/etc` contient la configuration (utilisateurs, réseau, services…)."
+    },
+    {
+     "type": "choice",
+     "q": "Où se trouvent les **journaux** (logs) du système ?",
+     "options": [
+      "/var/log",
+      "/etc/log",
+      "/home/log"
+     ],
+     "answer": 0,
+     "explain": "Les données qui changent (dont les journaux) vivent dans `/var`, donc `/var/log`."
+    },
+    {
+     "type": "choice",
+     "q": "Quel est le dossier personnel de l'utilisateur `awa` ?",
+     "options": [
+      "/home/awa",
+      "/root/awa",
+      "/usr/awa"
+     ],
+     "answer": 0,
+     "explain": "Les utilisateurs normaux ont leur dossier dans `/home/`. (`/root` est réservé à l'administrateur.)"
+    },
+    {
+     "type": "say",
+     "text": "Pour se déplacer : `cd` (*change directory*). Il y a deux façons d'écrire un chemin :"
+    },
+    {
+     "type": "code",
+     "sql": "chemin ABSOLU : commence par /          → cd /etc/ssh   (marche depuis n'importe où)\nchemin RELATIF : ne commence PAS par /   → cd ssh        (depuis /etc)",
+     "lang": "Terminal",
+     "title": "Absolu ou relatif ?"
+    },
+    {
+     "type": "say",
+     "text": "Quatre raccourcis qui reviennent tout le temps : `.` (ici), `..` (le dossier parent), `~` (mon dossier personnel), `-` (le dossier précédent, avec `cd -`)."
+    },
+    {
+     "type": "code",
+     "sql": "cd ..      → monter d'un cran\ncd ~       → aller chez moi (comme tout seul : cd)\ncd -       → revenir là où j'étais avant",
+     "lang": "Terminal",
+     "title": "Raccourcis de navigation"
+    },
+    {
+     "type": "exercise",
+     "q": "Tu es dans `/home/awa/docs`. Quelle commande te ramène dans `/home/awa` ?",
+     "hints": [
+      "Le dossier parent s'écrit avec deux points.",
+      "cd .."
+     ],
+     "accept": [
+      "cd /home/awa",
+      "cd ../"
+     ],
+     "solution": "cd ..",
+     "explain": "`..` désigne le répertoire parent : `/home/awa/docs` → `/home/awa`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Depuis n'importe où, quelle commande te place dans `/etc` (chemin **absolu**) ?",
+     "hints": [
+      "Un chemin absolu commence par /."
+     ],
+     "accept": [
+      "cd /etc/"
+     ],
+     "solution": "cd /etc",
+     "explain": "Chemin absolu = depuis la racine : `cd /etc`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Tu es dans `/home/awa/docs`. Quelle commande te place dans `/home/awa/photos` en **chemin relatif** ?",
+     "hints": [
+      "Remonte d'un cran, puis descends dans photos.",
+      ".. puis /photos"
+     ],
+     "accept": [
+      "cd ../photos/"
+     ],
+     "solution": "cd ../photos",
+     "explain": "`..` remonte à `/home/awa`, puis `/photos` redescend : **cd ../photos**.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "`cd` seul, sans argument, te ramène…",
+     "options": [
+      "À la racine /",
+      "Dans ton dossier personnel",
+      "Au dossier précédent"
+     ],
+     "answer": 1,
+     "explain": "`cd` sans argument = `cd ~` : ton dossier personnel."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Un seul arbre à partir de `/`, des dossiers à connaître (`/etc`, `/var`, `/home`, `/tmp`, `/bin`, `/dev`), des chemins **absolus** (depuis `/`) ou **relatifs**, et `.`, `..`, `~`, `-`."
+    }
+   ]
+  },
+  {
+   "id": "lister",
+   "title": "Lister et lire ls -l",
+   "emoji": "📋",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "`ls` liste le contenu d'un répertoire. Mais sa vraie puissance vient de ses **options**. Voici les trois indispensables :"
+    },
+    {
+     "type": "code",
+     "sql": "ls       → liste simple\nls -l    → format long (droits, propriétaire, taille, date)\nls -a    → inclut les fichiers CACHÉS (ceux dont le nom commence par un point)\nls -h    → avec -l : tailles lisibles (K, M, G)\nls -la   → long + cachés (très courant)",
+     "lang": "Terminal",
+     "title": "Les options de ls"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande liste **tous** les fichiers, y compris cachés, au **format long** ?",
+     "hints": [
+      "Combine deux options : long et all.",
+      "ls -l -a se contracte en ls -la."
+     ],
+     "accept": [
+      "ls -al",
+      "ls -l -a",
+      "ls -a -l"
+     ],
+     "solution": "ls -la",
+     "explain": "`ls -la` : format long + fichiers cachés.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Les **fichiers cachés** commencent par un point : `.bashrc`, `.ssh`, `.profile`. Ils contiennent souvent la configuration personnelle. `ls` seul ne les affiche pas."
+    },
+    {
+     "type": "choice",
+     "q": "Quel fichier est caché ?",
+     "options": [
+      "notes.txt",
+      ".bashrc",
+      "bashrc.bak"
+     ],
+     "answer": 1,
+     "explain": "Un nom qui commence par `.` est caché."
+    },
+    {
+     "type": "say",
+     "text": "Maintenant, **lire une ligne de `ls -l`**. C'est LA compétence d'examen. Décortiquons :"
+    },
+    {
+     "type": "code",
+     "sql": "-rw-r--r--  1  awa  users  1024  mars 12 08:01  notes.txt\n│└┬─┘└┬─┘└┬─┘ │   │     │      │            └─ nom\n│ │   │   │   │   │     │      └─ date de dernière modification\n│ │   │   │   │   │     └─ taille en octets\n│ │   │   │   │   └─ groupe propriétaire\n│ │   │   │   └─ utilisateur propriétaire\n│ │   │   └─ nombre de liens\n│ │   └─ droits du groupe     (r--)\n│ └─ droits du propriétaire   (rw-)\n└─ type : - fichier, d répertoire, l lien",
+     "lang": "Terminal",
+     "title": "Une ligne de ls -l"
+    },
+    {
+     "type": "choice",
+     "q": "Que signifie le premier caractère `d` dans `drwxr-xr-x` ?",
+     "options": [
+      "Le fichier est supprimé",
+      "C'est un répertoire (directory)",
+      "C'est un fichier caché"
+     ],
+     "answer": 1,
+     "explain": "`-` = fichier ordinaire, `d` = répertoire, `l` = lien symbolique."
+    },
+    {
+     "type": "choice",
+     "q": "Qui est le propriétaire de `-rw-r--r-- 1 awa users 1024 mars 12 08:01 notes.txt` ?",
+     "options": [
+      "users",
+      "awa",
+      "root"
+     ],
+     "answer": 1,
+     "explain": "Le premier nom (après le nombre de liens) est l'**utilisateur** propriétaire : `awa`. Le second est le **groupe** : `users`."
+    },
+    {
+     "type": "choice",
+     "q": "Quelle est la taille du fichier `notes.txt` de la ligne précédente ?",
+     "options": [
+      "1024 octets",
+      "12 octets",
+      "1 octet"
+     ],
+     "answer": 0,
+     "explain": "La colonne avant la date est la taille en octets : **1024**. Avec `ls -lh` on lirait `1,0K`."
+    },
+    {
+     "type": "say",
+     "text": "Les neuf caractères suivants sont les **droits** : trois triplets `rwx` pour le **propriétaire** (u), le **groupe** (g), les **autres** (o). On approfondit les permissions dans une autre formation, mais retiens : `r` lire, `w` écrire, `x` exécuter, `-` absent."
+    },
+    {
+     "type": "choice",
+     "q": "`-rw-r--r--` : que peut faire le groupe sur le fichier ?",
+     "options": [
+      "Lire seulement",
+      "Lire et écrire",
+      "Tout faire"
+     ],
+     "answer": 0,
+     "explain": "Le groupe est le 2ᵉ triplet : `r--` → lecture seule."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche les tailles de fichiers **lisibles** (K, M, G) au format long ?",
+     "hints": [
+      "Long + human readable."
+     ],
+     "accept": [
+      "ls -hl",
+      "ls -l -h"
+     ],
+     "solution": "ls -lh",
+     "explain": "`-h` (*human*) transforme les octets en K/M/G, avec `-l`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "🏁 `ls -l` (long), `-a` (cachés), `-h` (lisible). Tu sais lire : **type, droits, propriétaire, groupe, taille, date, nom**."
+    }
+   ]
+  },
+  {
+   "id": "aide",
+   "title": "Trouver de l'aide et gagner du temps",
+   "emoji": "⚡",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Un bon administrateur ne connaît pas toutes les commandes par cœur : il sait **chercher l'aide** et **taper vite**. Deux compétences à acquérir tout de suite."
+    },
+    {
+     "type": "say",
+     "text": "**L'aide intégrée.** Presque chaque commande a une page de manuel (`man`) et une aide courte (`--help`) :"
+    },
+    {
+     "type": "code",
+     "sql": "man ls         → manuel complet de ls (navigue avec les flèches, 'q' pour quitter)\nls --help      → aide courte\nwhatis ls      → description en une ligne",
+     "lang": "Terminal",
+     "title": "Obtenir de l'aide"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande ouvre le **manuel** de `chmod` ?",
+     "hints": [
+      "Le mot « manuel » abrégé."
+     ],
+     "accept": [],
+     "solution": "man chmod",
+     "explain": "`man chmod` ouvre sa page de manuel. Appuie sur `q` pour quitter.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Dans une page `man`, quelle touche permet de **quitter** ?",
+     "options": [
+      "Échap",
+      "q",
+      "Ctrl+X"
+     ],
+     "answer": 1,
+     "explain": "`q` pour quitter, `/mot` pour chercher, les flèches ou Espace pour défiler."
+    },
+    {
+     "type": "say",
+     "text": "**La touche Tab** est ta meilleure amie : elle **complète** les noms de fichiers et de commandes. Tape `cd /et` puis **Tab** → `cd /etc/`. Deux Tab affichent les possibilités."
+    },
+    {
+     "type": "say",
+     "text": "**L'historique.** Bash se souvient de tes commandes :"
+    },
+    {
+     "type": "code",
+     "sql": "↑ ↓        → parcourir les commandes précédentes\nhistory     → afficher la liste numérotée\n!!          → relancer la dernière commande\n!42         → relancer la commande n° 42\nCtrl + R    → rechercher dans l'historique en tapant",
+     "lang": "Terminal",
+     "title": "Historique"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche **l'historique** de tes commandes ?",
+     "hints": [
+      "Le mot anglais pour « historique »."
+     ],
+     "accept": [],
+     "solution": "history",
+     "explain": "`history` liste les commandes précédentes avec un numéro.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Raccourcis clavier à connaître : **Ctrl+C** interrompt la commande en cours, **Ctrl+L** efface l'écran, **Ctrl+D** ferme la session (fin d'entrée), **Ctrl+A / Ctrl+E** vont au début / à la fin de la ligne."
+    },
+    {
+     "type": "choice",
+     "q": "Une commande tourne sans fin et ne répond plus. Quel raccourci l'interrompt ?",
+     "options": [
+      "Ctrl+Z",
+      "Ctrl+C",
+      "Ctrl+D"
+     ],
+     "answer": 1,
+     "explain": "`Ctrl+C` envoie un signal d'interruption (SIGINT) au programme en cours."
+    },
+    {
+     "type": "say",
+     "text": "Dernier outil : savoir **ce qu'est** une commande. `type` et `which` te disent d'où elle vient."
+    },
+    {
+     "type": "code",
+     "sql": "which ls        → /usr/bin/ls     (chemin du programme)\ntype cd         → cd is a shell builtin (commande interne du shell)",
+     "lang": "Terminal",
+     "title": "Où est cette commande ?"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche le **chemin** du programme `ls` ?",
+     "hints": [
+      "Se prononce comme « laquelle » en anglais."
+     ],
+     "accept": [
+      "type ls",
+      "command -v ls"
+     ],
+     "solution": "which ls",
+     "explain": "`which ls` répond par exemple `/usr/bin/ls`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "🏁 `man` / `--help`, **Tab**, `history` / `!!` / **Ctrl+R**, **Ctrl+C**, `which`. Avec ça, tu avances 3 fois plus vite. Place au **défi final** !"
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : le terminal",
+   "emoji": "🏆",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Défi final ! Cinq situations, comme en TP. Prends ton temps."
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/5** — Affiche le **répertoire courant**.",
+     "hints": [
+      "Print Working Directory."
+     ],
+     "accept": [],
+     "solution": "pwd",
+     "explain": "`pwd`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/5** — Tu es n'importe où : va dans `/var/log` avec un chemin **absolu**.",
+     "hints": [
+      "Commence par /."
+     ],
+     "accept": [
+      "cd /var/log/"
+     ],
+     "solution": "cd /var/log",
+     "explain": "`cd /var/log` fonctionne depuis n'importe quel répertoire.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/5** — Tu es dans `/var/log`. Remonte dans `/var`.",
+     "hints": [
+      "Le parent s'écrit ..."
+     ],
+     "accept": [
+      "cd /var",
+      "cd ../"
+     ],
+     "solution": "cd ..",
+     "explain": "`cd ..` (ou `cd /var`).",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 4/5** — Liste en **format long**, avec les fichiers **cachés**, tailles **lisibles** de ton répertoire.",
+     "hints": [
+      "Trois options : l, a, h."
+     ],
+     "accept": [
+      "ls -alh",
+      "ls -hal",
+      "ls -lha",
+      "ls -ahl",
+      "ls -hla",
+      "ls -l -a -h"
+     ],
+     "solution": "ls -lah",
+     "explain": "`ls -lah` (l = long, a = all, h = human).",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "**Défi 5/5 (boss)** — `-rwxr-x--- 1 root admin 4096 nov 11 06:00 script.sh` : qui peut **exécuter** ce fichier ?",
+     "options": [
+      "Tout le monde",
+      "Le propriétaire (root) et le groupe (admin)",
+      "Seulement root"
+     ],
+     "answer": 1,
+     "explain": "`rwx` pour root, `r-x` pour le groupe admin (donc exécution possible), `---` pour les autres : aucun accès."
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu sais lire l'invite, naviguer dans l'arborescence, lire `ls -l`, utiliser l'aide et l'historique. Tu es prêt pour les fichiers, les redirections et la recherche !"
+    }
+   ]
+  }
+ ]
+}

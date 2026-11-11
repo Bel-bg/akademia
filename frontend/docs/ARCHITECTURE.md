@@ -35,7 +35,7 @@ Une *formation* est un parcours thématique court (ex. « Tout savoir sur le SEL
 
 - Contenu : `frontend/content/modules/<module>/formations/<id>.json` (un fichier par formation, `id` = nom du fichier).
   Champs : `title`, `tagline`, `emoji`, `color`, `level`, `minutes`, `order`, `pitch[]` (dialogue d'accueil de Nimbo), `benefits[]`, `lessons[]`.
-  Une leçon contient des `steps` : `say` (bulle du coach, markdown), `code` (bloc SQL), `choice` (QCM instantané), `exercise` (requête libre comparée à `solution` + `accept[]` après normalisation, avec `hints[]`).
+  Une leçon contient des `steps` : `say` (bulle du coach, markdown), `code` (bloc SQL), `choice` (QCM instantané), `exercise` (requête libre comparée à `solution` + `accept[]` après normalisation, avec `hints[]`). Options d'un exercice : `placeholder` (texte du champ), `table` (données affichées), `caseSensitive: true` (commandes shell : la casse est conservée, seuls les espaces autour de `| > >> < ;` sont normalisés). Un `code` peut avoir `lang` (étiquette du bloc).
 - API : `GET /api/modules/:id/formations` (repli local via `import.meta.glob`).
 - Progression : action `formation-lesson` (`moduleId`, `formationId`, `lessonId`) ; XP serveur 20 par leçon + 60 à la fin de la formation ; état `formations["module:formation"] = [leçons]` ; compteur `counters.formations` ; badges `formation-1` et `formation-3`.
 - UI : `FormationShowcase` (nuage à lunettes qui annonce les titres, puis discussion de présentation si plusieurs formations), `FormationPage` (parcours), `FormationLessonPage` (lecteur de leçon façon chat).

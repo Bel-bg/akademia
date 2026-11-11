@@ -1,0 +1,824 @@
+{
+ "id": "recherche",
+ "order": 3,
+ "title": "Rechercher comme un pro",
+ "tagline": "grep, regex, find, locate : retrouve n'importe quoi, dans n'importe quel fichier, en quelques secondes.",
+ "emoji": "🔎",
+ "color": "#F59E0B",
+ "level": "Intermédiaire",
+ "minutes": 60,
+ "pitch": [
+  "Salut ! Je te présente **« Rechercher comme un pro »** 🔎.",
+  "Sur un serveur, tout est fichier, et des milliers de fichiers cachent des milliers de lignes. Savoir **retrouver l'info qu'on cherche** rapidement, c'est ce qui sépare un débutant d'un administrateur efficace.",
+  "On commence par `grep` (chercher *dans* les fichiers), puis les **expressions régulières**, puis `find` (chercher *les* fichiers par nom, taille, date), puis `-exec` et `xargs` pour agir sur les résultats, et enfin `locate`. Tu verras aussi **les pièges** : guillemets, -delete, noms avec espaces.",
+  "Tout est pratiqué sur un petit projet fictif, avec des commandes à écrire toi-même, des indices et des corrections."
+ ],
+ "benefits": [
+  "Chercher dans le contenu avec grep et les expressions régulières",
+  "Trouver des fichiers par nom, type, taille et date avec find",
+  "Agir sur les résultats en sécurité (-exec, xargs, prévisualiser)",
+  "Savoir choisir entre grep, find et locate selon le besoin"
+ ],
+ "lessons": [
+  {
+   "id": "grep",
+   "title": "grep : chercher dans les fichiers",
+   "emoji": "🔎",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Un serveur contient des milliers de fichiers et des journaux de millions de lignes. Savoir **chercher vite et juste**, c'est un super-pouvoir d'administrateur. On commence par `grep`."
+    },
+    {
+     "type": "say",
+     "text": "`grep` affiche les **lignes d'un fichier qui contiennent un motif**. Sa syntaxe : `grep [options] motif fichier`. Notre dossier de travail :"
+    },
+    {
+     "type": "code",
+     "sql": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "lang": "Terminal",
+     "title": "Arborescence de l'exercice"
+    },
+    {
+     "type": "code",
+     "sql": "notes.txt\nAcheter du pain\nERREUR reseau\nrappeler Awa\nerreur disque\n\nsrc/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "lang": "Terminal",
+     "title": "Contenu des fichiers"
+    },
+    {
+     "type": "code",
+     "sql": "grep erreur notes.txt\nerreur disque",
+     "lang": "Terminal",
+     "title": "Chercher « erreur » (casse exacte)"
+    },
+    {
+     "type": "say",
+     "text": "Remarque : `ERREUR reseau` n'est **pas** affichée, car `grep` distingue majuscules et minuscules. Les options magiques :"
+    },
+    {
+     "type": "code",
+     "sql": "-i   ignorer la casse            grep -i erreur notes.txt   → 2 lignes\n-n   afficher les numéros de ligne grep -n TODO src/main.c    → 2:// TODO: ...\n-c   compter les lignes trouvées    grep -c erreur notes.txt   → 1\n-v   inverser (lignes SANS le motif) grep -v '^#' src/main.c\n-w   mot entier seulement\n-r   chercher récursivement dans un dossier\n-l   n'afficher que les NOMS de fichiers",
+     "lang": "Terminal",
+     "title": "Les options à connaître"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les lignes de `notes.txt` contenant `erreur`, **sans tenir compte de la casse**.",
+     "hints": [
+      "Option pour ignorer la casse : -i"
+     ],
+     "accept": [
+      "grep -i 'erreur' notes.txt",
+      "grep -i \"erreur\" notes.txt"
+     ],
+     "solution": "grep -i erreur notes.txt",
+     "explain": "Avec `-i`, `ERREUR reseau` et `erreur disque` sont trouvées.",
+     "table": "notes.txt\nAcheter du pain\nERREUR reseau\nrappeler Awa\nerreur disque",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche la ligne de `src/main.c` contenant `TODO`, **avec son numéro de ligne**.",
+     "hints": [
+      "Option -n pour les numéros."
+     ],
+     "accept": [
+      "grep -n 'TODO' src/main.c"
+     ],
+     "solution": "grep -n TODO src/main.c",
+     "explain": "Résultat : `2:// TODO: gerer les erreurs`.",
+     "table": "src/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Compte** le nombre de lignes de `notes.txt` qui contiennent `erreur` (casse exacte).",
+     "hints": [
+      "Option -c pour compter."
+     ],
+     "accept": [
+      "grep -c 'erreur' notes.txt"
+     ],
+     "solution": "grep -c erreur notes.txt",
+     "explain": "Résultat : **1** (seule `erreur disque` est en minuscules).",
+     "table": "notes.txt\nAcheter du pain\nERREUR reseau\nrappeler Awa\nerreur disque",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "`grep -v erreur notes.txt` affiche…",
+     "options": [
+      "Les lignes qui contiennent erreur",
+      "Les lignes qui NE contiennent PAS erreur",
+      "Les numéros de ligne"
+     ],
+     "answer": 1,
+     "explain": "`-v` **inverse** la sélection. Utile pour retirer le bruit : `grep -v INFO journal.log`."
+    },
+    {
+     "type": "say",
+     "text": "Pour chercher dans **tout un dossier**, on ajoute `-r` (récursif), souvent avec `-n` et `-l`."
+    },
+    {
+     "type": "code",
+     "sql": "grep -rn TODO src\nsrc/main.c:2:// TODO: gerer les erreurs\nsrc/util.c:2:// TODO: tester",
+     "lang": "Terminal",
+     "title": "-r : tout un dossier"
+    },
+    {
+     "type": "exercise",
+     "q": "Cherche `TODO` **récursivement** dans le dossier `src`, avec les numéros de ligne.",
+     "hints": [
+      "-r (récursif) et -n (numéros)."
+     ],
+     "accept": [
+      "grep -nr TODO src",
+      "grep -r -n TODO src",
+      "grep -rn 'TODO' src",
+      "grep -n -r TODO src"
+     ],
+     "solution": "grep -rn TODO src",
+     "explain": "Chaque ligne affiche `fichier:numéro:contenu`.",
+     "table": "src/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche **seulement les noms des fichiers** du dossier courant (récursif) qui contiennent `TODO`.",
+     "hints": [
+      "-r pour récursif, -l pour les noms seulement."
+     ],
+     "accept": [
+      "grep -lr TODO .",
+      "grep -rl 'TODO' .",
+      "grep -r -l TODO ."
+     ],
+     "solution": "grep -rl TODO .",
+     "explain": "Résultat : `./src/main.c` et `./src/util.c`.",
+     "table": "src/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "🏁 `grep motif fichier`, avec `-i` (casse), `-n` (numéros), `-c` (compter), `-v` (inverser), `-r` (dossier), `-l` (noms). Dans la leçon suivante : les **expressions régulières**."
+    }
+   ]
+  },
+  {
+   "id": "regex",
+   "title": "Les expressions régulières",
+   "emoji": "🧩",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Chercher un mot exact, c'est bien. Mais « toutes les lignes qui **commencent par** une majuscule », ou « qui **finissent par** un point-virgule » ? Il faut des **expressions régulières** (*regex*), un petit langage de motifs."
+    },
+    {
+     "type": "code",
+     "sql": ".     n'importe quel caractère\n*     le caractère précédent, 0 fois ou plus\n^     début de ligne\n$     fin de ligne\n[abc] un caractère parmi a, b ou c\n[0-9] un chiffre\n[^abc] un caractère qui n'est PAS a, b, c\n\\     échappe un caractère spécial (\\. pour un vrai point)",
+     "lang": "Terminal",
+     "title": "Les symboles de base"
+    },
+    {
+     "type": "say",
+     "text": "Les deux plus utiles : `^` (début) et `$` (fin). Notre fichier :"
+    },
+    {
+     "type": "code",
+     "sql": "notes.txt\nAcheter du pain\nERREUR reseau\nrappeler Awa\nerreur disque",
+     "lang": "Terminal",
+     "title": "notes.txt"
+    },
+    {
+     "type": "code",
+     "sql": "grep '^[A-Z]' notes.txt\nAcheter du pain\nERREUR reseau",
+     "lang": "Terminal",
+     "title": "Lignes qui commencent par une majuscule"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les lignes de `notes.txt` qui **commencent par une majuscule** (A à Z).",
+     "hints": [
+      "^ pour le début, [A-Z] pour une majuscule.",
+      "Mets le motif entre guillemets simples."
+     ],
+     "accept": [
+      "grep \"^[A-Z]\" notes.txt"
+     ],
+     "solution": "grep '^[A-Z]' notes.txt",
+     "explain": "`^[A-Z]` : début de ligne suivi d'une majuscule. Les guillemets empêchent le shell d'interpréter les symboles.",
+     "table": "notes.txt\nAcheter du pain\nERREUR reseau\nrappeler Awa\nerreur disque",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi met-on le motif entre **guillemets simples** : `grep '^#' fichier` ?",
+     "options": [
+      "Pour que le shell n'interprète pas les caractères spéciaux",
+      "Parce que grep l'exige",
+      "Pour ignorer la casse"
+     ],
+     "answer": 0,
+     "explain": "`*`, `$`, `[` ont un sens pour le shell **et** pour grep. Les guillemets simples laissent le motif intact pour grep."
+    },
+    {
+     "type": "say",
+     "text": "Pour retirer les **lignes de commentaire** (qui commencent par `#`), un grand classique de l'administrateur :"
+    },
+    {
+     "type": "code",
+     "sql": "grep -v '^#' fichier.conf",
+     "lang": "Terminal",
+     "title": "Afficher un fichier de config sans les commentaires"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les lignes de `src/main.c` qui **ne commencent pas** par `#`.",
+     "hints": [
+      "Inverse (-v) d'un motif « début de ligne = # »."
+     ],
+     "accept": [
+      "grep -v \"^#\" src/main.c"
+     ],
+     "solution": "grep -v '^#' src/main.c",
+     "explain": "`-v '^#'` retire les lignes commençant par `#` (include, commentaires shell).",
+     "table": "src/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les lignes de `src/util.h` qui **finissent par** `;`.",
+     "hints": [
+      "$ désigne la fin de ligne."
+     ],
+     "accept": [
+      "grep \";$\" src/util.h"
+     ],
+     "solution": "grep ';$' src/util.h",
+     "explain": "`;$` : un point-virgule en fin de ligne.",
+     "table": "src/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Pour des motifs plus riches, on active les **regex étendues** avec `-E` (ou la commande `egrep`). Elles ajoutent `+` (1 ou plus), `?` (0 ou 1), `{n}`, `|` (OU) et les parenthèses."
+    },
+    {
+     "type": "code",
+     "sql": "grep -E 'ERREUR|erreur' notes.txt     → lignes avec ERREUR OU erreur\ngrep -E '[0-9]+' fichier               → lignes contenant au moins un chiffre\ngrep -E '^(INFO|WARN)' journal.log     → lignes commençant par INFO ou WARN",
+     "lang": "Terminal",
+     "title": "Regex étendues (-E)"
+    },
+    {
+     "type": "exercise",
+     "q": "Affiche les lignes de `notes.txt` contenant `ERREUR` **ou** `erreur` (avec `-E`).",
+     "hints": [
+      "-E pour l'alternance, | pour le OU."
+     ],
+     "accept": [
+      "grep -E \"ERREUR|erreur\" notes.txt",
+      "grep -E '(ERREUR|erreur)' notes.txt",
+      "grep -e ERREUR -e erreur notes.txt",
+      "grep -e 'ERREUR' -e 'erreur' notes.txt"
+     ],
+     "solution": "grep -E 'ERREUR|erreur' notes.txt",
+     "explain": "`|` signifie OU (dans les regex étendues).",
+     "table": "notes.txt\nAcheter du pain\nERREUR reseau\nrappeler Awa\nerreur disque",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "Que fait le motif `^$` dans `grep -c '^$' fichier` ?",
+     "options": [
+      "Compte les lignes vides",
+      "Compte les lignes avec un dollar",
+      "Compte les lignes qui commencent par ^"
+     ],
+     "answer": 0,
+     "explain": "`^$` : un début de ligne **immédiatement suivi** d'une fin de ligne, c'est-à-dire une ligne **vide**."
+    },
+    {
+     "type": "choice",
+     "q": "Le point `.` dans une regex signifie…",
+     "options": [
+      "Un point littéral",
+      "N'importe quel caractère",
+      "La fin de ligne"
+     ],
+     "answer": 1,
+     "explain": "`.` remplace n'importe quel caractère. Pour chercher un vrai point, il faut l'échapper : `\\.`."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Regex : `.` `*` `^` `$` `[ ]` `[^ ]`, et en mode `-E` : `+` `?` `|` `( )`. Toujours entre **guillemets simples**."
+    }
+   ]
+  },
+  {
+   "id": "find-nom",
+   "title": "find : trouver des fichiers par nom",
+   "emoji": "📂",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "`grep` cherche **dans le contenu** des fichiers. `find` cherche **les fichiers eux-mêmes** : par nom, type, taille, date, propriétaire. C'est l'outil de recherche le plus puissant de Linux."
+    },
+    {
+     "type": "say",
+     "text": "Syntaxe : `find [où chercher] [critères] [action]`. Sans critère, il liste tout ce qu'il y a sous le dossier indiqué."
+    },
+    {
+     "type": "code",
+     "sql": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "lang": "Terminal",
+     "title": "Notre arborescence"
+    },
+    {
+     "type": "code",
+     "sql": "find .                            → tout ce qui est sous le dossier courant\nfind . -name \"*.c\"               → les fichiers dont le nom finit par .c\nfind . -iname \"guide.md\"         → insensible à la casse (trouve guide.md et Guide.MD)\nfind . -type d                    → seulement les répertoires\nfind . -type f                    → seulement les fichiers ordinaires",
+     "lang": "Terminal",
+     "title": "Les critères de base"
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Mets le motif de `-name` entre guillemets !** Sinon le shell développe `*.c` **avant** `find` si des fichiers `.c` existent dans le dossier courant, et la recherche donne des résultats faux."
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi écrire `find . -name \"*.c\"` avec des guillemets ?",
+     "options": [
+      "Pour que le shell ne développe pas *.c avant find",
+      "Pour ignorer la casse",
+      "C'est une option de find"
+     ],
+     "answer": 0,
+     "explain": "Sans guillemets, le shell remplace `*.c` par les fichiers `.c` du dossier courant. Avec guillemets, `find` reçoit le motif tel quel."
+    },
+    {
+     "type": "exercise",
+     "q": "Trouve tous les fichiers dont le nom se termine par `.c` à partir du dossier courant.",
+     "hints": [
+      "find . -name \"motif\""
+     ],
+     "accept": [
+      "find . -name '*.c'",
+      "find -name \"*.c\"",
+      "find . -name \"*.c\" -type f",
+      "find . -type f -name \"*.c\"",
+      "find . -name '*.c' -type f",
+      "find . -type f -name '*.c'"
+     ],
+     "solution": "find . -name \"*.c\"",
+     "explain": "Résultat : `./src/main.c` et `./src/util.c`.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Trouve `guide.md` **sans tenir compte de la casse** (doit trouver aussi `Guide.MD`).",
+     "hints": [
+      "-iname au lieu de -name."
+     ],
+     "accept": [
+      "find . -iname 'guide.md'",
+      "find -iname \"guide.md\""
+     ],
+     "solution": "find . -iname \"guide.md\"",
+     "explain": "`-iname` ignore la casse.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Liste tous les **répertoires** sous le dossier courant.",
+     "hints": [
+      "-type d pour directory."
+     ],
+     "accept": [
+      "find -type d"
+     ],
+     "solution": "find . -type d",
+     "explain": "Résultat : `.`, `./src`, `./docs`, `./logs`.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Liste tous les fichiers **`.log`** (fichiers ordinaires seulement).",
+     "hints": [
+      "Combine -type f et -name."
+     ],
+     "accept": [
+      "find . -name \"*.log\" -type f",
+      "find . -type f -name '*.log'",
+      "find . -name '*.log' -type f"
+     ],
+     "solution": "find . -type f -name \"*.log\"",
+     "explain": "Résultat : `./logs/app.log` et `./logs/old.log`.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "On peut **limiter la profondeur** avec `-maxdepth` : `find . -maxdepth 1` ne regarde que le dossier courant, sans descendre dans les sous-dossiers."
+    },
+    {
+     "type": "exercise",
+     "q": "Liste uniquement les **fichiers** du dossier courant (sans descendre dans les sous-dossiers).",
+     "hints": [
+      "-maxdepth 1 limite à un seul niveau."
+     ],
+     "accept": [
+      "find . -type f -maxdepth 1"
+     ],
+     "solution": "find . -maxdepth 1 -type f",
+     "explain": "Résultat : `./notes.txt`, `./photo.jpg`, `./rapport.pdf`.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "Dernier réflexe : quand tu cherches dans `/` (tout le système), `find` affiche plein de « Permission denied ». On les fait taire avec `2>/dev/null`."
+    },
+    {
+     "type": "code",
+     "sql": "find / -name \"sshd_config\" 2>/dev/null",
+     "lang": "Terminal",
+     "title": "Chercher dans tout le système"
+    },
+    {
+     "type": "say",
+     "text": "🏁 `find où -name / -iname / -type / -maxdepth`, motifs entre guillemets, `2>/dev/null` pour les erreurs. Maintenant : **taille, date, actions** !"
+    }
+   ]
+  },
+  {
+   "id": "find-actions",
+   "title": "find : taille, date et actions",
+   "emoji": "⚙️",
+   "minutes": 12,
+   "steps": [
+    {
+     "type": "say",
+     "text": "`find` sait aussi filtrer par **taille**, **date de modification**, **propriétaire** ou **droits**, et même **agir** sur les fichiers trouvés. C'est là qu'il devient redoutable."
+    },
+    {
+     "type": "code",
+     "sql": "-size +1M     plus de 1 Mo        -size -100k  moins de 100 Ko   -size 500k  exactement 500 Ko\n-mtime +30    modifié il y a PLUS de 30 jours\n-mtime -7     modifié il y a MOINS de 7 jours\n-user awa     appartient à awa\n-perm 644     droits exactement 644\n-empty        fichiers ou dossiers vides",
+     "lang": "Terminal",
+     "title": "Taille, date, propriétaire"
+    },
+    {
+     "type": "choice",
+     "q": "Que fait `find . -mtime +30` ?",
+     "options": [
+      "Trouve les fichiers modifiés il y a plus de 30 jours",
+      "Trouve les fichiers modifiés dans les 30 derniers jours",
+      "Trouve les fichiers de 30 Mo"
+     ],
+     "answer": 0,
+     "explain": "`+30` = plus de 30 jours ; `-30` = moins de 30 jours. Idéal pour repérer de **vieux fichiers** à archiver."
+    },
+    {
+     "type": "code",
+     "sql": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "lang": "Terminal",
+     "title": "Rappel de l'arborescence"
+    },
+    {
+     "type": "exercise",
+     "q": "Trouve les fichiers de **plus de 1 Mo** à partir du dossier courant.",
+     "hints": [
+      "-size +1M"
+     ],
+     "accept": [
+      "find . -type f -size +1M",
+      "find . -size +1024k"
+     ],
+     "solution": "find . -size +1M",
+     "explain": "Seul `./rapport.pdf` (2 Mo) dépasse 1 Mo.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Trouve les fichiers modifiés il y a **plus de 30 jours**.",
+     "hints": [
+      "-mtime +N"
+     ],
+     "accept": [
+      "find . -type f -mtime +30"
+     ],
+     "solution": "find . -mtime +30",
+     "explain": "Résultat : `./logs/old.log` (40 jours).",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**Agir sur les résultats.** Deux méthodes : `-exec` (exécute une commande pour chaque fichier trouvé) et `xargs` (envoie la liste en arguments). `{}` représente le fichier courant, et `\\;` termine la commande."
+    },
+    {
+     "type": "code",
+     "sql": "find . -name \"*.c\" -exec wc -l {} \\;                → compte les lignes de chaque .c\nfind . -name \"*.c\" | xargs grep -n TODO              → cherche TODO dans tous les .c",
+     "lang": "Terminal",
+     "title": "-exec et xargs"
+    },
+    {
+     "type": "exercise",
+     "q": "Compte les lignes de chaque fichier `.c` avec `find … -exec wc -l {} \\;`.",
+     "hints": [
+      "find ... -exec commande {} \\;"
+     ],
+     "accept": [
+      "find . -name '*.c' -exec wc -l {} \\;",
+      "find . -name \"*.c\" -exec wc -l '{}' \\;"
+     ],
+     "solution": "find . -name \"*.c\" -exec wc -l {} \\;",
+     "explain": "Résultat : `3 ./src/main.c` et `3 ./src/util.c`.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Cherche `TODO` dans tous les `.c` avec **find puis xargs grep -n**.",
+     "hints": [
+      "find ... | xargs grep -n TODO"
+     ],
+     "accept": [
+      "find . -name '*.c' | xargs grep -n TODO",
+      "find . -name \"*.c\" | xargs grep -n 'TODO'",
+      "find . -name '*.c' | xargs grep -n 'TODO'"
+     ],
+     "solution": "find . -name \"*.c\" | xargs grep -n TODO",
+     "explain": "`xargs` transforme la liste de fichiers en arguments de `grep`.",
+     "table": "src/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Danger : `-delete` et `-exec rm`.** `find . -name \"*.tmp\" -delete` supprime **tout** ce qui correspond, sans corbeille ni confirmation. **Règle d'or :** exécute **d'abord** la commande sans `-delete` pour *voir* ce qui sera supprimé."
+    },
+    {
+     "type": "choice",
+     "q": "Avant de lancer `find /var/tmp -name \"*.old\" -delete`, que faut-il faire ?",
+     "options": [
+      "Rien, c'est sûr",
+      "Lancer la même commande sans -delete pour vérifier la liste",
+      "Ajouter sudo"
+     ],
+     "answer": 1,
+     "explain": "Toujours **prévisualiser** : `find /var/tmp -name \"*.old\"` d'abord. La suppression est définitive."
+    },
+    {
+     "type": "say",
+     "text": "Les noms avec **espaces** cassent `xargs`. Solution fiable : `find ... -print0 | xargs -0 commande`, qui sépare les noms par un caractère nul au lieu d'un espace."
+    },
+    {
+     "type": "choice",
+     "q": "Pour traiter des fichiers dont le nom contient des espaces avec `find | xargs`, on utilise…",
+     "options": [
+      "-print0 et xargs -0",
+      "-space et xargs -s",
+      "Rien : ça marche toujours"
+     ],
+     "answer": 0,
+     "explain": "`-print0` et `xargs -0` utilisent le caractère nul comme séparateur : sûr pour tous les noms."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `-size`, `-mtime`, `-user`, `-perm`, puis `-exec … {} \\;` ou `| xargs`. Et toujours **prévisualiser avant de supprimer**."
+    }
+   ]
+  },
+  {
+   "id": "localiser",
+   "title": "locate, whereis, which",
+   "emoji": "🧭",
+   "minutes": 8,
+   "steps": [
+    {
+     "type": "say",
+     "text": "`find` parcourt le disque **en direct** : précis mais parfois lent. Pour des recherches rapides de **fichiers du système**, d'autres outils existent."
+    },
+    {
+     "type": "code",
+     "sql": "locate nom        → cherche dans une base de données indexée (ultra rapide)\nsudo updatedb     → met à jour cette base (souvent faite chaque nuit)\nwhich cmd         → chemin de l'exécutable qui sera lancé\nwhereis cmd       → exécutable + page de manuel + sources\ntype cmd          → alias, commande interne du shell, ou fichier ?",
+     "lang": "Terminal",
+     "title": "Les outils de localisation"
+    },
+    {
+     "type": "say",
+     "text": "`locate` ne parcourt pas le disque : il interroge une **base indexée** par `updatedb`. Résultat quasi instantané, mais un fichier créé **depuis la dernière mise à jour** n'y figure pas."
+    },
+    {
+     "type": "choice",
+     "q": "Tu viens de créer `rapport.pdf`. `locate rapport.pdf` ne le trouve pas. Pourquoi ?",
+     "options": [
+      "La base de locate n'est pas à jour : il faut lancer updatedb",
+      "locate ne trouve pas les PDF",
+      "Il faut être root"
+     ],
+     "answer": 0,
+     "explain": "`locate` utilise un index. Après création d'un fichier, `sudo updatedb` met la base à jour. `find` n'a pas ce défaut."
+    },
+    {
+     "type": "choice",
+     "q": "Tu cherches un fichier modifié il y a 2 minutes. Le meilleur outil est…",
+     "options": [
+      "locate",
+      "find",
+      "which"
+     ],
+     "answer": 1,
+     "explain": "`find` parcourt le disque en direct, donc il voit les changements récents. `locate` dépend de son index."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche le **chemin de l'exécutable** de `python3` ?",
+     "hints": [
+      "Un mot qui veut dire « lequel »."
+     ],
+     "accept": [
+      "type python3",
+      "command -v python3",
+      "whereis python3"
+     ],
+     "solution": "which python3",
+     "explain": "`which python3` répond par exemple `/usr/bin/python3`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche l'**exécutable, le manuel et les sources** de `ls` ?",
+     "hints": [
+      "Cherche *où est*…"
+     ],
+     "accept": [],
+     "solution": "whereis ls",
+     "explain": "`whereis ls` affiche par exemple `ls: /usr/bin/ls /usr/share/man/man1/ls.1.gz`.",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "say",
+     "text": "**Tableau de choix :** *Je sais le nom d'un fichier système* → `locate`. *Je cherche selon des critères (taille, date…)* → `find`. *Je cherche du texte dans des fichiers* → `grep -r`. *Où est cette commande ?* → `which`/`type`."
+    },
+    {
+     "type": "choice",
+     "q": "Je cherche tous les fichiers de plus de 100 Mo modifiés cette semaine. J'utilise…",
+     "options": [
+      "locate",
+      "find",
+      "whereis"
+     ],
+     "answer": 1,
+     "explain": "Les critères de taille et de date sont le domaine de `find`."
+    },
+    {
+     "type": "say",
+     "text": "🏁 `locate` = rapide mais indexé ; `find` = précis et en direct ; `which`/`whereis`/`type` = trouver une commande. Place au défi final !"
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : retrouve-le !",
+   "emoji": "🏆",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Défi final ! Même dossier `projet`. Six enquêtes de difficulté croissante, comme un sujet d'examen."
+    },
+    {
+     "type": "code",
+     "sql": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "lang": "Terminal",
+     "title": "Rappel"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/6** — Affiche les lignes de `notes.txt` contenant `erreur` **quelle que soit la casse**, avec leur numéro.",
+     "hints": [
+      "Deux options : ignorer la casse et numéroter."
+     ],
+     "accept": [
+      "grep -ni erreur notes.txt",
+      "grep -i -n erreur notes.txt",
+      "grep -n -i erreur notes.txt"
+     ],
+     "solution": "grep -in erreur notes.txt",
+     "explain": "`-i` (casse) et `-n` (numéros) se combinent : `2:ERREUR reseau` et `4:erreur disque`.",
+     "table": "notes.txt\nAcheter du pain\nERREUR reseau\nrappeler Awa\nerreur disque",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/6** — Liste les **noms des fichiers** (récursif, depuis le dossier courant) contenant `TODO`.",
+     "hints": [
+      "-r et -l."
+     ],
+     "accept": [
+      "grep -lr TODO .",
+      "grep -r -l TODO ."
+     ],
+     "solution": "grep -rl TODO .",
+     "explain": "`./src/main.c` et `./src/util.c`.",
+     "table": "src/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/6** — Trouve tous les `.c` **et** compte leurs lignes (`-exec wc -l`).",
+     "hints": [
+      "find ... -exec ... {} \\;"
+     ],
+     "accept": [
+      "find . -name '*.c' -exec wc -l {} \\;"
+     ],
+     "solution": "find . -name \"*.c\" -exec wc -l {} \\;",
+     "explain": "Chaque fichier `.c` fait 3 lignes.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 4/6** — Liste les fichiers `.log` **modifiés il y a plus de 30 jours**.",
+     "hints": [
+      "Combine -name et -mtime."
+     ],
+     "accept": [
+      "find . -name '*.log' -mtime +30",
+      "find . -type f -name \"*.log\" -mtime +30",
+      "find . -mtime +30 -name \"*.log\"",
+      "find . -type f -name '*.log' -mtime +30",
+      "find . -mtime +30 -name '*.log'"
+     ],
+     "solution": "find . -name \"*.log\" -mtime +30",
+     "explain": "Seul `./logs/old.log` répond aux deux critères.",
+     "table": "Tu es dans le dossier « projet » :\nprojet/\n├── notes.txt\n├── rapport.pdf        (2 Mo)\n├── photo.jpg          (500 Ko)\n├── src/\n│   ├── main.c\n│   ├── util.c\n│   └── util.h\n├── docs/\n│   ├── guide.md\n│   └── Guide.MD\n└── logs/\n    ├── app.log\n    └── old.log        (modifié il y a 40 jours)",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 5/6** — Cherche `TODO` dans tous les `.c`, en affichant **seulement le nombre de lignes trouvées au total** (`find`, `xargs grep`, `wc -l`).",
+     "hints": [
+      "find ... | xargs grep TODO | wc -l"
+     ],
+     "accept": [
+      "find . -name '*.c' | xargs grep TODO | wc -l",
+      "find . -name \"*.c\" | xargs grep -h TODO | wc -l",
+      "find . -name '*.c' | xargs grep -h TODO | wc -l"
+     ],
+     "solution": "find . -name \"*.c\" | xargs grep TODO | wc -l",
+     "explain": "Résultat : **2** lignes (une dans `main.c`, une dans `util.c`).",
+     "table": "src/main.c\n#include <stdio.h>\n// TODO: gerer les erreurs\nint main(void) { return 0; }\n\nsrc/util.c\n#include \"util.h\"\n// TODO: tester\nint add(int a, int b) { return a + b; }\n\nsrc/util.h\nint add(int a, int b);",
+     "placeholder": "Écris ta commande ici…",
+     "caseSensitive": true
+    },
+    {
+     "type": "choice",
+     "q": "**Défi 6/6 (boss)** — Tu veux **supprimer** tous les `.tmp` d'un serveur. Quelle est la bonne méthode ?",
+     "options": [
+      "find / -name \"*.tmp\" -delete directement",
+      "Lister d'abord avec find / -name \"*.tmp\" 2>/dev/null, vérifier, puis ajouter -delete",
+      "rm -rf /*.tmp"
+     ],
+     "answer": 1,
+     "explain": "**Toujours prévisualiser.** `-delete` est irréversible. Et `rm -rf /*.tmp` ne fait pas ce qu'on croit… ni de sûr !"
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu sais chercher dans le **contenu** (`grep`, regex) et parmi les **fichiers** (`find`, `locate`), et agir sur les résultats en sécurité. Avec les tubes, tu peux maintenant résoudre presque n'importe quel problème de recherche sur un serveur."
+    }
+   ]
+  }
+ ]
+}
