@@ -1,0 +1,773 @@
+{
+ "id": "ipv4",
+ "order": 3,
+ "title": "IPv4 : des bases aux pièges",
+ "tagline": "Classes, adresses privées, adresses spéciales, passerelle : tout ce qu'il faut savoir sur l'adressage IPv4.",
+ "emoji": "🌐",
+ "color": "#10B981",
+ "level": "Débutant",
+ "minutes": 55,
+ "pitch": [
+  "Salut ! Je te propose **« IPv4 : des bases aux pièges »** 🌐.",
+  "L'adressage IPv4 est la **fondation** de tout le reste : subnetting, routage, NAT, ACL… Si les adresses ne sont pas solides, tout le reste vacille.",
+  "On part du binaire pour comprendre une adresse, puis les classes, les adresses privées, les adresses spéciales (loopback, APIPA, broadcast, multicast) et la logique « local ou distant » d'un PC. Tout est ponctué d'exercices avec indices et corrections.",
+  "Tu repartiras capable de reconnaître en un coup d'œil de quoi il s'agit, et de ne plus tomber dans les pièges d'examen."
+ ],
+ "benefits": [
+  "Lire et convertir une adresse IPv4 sans hésiter",
+  "Connaître les classes et les plages privées par cœur",
+  "Reconnaître loopback, APIPA, broadcast et multicast",
+  "Comprendre pourquoi la passerelle par défaut est indispensable"
+ ],
+ "lessons": [
+  {
+   "id": "anatomie",
+   "title": "Anatomie d'une adresse IPv4",
+   "emoji": "🧬",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Avant de manipuler des masques ou des routes, il faut **vraiment** comprendre ce qu'est une adresse IPv4. On y va en douceur."
+    },
+    {
+     "type": "say",
+     "text": "Une adresse IPv4 est un nombre de **32 bits**. Pour qu'on puisse la lire, on la découpe en **4 octets** (8 bits chacun) écrits en décimal, séparés par des points : c'est la notation **décimale pointée**."
+    },
+    {
+     "type": "code",
+     "sql": "11000000 . 10101000 . 00000001 . 01001101   ← 32 bits\n   192    .   168    .    1     .    77      ← décimal pointé",
+     "lang": "Réseau",
+     "title": "Une adresse, deux écritures"
+    },
+    {
+     "type": "say",
+     "text": "Chaque octet va de **0 à 255** (car 2⁸ = 256 valeurs). Donc `192.168.1.300` n'existe pas, et `256.1.1.1` non plus. Au total, il y a 2³² ≈ **4,3 milliards** d'adresses possibles."
+    },
+    {
+     "type": "choice",
+     "q": "Laquelle de ces adresses est **invalide** ?",
+     "options": [
+      "10.0.0.255",
+      "172.16.256.1",
+      "192.168.0.0"
+     ],
+     "answer": 1,
+     "explain": "Un octet ne peut pas dépasser **255**. `172.16.256.1` est invalide à cause du 256."
+    },
+    {
+     "type": "say",
+     "text": "Pour passer du binaire au décimal, chaque bit a un **poids** : 128, 64, 32, 16, 8, 4, 2, 1. On additionne les poids des bits à 1."
+    },
+    {
+     "type": "code",
+     "sql": "Poids :   128  64  32  16   8   4   2   1\nBits   :    1   1   0   0   0   0   0   0\n                128 + 64 = 192",
+     "lang": "Réseau",
+     "title": "11000000 = 192"
+    },
+    {
+     "type": "exercise",
+     "q": "Convertis `10101100` en décimal.",
+     "hints": [
+      "Poids : 128 64 32 16 8 4 2 1.",
+      "Les bits à 1 : 128, 32, 8, 4."
+     ],
+     "accept": [],
+     "solution": "172",
+     "explain": "128 + 32 + 8 + 4 = **172**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Convertis `00001010` en décimal.",
+     "hints": [
+      "Seuls les poids 8 et 2 sont à 1.",
+      "8 + 2"
+     ],
+     "accept": [],
+     "solution": "10",
+     "explain": "8 + 2 = **10** (le premier octet des adresses privées `10.x.x.x`).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Et dans l'autre sens : décimal → binaire. On retire les poids de gauche à droite : si le poids tient dans le nombre, le bit vaut 1 et on soustrait, sinon 0."
+    },
+    {
+     "type": "code",
+     "sql": "Convertir 172 :\n172 ≥ 128 → 1  (reste 44)\n 44 <  64 → 0\n 44 ≥  32 → 1  (reste 12)\n 12 <  16 → 0\n 12 ≥   8 → 1  (reste 4)\n  4 ≥   4 → 1  (reste 0)\n  0 → 0 , 0\n=> 10101100",
+     "lang": "Réseau",
+     "title": "Méthode des poids"
+    },
+    {
+     "type": "exercise",
+     "q": "Convertis **192** en binaire (8 bits).",
+     "hints": [
+      "192 = 128 + 64.",
+      "Deux bits à 1 au début, puis six 0."
+     ],
+     "accept": [],
+     "solution": "11000000",
+     "explain": "128 + 64 = 192 → `11000000`.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Convertis **255** en binaire (8 bits).",
+     "hints": [
+      "255 = tous les poids additionnés.",
+      "Huit bits à 1."
+     ],
+     "accept": [],
+     "solution": "11111111",
+     "explain": "128+64+32+16+8+4+2+1 = 255 → `11111111`. C'est le maximum d'un octet.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "choice",
+     "q": "Combien d'adresses distinctes offre un seul octet ?",
+     "options": [
+      "255",
+      "256",
+      "128"
+     ],
+     "answer": 1,
+     "explain": "2⁸ = **256** valeurs (de 0 à 255)."
+    },
+    {
+     "type": "say",
+     "text": "Dernier point : une adresse se compose d'une **partie réseau** (le quartier) et d'une **partie hôte** (la maison). C'est le **masque** qui indique où est la coupure. Sans masque, une adresse seule est ambiguë."
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi une adresse IP seule ne suffit-elle pas à connaître son réseau ?",
+     "options": [
+      "Parce qu'elle est trop courte",
+      "Parce qu'il faut le masque pour savoir où finit la partie réseau",
+      "Parce qu'il faut aussi l'adresse MAC"
+     ],
+     "answer": 1,
+     "explain": "Sans masque (ou préfixe `/n`), on ne sait pas quels bits désignent le réseau et lesquels désignent l'hôte."
+    },
+    {
+     "type": "say",
+     "text": "🏁 IPv4 = 32 bits = 4 octets de 0 à 255, avec une partie réseau et une partie hôte. Prochaine leçon : les **classes**, l'ancienne façon de découper l'espace d'adresses."
+    }
+   ]
+  },
+  {
+   "id": "classes",
+   "title": "Les classes A, B, C, D, E",
+   "emoji": "🏷️",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "À l'origine d'Internet, on a découpé l'espace d'adresses en **classes**, selon la valeur du **premier octet**. Aujourd'hui le CIDR les a remplacées, mais elles restent **au programme** et expliquent encore beaucoup de choses."
+    },
+    {
+     "type": "code",
+     "sql": "Classe | 1er octet  | Bits de tête | Masque par défaut | Usage\n  A    |   1 – 126  |     0        | 255.0.0.0   (/8)  | très grands réseaux\n  B    | 128 – 191  |     10       | 255.255.0.0 (/16) | réseaux moyens\n  C    | 192 – 223  |     110      | 255.255.255.0 (/24)| petits réseaux\n  D    | 224 – 239  |     1110     | —                 | multicast\n  E    | 240 – 255  |     1111     | —                 | réservé / expérimental",
+     "lang": "Réseau",
+     "title": "Tableau des classes"
+    },
+    {
+     "type": "say",
+     "text": "Astuce pour mémoriser : les **bits de tête** du premier octet décident de la classe. Un `0` au début → A. `10` → B. `110` → C. `1110` → D."
+    },
+    {
+     "type": "choice",
+     "q": "L'adresse `150.20.3.4` est de classe…",
+     "options": [
+      "A",
+      "B",
+      "C"
+     ],
+     "answer": 1,
+     "explain": "Le premier octet (150) est entre 128 et 191 → **classe B**."
+    },
+    {
+     "type": "exercise",
+     "q": "Donne la **classe** de `10.4.5.6` (A, B, C, D ou E).",
+     "hints": [
+      "Regarde le premier octet : 10.",
+      "Classe A : 1 à 126."
+     ],
+     "accept": [
+      "classe a"
+     ],
+     "solution": "A",
+     "explain": "10 est entre 1 et 126 → **classe A** (masque par défaut /8).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Donne la **classe** de `172.20.1.1`.",
+     "hints": [
+      "Premier octet : 172.",
+      "Classe B : 128 à 191."
+     ],
+     "accept": [
+      "classe b"
+     ],
+     "solution": "B",
+     "explain": "172 ∈ [128 ; 191] → **classe B**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Donne la **classe** de `192.168.1.1`.",
+     "hints": [
+      "Premier octet : 192.",
+      "Classe C : 192 à 223."
+     ],
+     "accept": [
+      "classe c"
+     ],
+     "solution": "C",
+     "explain": "192 ∈ [192 ; 223] → **classe C**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Donne la **classe** de `224.0.0.5`.",
+     "hints": [
+      "Premier octet : 224.",
+      "Classe D = multicast."
+     ],
+     "accept": [
+      "classe d"
+     ],
+     "solution": "D",
+     "explain": "224 ∈ [224 ; 239] → **classe D** (multicast). C'est d'ailleurs l'adresse utilisée par OSPF.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Pourquoi **127 est absent** de la classe A (1–126) ? Parce que tout le bloc `127.0.0.0/8` est réservé au **bouclage** (*loopback*) : `127.0.0.1` désigne « moi-même ». On y reviendra."
+    },
+    {
+     "type": "choice",
+     "q": "Quel est le masque **par défaut** d'une adresse de classe B ?",
+     "options": [
+      "255.0.0.0",
+      "255.255.0.0",
+      "255.255.255.0"
+     ],
+     "answer": 1,
+     "explain": "Classe B → /16 → `255.255.0.0`."
+    },
+    {
+     "type": "say",
+     "text": "Combien d'hôtes par classe ? Avec la formule 2^h − 2 : **A** → 24 bits d'hôtes → 16 777 214 hôtes ; **B** → 16 bits → 65 534 hôtes ; **C** → 8 bits → **254** hôtes."
+    },
+    {
+     "type": "exercise",
+     "q": "Combien d'hôtes utilisables dans un réseau de **classe C** (masque par défaut) ?",
+     "hints": [
+      "h = 8 bits d'hôte.",
+      "2^8 − 2"
+     ],
+     "accept": [
+      "254 hôtes"
+     ],
+     "solution": "254",
+     "explain": "2⁸ − 2 = 256 − 2 = **254**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Combien d'hôtes utilisables dans un réseau de **classe B** (masque par défaut) ?",
+     "hints": [
+      "h = 16.",
+      "2^16 = 65 536."
+     ],
+     "accept": [
+      "65 534"
+     ],
+     "solution": "65534",
+     "explain": "2¹⁶ − 2 = **65 534**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Le routage « classless » (CIDR)** : aujourd'hui on n'est plus obligé de respecter ces masques. On peut avoir `10.1.2.0/24` (une adresse de classe A avec un masque /24). La classe ne donne qu'un masque **par défaut** ; c'est le préfixe `/n` qui fait foi."
+    },
+    {
+     "type": "choice",
+     "q": "`10.1.2.0/24` est une adresse de classe A. Son masque est…",
+     "options": [
+      "/8 car classe A",
+      "/24 : c'est le préfixe indiqué qui compte",
+      "Impossible"
+     ],
+     "answer": 1,
+     "explain": "En **CIDR**, le préfixe écrit prime sur le masque par défaut de la classe."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Retiens les plages du premier octet : **A 1–126, B 128–191, C 192–223, D 224–239, E 240–255**, et que 127 est réservé. Ensuite : quelles adresses sont **privées** ?"
+    }
+   ]
+  },
+  {
+   "id": "privees",
+   "title": "Adresses privées et publiques",
+   "emoji": "🏠",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Il n'y a que 4,3 milliards d'adresses IPv4 pour tous les appareils du monde : on a manqué d'adresses. Solution : réserver trois blocs d'adresses **privées**, utilisables **gratuitement** et **en interne** par tout le monde, mais **non routées sur Internet**."
+    },
+    {
+     "type": "code",
+     "sql": "Bloc privé       | Plage                         | CIDR\n10.0.0.0         | 10.0.0.0 – 10.255.255.255      | 10.0.0.0/8\n172.16.0.0       | 172.16.0.0 – 172.31.255.255    | 172.16.0.0/12\n192.168.0.0      | 192.168.0.0 – 192.168.255.255  | 192.168.0.0/16",
+     "lang": "Réseau",
+     "title": "Les adresses privées (RFC 1918)"
+    },
+    {
+     "type": "say",
+     "text": "Retiens-le : `10.x.x.x` en entier, `172.16.x.x` **jusqu'à** `172.31.x.x` (pas toute la 172 !) et `192.168.x.x`. Tout le reste est **publique**, c'est-à-dire unique au monde et routable sur Internet."
+    },
+    {
+     "type": "choice",
+     "q": "L'adresse `172.32.0.1` est-elle privée ?",
+     "options": [
+      "Oui",
+      "Non, la plage privée s'arrête à 172.31.255.255",
+      "Seulement en classe B"
+     ],
+     "answer": 1,
+     "explain": "Le bloc privé 172 va de 172.**16** à 172.**31**. 172.32 est **publique**."
+    },
+    {
+     "type": "exercise",
+     "q": "`172.31.255.1` est-elle privée ou publique ? (réponds `privée` ou `publique`)",
+     "hints": [
+      "Le bloc privé : 172.16.0.0 → 172.31.255.255.",
+      "31 est dans la plage ?"
+     ],
+     "accept": [
+      "privee",
+      "prive",
+      "privé"
+     ],
+     "solution": "privée",
+     "explain": "172.31.255.1 est bien dans 172.16.0.0/12 → **privée**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "`192.169.1.1` est-elle privée ou publique ?",
+     "hints": [
+      "Le bloc privé est 192.168.x.x.",
+      "Ici : 192.169."
+     ],
+     "accept": [
+      "public"
+     ],
+     "solution": "publique",
+     "explain": "192.**169** n'est pas 192.**168** → **publique**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "`10.200.1.1` est-elle privée ou publique ?",
+     "hints": [
+      "Tout le 10.x.x.x est privé.",
+      "Premier octet = 10."
+     ],
+     "accept": [
+      "privee",
+      "prive",
+      "privé"
+     ],
+     "solution": "privée",
+     "explain": "Le bloc `10.0.0.0/8` est entièrement privé.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Un PC en adresse **privée** (`192.168.1.20`) ne peut pas parler directement sur Internet. C'est le **NAT** (traduction d'adresses) du routeur/box qui remplace l'adresse privée par **l'adresse publique** de la box à la sortie."
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi des milliers de réseaux peuvent-ils utiliser `192.168.1.0/24` en même temps ?",
+     "options": [
+      "Parce qu'ils sont tous derrière la même box",
+      "Parce que ces adresses ne sont jamais routées sur Internet : chaque réseau privé est isolé",
+      "Parce que c'est interdit"
+     ],
+     "answer": 1,
+     "explain": "Les adresses privées ne sortent jamais telles quelles sur Internet : chaque réseau local les réutilise sans conflit."
+    },
+    {
+     "type": "say",
+     "text": "Où les rencontre-t-on ? Dans **ta box** (`192.168.1.1`), les réseaux d'entreprise (`10.x.x.x`), Docker (`172.17.0.0/16` par défaut), etc. Quand tu configures un réseau d'examen, on te donne presque toujours du `192.168.x.x`, du `10.x.x.x` ou du `172.16.x.x`."
+    },
+    {
+     "type": "choice",
+     "q": "Docker utilise par défaut le réseau `172.17.0.0/16`. Cette adresse est…",
+     "options": [
+      "Publique",
+      "Privée",
+      "Réservée multicast"
+     ],
+     "answer": 1,
+     "explain": "172.17.x.x est dans 172.16.0.0/12 : **privée**."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Trois blocs privés à connaître par cœur : `10/8`, `172.16/12` (16 → 31), `192.168/16`. Prochaine étape : les **adresses spéciales**."
+    }
+   ]
+  },
+  {
+   "id": "speciales",
+   "title": "Les adresses spéciales",
+   "emoji": "⭐",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Certaines adresses ont un **rôle particulier** : on ne peut pas les attribuer à une machine. Les reconnaître te sauve à l'examen (et en TP !)."
+    },
+    {
+     "type": "code",
+     "sql": "0.0.0.0              : « cette machine / n'importe laquelle » (adresse non spécifiée, route par défaut)\n127.0.0.0/8          : bouclage (loopback) — 127.0.0.1 = « moi-même »\n169.254.0.0/16       : adresses « link-local » (APIPA)\n255.255.255.255      : broadcast limité (toutes les machines du réseau local)\n224.0.0.0/4          : multicast (classe D)\nadresse réseau       : première adresse d'un sous-réseau\nadresse de broadcast : dernière adresse d'un sous-réseau",
+     "lang": "Réseau",
+     "title": "Aide-mémoire"
+    },
+    {
+     "type": "say",
+     "text": "**Le loopback `127.0.0.1`** : un paquet envoyé à cette adresse ne quitte **jamais** la machine. C'est le moyen de tester que la pile TCP/IP fonctionne : `ping 127.0.0.1`. Son nom habituel : `localhost`."
+    },
+    {
+     "type": "choice",
+     "q": "`ping 127.0.0.1` répond. Qu'est-ce que cela prouve ?",
+     "options": [
+      "Que le routeur fonctionne",
+      "Que la pile TCP/IP locale fonctionne",
+      "Qu'Internet est accessible"
+     ],
+     "answer": 1,
+     "explain": "Le paquet reste sur la machine : seul le logiciel réseau local est testé. Ni la carte réseau physique, ni le routeur, ni Internet."
+    },
+    {
+     "type": "say",
+     "text": "**APIPA `169.254.x.x`** : quand un PC est configuré en DHCP mais **ne reçoit aucune réponse** d'un serveur DHCP, Windows s'attribue lui-même une adresse `169.254.x.x`. C'est un signal d'alarme très courant."
+    },
+    {
+     "type": "choice",
+     "q": "Un PC affiche `169.254.12.7`. Que s'est-il probablement passé ?",
+     "options": [
+      "Il est connecté à Internet",
+      "Il n'a pas pu joindre de serveur DHCP",
+      "Il est en IPv6"
+     ],
+     "answer": 1,
+     "explain": "Une adresse 169.254.x.x signifie : **échec du DHCP**. Il faut vérifier le câble, le serveur DHCP ou le relais."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle adresse spéciale (écris l'adresse) désigne « moi-même » sur une machine ?",
+     "hints": [
+      "Elle appartient au bloc 127.0.0.0/8.",
+      "Elle se termine par .1"
+     ],
+     "accept": [],
+     "solution": "127.0.0.1",
+     "explain": "`127.0.0.1` (localhost) : l'adresse de **bouclage**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "**Le broadcast** : un message envoyé à *toutes* les machines d'un réseau. Deux sortes : le **broadcast limité** `255.255.255.255` (ne franchit pas le routeur) et le **broadcast dirigé** (dernière adresse d'un sous-réseau précis, ex. `192.168.1.255` pour `192.168.1.0/24`)."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle est l'adresse de **broadcast** du réseau `192.168.1.0/24` ?",
+     "hints": [
+      "C'est la dernière adresse du réseau.",
+      "Tous les bits d'hôte à 1."
+     ],
+     "accept": [],
+     "solution": "192.168.1.255",
+     "explain": "Dans un /24 le dernier octet vaut 255 → **192.168.1.255**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "choice",
+     "q": "Un routeur transmet-il un broadcast limité (`255.255.255.255`) vers un autre réseau ?",
+     "options": [
+      "Oui, toujours",
+      "Non : les routeurs bloquent les broadcasts",
+      "Seulement si on active le NAT"
+     ],
+     "answer": 1,
+     "explain": "Les routeurs **délimitent les domaines de broadcast** : le broadcast reste dans son réseau local."
+    },
+    {
+     "type": "say",
+     "text": "**Le multicast** `224.0.0.0/4` : un message envoyé à un **groupe** de machines abonnées. Exemples utiles : `224.0.0.5` (tous les routeurs OSPF) et `224.0.0.9` (RIPv2)."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle adresse multicast utilisent les routeurs **OSPF** pour s'annoncer à tous leurs voisins ?",
+     "hints": [
+      "Bloc multicast 224.0.0.0/4.",
+      "Se termine par 5."
+     ],
+     "accept": [],
+     "solution": "224.0.0.5",
+     "explain": "OSPF utilise `224.0.0.5` (tous les routeurs OSPF) et `224.0.0.6` (routeurs désignés).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "choice",
+     "q": "Peut-on attribuer `192.168.1.0/24` → `192.168.1.255` à un PC ?",
+     "options": [
+      "Oui",
+      "Non, c'est l'adresse de broadcast",
+      "Oui mais seulement en DHCP"
+     ],
+     "answer": 1,
+     "explain": "Aucun hôte ne peut porter l'adresse de **broadcast** du réseau, ni l'adresse de **réseau** (192.168.1.0)."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Spéciales à retenir : **0.0.0.0**, **127/8**, **169.254/16**, **255.255.255.255**, **224/4**, plus l'adresse du réseau et de broadcast de chaque sous-réseau."
+    }
+   ]
+  },
+  {
+   "id": "local-distant",
+   "title": "Parler à un voisin ou à l'autre bout du monde",
+   "emoji": "📡",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Voici la logique qu'applique **chaque PC** à chaque paquet qu'il envoie. Elle explique la **passerelle par défaut** et pourquoi une mauvaise passerelle coupe la communication."
+    },
+    {
+     "type": "say",
+     "text": "Le PC prend l'adresse de destination et la compare à **son propre réseau** (calculé avec son masque). Deux cas :"
+    },
+    {
+     "type": "code",
+     "sql": "Destination dans MON réseau   → je l'envoie DIRECTEMENT (je résous son adresse MAC par ARP)\nDestination hors de mon réseau → je l'envoie à ma PASSERELLE (le routeur), qui s'occupe du reste",
+     "lang": "Réseau",
+     "title": "La décision de l'hôte"
+    },
+    {
+     "type": "choice",
+     "q": "Un PC `192.168.1.10/24` écrit à `192.168.1.200`. Que fait-il ?",
+     "options": [
+      "Il envoie à sa passerelle",
+      "Il envoie directement (même réseau) après un ARP",
+      "Il envoie à un serveur DNS"
+     ],
+     "answer": 1,
+     "explain": "192.168.1.200 est dans 192.168.1.0/24 : même réseau → **envoi direct** (via ARP)."
+    },
+    {
+     "type": "choice",
+     "q": "Le même PC `192.168.1.10/24` écrit à `192.168.2.5`. Que fait-il ?",
+     "options": [
+      "Il envoie directement",
+      "Il envoie à sa passerelle par défaut",
+      "Il envoie en broadcast"
+     ],
+     "answer": 1,
+     "explain": "192.168.2.5 est hors de 192.168.1.0/24 → il passe par la **passerelle par défaut**."
+    },
+    {
+     "type": "say",
+     "text": "La **passerelle par défaut** (*default gateway*) est l'adresse du routeur **dans ton propre réseau**. Elle doit donc toujours être dans le **même sous-réseau** que le PC."
+    },
+    {
+     "type": "choice",
+     "q": "PC : `192.168.1.10/24`. Quelle passerelle est **valide** ?",
+     "options": [
+      "192.168.2.1",
+      "192.168.1.1",
+      "10.0.0.1"
+     ],
+     "answer": 1,
+     "explain": "La passerelle doit appartenir au même réseau que le PC (192.168.1.0/24) : `192.168.1.1`."
+    },
+    {
+     "type": "say",
+     "text": "Avec un **masque différent**, la réponse change ! Exemple : deux PC en `/23` :"
+    },
+    {
+     "type": "code",
+     "sql": "PC1 : 10.0.4.20 /23  → réseau 10.0.4.0 (plage 10.0.4.0 – 10.0.5.255)\nPC2 : 10.0.5.30 /23  → réseau 10.0.4.0 → MÊME réseau\nPC3 : 10.0.6.30 /23  → réseau 10.0.6.0 → réseau différent",
+     "lang": "Réseau",
+     "title": "Un /23 couvre deux « troisièmes octets »"
+    },
+    {
+     "type": "choice",
+     "q": "`10.0.4.20/23` et `10.0.5.30/23` : même réseau ?",
+     "options": [
+      "Oui : réseau 10.0.4.0/23",
+      "Non, car 4 ≠ 5",
+      "Impossible à dire"
+     ],
+     "answer": 0,
+     "explain": "Un /23 regroupe 10.0.4.0 à 10.0.5.255 : les deux sont dans le **même réseau**."
+    },
+    {
+     "type": "choice",
+     "q": "`10.0.5.20/23` et `10.0.6.30/23` : même réseau ?",
+     "options": [
+      "Oui",
+      "Non : 10.0.4.0/23 et 10.0.6.0/23",
+      "Seulement avec NAT"
+     ],
+     "answer": 1,
+     "explain": "10.0.5.20 est dans 10.0.4.0/23 ; 10.0.6.30 est dans 10.0.6.0/23 → réseaux **différents** : il faut un routeur."
+    },
+    {
+     "type": "say",
+     "text": "🔧 Cas pratique de dépannage : un PC joint ses voisins mais **pas Internet**. Cause fréquente : **passerelle absente ou fausse**. Vérifie avec `ipconfig` (Windows) ou `ip route` (Linux)."
+    },
+    {
+     "type": "choice",
+     "q": "Un PC joint tout son LAN mais aucune adresse extérieure. Première chose à vérifier ?",
+     "options": [
+      "La passerelle par défaut",
+      "La couleur du câble",
+      "Le nom de l'ordinateur"
+     ],
+     "answer": 0,
+     "explain": "La **passerelle par défaut** est le chemin vers tout ce qui est hors du réseau local."
+    },
+    {
+     "type": "say",
+     "text": "Le PC ne connaît que le **prochain saut**. Il envoie à la passerelle, puis le routeur décide du saut suivant, et ainsi de suite jusqu'à la destination."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande Linux affiche la **table de routage** et donc la passerelle par défaut d'un PC ?",
+     "hints": [
+      "Deux mots : ip + ...",
+      "`ip route show` donne le même résultat."
+     ],
+     "accept": [
+      "ip route show",
+      "ip r"
+     ],
+     "solution": "ip route",
+     "explain": "`ip route` (ou `ip route show`) affiche la route par défaut (`default via …`).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 L'hôte compare la destination à son réseau : **même réseau → direct, sinon → passerelle**. Et la passerelle doit être dans **son** réseau. Dernière étape : un **défi final** qui mélange tout !"
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : IPv4",
+   "emoji": "🏆",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Défi final ! Six questions mêlant tout ce qu'on a vu : conversions, classes, adresses privées et spéciales, décision local/distant."
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/6** — Convertis l'octet binaire `11110000` en décimal.",
+     "hints": [
+      "128 + 64 + 32 + 16",
+      "Quatre bits à 1 au début."
+     ],
+     "accept": [],
+     "solution": "240",
+     "explain": "128 + 64 + 32 + 16 = **240**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/6** — Classe de `130.5.6.7` ? (A, B, C, D ou E)",
+     "hints": [
+      "Premier octet : 130.",
+      "Classe B : 128 – 191."
+     ],
+     "accept": [
+      "classe b"
+     ],
+     "solution": "B",
+     "explain": "130 ∈ [128 ; 191] → **classe B**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/6** — `172.20.99.1` est-elle privée ou publique ?",
+     "hints": [
+      "Bloc privé : 172.16.0.0 → 172.31.255.255.",
+      "20 est-il entre 16 et 31 ?"
+     ],
+     "accept": [
+      "privee",
+      "prive",
+      "privé"
+     ],
+     "solution": "privée",
+     "explain": "172.20 ∈ [172.16 ; 172.31] → **privée**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 4/6** — Un PC obtient `169.254.88.3`. Quel service n'a pas répondu ? (un mot ou sigle)",
+     "hints": [
+      "APIPA se déclenche quand…",
+      "Service qui distribue les adresses automatiquement."
+     ],
+     "accept": [
+      "serveur dhcp",
+      "le dhcp"
+     ],
+     "solution": "DHCP",
+     "explain": "Pas de réponse d'un serveur **DHCP** → auto-adressage APIPA.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 5/6** — `10.0.4.20/23` et `10.0.5.30/23` sont-ils dans le même réseau ? (`oui` ou `non`)",
+     "hints": [
+      "Un /23 couvre deux « troisièmes octets » consécutifs.",
+      "10.0.4.0/23 va de 10.0.4.0 à 10.0.5.255."
+     ],
+     "accept": [
+      "oui, même réseau"
+     ],
+     "solution": "oui",
+     "explain": "Même réseau **10.0.4.0/23** : oui.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 6/6 (boss)** — Pour `192.168.1.0/24`, donne la **dernière adresse attribuable** à un hôte.",
+     "hints": [
+      "Dernière adresse du réseau = broadcast (.255).",
+      "La dernière attribuable est juste avant."
+     ],
+     "accept": [],
+     "solution": "192.168.1.254",
+     "explain": "Broadcast = .255 → dernière hôte utilisable = **192.168.1.254**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu connais l'anatomie d'une adresse IPv4, les classes, les plages privées, les adresses spéciales et la logique local/distant. Tu es prêt pour le **subnetting** (si ce n'est pas déjà fait !) et le routage."
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,889 @@
+{
+ "id": "table-routage",
+ "order": 4,
+ "title": "Lire une table de routage comme un pro",
+ "tagline": "Codes, distance administrative, métrique, plus long préfixe : sache toujours par où part un paquet.",
+ "emoji": "🧭",
+ "color": "#EF4444",
+ "level": "Intermédiaire",
+ "minutes": 60,
+ "pitch": [
+  "Bonjour ! Je te présente **« Lire une table de routage comme un pro »** 🧭.",
+  "Dans les sujets de réseau, on te donne souvent une table de routage en te demandant : « par où part ce paquet ? ». Beaucoup d'étudiants se trompent en oubliant la règle du **plus long préfixe**, ou en confondant distance administrative et métrique.",
+  "Je te montre comment décoder chaque ligne, reconnaître les codes (C, L, S, O…), choisir la bonne route, gérer les égalités et comprendre la route par défaut. Chaque notion est suivie d'exercices sur **une vraie table** de routeur, avec indices et corrections.",
+  "À la fin, tu liras une table comme on lit une carte routière."
+ ],
+ "benefits": [
+  "Décoder une ligne de show ip route sans hésiter",
+  "Appliquer le plus long préfixe pour trouver le bon next-hop",
+  "Distinguer distance administrative, métrique et partage de charge",
+  "Diagnostiquer un paquet perdu grâce à la table"
+ ],
+ "lessons": [
+  {
+   "id": "anatomie",
+   "title": "Anatomie d'une ligne de routage",
+   "emoji": "🔬",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Salut ! Moi c'est **Nimbo** ☁️. Une table de routage ressemble à un mur de texte… jusqu'à ce qu'on sache la **lire**. Aujourd'hui, tu apprends à la décortiquer ligne par ligne, comme un pro du réseau."
+    },
+    {
+     "type": "say",
+     "text": "Voici la table du routeur **R1** qu'on utilisera pendant toute la formation. Garde-la sous les yeux 👇"
+    },
+    {
+     "type": "code",
+     "sql": "R1# show ip route\n\nCodes: C - connected, L - local, S - static, O - OSPF, * - candidate default\nGateway of last resort is 10.0.0.6 to network 0.0.0.0\n\nC    192.168.10.0/24 is directly connected, GigabitEthernet0/0\nL    192.168.10.1/32 is directly connected, GigabitEthernet0/0\nC    10.0.0.0/30 is directly connected, Serial0/0/0\nC    10.0.0.4/30 is directly connected, Serial0/0/1\nS    192.168.20.0/24 [1/0] via 10.0.0.2\nS    192.168.20.128/25 [1/0] via 10.0.0.6\nO    172.16.0.0/16 [110/65] via 10.0.0.2, 00:12:41, Serial0/0/0\nS*   0.0.0.0/0 [1/0] via 10.0.0.6",
+     "lang": "Cisco IOS",
+     "title": "Table de routage de R1"
+    },
+    {
+     "type": "say",
+     "text": "Prenons **une seule ligne** et découpons-la en morceaux :"
+    },
+    {
+     "type": "code",
+     "sql": "O    172.16.0.0/16 [110/65] via 10.0.0.2, 00:12:41, Serial0/0/0\n│    │               │        │         │         └─ interface de sortie\n│    │               │        │         └─ ancienneté de la route\n│    │               │        └─ next-hop (prochain routeur)\n│    │               └─ [distance administrative / métrique]\n│    └─ réseau de destination / masque\n└─ origine de la route (O = OSPF)",
+     "lang": "Réseau",
+     "title": "Les 6 morceaux d'une ligne"
+    },
+    {
+     "type": "choice",
+     "q": "Dans `[110/65]`, que vaut la distance administrative ?",
+     "options": [
+      "65",
+      "110",
+      "175"
+     ],
+     "answer": 1,
+     "explain": "Le premier nombre est la **distance administrative** (110 = OSPF), le second la **métrique** (65 = coût OSPF)."
+    },
+    {
+     "type": "exercise",
+     "q": "Pour `S 192.168.20.0/24 [1/0] via 10.0.0.2`, quelle est l'adresse du **next-hop** ?",
+     "hints": [
+      "Le next-hop suit le mot « via ».",
+      "via ..."
+     ],
+     "accept": [],
+     "solution": "10.0.0.2",
+     "explain": "Le next-hop est l'adresse de l'équipement voisin vers lequel on envoie le paquet : **10.0.0.2**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Pour `O 172.16.0.0/16 [110/65] via 10.0.0.2, 00:12:41, Serial0/0/0`, par quelle **interface** sortent les paquets ?",
+     "hints": [
+      "Le dernier élément de la ligne.",
+      "Après l'ancienneté de la route."
+     ],
+     "accept": [
+      "s0/0/0",
+      "serial 0/0/0"
+     ],
+     "solution": "Serial0/0/0",
+     "explain": "L'interface de sortie est **Serial0/0/0**. Les routes statiques à next-hop n'affichent pas l'interface (elle est déduite).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle est la **métrique** de la route OSPF vers 172.16.0.0/16 ? (le chiffre)",
+     "hints": [
+      "Le second nombre entre crochets.",
+      "[110/65]"
+     ],
+     "accept": [
+      "65"
+     ],
+     "solution": "65",
+     "explain": "Métrique = **65** (le *coût* OSPF cumulé jusqu'au réseau).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Les lignes `C` et `L` sont un cas particulier : elles n'ont **pas** de next-hop, car le réseau est directement branché. `C` = le **réseau** de l'interface (`/24`) ; `L` = l'**adresse exacte de l'interface** du routeur (`/32`)."
+    },
+    {
+     "type": "choice",
+     "q": "À quoi sert la ligne `L 192.168.10.1/32` ?",
+     "options": [
+      "À joindre un autre routeur",
+      "À indiquer l'adresse IP de l'interface du routeur lui-même",
+      "À définir une route par défaut"
+     ],
+     "answer": 1,
+     "explain": "`L` (*local*) est une route /32 vers **l'adresse du routeur lui-même** : les paquets pour 192.168.10.1 lui sont destinés."
+    },
+    {
+     "type": "say",
+     "text": "Remarque aussi la ligne `Gateway of last resort is 10.0.0.6 to network 0.0.0.0` : c'est la **passerelle de dernier recours**, c'est-à-dire la route par défaut. On y reviendra."
+    },
+    {
+     "type": "choice",
+     "q": "`Gateway of last resort is not set` signifie…",
+     "options": [
+      "Le routeur n'a pas de route par défaut",
+      "Le routeur est éteint",
+      "Le routeur a trop de routes"
+     ],
+     "answer": 0,
+     "explain": "Aucune route par défaut : tout paquet sans route précise est **jeté**."
+    },
+    {
+     "type": "say",
+     "text": "🏁 Une ligne = **origine, réseau/masque, [AD/métrique], next-hop, ancienneté, interface**. Dans la leçon suivante : le **code** de la première colonne."
+    }
+   ]
+  },
+  {
+   "id": "codes",
+   "title": "Les codes d'origine",
+   "emoji": "🔤",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "La **première colonne** de la table indique **d'où vient** la route. C'est le premier réflexe quand on lit une table : *qui m'a appris cette route ?*"
+    },
+    {
+     "type": "code",
+     "sql": "C   Connected   : réseau directement branché sur une interface (AD 0)\nL   Local       : adresse IP de l'interface du routeur (/32)\nS   Static      : route écrite à la main (AD 1)\nS*  Static dflt : route statique par défaut\nO   OSPF        : apprise par OSPF (AD 110)\nO IA            : OSPF, autre aire (inter-area)\nR   RIP         : apprise par RIP (AD 120)\nD   EIGRP       : apprise par EIGRP (AD 90)\nB   BGP         : apprise par BGP (AD 20 en eBGP)",
+     "lang": "Réseau",
+     "title": "Les codes à connaître"
+    },
+    {
+     "type": "choice",
+     "q": "Quel code désigne une route configurée **à la main** ?",
+     "options": [
+      "C",
+      "S",
+      "O"
+     ],
+     "answer": 1,
+     "explain": "`S` = *static*."
+    },
+    {
+     "type": "choice",
+     "q": "Quel code désigne une route apprise par **OSPF** ?",
+     "options": [
+      "R",
+      "O",
+      "D"
+     ],
+     "answer": 1,
+     "explain": "`O` = OSPF. `R` = RIP, `D` = EIGRP."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle est la **distance administrative** d'une route **connectée** (`C`) ? (un chiffre)",
+     "hints": [
+      "C'est la plus fiable de toutes.",
+      "Plus la valeur est petite, plus on a confiance."
+     ],
+     "accept": [
+      "ad 0"
+     ],
+     "solution": "0",
+     "explain": "Réseau directement connecté : AD = **0** (rien n'est plus fiable).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle est la distance administrative d'une route **statique** ?",
+     "hints": [
+      "Juste après connectée (0).",
+      "[1/0] dans nos lignes S."
+     ],
+     "accept": [
+      "ad 1"
+     ],
+     "solution": "1",
+     "explain": "Statique : AD = **1**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle est la distance administrative par défaut d'**OSPF** ?",
+     "hints": [
+      "EIGRP = 90, RIP = 120.",
+      "OSPF est entre les deux."
+     ],
+     "accept": [
+      "ad 110"
+     ],
+     "solution": "110",
+     "explain": "OSPF : AD = **110** (EIGRP 90, RIP 120).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Mnémotechnique : **C**onnecté 0, **S**tatique 1, **E**IGRP 90, **O**SPF 110, **R**IP 120. Plus l'AD est petite, plus la source est digne de confiance."
+    },
+    {
+     "type": "choice",
+     "q": "Classe ces sources de la plus fiable à la moins fiable : OSPF, statique, connectée, RIP.",
+     "options": [
+      "Connectée, statique, OSPF, RIP",
+      "Statique, connectée, RIP, OSPF",
+      "Connectée, OSPF, statique, RIP"
+     ],
+     "answer": 0,
+     "explain": "0 (connectée) < 1 (statique) < 110 (OSPF) < 120 (RIP)."
+    },
+    {
+     "type": "say",
+     "text": "Que signifie le `*` (étoile) ? Une route marquée `*` est **candidate** pour devenir la route par défaut. `S*` = route par défaut statique ; `O*E2` = route par défaut apprise en OSPF."
+    },
+    {
+     "type": "choice",
+     "q": "Dans la table de R1, quelle ligne représente la route par défaut ?",
+     "options": [
+      "C 10.0.0.0/30",
+      "S* 0.0.0.0/0 via 10.0.0.6",
+      "O 172.16.0.0/16"
+     ],
+     "answer": 1,
+     "explain": "`0.0.0.0/0` est la route par défaut, marquée `S*`."
+    },
+    {
+     "type": "say",
+     "text": "Un dernier réflexe : `show ip route` affiche **toute** la table ; tu peux filtrer avec `show ip route connected`, `show ip route static`, `show ip route ospf`, ou chercher une destination précise avec `show ip route 172.16.4.9`."
+    },
+    {
+     "type": "exercise",
+     "q": "Quelle commande affiche seulement les routes apprises par **OSPF** ?",
+     "hints": [
+      "Même schéma que `show ip route static`.",
+      "show ip route ..."
+     ],
+     "accept": [],
+     "solution": "show ip route ospf",
+     "explain": "`show ip route ospf` filtre sur le protocole OSPF.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Tu sais lire les codes : **C, L, S, S\\*, O** et les **AD** (0, 1, 90, 110, 120). Maintenant la partie qui fait réfléchir : **quelle route est choisie ?**"
+    }
+   ]
+  },
+  {
+   "id": "lpm",
+   "title": "Quelle route sera choisie ?",
+   "emoji": "🎯",
+   "minutes": 11,
+   "steps": [
+    {
+     "type": "say",
+     "text": "C'est LA question d'examen : « le routeur reçoit un paquet pour telle adresse, **par où le renvoie-t-il** ? ». Une seule règle gouverne tout : le **plus long préfixe** (*longest prefix match*)."
+    },
+    {
+     "type": "say",
+     "text": "Méthode en deux temps : **1)** garde **toutes les routes qui contiennent** l'adresse de destination ; **2)** parmi elles, prends celle dont le **masque est le plus long** (/25 bat /24 qui bat /16 qui bat /0)."
+    },
+    {
+     "type": "code",
+     "sql": "R1# show ip route\n\nCodes: C - connected, L - local, S - static, O - OSPF, * - candidate default\nGateway of last resort is 10.0.0.6 to network 0.0.0.0\n\nC    192.168.10.0/24 is directly connected, GigabitEthernet0/0\nL    192.168.10.1/32 is directly connected, GigabitEthernet0/0\nC    10.0.0.0/30 is directly connected, Serial0/0/0\nC    10.0.0.4/30 is directly connected, Serial0/0/1\nS    192.168.20.0/24 [1/0] via 10.0.0.2\nS    192.168.20.128/25 [1/0] via 10.0.0.6\nO    172.16.0.0/16 [110/65] via 10.0.0.2, 00:12:41, Serial0/0/0\nS*   0.0.0.0/0 [1/0] via 10.0.0.6",
+     "lang": "Cisco IOS",
+     "title": "Rappel : la table de R1"
+    },
+    {
+     "type": "say",
+     "text": "Exemple 1 : destination **192.168.20.50**. Quelles routes la contiennent ? `192.168.20.0/24` ✅ (plage .0 → .255), `192.168.20.128/25` ❌ (plage .128 → .255 : 50 n'y est pas), et la route par défaut `0.0.0.0/0` ✅ (elle contient tout). Le plus long préfixe : **/24** → via 10.0.0.2."
+    },
+    {
+     "type": "say",
+     "text": "Exemple 2 : destination **192.168.20.200**. Elle est dans `/24`, dans `/25` (.128 → .255 ✅) et dans `/0`. Le plus long préfixe est **/25** → via **10.0.0.6**."
+    },
+    {
+     "type": "choice",
+     "q": "Pour un paquet vers `192.168.20.200`, quel next-hop est utilisé ?",
+     "options": [
+      "10.0.0.2",
+      "10.0.0.6",
+      "Aucun, le paquet est jeté"
+     ],
+     "answer": 1,
+     "explain": "Les routes /24, /25 et /0 correspondent ; le /25 est le plus précis → next-hop **10.0.0.6**."
+    },
+    {
+     "type": "exercise",
+     "q": "Pour un paquet vers **192.168.20.50**, quel est le next-hop utilisé ?",
+     "hints": [
+      "Est-ce que 50 est dans .128/25 ?",
+      "Non → la route /24 est la plus précise.",
+      "Next-hop de la route /24 : ?"
+     ],
+     "accept": [],
+     "solution": "10.0.0.2",
+     "explain": "Seules /24 et /0 conviennent ; le /24 est plus long → **10.0.0.2**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Pour un paquet vers **172.16.4.9**, quel est le next-hop utilisé ?",
+     "hints": [
+      "Quelle route contient 172.16.4.9 ?",
+      "172.16.0.0/16 (route OSPF)."
+     ],
+     "accept": [],
+     "solution": "10.0.0.2",
+     "explain": "La route `O 172.16.0.0/16` l'emporte sur la route par défaut → **10.0.0.2**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Pour un paquet vers **8.8.8.8**, quel est le next-hop utilisé ?",
+     "hints": [
+      "Aucune route spécifique ne contient 8.8.8.8.",
+      "Reste la route par défaut."
+     ],
+     "accept": [],
+     "solution": "10.0.0.6",
+     "explain": "Seule la route par défaut (`0.0.0.0/0`) convient → next-hop **10.0.0.6**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Pour un paquet vers **192.168.10.77**, par quelle interface part le paquet ?",
+     "hints": [
+      "Quel réseau directement connecté contient 192.168.10.77 ?",
+      "192.168.10.0/24 (route C)."
+     ],
+     "accept": [
+      "g0/0",
+      "gi0/0",
+      "gigabitethernet 0/0",
+      "gig0/0"
+     ],
+     "solution": "GigabitEthernet0/0",
+     "explain": "Réseau directement connecté : le routeur le livre lui-même, par **GigabitEthernet0/0** (pas de next-hop).",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Cas limite : **192.168.20.127**. Il est à la frontière ! La route `/25` commence à .128. Donc **.127 n'en fait pas partie** et le /24 gagne. Toujours calculer les bornes du préfixe."
+    },
+    {
+     "type": "choice",
+     "q": "`192.168.20.127` est-il couvert par `192.168.20.128/25` ?",
+     "options": [
+      "Oui",
+      "Non : le /25 commence à .128",
+      "Seulement si c'est un hôte"
+     ],
+     "answer": 1,
+     "explain": "192.168.20.128/25 couvre **.128 → .255**. Le .127 est dans le /24 seulement."
+    },
+    {
+     "type": "exercise",
+     "q": "Pour un paquet vers **192.168.20.127**, quel next-hop est utilisé ?",
+     "hints": [
+      "Le .127 est hors du /25.",
+      "Reste le /24."
+     ],
+     "accept": [],
+     "solution": "10.0.0.2",
+     "explain": "Seule la route /24 (et le /0) contient .127 → **10.0.0.2**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "Pour un paquet vers **172.17.0.1**, quel next-hop est utilisé ?",
+     "hints": [
+      "La route OSPF est 172.16.0.0/16 : 172.17 en fait-il partie ?",
+      "Non → reste la route par défaut."
+     ],
+     "accept": [],
+     "solution": "10.0.0.6",
+     "explain": "172.16.0.0/16 couvre 172.16.x.x seulement. **172.17.0.1** n'y est pas → route par défaut → **10.0.0.6**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Méthode : **toutes les routes qui contiennent l'adresse → la plus longue gagne**. Attention aux bornes des préfixes ! Dans la leçon suivante, que se passe-t-il quand **deux routes ont le même préfixe** ?"
+    }
+   ]
+  },
+  {
+   "id": "ad-metrique",
+   "title": "AD, métrique et égalité",
+   "emoji": "⚖️",
+   "minutes": 10,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Le plus long préfixe décide **en premier**. Mais que faire si deux routes ont **exactement le même préfixe** ? Là interviennent la **distance administrative** puis la **métrique**."
+    },
+    {
+     "type": "code",
+     "sql": "1) Plus long préfixe        → la route la plus précise gagne\n2) Distance administrative   → à préfixe égal, la source la plus fiable gagne (AD la plus petite)\n3) Métrique                  → à préfixe ET AD égaux (même protocole), le meilleur coût gagne\n4) Égalité parfaite           → partage de charge (ECMP)",
+     "lang": "Réseau",
+     "title": "L'ordre des critères"
+    },
+    {
+     "type": "say",
+     "text": "⚠️ **Idée reçue à corriger** : la distance administrative ne « bat » **pas** le préfixe. Une route OSPF `/25` passera avant une route statique `/24` : le **plus long préfixe passe d'abord**."
+    },
+    {
+     "type": "code",
+     "sql": "S    10.1.1.0/24 [1/0]   via 10.0.0.2        ← statique /24\nO    10.1.1.0/25 [110/20] via 10.0.0.6      ← OSPF /25\n\nPaquet vers 10.1.1.50 → OSPF /25 (plus précis), malgré l'AD plus haute",
+     "lang": "Réseau",
+     "title": "Le préfixe prime sur l'AD"
+    },
+    {
+     "type": "choice",
+     "q": "Une route statique `10.1.1.0/24` et une route OSPF `10.1.1.0/25`. Paquet pour `10.1.1.50` : laquelle ?",
+     "options": [
+      "La statique (AD 1)",
+      "L'OSPF /25 (préfixe plus long)",
+      "Les deux, en partage"
+     ],
+     "answer": 1,
+     "explain": "Le **plus long préfixe** est examiné avant l'AD. 10.1.1.50 est dans le /25 → route OSPF."
+    },
+    {
+     "type": "say",
+     "text": "Maintenant le cas où l'AD intervient : **même préfixe, sources différentes**."
+    },
+    {
+     "type": "code",
+     "sql": "S    10.2.0.0/16 [1/0]   via 10.0.0.2   ← statique\nO    10.2.0.0/16 [110/30] via 10.0.0.6  ← OSPF\n\nMême préfixe /16 → AD 1 < AD 110 → seule la route statique est installée",
+     "lang": "Réseau",
+     "title": "AD départage deux sources"
+    },
+    {
+     "type": "choice",
+     "q": "Même préfixe `10.2.0.0/16` annoncé en statique (AD 1) et en OSPF (AD 110). Laquelle est installée ?",
+     "options": [
+      "OSPF",
+      "La statique",
+      "Les deux"
+     ],
+     "answer": 1,
+     "explain": "À préfixe égal, la source avec la **plus petite AD** gagne : la statique."
+    },
+    {
+     "type": "say",
+     "text": "Et si c'est le **même protocole** (donc même AD) mais deux chemins ? C'est la **métrique** qui tranche : *le plus petit gagne*. En OSPF, la métrique est le **coût** (basé sur la bande passante) ; en RIP, le **nombre de sauts**."
+    },
+    {
+     "type": "exercise",
+     "q": "Deux routes OSPF vers 172.30.0.0/16 : l'une de métrique 20, l'autre de métrique 45. Quelle métrique est retenue ? (le chiffre)",
+     "hints": [
+      "La métrique la plus petite l'emporte.",
+      "20 ou 45 ?"
+     ],
+     "accept": [
+      "20 (la plus petite)"
+     ],
+     "solution": "20",
+     "explain": "Meilleure route = coût le plus **faible** : **20**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "Si les deux métriques sont **identiques**, le routeur installe **les deux** routes et répartit le trafic : c'est le **partage de charge** (*load balancing*, ECMP)."
+    },
+    {
+     "type": "choice",
+     "q": "Deux routes OSPF vers le même préfixe avec la **même métrique**. Que fait le routeur ?",
+     "options": [
+      "Il en choisit une au hasard et ignore l'autre",
+      "Il installe les deux et partage la charge",
+      "Il rejette les deux"
+     ],
+     "answer": 1,
+     "explain": "À AD et métrique égales, IOS installe les deux chemins (jusqu'à 4 par défaut) et **répartit le trafic**."
+    },
+    {
+     "type": "say",
+     "text": "🔁 C'est le principe de la **route flottante** vu en routage statique : on donne à la route de secours une **AD plus grande**. Elle ne s'installe que si la route principale disparaît."
+    },
+    {
+     "type": "choice",
+     "q": "Pour une route statique de secours (flottante), on choisit une AD…",
+     "options": [
+      "Plus petite que la route principale",
+      "Plus grande que la route principale",
+      "Égale à la route principale"
+     ],
+     "answer": 1,
+     "explain": "AD plus grande = moins prioritaire. Tant que la principale existe, la flottante reste « cachée »."
+    },
+    {
+     "type": "exercise",
+     "q": "Une route statique de secours doit rester **derrière OSPF** (AD 110). Donne une AD valide pour elle (un nombre entre 111 et 255).",
+     "hints": [
+      "Elle doit être plus grande que 110.",
+      "L'AD maximale est 255."
+     ],
+     "accept": [
+      "111",
+      "112",
+      "113",
+      "114",
+      "115",
+      "116",
+      "117",
+      "118",
+      "119",
+      "121",
+      "122",
+      "123",
+      "124",
+      "125",
+      "126",
+      "127",
+      "128",
+      "129",
+      "130",
+      "131",
+      "132",
+      "133",
+      "134",
+      "135",
+      "136",
+      "137",
+      "138",
+      "139",
+      "140",
+      "141",
+      "142",
+      "143",
+      "144",
+      "145",
+      "146",
+      "147",
+      "148",
+      "149",
+      "150",
+      "151",
+      "152",
+      "153",
+      "154",
+      "155",
+      "156",
+      "157",
+      "158",
+      "159",
+      "160",
+      "161",
+      "162",
+      "163",
+      "164",
+      "165",
+      "166",
+      "167",
+      "168",
+      "169",
+      "170",
+      "171",
+      "172",
+      "173",
+      "174",
+      "175",
+      "176",
+      "177",
+      "178",
+      "179",
+      "180",
+      "181",
+      "182",
+      "183",
+      "184",
+      "185",
+      "186",
+      "187",
+      "188",
+      "189",
+      "190",
+      "191",
+      "192",
+      "193",
+      "194",
+      "195",
+      "196",
+      "197",
+      "198",
+      "199",
+      "200",
+      "201",
+      "202",
+      "203",
+      "204",
+      "205",
+      "206",
+      "207",
+      "208",
+      "209",
+      "210",
+      "211",
+      "212",
+      "213",
+      "214",
+      "215",
+      "216",
+      "217",
+      "218",
+      "219",
+      "220",
+      "221",
+      "222",
+      "223",
+      "224",
+      "225",
+      "226",
+      "227",
+      "228",
+      "229",
+      "230",
+      "231",
+      "232",
+      "233",
+      "234",
+      "235",
+      "236",
+      "237",
+      "238",
+      "239",
+      "240",
+      "241",
+      "242",
+      "243",
+      "244",
+      "245",
+      "246",
+      "247",
+      "248",
+      "249",
+      "250",
+      "251",
+      "252",
+      "253",
+      "254",
+      "255"
+     ],
+     "solution": "120",
+     "explain": "Pour passer **après** OSPF, l'AD doit dépasser 110 : 120, 150, 200… tout nombre de 111 à 255 convient.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🏁 Ordre de décision : **1) préfixe le plus long → 2) AD la plus petite → 3) métrique la plus petite → 4) égalité = partage de charge**."
+    }
+   ]
+  },
+  {
+   "id": "defaut",
+   "title": "Route par défaut et paquets perdus",
+   "emoji": "🕳️",
+   "minutes": 9,
+   "steps": [
+    {
+     "type": "say",
+     "text": "La route par défaut est la **dernière chance** d'un paquet. Voyons comment elle s'affiche, comment elle se comporte, et ce qui arrive **quand elle n'existe pas**."
+    },
+    {
+     "type": "code",
+     "sql": "Gateway of last resort is 10.0.0.6 to network 0.0.0.0\n...\nS*   0.0.0.0/0 [1/0] via 10.0.0.6",
+     "lang": "Cisco IOS",
+     "title": "Une route par défaut dans la table"
+    },
+    {
+     "type": "say",
+     "text": "Elle utilise le préfixe `/0` : **le plus court de tous**. C'est ce qui la rend inoffensive : toute route plus précise passe avant, et elle ne sert que pour **ce que le routeur ne connaît pas**."
+    },
+    {
+     "type": "choice",
+     "q": "Pourquoi `0.0.0.0/0` est-elle toujours choisie en dernier ?",
+     "options": [
+      "Parce qu'elle a l'AD la plus haute",
+      "Parce que /0 est le préfixe le plus court",
+      "Parce qu'elle est configurée en dernier"
+     ],
+     "answer": 1,
+     "explain": "Le plus long préfixe gagne ; /0 est le plus court possible, donc **dernier recours**."
+    },
+    {
+     "type": "say",
+     "text": "Que se passe-t-il **sans** route par défaut, pour une destination inconnue ? Le routeur **jette le paquet** et renvoie un message **ICMP « destination unreachable »** à l'expéditeur. Côté utilisateur, un `ping` affiche `U` (unreachable) sur Cisco ou « Destination Host Unreachable » sous Windows."
+    },
+    {
+     "type": "choice",
+     "q": "Sans route correspondante ni route par défaut, le routeur…",
+     "options": [
+      "Garde le paquet",
+      "Jette le paquet et renvoie un ICMP injoignable",
+      "Envoie le paquet à tous ses voisins"
+     ],
+     "answer": 1,
+     "explain": "Paquet abandonné + ICMP *destination unreachable* à la source."
+    },
+    {
+     "type": "exercise",
+     "q": "Quel symbole un `ping` Cisco affiche-t-il quand le routeur répond « destination injoignable » ? (une lettre)",
+     "hints": [
+      "Les symboles : ! (succès), . (timeout), … ?",
+      "C'est l'initiale de *Unreachable*."
+     ],
+     "accept": [
+      "u majuscule"
+     ],
+     "solution": "U",
+     "explain": "`!` = réponse reçue, `.` = timeout, **`U`** = destination injoignable.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "say",
+     "text": "🔍 **Lire une table pour diagnostiquer.** Un utilisateur du réseau `192.168.30.0/24` ne joint pas `192.168.10.5`. Tu regardes la table du routeur :"
+    },
+    {
+     "type": "code",
+     "sql": "C    192.168.10.0/24 is directly connected, GigabitEthernet0/0\nC    10.0.0.0/30 is directly connected, Serial0/0/0\nS    192.168.20.0/24 [1/0] via 10.0.0.2",
+     "lang": "Cisco IOS",
+     "title": "Table de R1 (extrait)"
+    },
+    {
+     "type": "choice",
+     "q": "Quel réseau **manque** à R1 pour répondre à un paquet venant de 192.168.30.0/24 ?",
+     "options": [
+      "192.168.30.0/24 (route retour)",
+      "10.0.0.0/30",
+      "192.168.10.0/24"
+     ],
+     "answer": 0,
+     "explain": "R1 n'a **aucune route** vers 192.168.30.0/24 : il ne sait pas renvoyer la réponse. Sans route par défaut, la réponse est jetée."
+    },
+    {
+     "type": "exercise",
+     "q": "Écris la commande qui ajoute sur R1 une route vers 192.168.30.0/24 via 10.0.0.2.",
+     "hints": [
+      "ip route <réseau> <masque> <next-hop>",
+      "next-hop = 10.0.0.2"
+     ],
+     "accept": [],
+     "solution": "ip route 192.168.30.0 255.255.255.0 10.0.0.2",
+     "explain": "On ajoute la route manquante avec `ip route`, masque en notation décimale.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "say",
+     "text": "**Bonne pratique :** sur un routeur « stub » (une seule sortie), une route par défaut suffit. Sur un routeur « central » avec plusieurs voisins, on évite la route par défaut aveugle : on préfère des routes précises (ou un protocole de routage)."
+    },
+    {
+     "type": "choice",
+     "q": "Un routeur de bordure relie le réseau d'entreprise à Internet. Quelle route y place-t-on généralement ?",
+     "options": [
+      "Une route par défaut vers le fournisseur d'accès",
+      "Une route par réseau Internet (des milliers)",
+      "Aucune route"
+     ],
+     "answer": 0,
+     "explain": "Impossible de lister tous les réseaux d'Internet : on envoie **tout l'inconnu** vers le fournisseur avec une route par défaut."
+    },
+    {
+     "type": "say",
+     "text": "🏁 La route par défaut = **dernier recours** (/0). Sans elle : paquet jeté + ICMP injoignable. Et la **route retour** est la première chose à vérifier quand un ping échoue."
+    }
+   ]
+  },
+  {
+   "id": "defi",
+   "title": "Défi final : lire une table complète",
+   "emoji": "🏆",
+   "minutes": 12,
+   "steps": [
+    {
+     "type": "say",
+     "text": "Défi final ! On garde la table de R1 sous les yeux. Six questions comme à l'examen : à toi de **lire**, **choisir** et **expliquer**."
+    },
+    {
+     "type": "code",
+     "sql": "R1# show ip route\n\nCodes: C - connected, L - local, S - static, O - OSPF, * - candidate default\nGateway of last resort is 10.0.0.6 to network 0.0.0.0\n\nC    192.168.10.0/24 is directly connected, GigabitEthernet0/0\nL    192.168.10.1/32 is directly connected, GigabitEthernet0/0\nC    10.0.0.0/30 is directly connected, Serial0/0/0\nC    10.0.0.4/30 is directly connected, Serial0/0/1\nS    192.168.20.0/24 [1/0] via 10.0.0.2\nS    192.168.20.128/25 [1/0] via 10.0.0.6\nO    172.16.0.0/16 [110/65] via 10.0.0.2, 00:12:41, Serial0/0/0\nS*   0.0.0.0/0 [1/0] via 10.0.0.6",
+     "lang": "Cisco IOS",
+     "title": "Table de R1"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 1/6** — Quelle est la **distance administrative** de la route vers 172.16.0.0/16 ?",
+     "hints": [
+      "Premier nombre entre crochets.",
+      "[110/65]"
+     ],
+     "accept": [],
+     "solution": "110",
+     "explain": "C'est une route **OSPF** : AD = **110**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 2/6** — Par quel **next-hop** part un paquet destiné à **192.168.20.200** ?",
+     "hints": [
+      "Plusieurs routes contiennent .200 : /24, /25, /0.",
+      "Le /25 est le plus précis."
+     ],
+     "accept": [],
+     "solution": "10.0.0.6",
+     "explain": "Le **/25** gagne (plus long préfixe) → **10.0.0.6**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 3/6** — Par quel **next-hop** part un paquet destiné à **192.168.20.50** ?",
+     "hints": [
+      ".50 n'est pas dans la plage .128 – .255.",
+      "Reste le /24."
+     ],
+     "accept": [],
+     "solution": "10.0.0.2",
+     "explain": "Le /24 est la route la plus précise qui contienne .50 → **10.0.0.2**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 4/6** — Quelle est l'**adresse IP de l'interface Gi0/0** de R1 ? (cherche la ligne L)",
+     "hints": [
+      "Cherche la route /32 locale.",
+      "Ligne L ..."
+     ],
+     "accept": [],
+     "solution": "192.168.10.1",
+     "explain": "La ligne `L 192.168.10.1/32` donne l'adresse de l'interface : **192.168.10.1**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 5/6** — Quel next-hop est utilisé pour joindre **1.1.1.1** (une adresse sur Internet) ?",
+     "hints": [
+      "Aucune route précise ne couvre 1.1.1.1.",
+      "Regarde « Gateway of last resort »."
+     ],
+     "accept": [],
+     "solution": "10.0.0.6",
+     "explain": "Seule la route par défaut convient → **10.0.0.6**.",
+     "placeholder": "Écris ta réponse ici…"
+    },
+    {
+     "type": "exercise",
+     "q": "**Défi 6/6 (boss)** — Quelle **seule** ligne faut-il ajouter pour que R1 joigne 10.9.0.0/24 via 10.0.0.2 ? (commande Cisco complète)",
+     "hints": [
+      "ip route <réseau> <masque> <next-hop>",
+      "Masque d'un /24 : 255.255.255.0."
+     ],
+     "accept": [],
+     "solution": "ip route 10.9.0.0 255.255.255.0 10.0.0.2",
+     "explain": "Réseau `10.9.0.0`, masque `255.255.255.0`, next-hop `10.0.0.2`.",
+     "placeholder": "Écris la commande Cisco ici…"
+    },
+    {
+     "type": "say",
+     "text": "🎓 **Bravo !** Tu sais lire une table de routage : origine, AD, métrique, next-hop, plus long préfixe, route par défaut. C'est exactement ce qu'on te demande en examen et en dépannage."
+    }
+   ]
+  }
+ ]
+}
